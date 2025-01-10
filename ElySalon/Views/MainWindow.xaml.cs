@@ -20,10 +20,11 @@ namespace ElySalon
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow mainW { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
-           
+            mainW = this;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -33,7 +34,9 @@ namespace ElySalon
 
         private void adminBtn_Click(object sender, RoutedEventArgs e)
         {
-           
+            AdminWindow adminWindow = new AdminWindow();
+            adminWindow.Show();
+            this.Hide();
             
         }
 

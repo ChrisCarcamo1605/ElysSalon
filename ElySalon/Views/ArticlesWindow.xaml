@@ -8,19 +8,12 @@
         Title="ArticlesWindow" Height="720" Width="1280"
           WindowStartupLocation="CenterScreen">
     <Grid Background="White">
-        <ScrollViewer x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
+        <ScrollViewer Style="{StaticResource scroll}" x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
             <WrapPanel x:Name="ArticulosPanel" Margin="10">
 
             </WrapPanel>
         </ScrollViewer>
-        <ScrollViewer HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278">
-            <ScrollViewer.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FFBFEFFF" Offset="1"/>
-                    <GradientStop Color="#FFFF74E7" Offset="0"/>
-                </LinearGradientBrush>
-            </ScrollViewer.Background>
-        </ScrollViewer>
+        <ScrollViewer Style="{StaticResource scroll}" x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278" Background="#FFFFF2E0"/>
         <Button Style="{StaticResource btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49" Margin="62,41,0,0" VerticalAlignment="Top" Width="140"  FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Background="Black" Foreground="#FFEFECE7" Click="atrasBtn_Click"/>
         <Button Style="{StaticResource btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118" Margin="966,538,0,0" VerticalAlignment="Top" Width="278" Background="Black" FontFamily="Bahnschrift Condensed" FontSize="48" Foreground="White" Click="listoBtn_Click"/>
 

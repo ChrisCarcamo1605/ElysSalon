@@ -25,7 +25,7 @@
                         </Grid.RenderTransformOrigin>
                         <Border x:Name="border"
                             Background="{TemplateBinding Background}"
-                            CornerRadius="12"
+                            CornerRadius="8"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}"/>
                         <ContentPresenter x:Name="contentPresenter" 
@@ -286,7 +286,7 @@
 
                         <Border x:Name="border"
                     Background="{TemplateBinding Background}"
-                    CornerRadius="12"
+                    CornerRadius="8"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     BorderBrush="{TemplateBinding BorderBrush}"/>
 
@@ -355,6 +355,40 @@
                             </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="scroll" TargetType="ScrollViewer">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FFDC00D4" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid x:Name="viewerGrid">
+                        <Grid.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform"/>
+                        </Grid.RenderTransform>
+                        <Grid.RenderTransformOrigin>
+                            <Point X="0.5" Y="0.5" />
+                        </Grid.RenderTransformOrigin>
+                        <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

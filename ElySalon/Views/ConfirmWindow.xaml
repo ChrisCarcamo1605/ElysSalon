@@ -14,28 +14,34 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        
+
     </Window.Resources>
 
     <Border Background="White" 
-            BorderBrush="Black" 
-            BorderThickness="10" 
-            CornerRadius="20">
+            BorderThickness="4" 
+            CornerRadius="14">
+        <Border.BorderBrush>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="#FFDC00D4" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Área para mensaje de confirmación -->
+
             <TextBlock x:Name="mensajeConfirmacion"
-                      Text="¿Está seguro?"
-                      FontSize="48"
+                      Text="¿CONFIRMAR?"
+                      FontSize="42"
                       FontFamily="Bahnschrift Condensed"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Center"/>
+                      VerticalAlignment="Top" Margin="0,169,0,0"
+                      />
 
-            <!-- Área de botones -->
+
             <StackPanel Grid.Row="1" 
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center" 
@@ -59,6 +65,7 @@
                         FontSize="72" Click="noBtn_Click"
                         />
             </StackPanel>
+            <Label Content="TOTAL A PAGAR:" HorizontalAlignment="Left" Height="76" Margin="36,61,0,0" VerticalAlignment="Top" Width="382" FontFamily="Bahnschrift Condensed" FontSize="72" Foreground="#FFD63ED1" BorderBrush="Black"/>
         </Grid>
     </Border>
 </Window>
