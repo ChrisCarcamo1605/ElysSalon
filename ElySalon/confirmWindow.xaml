@@ -1,0 +1,64 @@
+﻿<Window x:Class="ElySalon.confirmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ElySalon"
+        mc:Ignorable="d"
+         Title="ConfirmWindow" 
+        Height="350" 
+        Width="600"
+        WindowStyle="None" 
+        AllowsTransparency="True" 
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        
+    </Window.Resources>
+
+    <Border Background="White" 
+            BorderBrush="Black" 
+            BorderThickness="10" 
+            CornerRadius="20">
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Área para mensaje de confirmación -->
+            <TextBlock x:Name="mensajeConfirmacion"
+                      Text="¿Está seguro?"
+                      FontSize="48"
+                      FontFamily="Bahnschrift Condensed"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
+
+            <!-- Área de botones -->
+            <StackPanel Grid.Row="1" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,0,0,20">
+                <Button Style="{DynamicResource btn}"  
+                        x:Name="siBtn" 
+                        Content="SI" 
+                        Height="93" 
+                        Width="228" 
+                        FontFamily="Bahnschrift Condensed" 
+                        FontSize="72"
+                        Margin="0,0,20,0" Click="siBtn_Click"
+                        />
+
+                <Button Style="{DynamicResource btn}" 
+                        x:Name="noBtn" 
+                        Content="NO" 
+                        Height="93" 
+                        Width="228" 
+                        FontFamily="Bahnschrift Condensed" 
+                        FontSize="72" Click="noBtn_Click"
+                        />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -23,11 +23,27 @@ namespace ElySalon
         public MainWindow()
         {
             InitializeComponent();
+           
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void adminBtn_Click(object sender, RoutedEventArgs e)
+        {
+           
+            
+        }
+
+        private async void btnServices_Click(object sender, RoutedEventArgs e)
+        {
+            ArticlesWindow articlesWindow = new ArticlesWindow();
+          
+            await Task.Delay(450);
+            this.Close();
+            articlesWindow.Show();
         }
     }
 }
