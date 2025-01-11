@@ -7,7 +7,10 @@
         mc:Ignorable="d"
         Title="ArticlesWindow" Height="720" Width="1280"
           WindowStartupLocation="CenterScreen">
-    <Grid Background="White">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Views/wallpaper3.jpg"/>
+        </Grid.Background>
         <ScrollViewer Style="{StaticResource scroll}" x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
             <WrapPanel x:Name="ArticulosPanel" Margin="10">
 

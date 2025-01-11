@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ElySalon.Views.AdminViews;
 
 namespace ElySalon
 {
@@ -35,6 +36,13 @@ namespace ElySalon
             }
 
 
+        }
+
+        private void salesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SalesWindow  salesWindow = new SalesWindow();
+            salesWindow.Show();
+            this.Close();
         }
     }
 }

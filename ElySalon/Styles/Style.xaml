@@ -23,6 +23,9 @@
                         <Grid.RenderTransformOrigin>
                             <Point X="0.5" Y="0.5"/>
                         </Grid.RenderTransformOrigin>
+                        <Grid.Effect>                            
+                                <DropShadowEffect Color="#FFFF00BE" BlurRadius="1" ShadowDepth="8" Direction="310"/>                            
+                        </Grid.Effect>
                         <Border x:Name="border"
                             Background="{TemplateBinding Background}"
                             CornerRadius="8"
@@ -131,7 +134,7 @@
         <Setter Property="Foreground"  Value="#FFFF559D"/>
         <Setter Property="Background">
             <Setter.Value>
-                <ImageBrush ImageSource="/Productos.jpg" Stretch="Fill"/>
+                <ImageBrush ImageSource="/Products.jpg" Stretch="Fill"/>
             </Setter.Value>
         </Setter>
 
@@ -260,105 +263,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="btnAdmin" TargetType="{x:Type Button}">
-
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-
-                    <Grid>
-                        <Grid.RenderTransform>
-                            <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
-                        </Grid.RenderTransform>
-                        <Grid.RenderTransformOrigin>
-                            <Point X="0.5" Y="0.5"/>
-                        </Grid.RenderTransformOrigin>
-
-                        <Border x:Name="border"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="8"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}"/>
-
-                        <ContentPresenter x:Name="contentPresenter" 
-                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                            Content="{TemplateBinding Content}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Margin="{TemplateBinding Padding}"/>
-                    </Grid>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-
-                                        <DoubleAnimation 
-                                                 Storyboard.TargetName="scaleTransform"
-                                                 Storyboard.TargetProperty="ScaleX"
-                                                 To="1.03" 
-                                                 Duration="0:0:0.2"/>
-
-                                        <DoubleAnimation 
-                                                 Storyboard.TargetName="scaleTransform"
-                                                 Storyboard.TargetProperty="ScaleY"
-                                                 To="1.03" 
-                                                 Duration="0:0:0.2"/>
-
-
-                                        <ColorAnimation Storyboard.TargetName="border"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="#efefec" Duration="0:0:0.2"/>
-                                        <ColorAnimation Storyboard.TargetName="contentPresenter" 
-                                                Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
-                                                To="Black"
-                                                Duration="0:0:0.2"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-
-                                        <DoubleAnimation 
-                                                 Storyboard.TargetName="scaleTransform"
-                                                 Storyboard.TargetProperty="ScaleX"
-                                                 To="1.0" 
-                                                 Duration="0:0:0.2"/>
-
-                                        <DoubleAnimation 
-                                                 Storyboard.TargetName="scaleTransform"
-                                                 Storyboard.TargetProperty="ScaleY"
-                                                 To="1.0" 
-                                                 Duration="0:0:0.2"/>
-
-                                        <ColorAnimation Storyboard.TargetName="border"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="Black" Duration="0:0:0.2"/>
-                                        <ColorAnimation Storyboard.TargetName="contentPresenter" 
-                                                     Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
-                                                     To="White"
-                                                     Duration="0:0:0.2"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    
 
 
     <Style x:Key="scroll" TargetType="ScrollViewer">
@@ -377,7 +282,7 @@
                 <ControlTemplate TargetType="ScrollViewer">
                     <Grid x:Name="viewerGrid">
                         <Grid.RenderTransform>
-                            <ScaleTransform x:Name="scaleTransform"/>
+                            <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
                         </Grid.RenderTransform>
                         <Grid.RenderTransformOrigin>
                             <Point X="0.5" Y="0.5" />
@@ -388,7 +293,81 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="8">
                         </Border>
+                        
+                        <ContentPresenter x:Name="contentPresenter" 
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Content="{TemplateBinding Content}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Margin="{TemplateBinding Padding}"/>
                     </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="titulo" TargetType="Label">
+        <Setter Property="Width" Value="718"/>
+        <Setter Property="Height" Value="108"/>
+        <Setter Property="FontSize" Value="72" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,12,0,0" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontFamily" Value="Bahnschrift Condensed"/>
+    </Style>
+
+    <Style x:Key="exitBtn" TargetType="Button">
+        
+        
+        <Setter Property="VerticalAlignment"  Value="Top"/>
+        <Setter Property="HorizontalAlignment"  Value="Left"/>
+        
+        <Setter Property="Margin" Value="78,26,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="exitGrid">
+                        <Border Height="70"
+                                Width="114"/>
+                        <Grid.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+                        </Grid.RenderTransform>
+                        <Grid.RenderTransformOrigin>
+                            <Point X="0.5" Y="0.5"/>
+                        </Grid.RenderTransformOrigin>
+                        
+                        <Grid.Background>
+                            <ImageBrush ImageSource="C:\Users\mojic\OneDrive\Escritorio\Code Proyectos\ElySalon\ElySalon\Views\AdminViews\row.png" Stretch="Fill"/>
+                        </Grid.Background>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                             Storyboard.TargetProperty="ScaleX" To="1.2" Duration="00:00:0.2"/>
+                                            <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                             Storyboard.TargetProperty="ScaleY" To="1.2" Duration="00:00:0.2"/>
+                                    </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                 Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                  Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2"/>
+                                    </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                       
+                   
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

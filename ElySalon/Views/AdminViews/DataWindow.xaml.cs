@@ -15,20 +15,13 @@ using System.Windows.Shapes;
 namespace ElySalon.Views.AdminViews
 {
     /// <summary>
-    /// Lógica de interacción para SalesWindow.xaml
+    /// Lógica de interacción para GeneralWindow.xaml
     /// </summary>
-    public partial class SalesWindow : Window
+    public partial class GeneralWindow : Window
     {
-        public SalesWindow()
+        public GeneralWindow()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            AdminWindow adminWindow = new AdminWindow();
-            this.Close();
-            adminWindow.Show();
         }
     }
 }

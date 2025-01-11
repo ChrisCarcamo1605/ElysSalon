@@ -35,8 +35,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,8 +64,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="article.cs">
+      <DependentUpon>ElysModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="article_type.cs">
+      <DependentUpon>ElysModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bill.cs">
+      <DependentUpon>ElysModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="bill_details.cs">
+      <DependentUpon>ElysModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ElysModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElysModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ElysModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElysModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ElysModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ElysModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="infra\Domain\ArticleShow.cs" />
+    <Compile Include="infra\Domain\infra\Domain\ArticleShow.cs" />
     <Compile Include="Views\AdminViews\AdminWindow.xaml.cs">
       <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdminViews\DataWindow.xaml.cs">
+      <DependentUpon>DataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdminViews\MailWindow.xaml.cs">
+      <DependentUpon>MailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AdminViews\SalesWindow.xaml.cs">
       <DependentUpon>SalesWindow.xaml</DependentUpon>
@@ -81,6 +125,14 @@
     <Page Include="Views\AdminViews\AdminWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AdminViews\DataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdminViews\MailWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AdminViews\SalesWindow.xaml">
       <SubType>Designer</SubType>
@@ -117,6 +169,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EntityDeploy Include="ElysModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ElysModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="ElysModel.edmx.diagram">
+      <DependentUpon>ElysModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -126,10 +186,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="productos.jpg" />
+    <Resource Include="products.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Servicios.jpg" />
+    <Resource Include="Services.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="NEGRO LOGO_Mesa de trabajo 1.png" />
@@ -137,6 +197,51 @@
   <ItemGroup>
     <Resource Include="wallpaper.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\AdminViews\row.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Styles\row.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\AdminViews\wallpaper.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\AdminViews\wallpaper2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\wallpaper3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\wallpaper2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\wallpaper4.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\wallpaper3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\AdminViews\wallpaper4.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\AdminViews\wallpaper3.jpg" />
+  </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="ElysModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ElysModel.Context.cs</LastGenOutput>
+      <DependentUpon>ElysModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="ElysModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ElysModel.edmx</DependentUpon>
+      <LastGenOutput>ElysModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

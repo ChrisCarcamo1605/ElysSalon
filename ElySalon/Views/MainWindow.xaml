@@ -32,7 +32,7 @@
     </Window.Resources>
     <Grid x:Name="mainWindow" RenderTransformOrigin="25,0" Height="720" Margin="0,0,0,-16">
         <Grid.Background>
-            <ImageBrush ImageSource="/wallpaper.jpg" Opacity="0.75"/>
+            <ImageBrush ImageSource="/Views/wallpaper2.png" Opacity="0.75"/>
         </Grid.Background>
 
         <Ellipse HorizontalAlignment="Center" Height="490" Margin="0,656,0,0" Stroke="Black" VerticalAlignment="Top" Width="2604" Fill="Black"/>
@@ -41,12 +41,12 @@
 
 
             <Button.Background>
-                <ImageBrush ImageSource="/Servicios.jpg"/>
+                <ImageBrush ImageSource="/Services.jpg"/>
             </Button.Background>
         </Button>
-        <Button x:Name="btnProducts" Style="{DynamicResource BtnMenu}" Content="PRODUCTOS" HorizontalAlignment="Left" Height="478" Margin="494,140,0,0" VerticalAlignment="Top" Width="366" FontSize="80" FontWeight="Bold" FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC">
+        <Button x:Name="btnProducts" Style="{DynamicResource BtnMenu}" Content="PRODUCTOS" HorizontalAlignment="Left" Height="478" Margin="494,140,0,0" VerticalAlignment="Top" Width="366" FontSize="80" FontWeight="Bold" FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC" Click="btnProducts_Click">
             <Button.Background>
-                <ImageBrush ImageSource="/productos.jpg"/>
+                <ImageBrush ImageSource="/products.jpg"/>
             </Button.Background>
         </Button>
         <Image   HorizontalAlignment="Left" Height="341" Margin="906,61,0,0" VerticalAlignment="Top" Width="322" Source="/NEGRO LOGO_Mesa de trabajo 1.png">
@@ -59,10 +59,8 @@
             </Image.OpacityMask>
         </Image>
         <Label Content="ELIJA UNA OPCIÓN" HorizontalAlignment="Left" Height="76" Margin="292,38,0,0" VerticalAlignment="Top" Width="360" FontFamily="Bahnschrift Condensed" FontSize="60" FontWeight="Bold"/>
-        <Button Style="{StaticResource btnAdmin}" x:Name="adminBtn"  Content="ADMINISTRACION" HorizontalAlignment="Left" Height="66" Margin="928,539,0,0" VerticalAlignment="Top" Width="278" Background="Black" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Click="adminBtn_Click">
-            <Button.Effect>
-                <DropShadowEffect Color="#FFFF00BE" BlurRadius="1" ShadowDepth="10" Direction="320"/>
-            </Button.Effect>
+        <Button Style="{StaticResource btn}" x:Name="adminBtn"  Content="ADMINISTRACION" HorizontalAlignment="Left" Height="66" Margin="928,539,0,0" VerticalAlignment="Top" Width="278" Background="Black" Foreground="White" FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Click="adminBtn_Click">
+           
         </Button>
 
     </Grid>

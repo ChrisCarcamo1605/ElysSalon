@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ElySalon.infra.Domain;
 
 namespace ElySalon
 {
@@ -47,6 +48,14 @@ namespace ElySalon
             await Task.Delay(450);
             this.Close();
             articlesWindow.Show();
+        }
+
+        private void btnProducts_Click(object sender, RoutedEventArgs e)
+        {
+            ArticleShow productsWindow = new ArticleShow();
+            productsWindow.addArticle();
+
+            MessageBox.Show("Producto sampado mi loco");
         }
     }
 }
