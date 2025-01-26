@@ -64,6 +64,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adapters\InBound\UI\views\AdminViews\AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\AdminViews\DataWindow.xaml.cs">
+      <DependentUpon>DataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\AdminViews\MailWindow.xaml.cs">
+      <DependentUpon>MailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\AdminViews\SalesWindow.xaml.cs">
+      <DependentUpon>SalesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\ArticlesWindow.xaml.cs">
+      <DependentUpon>ArticlesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\ConfirmWindow.xaml.cs">
+      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adapters\InBound\UI\views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="article.cs">
       <DependentUpon>ElysModel.tt</DependentUpon>
     </Compile>
@@ -76,6 +97,11 @@
     <Compile Include="bill_details.cs">
       <DependentUpon>ElysModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Domain\Entities\Article.cs" />
+    <Compile Include="Domain\Entities\ArticleType.cs" />
+    <Compile Include="Domain\Entities\Ticket.cs" />
+    <Compile Include="Domain\Entities\TicketDetails.cs" />
+    <Compile Include="Domain\Exception\TransactionException.cs" />
     <Compile Include="ElysModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -91,62 +117,39 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ElysModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="infra\Domain\ArticleShow.cs" />
-    <Compile Include="infra\Domain\infra\Domain\ArticleShow.cs" />
-    <Compile Include="Views\AdminViews\AdminWindow.xaml.cs">
-      <DependentUpon>AdminWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AdminViews\DataWindow.xaml.cs">
-      <DependentUpon>DataWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AdminViews\MailWindow.xaml.cs">
-      <DependentUpon>MailWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AdminViews\SalesWindow.xaml.cs">
-      <DependentUpon>SalesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ArticlesWindow.xaml.cs">
-      <DependentUpon>ArticlesWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ConfirmWindow.xaml.cs">
-      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Styles\Style.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AdminViews\AdminWindow.xaml">
+    <Page Include="Adapters\InBound\UI\styles\Style.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AdminViews\DataWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AdminViews\MailWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AdminViews\SalesWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ArticlesWindow.xaml">
+    <Page Include="Adapters\InBound\UI\views\AdminViews\AdminWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ConfirmWindow.xaml">
+    <Page Include="Adapters\InBound\UI\views\AdminViews\DataWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Adapters\InBound\UI\views\AdminViews\MailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adapters\InBound\UI\views\AdminViews\SalesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adapters\InBound\UI\views\ArticlesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adapters\InBound\UI\views\ConfirmWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Adapters\InBound\UI\views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -198,37 +201,22 @@
     <Resource Include="wallpaper.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\AdminViews\row.png" />
+    <Folder Include="Adapters\OutBound\Repositories\" />
+    <Folder Include="Aplication\DTOS\" />
+    <Folder Include="Aplication\Services\" />
+    <Folder Include="Aplication\UseCases\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Styles\row.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\AdminViews\wallpaper.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\AdminViews\wallpaper2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\wallpaper3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\wallpaper2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\wallpaper4.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\wallpaper3.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\AdminViews\wallpaper4.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\AdminViews\wallpaper3.jpg" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
+    <Resource Include="Adapters\InBound\UI\styles\row.png" />
+    <Resource Include="Adapters\InBound\UI\views\AdminViews\row.png" />
+    <Resource Include="Adapters\InBound\UI\views\AdminViews\wallpaper.jpg" />
+    <Resource Include="Adapters\InBound\UI\views\AdminViews\wallpaper2.png" />
+    <Resource Include="Adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
+    <Resource Include="Adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
+    <Resource Include="Adapters\InBound\UI\views\wallpaper2.png" />
+    <Resource Include="Adapters\InBound\UI\views\wallpaper3.jpg" />
+    <Resource Include="Adapters\InBound\UI\views\wallpaper3.png" />
+    <Resource Include="Adapters\InBound\UI\views\wallpaper4.jpeg" />
     <Content Include="ElysModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ElysModel.Context.cs</LastGenOutput>

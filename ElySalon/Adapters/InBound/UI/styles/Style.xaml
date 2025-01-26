@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <Style x:Key="btn" TargetType="Button">
+    <Style x:Key="Btn" TargetType="Button">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
@@ -129,7 +129,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="1"/>
-        <Setter Property="Background" Value="Black"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="Foreground"  Value="#FFFF559D"/>
         <Setter Property="Background">
@@ -266,7 +265,7 @@
     
 
 
-    <Style x:Key="scroll" TargetType="ScrollViewer">
+    <Style x:Key="Scroll" TargetType="ScrollViewer">
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="BorderBrush">
@@ -306,7 +305,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="titulo" TargetType="Label">
+    <Style x:Key="TitleText" TargetType="Label">
         <Setter Property="Width" Value="718"/>
         <Setter Property="Height" Value="108"/>
         <Setter Property="FontSize" Value="72" />
@@ -317,7 +316,7 @@
         <Setter Property="FontFamily" Value="Bahnschrift Condensed"/>
     </Style>
 
-    <Style x:Key="exitBtn" TargetType="Button">
+    <Style x:Key="ExitBtn" TargetType="Button">
         
         
         <Setter Property="VerticalAlignment"  Value="Top"/>
@@ -338,7 +337,7 @@
                         </Grid.RenderTransformOrigin>
                         
                         <Grid.Background>
-                            <ImageBrush ImageSource="C:\Users\mojic\OneDrive\Escritorio\Code Proyectos\ElySalon\ElySalon\Views\AdminViews\row.png" Stretch="Fill"/>
+                            <ImageBrush ImageSource="C:\Users\mojic\OneDrive\Escritorio\Code Proyectos\ElySalon\ElySalon\Adapters\InBound\UI\styles\row.png" Stretch="Fill"/>
                         </Grid.Background>
                     </Grid>
                     <ControlTemplate.Triggers>

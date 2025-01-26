@@ -2,12 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ElySalon"
-             StartupUri="/Views/MainWindow.xaml">
+             StartupUri="\Adapters\InBound\UI\views\MainWindow.xaml">
     <Application.Resources>
    
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/Styles/Style.xaml"/>
+                <ResourceDictionary Source="\Adapters\InBound\UI\styles\Style.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
    

@@ -8,10 +8,10 @@
         Title="GeneralWindow" Height="720" Width="1280">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/Views/AdminViews/wallpaper3.jpg" Opacity="0.75"/>
+            <ImageBrush ImageSource="/Adapters/InBound/UI/Views/AdminViews/wallpaper3.jpg" Opacity="0.75"/>
         </Grid.Background>
-        <Label Style="{DynamicResource titulo}" Content="INFORMES" Margin="0,12,0,0" Width="246"/>
-        <Button x:Name="exitBtn" Style="{DynamicResource exitBtn}" Margin="77,66,0,0"/>
+        <Label Style="{DynamicResource TitleText}" Content="INFORMES" Margin="0,12,0,0" Width="246"/>
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="77,66,0,0"/>
 
     </Grid>
 </Window>

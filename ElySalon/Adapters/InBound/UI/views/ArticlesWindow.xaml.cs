@@ -41,7 +41,7 @@ namespace ElySalon
 
         private void listoBtn_Click(object sender, RoutedEventArgs e)
         {
-            confirmWindow confirmWindow = new confirmWindow();
+            ConfirmWindow confirmWindow = new ConfirmWindow();
             confirmWindow.Show();
         }
     }

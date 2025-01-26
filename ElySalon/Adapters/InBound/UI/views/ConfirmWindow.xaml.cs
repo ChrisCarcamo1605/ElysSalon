@@ -17,9 +17,9 @@ namespace ElySalon
     /// <summary>
     /// Lógica de interacción para confirmWindow.xaml
     /// </summary>
-    public partial class confirmWindow : Window
+    public partial class ConfirmWindow : Window
     {
-        public confirmWindow()
+        public ConfirmWindow()
         {
             InitializeComponent();
         }

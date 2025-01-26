@@ -12,13 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ElySalon.infra.Domain;
+using ElySalon.Views;
 
 namespace ElySalon
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
+    
     public partial class MainWindow : Window
     {
         public static MainWindow mainW { get; private set; }
@@ -52,10 +50,7 @@ namespace ElySalon
 
         private void btnProducts_Click(object sender, RoutedEventArgs e)
         {
-            ArticleShow productsWindow = new ArticleShow();
-            productsWindow.addArticle();
-
-            MessageBox.Show("Producto sampado mi loco");
+          
         }
     }
 }
