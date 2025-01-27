@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ElysSalon2.0")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+869d37e24a00aef6b8e473968a348d218e36664f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40e2f87ea48a72db7ab4103ab9483c18be86a9f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ElysSalon2.0")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ElysSalon2.0")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
