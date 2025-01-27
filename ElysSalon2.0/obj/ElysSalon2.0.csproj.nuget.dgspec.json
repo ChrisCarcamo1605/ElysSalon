@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon2.0\\ElysSalon2.0\\ElysSalon2.0.csproj": {}
+    "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon\\ElysSalon2.0\\ElysSalon2.0.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon2.0\\ElysSalon2.0\\ElysSalon2.0.csproj": {
+    "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon\\ElysSalon2.0\\ElysSalon2.0.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon2.0\\ElysSalon2.0\\ElysSalon2.0.csproj",
+        "projectUniqueName": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon\\ElysSalon2.0\\ElysSalon2.0.csproj",
         "projectName": "ElysSalon2.0",
-        "projectPath": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon2.0\\ElysSalon2.0\\ElysSalon2.0.csproj",
+        "projectPath": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon\\ElysSalon2.0\\ElysSalon2.0.csproj",
         "packagesPath": "C:\\Users\\mojic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon2.0\\ElysSalon2.0\\obj\\",
+        "outputPath": "C:\\Users\\mojic\\OneDrive\\Escritorio\\Code Proyectos\\ElysSalon\\ElysSalon2.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
