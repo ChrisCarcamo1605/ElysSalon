@@ -1,0 +1,40 @@
+# Archivos de compilación
+/bin/
+/obj/
+.bin/
+.obj/
+obj/
+bin/
+
+# Archivos de configuración del IDE (Visual Studio)
+.vs/
+.vscode/
+.idea/
+
+# Archivos generados por el sistema operativo
+Thumbs.db
+.DS_Store
+
+# Archivos de configuración de usuario
+*.user
+*.suo
+
+# Archivos de dependencias NuGet
+/packages/
+
+# Archivos de log
+*.log
+
+# Archivos de resultados de tests
+/test-results/
+
+# Archivos de cobertura de código
+coverage/
+
+# Archivos temporales de compilación de ASP.NET
+wwwroot/
+/ElysSalon2.0/bin/Debug/net8.0-windows/ElysSalon2.0.dll
+/ElysSalon2.0/bin/Debug/net8.0-windows/ElysSalon2.0.exe
+/ElysSalon2.0/bin/Debug/net8.0-windows/ElysSalon2.0.pdb
+/ElysSalon2.0/bin/
+/ElysSalon2.0/obj/
