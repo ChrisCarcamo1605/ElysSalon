@@ -1,0 +1,16 @@
+﻿<Window x:Class="ElysSalon2._0.adapters.InBound.UI.views.AdminViews.GeneralWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="GeneralWindow" Height="720" Width="1280">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/images/wallpaper3.jpg" Opacity="0.75"/>
+        </Grid.Background>
+        <Label Style="{DynamicResource TitleText}" Content="INFORMES" Margin="0,12,0,0" Width="246"/>
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="77,66,0,0"/>
+
+    </Grid>
+</Window>
