@@ -12,7 +12,7 @@
             <ImageBrush ImageSource="/images/wallpaper3.jpg"/>
         </Grid.Background>
         <ScrollViewer Style="{StaticResource Scroll}" x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
-            <ItemsControl ItemsSource="{Binding (ui: ButtonManagement.ArticlesButtons) }">
+            <ItemsControl ItemsSource="{Binding (ui:ButtonManagement.ArticlesButtons) }">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>

@@ -23,7 +23,7 @@ public class ArticleRepository : IArticleRepository {
                 reader.GetInt32(5),
                 reader.GetString(6)));
         });
-        db.CloseConnection();
+
         return articles;
     }
 
@@ -31,14 +31,14 @@ public class ArticleRepository : IArticleRepository {
         db = DbUtil.getInstance();
 
         Article article = (Article)db.getFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
-            reader.GetInt32(0), 
+            reader.GetInt32(0),
             reader.GetString(1),
             reader.GetInt32(2),
             reader.GetDecimal(3),
             reader.GetDecimal(4),
             reader.GetInt32(5),
             reader.GetString(6))));
-        db.CloseConnection();
+
         return article;
     }
 

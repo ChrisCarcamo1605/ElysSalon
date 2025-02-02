@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper.jpg" />
+    <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
+    <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
     <None Remove="adapters\InBound\UI\views\NEGRO LOGO_Mesa de trabajo 1.png" />
     <None Remove="adapters\InBound\UI\views\wallpaper2.png" />
     <None Remove="images\row.png" />
@@ -21,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
+    <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
     <Resource Include="images\row.png" />
     <Resource Include="images\wallpaper.jpg" />
     <Resource Include="images\NEGRO LOGO_Mesa de trabajo 1.png" />

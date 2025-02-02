@@ -303,7 +303,7 @@
     <Style x:Key="TitleText" TargetType="Label">
         <Setter Property="Width" Value="718" />
         <Setter Property="Height" Value="108" />
-        <Setter Property="FontSize" Value="72" />
+        <Setter Property="FontSize" Value="62" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,12,0,0" />
@@ -494,6 +494,26 @@
             </Setter.Value>
         </Setter>
 
+    </Style>
+
+    <Style x:Key="textInput" TargetType="TextBox">
+        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="BorderThickness" Value="2"></Setter>
+        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="Bahnschrift Condensed" />
+    </Style>
+
+    <Style x:Key="cmboType" TargetType="ComboBox">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="2"></Setter>
+        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="Bahnschrift Condensed" />
     </Style>
 
 

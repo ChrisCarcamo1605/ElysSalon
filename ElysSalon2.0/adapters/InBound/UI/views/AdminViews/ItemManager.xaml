@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ElysSalon2._0.adapters.InBound.UI.views.AdminViews"
         mc:Ignorable="d"
-        Title="ItemManager" Height="450" Width="800">
+        Title="ItemManager" Height="720" Width="1280"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+    
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" />
+        </Grid.Background>
+        <Label Style="{DynamicResource TitleText}" Content="Gestion de Articulos" Width="420" Height="67"
+               Margin="0,12,0,0" />
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button" Click="exitBtn_Click"
+                Margin="78,26,0,0" />
+
+        <TextBox x:Name="nameTxtBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="58" Margin="131,154,0,0"
+                  
+                 VerticalAlignment="Top" Width="205" GotFocus="TextBox_GotFocus" LostFocus="nameTxtBox_LostFocus" Loaded="nameTxtBox_Loaded_1" />
+        <TextBox x:Name="priceCostBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="598,158,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="120" Loaded="priceCostBox_Loaded" LostFocus="priceCostBox_LostFocus" GotFocus="priceCostBox_GotFocus" />
+        <ComboBox x:Name="typeComboBox" HorizontalAlignment="Left" Height="56" Margin="380,156,0,0" VerticalAlignment="Top" Width="170"
+                  RenderTransformOrigin="0.781,0.671" />
+        <TextBox x:Name="descriptionBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="56" Margin="928,158,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="216" GotFocus="descriptionBox_GotFocus" LostFocus="descriptionBox_LostFocus" Loaded="descriptionBox_Loaded" />
+        <DataGrid HorizontalAlignment="Center" Height="367" Margin="0,307,0,0" VerticalAlignment="Top" Width="1178"
+                  d:ItemsSource="{d:SampleData ItemCount=5}" />
+        <TextBox x:Name="priceBuyBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="766,158,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="118" GotFocus="priceBuyBox_GotFocus" LostFocus="priceBuyBox_LostFocus" Loaded="priceBuyBox_Loaded" />
+
     </Grid>
 </Window>

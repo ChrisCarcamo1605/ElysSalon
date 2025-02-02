@@ -12,7 +12,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="/images/wallpaper4.jpeg" Opacity="0.5"/>
         </Grid.Background>
-        <Button x:Name="itemsBtn" Style="{StaticResource Btn}" Content="ITEMS" HorizontalAlignment="Left" Height="170" Margin="207,221,0,0" VerticalAlignment="Top" Width="395" FontSize="90" FontWeight="Bold" FontFamily="Bahnschrift Condensed"/>
+        <Button x:Name="itemsBtn" Style="{StaticResource Btn}" Content="ITEMS" HorizontalAlignment="Left" Height="170" Margin="207,221,0,0" VerticalAlignment="Top" Width="395" FontSize="90" FontWeight="Bold" FontFamily="Bahnschrift Condensed" Click="itemsBtn_Click"/>
         <Button x:Name="generalBtn" Style="{StaticResource Btn}" Content="GENERAL" HorizontalAlignment="Left" Height="172" Margin="204,413,0,0" VerticalAlignment="Top" Width="396" FontSize="90" FontWeight="Bold" FontFamily="Bahnschrift Condensed"/>
         <Button x:Name="salesBtn" Style="{StaticResource Btn}" Content="VENTAS" HorizontalAlignment="Left" Height="170" Margin="669,221,0,0" VerticalAlignment="Top" Width="396" FontSize="90" FontWeight="Bold" FontFamily="Bahnschrift Condensed" Click="salesBtn_Click"/>
         <Button x:Name="mailBtn" Style="{StaticResource Btn}" Content="CORREOS" HorizontalAlignment="Left" Height="172" Margin="669,413,0,0" VerticalAlignment="Top" Width="396" FontSize="90" FontWeight="Bold" FontFamily="Bahnschrift Condensed"/>

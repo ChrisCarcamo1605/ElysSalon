@@ -31,5 +31,12 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
             salesWindow.Show();
             this.Close();
         }
+
+        private void itemsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ItemManager item = new ItemManager();
+            item.Show();
+            this.Close();
+        }
     }
 }

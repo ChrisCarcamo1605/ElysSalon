@@ -9,12 +9,11 @@ namespace ElysSalon2._0.adapters.OutBound {
     public class DbUtil {
         private static DbUtil instance;
         private static readonly object _lock = new object();
-        private static SqlConnection connection;
+        private static string connectionString;
 
 
         private DbUtil(){
-            connection = new SqlConnection(SecretManager.GetValue("userCon"));
-            connection.Open();
+            connectionString = SecretManager.GetValue("userCon");
         }
 
 
@@ -31,45 +30,51 @@ namespace ElysSalon2._0.adapters.OutBound {
         }
 
         public ObservableCollection<T> getFromDB<T>(string table, string column, Func<SqlDataReader, T> mapFunction){
-
-
-            
-            SqlCommand cmd = new SqlCommand($"SELECT {column} FROM {table}", connection);
-            SqlDataReader reader = cmd.ExecuteReader();
             ObservableCollection<T> results = new ObservableCollection<T>();
-            int i = 0;
-            while (reader.Read())
-            {
-                results.Add(mapFunction(reader));
-                Console.WriteLine(results[i]);
-                i++;
-            }
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand($"SELECT {column} FROM {table}", connection))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(mapFunction(reader));
+                        }
+                        connection.Close();
+                    }
+                }
+            }
 
             return results;
         }
 
 
         public object getFromDB(int id, string table, string column, Func<SqlDataReader, object> mapFunction){
-            SqlCommand cmd = new SqlCommand($"SELECT {column} FROM {table} where {column} = {id};", connection);
-            SqlDataReader reader = cmd.ExecuteReader();
             object result = null;
-            if (reader.Read())
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                result = mapFunction(reader);
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand($"SELECT {column} FROM {table} WHERE {column} = @id",
+                           connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            result = mapFunction(reader);
+                        }
+                        connection.Close();
+                    }
+                }
             }
 
-        
-            MessageBox.Show(result.ToString());
+            MessageBox.Show(result?.ToString() ?? "No se encontró el registro.");
             return result;
-        }
-
-
-        public void CloseConnection(){
-            if (connection != null && connection.State == System.Data.ConnectionState.Open)
-            {
-                connection.Close();
-            }
         }
     }
 }
