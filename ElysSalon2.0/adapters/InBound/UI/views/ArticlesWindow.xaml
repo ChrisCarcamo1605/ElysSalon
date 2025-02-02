@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:ElysSalon2._0.adapters.InBound.UI"
         mc:Ignorable="d"
         Title="ArticlesWindow" Height="720" Width="1280"
           WindowStartupLocation="CenterScreen">
@@ -11,9 +12,13 @@
             <ImageBrush ImageSource="/images/wallpaper3.jpg"/>
         </Grid.Background>
         <ScrollViewer Style="{StaticResource Scroll}" x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
-            <WrapPanel x:Name="ArticulosPanel" Margin="10">
-
-            </WrapPanel>
+            <ItemsControl ItemsSource="{Binding (ui: ButtonManagement.ArticlesButtons) }">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </ScrollViewer>
         <ScrollViewer Style="{StaticResource Scroll}" x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278" Background="#FFFFF2E0"/>
         <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49" Margin="62,41,0,0" VerticalAlignment="Top" Width="140"  FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Background="Black" Foreground="#FFEFECE7" Click="atrasBtn_Click"/>

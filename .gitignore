@@ -5,6 +5,8 @@
 .obj/
 obj/
 bin/
+/ElysSalon2.0/bin/
+/ElysSalon2.0/obj/
 
 # Archivos de configuración del IDE (Visual Studio)
 .vs/

@@ -6,6 +6,8 @@ namespace ElysSalon2._0.adapters.OutBound;
 
 public class TicketRepository:ITicketRepository {
     public void saveTicket(DTOsaveTicket dto) {
+
+        
         
     }
 }
