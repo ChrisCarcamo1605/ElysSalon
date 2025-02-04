@@ -9,7 +9,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views
 {
 
     public partial class MainWindow : Window {
-        private DbUtil factory;
+    
         public static MainWindow mainW { get; private set; }
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views
         private async void btnServices_Click(object sender, RoutedEventArgs e){
 
 
-            ArticleRepository articleRepository = new ArticleRepository();
+            IArticleRepository articleRepository = new ArticleRepository();
             ArticlesWindow articlesWindow = new ArticlesWindow(articleRepository);
             await Task.Delay(450);
             this.Close();

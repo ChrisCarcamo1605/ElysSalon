@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using Windows.Media.Streaming.Adaptive;
 using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Entities;
@@ -75,6 +76,55 @@ namespace ElysSalon2._0.adapters.OutBound {
 
             MessageBox.Show(result?.ToString() ?? "No se encontró el registro.");
             return result;
+        }
+
+        public void AddToDb<T>(string table, Dictionary<string, object> parameters)
+        {
+            string columns = string.Join(", ", parameters.Keys);
+            string parameterNames = string.Join(", ", parameters.Keys.Select(k => "@" + k));
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"INSERT INTO {table} ({columns}) VALUES ({parameterNames})";
+
+                using (SqlCommand cmd = new SqlCommand(query, connection))
+                {
+                    // Add all parameters dynamically
+                    foreach (var param in parameters)
+                    {
+                        cmd.Parameters.AddWithValue("@" + param.Key, param.Value ?? DBNull.Value);
+                    }
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public int getIdFrom(string table, string columnId, string columnName, string value)
+        {
+            object result = null;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                using (SqlCommand cmd = new SqlCommand($"SELECT {columnId} FROM {table} WHERE {columnName} = @value",
+                           connection))
+                {
+                    cmd.Parameters.AddWithValue("@value", value);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                    
+                        if (reader.Read())
+                        {
+                           
+                            return reader.GetInt32(0);
+                        }
+                        connection.Close();
+                    }
+                }
+            }
+           
+            throw new RankException("No se encontró el registro.") ;
         }
     }
 }

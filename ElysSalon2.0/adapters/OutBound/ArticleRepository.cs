@@ -42,11 +42,37 @@ public class ArticleRepository : IArticleRepository {
         return article;
     }
 
-    public void AddArticle(Article article){
-        throw new NotImplementedException();
+    public void AddArticle(DTOAddArticle article){
+
+        DbUtil db = DbUtil.getInstance();
+
+        var d = new Dictionary<string, object>
+        {
+            {"article_name" , article.articleName},
+            {"article_type_id" , db.getIdFrom("article_type","article_type_id","article_type_name",article.articleType)},
+            {"price_Buy" , article.priceBuy},
+            {"price_cost" , article.priceCost},
+            {"stock" , article.stock},
+            {"description" , article.description}
+
+        };
+
+        db.AddToDb<Article>("Article",d);
     }
 
     public void UpdateArticle(Article article){
         throw new NotImplementedException();
     }
+
+    public List<ArticleType> getTypeArticle(){
+        DbUtil db = DbUtil.getInstance();
+        ObservableCollection<ArticleType> articleTypes = db.getFromDB("article_type", "*", (reader) =>
+        {
+            return new ArticleType(new DTOGetTypeArticles(
+                reader.GetInt32(0),
+                reader.GetString(1)));
+        });
+        return articleTypes.ToList();
+    }
+
 }

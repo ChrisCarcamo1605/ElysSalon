@@ -8,7 +8,7 @@
         Title="ItemManager" Height="720" Width="1280"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
-    
+
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" />
@@ -18,22 +18,26 @@
         <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button" Click="exitBtn_Click"
                 Margin="78,26,0,0" />
 
-        <TextBox x:Name="nameTxtBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="58" Margin="131,154,0,0"
+        <TextBox  x:Name="nameTxtBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="58" Margin="125,127,0,0"
                   
                  VerticalAlignment="Top" Width="205" GotFocus="TextBox_GotFocus" LostFocus="nameTxtBox_LostFocus" Loaded="nameTxtBox_Loaded_1" />
-        <TextBox x:Name="priceCostBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="598,158,0,0"
+        <TextBox x:Name="priceCostBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="592,131,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="120" Loaded="priceCostBox_Loaded" LostFocus="priceCostBox_LostFocus" GotFocus="priceCostBox_GotFocus" />
-        <ComboBox x:Name="typeComboBox" HorizontalAlignment="Left" Height="56" Margin="380,156,0,0" VerticalAlignment="Top" Width="170"
-                  RenderTransformOrigin="0.781,0.671" />
-        <TextBox x:Name="descriptionBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="56" Margin="928,158,0,0"
+        <ComboBox SelectedIndex="0" Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox" HorizontalAlignment="Left" Height="56" Margin="357,129,0,0" VerticalAlignment="Top" Width="213"
+                  RenderTransformOrigin="0.781,0.671" Loaded="typeComboBox_Loaded" LostFocus="typeComboBox_LostFocus" GotFocus="typeComboBox_GotFocus">
+            <ComboBoxItem IsSelected="True" >Tipo Producto</ComboBoxItem>
+        </ComboBox>
+        <TextBox x:Name="descriptionBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="460,210,0,0"
                  TextWrapping="Wrap"
-                 VerticalAlignment="Top" Width="216" GotFocus="descriptionBox_GotFocus" LostFocus="descriptionBox_LostFocus" Loaded="descriptionBox_Loaded" />
+                 VerticalAlignment="Top" Width="442" GotFocus="descriptionBox_GotFocus" LostFocus="descriptionBox_LostFocus" Loaded="descriptionBox_Loaded" />
         <DataGrid HorizontalAlignment="Center" Height="367" Margin="0,307,0,0" VerticalAlignment="Top" Width="1178"
                   d:ItemsSource="{d:SampleData ItemCount=5}" />
-        <TextBox x:Name="priceBuyBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="766,158,0,0"
+        <TextBox x:Name="priceBuyBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54" Margin="298,210,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="118" GotFocus="priceBuyBox_GotFocus" LostFocus="priceBuyBox_LostFocus" Loaded="priceBuyBox_Loaded" />
+        <TextBox Style="{StaticResource textInput}" x:Name="stockBox"  HorizontalAlignment="Left" Height="52" Margin="125,212,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="131" Loaded="stockBox_Loaded" LostFocus="stockBox_LostFocus" GotFocus="stockBox_GotFocus" />
+        <Button  Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left" Height="54" Margin="738,131,0,0" VerticalAlignment="Top" Width="164" Click="addArticleBtn_Click"/>
 
     </Grid>
 </Window>

@@ -11,16 +11,7 @@ namespace ElysSalon2._0.domain.Entities {
         private string description;
 
 
-        public Article(DTOAddArticle dto){
-            articleId = dto.articleId;
-            articleName = dto.articleName;
-            articleType = dto.articleType;
-            priceCost = dto.priceCost;
-            priceBuy = dto.priceBuy;
-            stock = dto.stock;
-            description = dto.description;
-        }
-
+    
 
         public Article(DTOGetArticles dto){
             articleId = dto.articleId;

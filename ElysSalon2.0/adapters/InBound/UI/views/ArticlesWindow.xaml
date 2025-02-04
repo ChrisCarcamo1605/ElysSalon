@@ -11,7 +11,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="/images/wallpaper3.jpg"/>
         </Grid.Background>
-        <ScrollViewer Style="{StaticResource Scroll}" x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
+        <ScrollViewer VerticalScrollBarVisibility="Visible"  x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
             <ItemsControl ItemsSource="{Binding (ui:ButtonManagement.ArticlesButtons) }">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -20,7 +20,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        <ScrollViewer Style="{StaticResource Scroll}" x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278" Background="#FFFFF2E0"/>
+        <ScrollViewer x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278" Background="#FFEFECE7"/>
         <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49" Margin="62,41,0,0" VerticalAlignment="Top" Width="140"  FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Background="Black" Foreground="#FFEFECE7" Click="atrasBtn_Click"/>
         <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118" Margin="966,538,0,0" VerticalAlignment="Top" Width="278" Background="Black" FontFamily="Bahnschrift Condensed" FontSize="48" Foreground="White" Click="listoBtn_Click"/>
 
