@@ -7,10 +7,10 @@
         Title="GeneralWindow" Height="720" Width="1280">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/images/wallpaper3.jpg" Opacity="0.75"/>
+            <ImageBrush ImageSource="/images/wallpaper3.jpg" Opacity="0.75" />
         </Grid.Background>
-        <Label Style="{DynamicResource TitleText}" Content="INFORMES" Margin="0,12,0,0" Width="246"/>
-        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="77,66,0,0"/>
+        <Label Style="{DynamicResource TitleText}" Content="INFORMES" Width="246" />
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="77,66,0,0" />
 
     </Grid>
 </Window>

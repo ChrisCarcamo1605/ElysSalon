@@ -30,7 +30,7 @@ public class ArticleRepository : IArticleRepository {
     public Article GetArticle(int id){
         db = DbUtil.getInstance();
 
-        Article article = (Article)db.getFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
+        var article = (Article)db.getFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
             reader.GetInt32(0),
             reader.GetString(1),
             reader.GetInt32(2),
@@ -43,21 +43,22 @@ public class ArticleRepository : IArticleRepository {
     }
 
     public void AddArticle(DTOAddArticle article){
-
-        DbUtil db = DbUtil.getInstance();
+        var db = DbUtil.getInstance();
 
         var d = new Dictionary<string, object>
         {
-            {"article_name" , article.articleName},
-            {"article_type_id" , db.getIdFrom("article_type","article_type_id","article_type_name",article.articleType)},
-            {"price_Buy" , article.priceBuy},
-            {"price_cost" , article.priceCost},
-            {"stock" , article.stock},
-            {"description" , article.description}
-
+            { "article_name", article.articleName },
+            {
+                "article_type_id",
+                db.getIdFrom("article_type", "article_type_id", "article_type_name", article.articleType)
+            },
+            { "price_Buy", article.priceBuy },
+            { "price_cost", article.priceCost },
+            { "stock", article.stock },
+            { "description", article.description }
         };
 
-        db.AddToDb<Article>("Article",d);
+        db.AddToDb<Article>("Article", d);
     }
 
     public void UpdateArticle(Article article){
@@ -65,7 +66,7 @@ public class ArticleRepository : IArticleRepository {
     }
 
     public List<ArticleType> getTypeArticle(){
-        DbUtil db = DbUtil.getInstance();
+        var db = DbUtil.getInstance();
         ObservableCollection<ArticleType> articleTypes = db.getFromDB("article_type", "*", (reader) =>
         {
             return new ArticleType(new DTOGetTypeArticles(
@@ -74,5 +75,4 @@ public class ArticleRepository : IArticleRepository {
         });
         return articleTypes.ToList();
     }
-
 }

@@ -6,23 +6,30 @@
         xmlns:ui="clr-namespace:ElysSalon2._0.adapters.InBound.UI"
         mc:Ignorable="d"
         Title="ArticlesWindow" Height="720" Width="1280"
-          WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="/images/wallpaper3.jpg"/>
+            <ImageBrush ImageSource="/images/wallpaper3.jpg" />
         </Grid.Background>
-        <ScrollViewer VerticalScrollBarVisibility="Visible"  x:Name="articleViewer" HorizontalAlignment="Left" Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
+        <ScrollViewer VerticalScrollBarVisibility="Visible" x:Name="articleViewer" HorizontalAlignment="Left"
+                      Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
             <ItemsControl ItemsSource="{Binding (ui:ButtonManagement.ArticlesButtons) }">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel/>
+                        <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        <ScrollViewer x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0" VerticalAlignment="Top" Width="278" Background="#FFEFECE7"/>
-        <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49" Margin="62,41,0,0" VerticalAlignment="Top" Width="140"  FontFamily="Bahnschrift Condensed" FontSize="24" FontWeight="Bold" Background="Black" Foreground="#FFEFECE7" Click="atrasBtn_Click"/>
-        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118" Margin="966,538,0,0" VerticalAlignment="Top" Width="278" Background="Black" FontFamily="Bahnschrift Condensed" FontSize="48" Foreground="White" Click="listoBtn_Click"/>
+        <ScrollViewer x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0"
+                      VerticalAlignment="Top" Width="278" Background="#FFEFECE7" />
+        <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49"
+                Margin="62,41,0,0" VerticalAlignment="Top" Width="140" FontFamily="Bahnschrift Condensed" FontSize="24"
+                FontWeight="Bold"
+                Foreground="#FFEFECE7" Click="atrasBtn_Click" />
+        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118"
+                Margin="966,538,0,0" VerticalAlignment="Top" Width="278"
+                FontFamily="Bahnschrift Condensed" FontSize="48" Click="listoBtn_Click" />
 
     </Grid>
 </Window>

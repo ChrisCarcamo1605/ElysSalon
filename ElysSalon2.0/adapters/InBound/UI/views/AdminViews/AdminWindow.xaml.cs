@@ -1,42 +1,32 @@
 ﻿using System.Windows;
+using ElysSalon2._0.aplication.Management;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
-{
-    /// <summary>
-    /// Lógica de interacción para AdminWindow.xaml
-    /// </summary>
-    public partial class AdminWindow : Window
-    {
-        public AdminWindow()
-        {
-            InitializeComponent();
-        }
+namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
-        private void exitBtn_Click(object sender, RoutedEventArgs e)
-        {
+/// <summary>
+/// Lógica de interacción para AdminWindow.xaml
+/// </summary>
+public partial class AdminWindow : Window {
 
+    IServiceProvider _serviceProvider;
+    WindowsManager _windowManager;
+    public AdminWindow(IServiceProvider serviceProvider,WindowsManager windowsManager){
+        _serviceProvider = serviceProvider;
+        _windowManager = windowsManager;
+        InitializeComponent();
+    }
 
-            if (MainWindow.mainW != null)
-            {
-                MainWindow.mainW.Show();
-                this.Close();
-            }
+    private void exitBtn_Click(object sender, RoutedEventArgs e){
+        _windowManager.closeCurrentWindowandShowWindow<MainWindow>(this);
+    }
 
+    private void salesBtn_Click(object sender, RoutedEventArgs e){
+        _windowManager.closeCurrentWindowandShowWindow<SalesWindow>(this);
 
-        }
+    }
 
-        private void salesBtn_Click(object sender, RoutedEventArgs e)
-        {
-            SalesWindow  salesWindow = new SalesWindow();
-            salesWindow.Show();
-            this.Close();
-        }
-
-        private void itemsBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ItemManager item = new ItemManager();
-            item.Show();
-            this.Close();
-        }
+    private void itemsBtn_Click(object sender, RoutedEventArgs e){
+        _windowManager.closeCurrentWindowandShowWindow<ItemManager>(this);
     }
 }

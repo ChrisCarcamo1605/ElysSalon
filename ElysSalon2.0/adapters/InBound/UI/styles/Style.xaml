@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-
     <SolidColorBrush x:Key="ComboBoxNormalBorderBrush" Color="#e3e9ef" />
     <SolidColorBrush x:Key="ComboBoxNormalBackgroundBrush" Color="#fff" />
     <SolidColorBrush x:Key="ComboBoxDisabledForegroundBrush" Color="#888" />
@@ -396,7 +395,7 @@
 
     <Style x:Key="articlesBtn" TargetType="Button">
         <Setter Property="Width" Value="270" />
-        <Setter Property="Margin" Value="6 9 "></Setter>
+        <Setter Property="Margin" Value="6 9 " />
         <Setter Property="Height" Value="120" />
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderThickness" Value="1" />
@@ -722,8 +721,8 @@
 
     <Style x:Key="ComboBoxFlatStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
-        <Setter Property="FontSize" Value="25"></Setter>
-        <Setter Property="FontFamily" Value="Bahnschrift Condensed"></Setter>
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="FontFamily" Value="Bahnschrift Condensed" />
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />

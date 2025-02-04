@@ -2,49 +2,34 @@
 using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 using ElysSalon2._0.adapters.OutBound;
 using ElysSalon2._0.aplication.DTOs;
+using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ElysSalon2._0.adapters.InBound.UI.views
-{
+namespace ElysSalon2._0.adapters.InBound.UI.views;
 
-    public partial class MainWindow : Window {
-    
-        public static MainWindow mainW { get; private set; }
-        public MainWindow()
-        {
-            InitializeComponent();
-            mainW = this;
-         
-        }
+public partial class MainWindow : Window {
+    private readonly IServiceProvider _serviceProvider;
+    private readonly WindowsManager _windowsManager;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
+    public MainWindow(IServiceProvider serviceProvider, WindowsManager windows){
+       _windowsManager = windows;
+        _serviceProvider = serviceProvider;
+        InitializeComponent();
+    }
 
-        }
+    private void Button_Click(object sender, RoutedEventArgs e){
+    }
 
-        private void adminBtn_Click(object sender, RoutedEventArgs e)
-        {
-            
-            AdminWindow adminWindow = new AdminWindow();
-            adminWindow.Show();
-            this.Hide();
-            
-        }
+    private void adminBtn_Click(object sender, RoutedEventArgs e){
+        _windowsManager.closeCurrentWindowandShowWindow<AdminWindow>(this);
+    }
 
-        private async void btnServices_Click(object sender, RoutedEventArgs e){
+    private async void btnServices_Click(object sender, RoutedEventArgs e){
+        _windowsManager.closeCurrentWindowandShowWindow<ArticlesWindow>(this);
+    }
 
-
-            IArticleRepository articleRepository = new ArticleRepository();
-            ArticlesWindow articlesWindow = new ArticlesWindow(articleRepository);
-            await Task.Delay(450);
-            this.Close();
-            articlesWindow.Show();
-        }
-
-        private void btnProducts_Click(object sender, RoutedEventArgs e)
-        {
-          
-        }
+    private void btnProducts_Click(object sender, RoutedEventArgs e){
     }
 }

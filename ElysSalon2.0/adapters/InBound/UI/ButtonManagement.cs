@@ -8,36 +8,33 @@ using System.Windows;
 using System.Windows.Controls;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
-using Microsoft.IdentityModel.Abstractions;
 
-namespace ElysSalon2._0.adapters.InBound.UI {
-    internal class ButtonManagement {
-        private IArticleRepository _articleRepository;
-        public ObservableCollection<Button> ArticlesButtons { get; set; }
+namespace ElysSalon2._0.adapters.InBound.UI;
 
-        public ButtonManagement(IArticleRepository articleRepository){
-            ArticlesButtons = new ObservableCollection<Button>();
-            _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
-            loadButtons();
-        }
+internal class ButtonManagement {
+    private IArticleRepository _articleRepository;
+    public ObservableCollection<Button> ArticlesButtons { get; set; }
 
-        public void loadButtons(){
-            var articles = _articleRepository.GetArticles();
+    public ButtonManagement(IArticleRepository articleRepository){
+        ArticlesButtons = new ObservableCollection<Button>();
+        _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
+        loadButtons();
+    }
 
-            if (articles != null && articles.Any())
+    public void loadButtons(){
+        var articles = _articleRepository.GetArticles();
+
+        if (articles != null && articles.Any())
+            foreach (var article in articles)
             {
-                foreach (Article article in articles)
+                var btn = new Button
                 {
-                    Button btn = new Button
-                    {
-                        Content = article.getArticleName(),
-                        Tag = article.getArticleId(),
-                        Style = (Style)Application.Current.FindResource("articlesBtn")
-                    };
+                    Content = article.getArticleName(),
+                    Tag = article.getArticleId(),
+                    Style = (Style)Application.Current.FindResource("articlesBtn")
+                };
 
-                    ArticlesButtons.Add(btn); // Agregar el nuevo botón a la colección
-                }
+                ArticlesButtons.Add(btn); // Agregar el nuevo botón a la colección
             }
-        }
     }
 }
