@@ -5,7 +5,7 @@ using ElysSalon2._0.domain.Entities;
 namespace ElysSalon2._0.aplication.Repositories;
 
 public interface IArticleRepository {
-    ObservableCollection<Article> GetArticles();
+    ObservableCollection<DTOGetArticles> GetArticles();
     Article GetArticle(int id);
     void AddArticle(DTOAddArticle article);
     void UpdateArticle(Article article);

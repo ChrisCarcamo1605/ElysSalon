@@ -42,8 +42,8 @@
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="442" GotFocus="descriptionBox_GotFocus"
                  LostFocus="descriptionBox_LostFocus" Loaded="descriptionBox_Loaded" Grid.ColumnSpan="2" />
-        <DataGrid HorizontalAlignment="Center" Height="367" Margin="0,307,0,0" VerticalAlignment="Top" Width="1178"
-                  d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Column="1" />
+
+
         <TextBox x:Name="priceBuyBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54"
                  Margin="230,214,0,0"
                  TextWrapping="Wrap"
@@ -55,6 +55,23 @@
         <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
                 Height="54" Margin="670,136,0,0" VerticalAlignment="Top" Width="164" Click="addArticleBtn_Click"
                 Grid.ColumnSpan="2" />
+        <DataGrid x:Name="articlesGrid"
+                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="335" Margin="78,325,0,0"
+                  VerticalAlignment="Top" Width="951"
+                  ItemsSource="{Binding articlesCollection}" MaxColumnWidth="200"
+                  AutoGenerateColumns="False" MinColumnWidth="130">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID Artículo" Binding="{Binding articleId}" />
+                <DataGridTextColumn Header="Nombre" Binding="{Binding articleName}" />
+                <DataGridTextColumn Header="Tipo de Artículo" Binding="{Binding articleType}" />
+                <DataGridTextColumn Header="Precio Costo" Binding="{Binding priceCost}" />
+                <DataGridTextColumn Header="Precio Venta" Binding="{Binding priceBuy}" />
+                <DataGridTextColumn Header="Stock" Binding="{Binding stock}" />
+                <DataGridTextColumn Header="Descripción" Binding="{Binding description}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
 
     </Grid>
 </Window>

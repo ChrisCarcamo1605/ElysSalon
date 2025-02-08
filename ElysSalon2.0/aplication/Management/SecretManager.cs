@@ -22,7 +22,7 @@ public class SecretManager {
         _configuration = builder.Build();
     }
 
-    public static string GetValue(string key){
+    public static string? GetValue(string key){
         return _configuration[key];
     }
 }

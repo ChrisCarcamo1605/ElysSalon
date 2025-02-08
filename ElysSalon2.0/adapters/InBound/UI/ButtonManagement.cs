@@ -29,8 +29,8 @@ internal class ButtonManagement {
             {
                 var btn = new Button
                 {
-                    Content = article.getArticleName(),
-                    Tag = article.getArticleId(),
+                    Content = article.articleName,
+                    Tag = article.articleId,
                     Style = (Style)Application.Current.FindResource("articlesBtn")
                 };
 

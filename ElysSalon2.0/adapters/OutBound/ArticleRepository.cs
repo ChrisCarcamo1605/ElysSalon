@@ -7,21 +7,21 @@ using Microsoft.Data.SqlClient;
 namespace ElysSalon2._0.adapters.OutBound;
 
 public class ArticleRepository : IArticleRepository {
-    private static DbUtil db;
+    private  DbUtil db;
 
-    public ObservableCollection<Article> GetArticles(){
+    public ObservableCollection<DTOGetArticles> GetArticles(){
         db = DbUtil.getInstance();
 
-        ObservableCollection<Article> articles = db.getFromDB("Article", "*", (reader) =>
+        ObservableCollection<DTOGetArticles> articles = db.GetFromDB<DTOGetArticles>("Article", "*", (reader) =>
         {
-            return new Article(new DTOGetArticles(
+           return  new DTOGetArticles(
                 reader.GetInt32(0),
                 reader.GetString(1),
                 reader.GetInt32(2),
                 reader.GetDecimal(3),
                 reader.GetDecimal(4),
                 reader.GetInt32(5),
-                reader.GetString(6)));
+                reader.GetString(6));
         });
 
         return articles;
@@ -30,7 +30,7 @@ public class ArticleRepository : IArticleRepository {
     public Article GetArticle(int id){
         db = DbUtil.getInstance();
 
-        var article = (Article)db.getFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
+        var article = (Article)db.GetFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
             reader.GetInt32(0),
             reader.GetString(1),
             reader.GetInt32(2),
@@ -50,7 +50,7 @@ public class ArticleRepository : IArticleRepository {
             { "article_name", article.articleName },
             {
                 "article_type_id",
-                db.getIdFrom("article_type", "article_type_id", "article_type_name", article.articleType)
+                db.GetIdFrom("article_type", "article_type_id", "article_type_name", article.articleType)
             },
             { "price_Buy", article.priceBuy },
             { "price_cost", article.priceCost },
@@ -67,7 +67,7 @@ public class ArticleRepository : IArticleRepository {
 
     public List<ArticleType> getTypeArticle(){
         var db = DbUtil.getInstance();
-        ObservableCollection<ArticleType> articleTypes = db.getFromDB("article_type", "*", (reader) =>
+        ObservableCollection<ArticleType> articleTypes = db.GetFromDB("article_type", "*", (reader) =>
         {
             return new ArticleType(new DTOGetTypeArticles(
                 reader.GetInt32(0),

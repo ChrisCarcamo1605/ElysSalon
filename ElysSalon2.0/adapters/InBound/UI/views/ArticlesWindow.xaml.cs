@@ -11,7 +11,6 @@ namespace ElysSalon2._0.adapters.InBound.UI.views;
 /// Lógica de interacción para ArticlesWindow.xaml
 /// </summary>
 public partial class ArticlesWindow : Window {
-    private readonly IServiceProvider _serviceProvider;
     private readonly WindowsManager _windowsManager;
 
     public ArticlesWindow(IArticleRepository articleRepository, WindowsManager windowsManager){

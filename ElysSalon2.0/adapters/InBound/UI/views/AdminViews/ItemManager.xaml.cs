@@ -1,6 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using Windows.Devices.PointOfService;
 using ElysSalon2._0.adapters.OutBound;
@@ -8,6 +11,7 @@ using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
@@ -15,23 +19,57 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 /// <summary>
 /// Lógica de interacción para ItemManager.xaml
 /// </summary>
-public partial class ItemManager : Window {
+public partial class ItemManager : Window, INotifyPropertyChanged {
+    private readonly IArticleRepository _articleRepository;
 
-    IServiceProvider _serviceProvider;
-    private readonly IArticleRepository _articleRepository = new ArticleRepository();
+    public ObservableCollection<DTOGetArticles> articlesCollection
+    {
+        get { return _articlesCollection; }
+        set
+        {
+            _articlesCollection = value;
+            OnPropertyChanged(nameof(articlesCollection));
+        }
+    }
 
     private DTOAddArticle dto;
     private WindowsManager _windowsManager;
-    public ItemManager(IServiceProvider serviceProvider, WindowsManager windowsManager){
+
+    public ItemManager(IServiceProvider serviceProvider, WindowsManager windowsManager,
+        IArticleRepository articleRepository){
         InitializeComponent();
+        _articleRepository = articleRepository;
         _windowsManager = windowsManager;
-        _serviceProvider = serviceProvider;
+        DataContext = this;
+        LoadItems();
+    }
+
+    private ObservableCollection<DTOGetArticles> _articlesCollection;
+
+
+    private void LoadItems(){
+        var articles = _articleRepository.GetArticles();
+
+        if (_articlesCollection == null)
+        {
+            _articlesCollection = new ObservableCollection<DTOGetArticles>(articles);
+        }
+        else
+        {
+            _articlesCollection.Clear();
+            foreach (var article in articles)
+            {
+                _articlesCollection.Add(article); // Agrega los nuevos datos
+            }
+        }
+
+        // Aquí, llamas a OnPropertyChanged para asegurarte de que los cambios se notifiquen
+        OnPropertyChanged(nameof(articlesCollection));
     }
 
 
     private void exitBtn_Click(object sender, RoutedEventArgs e){
         _windowsManager.closeCurrentWindowandShowWindow<AdminWindow>(this);
-
     }
 
 
@@ -167,11 +205,14 @@ public partial class ItemManager : Window {
         _articleRepository.AddArticle(dto);
 
         MessageBox.Show("Articulo Agregado con exito!");
+        LoadItems();
         nameTxtBox.Clear();
         typeComboBox.Text = "Tipo Articulo";
         priceCostBox.Clear();
         stockBox.Clear();
         descriptionBox.Clear();
+        priceBuyBox.Clear();
+        articlesGrid.Items.Refresh();
     }
 
     private void typeComboBox_Loaded(object sender, RoutedEventArgs e){
@@ -229,5 +270,22 @@ public partial class ItemManager : Window {
 
 
         if (!textBox.Text.Equals("Tipo Articulo")) textBox.Foreground = new SolidColorBrush(Colors.Black);
+    }
+
+
+    private void ItemGrid_Loaded(object sender, RoutedEventArgs e){
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null){
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null){
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }

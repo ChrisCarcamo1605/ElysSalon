@@ -1,37 +1,34 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
-using Windows.Media.Streaming.Adaptive;
-using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Management;
-using ElysSalon2._0.domain.Entities;
 using Microsoft.Data.SqlClient;
 
 namespace ElysSalon2._0.adapters.OutBound;
 
 public class DbUtil {
-    private static DbUtil instance;
+    private static DbUtil _instance;
     private static readonly object _lock = new();
-    private static string connectionString;
+    private static string _connectionString;
 
 
     private DbUtil(){
-        connectionString = SecretManager.GetValue("userCon");
+        _connectionString = SecretManager.GetValue("userCon");
     }
 
 
     public static DbUtil getInstance(){
         lock (_lock)
         {
-            if (instance == null) instance = new DbUtil();
+            if (_instance == null) _instance = new DbUtil();
         }
 
-        return instance;
+        return _instance;
     }
 
-    public ObservableCollection<T> getFromDB<T>(string table, string column, Func<SqlDataReader, T> mapFunction){
+    public ObservableCollection<T> GetFromDB<T>(string table, string column, Func<SqlDataReader, T> mapFunction){
         ObservableCollection<T> results = new ObservableCollection<T>();
 
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
             using (var cmd = new SqlCommand($"SELECT {column} FROM {table}", connection))
@@ -48,10 +45,10 @@ public class DbUtil {
     }
 
 
-    public object getFromDB(int id, string table, string column, Func<SqlDataReader, object> mapFunction){
+    public object GetFromDB(int id, string table, string column, Func<SqlDataReader, object> mapFunction){
         object result = null;
 
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
             using (var cmd = new SqlCommand($"SELECT {column} FROM {table} WHERE {column} = @id",
@@ -74,7 +71,7 @@ public class DbUtil {
         var columns = string.Join(", ", parameters.Keys);
         var parameterNames = string.Join(", ", parameters.Keys.Select(k => "@" + k));
 
-        using (var connection = new SqlConnection(connectionString))
+        using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
             var query = $"INSERT INTO {table} ({columns}) VALUES ({parameterNames})";
@@ -90,8 +87,8 @@ public class DbUtil {
         }
     }
 
-    public int getIdFrom(string table, string columnId, string columnName, string value){
-        using (var connection = new SqlConnection(connectionString))
+    public int GetIdFrom(string table, string columnId, string columnName, string value){
+        using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
             using (var cmd = new SqlCommand($"SELECT {columnId} FROM {table} WHERE {columnName} = @value",
