@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using ElysSalon2._0.aplication.DTOs;
@@ -13,12 +15,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
-/// <summary>
-/// Lógica de interacción para ItemManager.xaml
-/// </summary>
 public partial class ItemManager : Window, INotifyPropertyChanged {
     private readonly IArticleRepository _articleRepository;
     private DTOGetArticles _selectedArticle;
+
+    private ICollectionView _articlesView;
 
     public ObservableCollection<DTOGetArticles> articlesCollection
     {
@@ -62,12 +63,13 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     private void LoadItems(){
         var articles = _articleRepository.GetArticles();
 
-        // Guardar el índice seleccionado actual
-        var selectedIndex = itemGrid.SelectedIndex;
+        int selectedIndex = itemGrid.SelectedIndex;
 
         if (_articlesCollection == null)
         {
             _articlesCollection = new ObservableCollection<DTOGetArticles>(articles);
+            _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
+            itemGrid.ItemsSource = _articlesView;
         }
         else
         {
@@ -78,14 +80,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
             }
         }
 
-        OnPropertyChanged(nameof(articlesCollection));
-
-        // Restaurar la selección si había una
-        if (selectedIndex >= 0 && selectedIndex < _articlesCollection.Count)
-        {
-            itemGrid.SelectedIndex = selectedIndex;
-            itemGrid.ScrollIntoView(itemGrid.SelectedItem);
-        }
+        _articlesView.Refresh();
     }
 
 
@@ -237,7 +232,6 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     }
 
     private void updateBtn_Click(object sender, RoutedEventArgs e){
-        // Obtener el ítem directamente del DataGrid
         var selectedIndex = itemGrid.SelectedIndex;
         if (selectedIndex == -1)
         {
@@ -246,6 +240,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
 
         var selectedItem = (DTOGetArticles)itemGrid.Items[selectedIndex];
+
 
         var item = new Article(new DTOUpdateArticle(
             selectedItem.article_id,
@@ -260,14 +255,8 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         {
             _articleRepository.UpdateArticle(item);
             MessageBox.Show("Artículo actualizado exitosamente");
-
-            // Guardar el ID del artículo actual
             var currentArticleId = selectedItem.article_id;
-
-            // Recargar los items
             LoadItems();
-
-            // Reseleccionar el artículo actualizado
             for (int i = 0; i < itemGrid.Items.Count; i++)
             {
                 var article = (DTOGetArticles)itemGrid.Items[i];
@@ -301,8 +290,9 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         if (result == MessageBoxResult.Yes)
         {
             _articleRepository.DeleteArticle(SelectedArticle.article_id);
-            LoadItems();
+
             MessageBox.Show("Artículo eliminado exitosamente");
+            LoadItems();
         }
     }
 
@@ -329,7 +319,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
             {
                 itemGrid.CommitEdit();
 
-                var nextItem = itemGrid.Items[currentRowIndex + 1];
+                var nextItem = itemGrid.Items[currentRowIndex + 0];
 
                 itemGrid.SelectedItem = null;
 
@@ -363,7 +353,109 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-
     private void sortComboBox_Loaded(object sender, RoutedEventArgs e){
+        var types = _articleRepository.getListTypeArticle();
+        sortComboBox.Items.Add("Todo");
+        sortComboBox.SelectedIndex = 0;
+        foreach (var i in types) sortComboBox.Items.Add(i.name);
+
+        if (sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Gray);
+    }
+
+    private void sortComboBox_GotFocus(object sender, RoutedEventArgs e){
+        if (!sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Black);
+    }
+
+    private void sortComboBox_LostFocus(object sender, RoutedEventArgs e){
+        lostFocus("Todo", sortComboBox);
+    }
+
+    private void sortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e){
+        if (sortComboBox.SelectedItem is string itemSelected && sortComboBox.IsMouseCaptured)
+        {
+            if (!itemSelected.Equals("Todo"))
+            {
+                _articlesView.Filter = (o) =>
+                {
+                    var article = (DTOGetArticles)o;
+                    return article.article_type.Equals(itemSelected);
+                };
+            }
+            else
+            {
+                _articlesView.Filter = null;
+            }
+
+            _articlesView.Refresh();
+        }
+    }
+
+    private void searchTxtBox_TextChanged(object sender, TextChangedEventArgs e){
+        string searchText = searchTxtBox.Text.ToLower();
+
+        if (string.IsNullOrWhiteSpace(searchText) || searchText.Equals("nombre..."))
+        {
+            _articlesView.Filter = null;
+        }
+        else
+        {
+            _articlesView.Filter = (obj) =>
+            {
+                if (obj is DTOGetArticles article)
+                {
+                    return article.article_name.ToLower().Contains(searchText);
+                }
+
+                return false;
+            };
+        }
+
+        _articlesView.Refresh();
+    }
+
+    private void searchTxtBox_Loaded(object sender, RoutedEventArgs e){
+        lostFocus("Nombre...", searchTxtBox);
+    }
+
+    private void searchTxtBox_LostFocus(object sender, RoutedEventArgs e){
+        lostFocus("Nombre...", searchTxtBox);
+    }
+
+    private void searchTxtBox_GotFocus(object sender, RoutedEventArgs e){
+        gotFocus("Nombre...", searchTxtBox);
+    }
+
+    public void onlyDigits(dynamic textBox, TextCompositionEventArgs e)
+    {
+        char caracter = e.Text[0];
+
+        if (!char.IsDigit(caracter) && !char.IsControl(caracter) && caracter != '.')
+        {
+            e.Handled = true;
+        }
+        else if (caracter == '.' && textBox.Text.Contains('.')) // Evitar múltiples puntos
+        {
+            e.Handled = true;
+        }
+    }
+
+
+    private void nameTxtBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
+       
+    }
+
+    private void stockBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        onlyDigits(stockBox, e);
+    }
+
+    private void priceBuyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        onlyDigits(priceBuyBox, e);
+    }
+
+    private void priceCostBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        onlyDigits(priceCostBox, e);
     }
 }

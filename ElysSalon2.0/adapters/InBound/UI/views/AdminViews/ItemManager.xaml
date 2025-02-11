@@ -22,52 +22,52 @@
                 Grid.ColumnSpan="2" />
 
         <TextBox x:Name="nameTxtBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="58"
-                 Margin="58,132,0,0"
+                 Margin="48,132,0,0"
 
                  VerticalAlignment="Top" Width="204" GotFocus="TextBox_GotFocus" LostFocus="nameTxtBox_LostFocus"
-                 Loaded="nameTxtBox_Loaded_1" Grid.ColumnSpan="2" />
+                 Loaded="nameTxtBox_Loaded_1" Grid.ColumnSpan="2" PreviewTextInput="nameTxtBox_PreviewTextInput" />
         <TextBox x:Name="priceCostBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54"
-                 Margin="527,136,0,0"
+                 Margin="517,136,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="171" Loaded="priceCostBox_Loaded" LostFocus="priceCostBox_LostFocus"
-                 GotFocus="priceCostBox_GotFocus" Grid.ColumnSpan="2" />
+                 GotFocus="priceCostBox_GotFocus" Grid.ColumnSpan="2" PreviewTextInput="priceCostBox_PreviewTextInput" />
         <ComboBox SelectedIndex="0" Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox"
-                  HorizontalAlignment="Left" Height="56" Margin="290,134,0,0" VerticalAlignment="Top" Width="212"
+                  HorizontalAlignment="Left" Height="56" Margin="280,134,0,0" VerticalAlignment="Top" Width="212"
                   RenderTransformOrigin="0.781,0.671" Loaded="typeComboBox_Loaded" LostFocus="typeComboBox_LostFocus"
                   GotFocus="typeComboBox_GotFocus" Grid.ColumnSpan="2">
             <ComboBoxItem IsSelected="True">Tipo Articulo</ComboBoxItem>
         </ComboBox>
         <TextBox x:Name="descriptionBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54"
-                 Margin="430,214,0,0"
+                 Margin="420,214,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="466" GotFocus="descriptionBox_GotFocus"
                  LostFocus="descriptionBox_LostFocus" Loaded="descriptionBox_Loaded" Grid.ColumnSpan="2" />
 
 
         <TextBox x:Name="priceBuyBox" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="54"
-                 Margin="226,214,0,0"
+                 Margin="216,214,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="170" GotFocus="priceBuyBox_GotFocus" LostFocus="priceBuyBox_LostFocus"
-                 Loaded="priceBuyBox_Loaded" Grid.ColumnSpan="2" />
+                 Loaded="priceBuyBox_Loaded" Grid.ColumnSpan="2" PreviewTextInput="priceBuyBox_PreviewTextInput" />
         <TextBox Style="{StaticResource textInput}" x:Name="stockBox" HorizontalAlignment="Left" Height="52"
-                 Margin="58,216,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Loaded="stockBox_Loaded"
-                 LostFocus="stockBox_LostFocus" GotFocus="stockBox_GotFocus" Grid.ColumnSpan="2"/>
+                 Margin="48,216,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Loaded="stockBox_Loaded"
+                 LostFocus="stockBox_LostFocus" GotFocus="stockBox_GotFocus" Grid.ColumnSpan="2" PreviewTextInput="stockBox_PreviewTextInput"/>
         <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
-                Height="54" Margin="732,136,0,0" VerticalAlignment="Top" Width="164" Click="addArticleBtn_Click"
+                Height="54" Margin="722,136,0,0" VerticalAlignment="Top" Width="164" Click="addArticleBtn_Click"
                 Grid.ColumnSpan="2" />
 
         <DataGrid x:Name="itemGrid"
-                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="335" Margin="58,325,0,0"
-                  VerticalAlignment="Top" Width="951"
+                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="335" Margin="48,325,0,0"
+                  VerticalAlignment="Top" Width="920"
                   ItemsSource="{Binding articlesCollection}" MaxColumnWidth="203"
                   AutoGenerateColumns="False" MinColumnWidth="100" Background="White" 
                   FontSize="20" FontFamily="Bahnschrift Condensed" 
                   CanUserSortColumns="False" 
-                   IsSynchronizedWithCurrentItem="True"
+                   IsSynchronizedWithCurrentItem="False"
           EnableRowVirtualization="False"
                   SelectedItem="{Binding SelectedArticle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionChanged="itemGrid_SelectionChanged"
-                  IsReadOnly="False" KeyDown="itemGrid_KeyDown" SelectionMode="Single">
+                  IsReadOnly="False" KeyDown="itemGrid_KeyDown" SelectionMode="Single" AlternationCount="-1" TabIndex="-1">
             <DataGrid.ColumnHeaderStyle>
                 <Style/>
             </DataGrid.ColumnHeaderStyle>
@@ -81,11 +81,15 @@
                 <DataGridTextColumn Header="Descripción" Binding="{Binding description, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Style="{StaticResource addBtn}" x:Name="updateBtn" Content="Actualizar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="64" Margin="1037,512,0,0" VerticalAlignment="Top" Width="201" Click="updateBtn_Click"/>
-        <Button Style="{StaticResource addBtn}" x:Name="deleteBtn" Content="Borrar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="65" Margin="1037,595,0,0" VerticalAlignment="Top" Width="201" Background="#FFBF0000" Click="deleteBtn_Click"/>
-        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" x:Name="sortComboBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="62" Margin="1037,325,0,0" VerticalAlignment="Top" Width="201"/>
-        <TextBox x:Name="searchTxtBox" Style="{StaticResource textInput}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="54" Margin="962,214,0,0" TextWrapping="Wrap" Text="Buscar..
-                 " VerticalAlignment="Top" Width="276"/>
+        <Button Style="{StaticResource addBtn}" x:Name="updateBtn" Content="Actualizar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="64" Margin="1000,522,0,0" VerticalAlignment="Top" Width="228" Click="updateBtn_Click"/>
+        <Button Style="{StaticResource addBtn}" x:Name="deleteBtn" Content="Borrar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="65" Margin="1000,595,0,0" VerticalAlignment="Top" Width="228" Background="#FFBF0000" Click="deleteBtn_Click"/>
+        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" x:Name="sortComboBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="62" Margin="1000,450,0,0" VerticalAlignment="Top" Width="228" Loaded="sortComboBox_Loaded" GotFocus="sortComboBox_GotFocus" LostFocus="sortComboBox_LostFocus" SelectionChanged="sortComboBox_SelectionChanged">
+
+        </ComboBox>
+        <TextBox x:Name="searchTxtBox" Style="{StaticResource textInput}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="54" Margin="952,214,0,0"                  VerticalAlignment="Top" Width="276" TextChanged="searchTxtBox_TextChanged" Loaded="searchTxtBox_Loaded" LostFocus="searchTxtBox_LostFocus" GotFocus="searchTxtBox_GotFocus"/>
+
+        <Label Content="ORDENAR POR:" Grid.ColumnSpan="2" Margin="1000,409,122,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
+        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,172,122,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
 
 
     </Grid>
