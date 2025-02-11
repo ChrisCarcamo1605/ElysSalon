@@ -22,7 +22,7 @@ internal class ButtonManagement {
     }
 
     public void loadButtons(){
-        var articles = _articleRepository.GetArticles();
+        var articles = _articleRepository.GetArticlesToButton();
 
         if (articles != null && articles.Any())
             foreach (var article in articles)

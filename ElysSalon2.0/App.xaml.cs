@@ -39,7 +39,7 @@ public partial class App : Application {
         services.AddTransient<MailWindow>();
 
         // Managers de lógica de negocio
-        services.AddScoped<ItemManager>(); // ← Considera cambiar este a Scoped
+        services.AddTransient<ItemManager>(); // ← Considera cambiar este a Scoped
     }
 
     // Este es el método que será llamado al inicio

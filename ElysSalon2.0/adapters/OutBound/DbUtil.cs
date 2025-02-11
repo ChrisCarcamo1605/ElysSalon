@@ -51,7 +51,7 @@ public class DbUtil {
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            using (var cmd = new SqlCommand($"SELECT {column} FROM {table} WHERE {column} = @id",
+            using (var cmd = new SqlCommand($"SELECT * FROM {table} WHERE {column} = @id",
                        connection))
             {
                 cmd.Parameters.AddWithValue("@id", id);
@@ -63,7 +63,6 @@ public class DbUtil {
             }
         }
 
-        MessageBox.Show(result?.ToString() ?? "No se encontró el registro.");
         return result;
     }
 
@@ -105,4 +104,47 @@ public class DbUtil {
 
         throw new RankException("No se encontró el registro.");
     }
+
+    public void UpdateItem<T>(string table, Dictionary<string, object> parameters, int id){
+        var setClause = string.Join(", ", parameters.Keys.Select(k => $"{k} = @{k}"));
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            var query = $"UPDATE {table} SET {setClause} WHERE article_id = {id};";
+
+            using (var cmd = new SqlCommand(query, connection))
+            {
+                // Agregar todos los parámetros dinámicamente
+                foreach (var param in parameters)
+                    cmd.Parameters.AddWithValue("@" + param.Key, param.Value ?? DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    public void DeleteItem(string table, int id){
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            using (var cmd = new SqlCommand($"DELETE FROM {table} WHERE article_id = @id", connection))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    //public void logicalDelete(string table, int id)
+    //{
+    //    using (var connection = new SqlConnection(_connectionString))
+    //    {
+    //        connection.Open();
+    //        using (var cmd = new SqlCommand($"UPDATE {table} SET active = 0 WHERE article_id = @id", connection))
+    //        {
+    //            cmd.Parameters.AddWithValue("@id", id);
+    //            cmd.ExecuteNonQuery();
+    //        }
+    //    }
+    //}
 }

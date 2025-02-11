@@ -11,4 +11,9 @@ public class ArticleType {
         articleTypeId = dto.typeId;
         name = dto.typeName;
     }
+    public ArticleType(DTOGetArticleTypeName dto)
+    {
+        articleTypeId = dto.type_id;
+        name = dto.type_name;
+    }
 }
