@@ -18,15 +18,15 @@ public partial class AdminWindow : Window {
     }
 
     private void exitBtn_Click(object sender, RoutedEventArgs e){
-        _windowManager.closeCurrentWindowandShowWindow<MainWindow>(this);
+        _windowManager.CloseCurrentWindowandShowWindow<MainWindow>(this);
     }
 
     private void salesBtn_Click(object sender, RoutedEventArgs e){
-        _windowManager.closeCurrentWindowandShowWindow<SalesWindow>(this);
+        _windowManager.CloseCurrentWindowandShowWindow<SalesWindow>(this);
 
     }
 
     private void itemsBtn_Click(object sender, RoutedEventArgs e){
-        _windowManager.closeCurrentWindowandShowWindow<ItemManager>(this);
+        _windowManager.CloseCurrentWindowandShowWindow<ItemManager>(this);
     }
 }

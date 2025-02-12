@@ -89,7 +89,8 @@
         <TextBox x:Name="searchTxtBox" Style="{StaticResource textInput}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="54" Margin="952,214,0,0"                  VerticalAlignment="Top" Width="276" TextChanged="searchTxtBox_TextChanged" Loaded="searchTxtBox_Loaded" LostFocus="searchTxtBox_LostFocus" GotFocus="searchTxtBox_GotFocus"/>
 
         <Label Content="ORDENAR POR:" Grid.ColumnSpan="2" Margin="1000,409,122,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
-        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,172,122,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
+        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,172,106,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
+        <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="51" Margin="952,110,0,0" VerticalAlignment="Top" Width="276" Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="3,3,3,3" Click="addTypeBtn_Click"/>
 
 
     </Grid>

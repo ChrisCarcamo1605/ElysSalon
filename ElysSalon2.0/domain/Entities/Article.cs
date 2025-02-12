@@ -1,4 +1,4 @@
-﻿using ElysSalon2._0.aplication.DTOs;
+﻿using ElysSalon2._0.aplication.DTOs.DTOArticle;
 
 namespace ElysSalon2._0.domain.Entities;
 

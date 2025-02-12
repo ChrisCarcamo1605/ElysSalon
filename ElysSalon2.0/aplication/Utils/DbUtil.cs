@@ -3,20 +3,23 @@ using System.Windows;
 using ElysSalon2._0.aplication.Management;
 using Microsoft.Data.SqlClient;
 
-namespace ElysSalon2._0.adapters.OutBound;
+namespace ElysSalon2._0.aplication.Utils;
 
-public class DbUtil {
+public class DbUtil
+{
     private static DbUtil _instance;
     private static readonly object _lock = new();
     private static string _connectionString;
 
 
-    private DbUtil(){
+    private DbUtil()
+    {
         _connectionString = SecretManager.GetValue("userCon");
     }
 
 
-    public static DbUtil getInstance(){
+    public static DbUtil getInstance()
+    {
         lock (_lock)
         {
             if (_instance == null) _instance = new DbUtil();
@@ -25,7 +28,8 @@ public class DbUtil {
         return _instance;
     }
 
-    public ObservableCollection<T> GetFromDB<T>(string table, string column, Func<SqlDataReader, T> mapFunction){
+    public ObservableCollection<T> GetFromDB<T>(string table, string column, Func<SqlDataReader, T> mapFunction)
+    {
         ObservableCollection<T> results = new ObservableCollection<T>();
 
         using (var connection = new SqlConnection(_connectionString))
@@ -45,7 +49,8 @@ public class DbUtil {
     }
 
 
-    public object GetFromDB(int id, string table, string column, Func<SqlDataReader, object> mapFunction){
+    public object GetFromDB(int id, string table, string column, Func<SqlDataReader, object> mapFunction)
+    {
         object result = null;
 
         using (var connection = new SqlConnection(_connectionString))
@@ -66,7 +71,8 @@ public class DbUtil {
         return result;
     }
 
-    public void AddToDb<T>(string table, Dictionary<string, object> parameters){
+    public void AddToDb<T>(string table, Dictionary<string, object> parameters)
+    {
         var columns = string.Join(", ", parameters.Keys);
         var parameterNames = string.Join(", ", parameters.Keys.Select(k => "@" + k));
 
@@ -86,7 +92,8 @@ public class DbUtil {
         }
     }
 
-    public int GetIdFrom(string table, string columnId, string columnName, string value){
+    public int GetIdFrom(string table, string columnId, string columnName, string value)
+    {
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
@@ -105,13 +112,14 @@ public class DbUtil {
         throw new RankException("No se encontró el registro.");
     }
 
-    public void UpdateItem<T>(string table, Dictionary<string, object> parameters, int id){
+    public void Update<T>(string table, string columnId, Dictionary<string, object> parameters, int id)
+    {
         var setClause = string.Join(", ", parameters.Keys.Select(k => $"{k} = @{k}"));
 
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            var query = $"UPDATE {table} SET {setClause} WHERE article_id = {id};";
+            var query = $"UPDATE {table} SET {setClause} WHERE {columnId} = {id};";
 
             using (var cmd = new SqlCommand(query, connection))
             {
@@ -123,11 +131,12 @@ public class DbUtil {
         }
     }
 
-    public void DeleteItem(string table, int id){
+    public void Delete(string table, string columnId, int id)
+    {
         using (var connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            using (var cmd = new SqlCommand($"DELETE FROM {table} WHERE article_id = @id", connection))
+            using (var cmd = new SqlCommand($"DELETE FROM {table} WHERE {columnId} = @id", connection))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.ExecuteNonQuery();

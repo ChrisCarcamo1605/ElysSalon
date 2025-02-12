@@ -23,11 +23,11 @@ public partial class MainWindow : Window {
     }
 
     private void adminBtn_Click(object sender, RoutedEventArgs e){
-        _windowsManager.closeCurrentWindowandShowWindow<AdminWindow>(this);
+        _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(this);
     }
 
     private async void btnServices_Click(object sender, RoutedEventArgs e){
-        _windowsManager.closeCurrentWindowandShowWindow<ArticlesWindow>(this);
+        _windowsManager.CloseCurrentWindowandShowWindow<ArticlesWindow>(this);
     }
 
     private void btnProducts_Click(object sender, RoutedEventArgs e){

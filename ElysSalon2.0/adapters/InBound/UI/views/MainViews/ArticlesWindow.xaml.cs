@@ -15,7 +15,7 @@ public partial class ArticlesWindow : Window {
 
     public ArticlesWindow(IArticleRepository articleRepository, WindowsManager windowsManager){
         _windowsManager = windowsManager;
-        DataContext = new ButtonManagement(articleRepository);
+        DataContext = new ButtonManager(articleRepository);
         InitializeComponent();
     }
 
@@ -23,7 +23,7 @@ public partial class ArticlesWindow : Window {
     }
 
     private void atrasBtn_Click(object sender, RoutedEventArgs e){
-        _windowsManager.closeCurrentWindowandShowWindow<MainWindow>(this);
+        _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(this);
     }
 
     private void listoBtn_Click(object sender, RoutedEventArgs e){

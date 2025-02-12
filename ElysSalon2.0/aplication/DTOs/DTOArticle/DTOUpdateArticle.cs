@@ -1,6 +1,6 @@
 ﻿using ElysSalon2._0.domain.Entities;
 
-namespace ElysSalon2._0.aplication.DTOs;
+namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
 public record DTOUpdateArticle(
     int articleId,

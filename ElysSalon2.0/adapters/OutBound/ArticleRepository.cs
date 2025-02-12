@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Navigation;
-using ElysSalon2._0.aplication.DTOs;
+using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
+using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.Data.SqlClient;
 
@@ -10,6 +11,11 @@ namespace ElysSalon2._0.adapters.OutBound;
 
 public class ArticleRepository : IArticleRepository {
     private DbUtil db;
+    private readonly IArticleTypeRepository _typeRepository;
+
+    public ArticleRepository(IArticleTypeRepository typeRepository){
+        _typeRepository = typeRepository;
+    }
 
     public ObservableCollection<DTOGetArticlesButton> GetArticlesToButton(){
         db = DbUtil.getInstance();
@@ -34,7 +40,7 @@ public class ArticleRepository : IArticleRepository {
             return new DTOGetArticles(
                 reader.GetInt32(0),
                 reader.GetString(1),
-                getArticleType((reader.GetInt32(2))).name,
+                _typeRepository.getArticleType((reader.GetInt32(2))).name,
                 reader.GetDecimal(3),
                 reader.GetDecimal(4),
                 reader.GetInt32(5),
@@ -92,41 +98,11 @@ public class ArticleRepository : IArticleRepository {
             { "stock", article.stock },
             { "description", article.description }
         };
-        db.UpdateItem<Article>("Article", d, article.articleId);
-    }
-
-    public ArticleType getArticleType(int id){
-        var db = DbUtil.getInstance();
-
-        var type_name = (ArticleType)db.GetFromDB(id, "article_type", "article_type_id", (reader) =>
-        {
-            return new ArticleType(new DTOGetArticleTypeName(
-                reader.GetInt32(0),
-                reader.GetString(1)));
-        });
-        return type_name;
-    }
-    public int getArticleTypeId(string type_name)
-    {
-        var db = DbUtil.getInstance();
-
-        int id =  db.GetIdFrom("article_type", "article_type_id", "article_type_name",type_name);
-        return id;
+        db.Update<Article>("Article", "article_id",d, article.articleId);
     }
 
     public void DeleteArticle(int id){
         var db = DbUtil.getInstance();
-        db.DeleteItem("Article", id);
-    }
-
-    public List<ArticleType> getListTypeArticle(){
-        var db = DbUtil.getInstance();
-        ObservableCollection<ArticleType> articleTypes = db.GetFromDB("article_type", "*", (reader) =>
-        {
-            return new ArticleType(new DTOGetTypeArticles(
-                reader.GetInt32(0),
-                reader.GetString(1)));
-        });
-        return articleTypes.ToList();
+        db.Delete("Article", "article_id", id);
     }
 }

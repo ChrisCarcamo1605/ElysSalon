@@ -1,0 +1,20 @@
+﻿<Window x:Class="ElysSalon2._0.adapters.InBound.UI.views.AdminViews.TypeArticleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ElysSalon2._0.adapters.InBound.UI.views.AdminViews"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Title="TypeArticleWindow" Height="350" Width="600">
+    <Grid>
+        <TextBox x:Name="nameTypeTxt" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="44" Margin="25,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="398" FontSize="20" Loaded="nameTypeTxt_Loaded" LostFocus="nameTypeTxt_LostFocus" GotFocus="nameTypeTxt_GotFocus"/>
+        <Button x:Name="updateTypeBtn" Style="{StaticResource addBtn}" Content="Actualizar" HorizontalAlignment="Left" Height="43" Margin="451,216,0,0" VerticalAlignment="Top" Width="128" Click="updateTypeBtn_Click"/>
+        <DataGrid ItemsSource="{Binding typesCollection}" x:Name="typeGrid" HorizontalAlignment="Left" Height="165" Margin="25,157,0,0" VerticalAlignment="Top" Width="398" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="typeGrid_SelectionChanged"/>
+        <Label Style="{StaticResource TitleText}" Content="GESTION TIPOS" Height="50" Margin="0,10,0,0" Width="181" FontSize="36"/>
+        <Button x:Name="deleteTypeBtn" Style="{StaticResource addBtn}" Content="Borrar" HorizontalAlignment="Left" Height="46" Margin="451,276,0,0" VerticalAlignment="Top" Width="128" Background="#FFBF1111" Click="deleteTypeBtn_Click"/>
+        <Button DataContext="" x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Agregar" HorizontalAlignment="Left" Height="44" Margin="451,83,0,0" VerticalAlignment="Top" Width="128"/>
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button" Click="exitBtn_Click" Height="41" Width="67" Margin="25,19,0,0" />
+    </Grid>
+</Window>

@@ -18,6 +18,6 @@ public partial class SalesWindow : Window {
     }
 
     private void Button_Click(object sender, RoutedEventArgs e){
-        _windowManager.closeCurrentWindowandShowWindow<AdminWindow>(this);
+        _windowManager.CloseCurrentWindowandShowWindow<AdminWindow>(this);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ElysSalon2._0.aplication.DTOs;
+﻿namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
 public record DTOAddArticle(
     string articleName,

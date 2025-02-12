@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using ElysSalon2._0.aplication.DTOs;
+using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.aplication.Repositories;
@@ -10,13 +10,5 @@ public interface IArticleRepository {
     Article GetArticle(int id);
     void AddArticle(DTOAddArticle article);
     void UpdateArticle(Article article);
-
-    ArticleType getArticleType(int id);
-
-    public int getArticleTypeId(string type_name);
-
     void DeleteArticle(int id);
-
-
-    List<ArticleType> getListTypeArticle();
 }

@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 using ElysSalon2._0.adapters.OutBound;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
+using ElysSalon2._0.aplication.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -23,30 +24,22 @@ public partial class App : Application {
     }
 
     private void ConfigureServices(IServiceCollection services){
-        // Capa de datos - Correcto como Scoped
         services.AddScoped<IArticleRepository, ArticleRepository>();
-
-        // Servicios de infraestructura - Bien como Singleton
+        services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
         services.AddSingleton<WindowsManager>();
         services.AddSingleton<DbUtil>();
-
-        // Ventanas - Bien como Transient
         services.AddTransient<ArticlesWindow>();
         services.AddTransient<AdminWindow>();
         services.AddTransient<MainWindow>();
         services.AddTransient<SalesWindow>();
         services.AddTransient<ConfirmWindow>();
         services.AddTransient<MailWindow>();
-
-        // Managers de lógica de negocio
-        services.AddTransient<ItemManager>(); // ← Considera cambiar este a Scoped
+        services.AddTransient<TypeArticleWindow>();
+        services.AddTransient<ItemManager>();
     }
 
-    // Este es el método que será llamado al inicio
     protected override void OnStartup(StartupEventArgs e){
         base.OnStartup(e);
-
-        // Inyecta dependencias y muestra la ventana principal
         var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }

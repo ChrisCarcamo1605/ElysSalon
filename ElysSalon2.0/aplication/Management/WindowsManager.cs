@@ -5,33 +5,43 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Windows.Web.UI;
+using ElysSalon2._0.adapters.InBound.UI.views;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElysSalon2._0.aplication.Management
 {
     public class WindowsManager
     {
-
         IServiceProvider _serviceProvider;
-        private Dictionary<Type,Window> _windows = new Dictionary<Type, Window>();
+        private Dictionary<Type, Window> _windows = new Dictionary<Type, Window>();
 
+        public delegate void GridUpdateRequestedHandler();
+        public event GridUpdateRequestedHandler GridUpdateRequested;
 
         public WindowsManager(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public void navigateToWindow<TWindow>() where TWindow : Window
+        public void NavigateToWindow<TWindow>(Action onGridUpdateRequested = null) where TWindow : Window
         {
-            // Obtener o crear la nueva ventana
             if (!_windows.TryGetValue(typeof(TWindow), out var newWindow))
             {
                 newWindow = _serviceProvider.GetRequiredService<TWindow>();
                 _windows[typeof(TWindow)] = newWindow;
                 newWindow.Closed += (s, e) => _windows.Remove(typeof(TWindow));
+
+                // Si la ventana implementa IChildWindow, suscribirse al evento
+                if (newWindow is IChildWindow childWindow)
+                {
+                    childWindow.UpdateParentGrid += () =>
+                    {
+                        onGridUpdateRequested?.Invoke();
+                        GridUpdateRequested?.Invoke();
+                    };
+                }
             }
 
-            // Mostrar la nueva ventana
             if (!newWindow.IsVisible)
             {
                 newWindow.Show();
@@ -39,9 +49,10 @@ namespace ElysSalon2._0.aplication.Management
             newWindow.Activate();
         }
 
-        public void closeCurrentWindowandShowWindow<TWindow>(Window currenWindow) where TWindow : Window{
-            navigateToWindow<TWindow>();
-            currenWindow.Close();
+        public void CloseCurrentWindowandShowWindow<TWindow>(Window currentWindow, Action onGridUpdateRequested = null) where TWindow : Window
+        {
+            NavigateToWindow<TWindow>(onGridUpdateRequested);
+            currentWindow.Close();
         }
     }
 }
