@@ -11,20 +11,19 @@ using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.aplication.Management;
 
-internal class ButtonManager
-{
+public class ButtonManager {
     private IArticleRepository _articleRepository;
     public ObservableCollection<Button> ArticlesButtons { get; set; }
 
-    public ButtonManager(IArticleRepository articleRepository)
-    {
+    public ButtonManager(IArticleRepository articleRepository){
         ArticlesButtons = new ObservableCollection<Button>();
+
+
         _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
         loadButtons();
     }
 
-    public void loadButtons()
-    {
+    public void loadButtons(){
         var articles = _articleRepository.GetArticlesToButton();
 
         if (articles != null && articles.Any())
@@ -37,7 +36,7 @@ internal class ButtonManager
                     Style = (Style)Application.Current.FindResource("articlesBtn")
                 };
 
-                ArticlesButtons.Add(btn); // Agregar el nuevo botón a la colección
+                ArticlesButtons.Add(btn);
             }
     }
 }

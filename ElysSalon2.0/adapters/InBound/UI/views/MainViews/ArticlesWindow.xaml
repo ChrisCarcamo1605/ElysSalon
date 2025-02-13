@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="clr-namespace:ElysSalon2._0.adapters.InBound.UI"
         mc:Ignorable="d"
         Title="ArticlesWindow" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen">
@@ -13,7 +12,7 @@
         </Grid.Background>
         <ScrollViewer VerticalScrollBarVisibility="Visible" x:Name="articleViewer" HorizontalAlignment="Left"
                       Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
-            <ItemsControl ItemsSource="{Binding (ui:ButtonManagement.ArticlesButtons) }">
+            <ItemsControl ItemsSource="{Binding ArticlesButtons}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />

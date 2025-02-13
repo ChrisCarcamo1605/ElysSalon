@@ -12,15 +12,19 @@ namespace ElysSalon2._0.adapters.InBound.UI.views;
 /// </summary>
 public partial class ArticlesWindow : Window {
     private readonly WindowsManager _windowsManager;
+    private readonly IArticleRepository _articleRepository;
+
 
     public ArticlesWindow(IArticleRepository articleRepository, WindowsManager windowsManager){
         _windowsManager = windowsManager;
+        _articleRepository = articleRepository;
         DataContext = new ButtonManager(articleRepository);
         InitializeComponent();
     }
 
     private void listoBtn(object sender, RoutedEventArgs e){
     }
+
 
     private void atrasBtn_Click(object sender, RoutedEventArgs e){
         _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(this);

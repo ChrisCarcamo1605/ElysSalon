@@ -51,7 +51,8 @@
                  Loaded="priceBuyBox_Loaded" Grid.ColumnSpan="2" PreviewTextInput="priceBuyBox_PreviewTextInput" />
         <TextBox Style="{StaticResource textInput}" x:Name="stockBox" HorizontalAlignment="Left" Height="52"
                  Margin="48,216,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="130" Loaded="stockBox_Loaded"
-                 LostFocus="stockBox_LostFocus" GotFocus="stockBox_GotFocus" Grid.ColumnSpan="2" PreviewTextInput="stockBox_PreviewTextInput"/>
+                 LostFocus="stockBox_LostFocus" GotFocus="stockBox_GotFocus" Grid.ColumnSpan="2"
+                 PreviewTextInput="stockBox_PreviewTextInput" />
         <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
                 Height="54" Margin="722,136,0,0" VerticalAlignment="Top" Width="164" Click="addArticleBtn_Click"
                 Grid.ColumnSpan="2" />
@@ -60,37 +61,79 @@
                   Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="335" Margin="48,325,0,0"
                   VerticalAlignment="Top" Width="920"
                   ItemsSource="{Binding articlesCollection}" MaxColumnWidth="203"
-                  AutoGenerateColumns="False" MinColumnWidth="100" Background="White" 
-                  FontSize="20" FontFamily="Bahnschrift Condensed" 
-                  CanUserSortColumns="False" 
-                   IsSynchronizedWithCurrentItem="False"
-          EnableRowVirtualization="False"
+                  AutoGenerateColumns="False" MinColumnWidth="100" Background="White"
+                  FontSize="20" FontFamily="Bahnschrift Condensed"
+                  CanUserSortColumns="False"
+                  IsSynchronizedWithCurrentItem="False"
+                  EnableRowVirtualization="False"
                   SelectedItem="{Binding SelectedArticle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionChanged="itemGrid_SelectionChanged"
-                  IsReadOnly="False" KeyDown="itemGrid_KeyDown" SelectionMode="Single" AlternationCount="-1" TabIndex="-1">
+                  IsReadOnly="False" KeyDown="itemGrid_KeyDown" SelectionMode="Single" AlternationCount="-1"
+                  TabIndex="-1">
             <DataGrid.ColumnHeaderStyle>
-                <Style/>
+                <Style />
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID Artículo" Binding="{Binding article_id}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Nombre" Binding="{Binding article_name, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Tipo de Artículo" Binding="{Binding article_type, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Precio Costo" Binding="{Binding price_cost, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Precio Venta" Binding="{Binding price_buy, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Stock" Binding="{Binding stock, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Descripción" Binding="{Binding description, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="ID Artículo" Binding="{Binding ArticleId}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Nombre"
+                                    Binding="{Binding ArticleName, UpdateSourceTrigger=PropertyChanged}" />
+
+                <DataGridComboBoxColumn Header="Tipo">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="ItemsSource" 
+                                    Value="{Binding DataContext.typeCollections, 
+                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            <Setter Property="SelectedItem" 
+                                    Value="{Binding ArticleType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="{x:Type ComboBox}">
+                            <Setter Property="ItemsSource" 
+                                    Value="{Binding DataContext.typeCollections, 
+                            RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                            <Setter Property="SelectedItem" 
+                                    Value="{Binding ArticleType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+
+                <DataGridTextColumn Header="Precio Costo"
+                                    Binding="{Binding PriceCost, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Precio Venta"
+                                    Binding="{Binding PriceBuy, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Stock" Binding="{Binding Stock, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Descripción"
+                                    Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Style="{StaticResource addBtn}" x:Name="updateBtn" Content="Actualizar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="64" Margin="1000,522,0,0" VerticalAlignment="Top" Width="228" Click="updateBtn_Click"/>
-        <Button Style="{StaticResource addBtn}" x:Name="deleteBtn" Content="Borrar" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="65" Margin="1000,595,0,0" VerticalAlignment="Top" Width="228" Background="#FFBF0000" Click="deleteBtn_Click"/>
-        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" x:Name="sortComboBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="62" Margin="1000,450,0,0" VerticalAlignment="Top" Width="228" Loaded="sortComboBox_Loaded" GotFocus="sortComboBox_GotFocus" LostFocus="sortComboBox_LostFocus" SelectionChanged="sortComboBox_SelectionChanged">
+        <Button Style="{StaticResource addBtn}" x:Name="updateBtn" Content="Actualizar" Grid.ColumnSpan="2"
+                HorizontalAlignment="Left" Height="64" Margin="1000,522,0,0" VerticalAlignment="Top" Width="228"
+                Click="updateBtn_Click" />
+        <Button Style="{StaticResource addBtn}" x:Name="deleteBtn" Content="Borrar" Grid.ColumnSpan="2"
+                HorizontalAlignment="Left" Height="65" Margin="1000,595,0,0" VerticalAlignment="Top" Width="228"
+                Background="#FFBF0000" Click="deleteBtn_Click" />
+        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" x:Name="sortComboBox" Grid.ColumnSpan="2"
+                  HorizontalAlignment="Left" Height="62" Margin="1000,450,0,0" VerticalAlignment="Top" Width="228"
+                  Loaded="sortComboBox_Loaded" GotFocus="sortComboBox_GotFocus" LostFocus="sortComboBox_LostFocus"
+                  SelectionChanged="sortComboBox_SelectionChanged">
 
         </ComboBox>
-        <TextBox x:Name="searchTxtBox" Style="{StaticResource textInput}" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="54" Margin="952,214,0,0"                  VerticalAlignment="Top" Width="276" TextChanged="searchTxtBox_TextChanged" Loaded="searchTxtBox_Loaded" LostFocus="searchTxtBox_LostFocus" GotFocus="searchTxtBox_GotFocus"/>
+        <TextBox x:Name="searchTxtBox" Style="{StaticResource textInput}" Grid.ColumnSpan="2"
+                 HorizontalAlignment="Left" Height="54" Margin="952,214,0,0" VerticalAlignment="Top" Width="276"
+                 TextChanged="searchTxtBox_TextChanged" Loaded="searchTxtBox_Loaded" LostFocus="searchTxtBox_LostFocus"
+                 GotFocus="searchTxtBox_GotFocus" />
 
-        <Label Content="ORDENAR POR:" Grid.ColumnSpan="2" Margin="1000,409,122,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
-        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,172,106,0" VerticalAlignment="Top" FontFamily="Bahnschrift Condensed" FontSize="27"/>
-        <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="51" Margin="952,110,0,0" VerticalAlignment="Top" Width="276" Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="3,3,3,3" Click="addTypeBtn_Click"/>
+        <Label Content="ORDENAR POR:" Grid.ColumnSpan="2" Margin="1000,409,122,0" VerticalAlignment="Top"
+               FontFamily="Bahnschrift Condensed" FontSize="27" />
+        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,172,106,0" VerticalAlignment="Top"
+               FontFamily="Bahnschrift Condensed" FontSize="27" />
+        <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2"
+                HorizontalAlignment="Left" Height="51" Margin="952,110,0,0" VerticalAlignment="Top" Width="276"
+                Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="3,3,3,3"
+                Click="addTypeBtn_Click" />
 
 
     </Grid>

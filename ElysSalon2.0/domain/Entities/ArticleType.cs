@@ -9,7 +9,7 @@ public class ArticleType {
 
     public ArticleType(DTOGetTypeArticles dto){
         articleTypeId = dto.typeId;
-        name = dto.typeName;
+        name = dto.article_type;
     }
     public ArticleType(DTOGetArticleType dto)
     {

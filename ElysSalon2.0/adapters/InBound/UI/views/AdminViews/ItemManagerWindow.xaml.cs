@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -8,20 +9,35 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using ElysSalon2._0.aplication.DTOs;
+using ElysSalon2._0.aplication.DTOs.ArticleType;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
 public partial class ItemManager : Window, INotifyPropertyChanged {
     private readonly IArticleRepository _articleRepository;
+    private ObservableCollection<string> _typeCollections;
     private DTOGetArticles _selectedArticle;
-    public  ICollectionView _articlesView;
+    public ICollectionView _articlesView;
     private IArticleTypeRepository _typeRepository;
+    private DTOAddArticle dto;
+    private WindowsManager _windowsManager;
+
+    public ObservableCollection<string> typeCollections
+    {
+        get { return _typeCollections; }
+        set
+        {
+            _typeCollections = value;
+            OnPropertyChanged(nameof(typeCollections));
+        }
+    }
 
     public ObservableCollection<DTOGetArticles> articlesCollection
     {
@@ -32,7 +48,6 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
             OnPropertyChanged(nameof(articlesCollection));
         }
     }
-
 
     public DTOGetArticles SelectedArticle
     {
@@ -47,16 +62,14 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    private DTOAddArticle dto;
-    private WindowsManager _windowsManager;
-
     public ItemManager(IServiceProvider serviceProvider, WindowsManager windowsManager,
         IArticleRepository articleRepository, IArticleTypeRepository TypeRepository){
         InitializeComponent();
         _typeRepository = TypeRepository;
         _articleRepository = articleRepository;
         _windowsManager = windowsManager;
-        _windowsManager.GridUpdateRequested +=  LoadItems;
+        _windowsManager.GridUpdateRequested += LoadItems;
+        typeCollections = new ObservableCollection<string>();
         DataContext = this;
         LoadItems();
     }
@@ -65,9 +78,21 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
 
 
     public void LoadItems(){
-
         var articles = _articleRepository.GetArticles();
-        int selectedIndex = itemGrid.SelectedIndex;
+        var types = _typeRepository.getTypes();
+
+        if (_typeCollections == null)
+        {
+            _typeCollections = new ObservableCollection<string>();
+        }
+        else
+        {
+            _typeCollections.Clear();
+            foreach (var type in types)
+            {
+                _typeCollections.Add(type.article_type);
+            }
+        }
 
         if (_articlesCollection == null)
         {
@@ -84,7 +109,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
             }
         }
 
-        _articlesView.Refresh();
+        _articlesView?.Refresh();
     }
 
 
@@ -143,38 +168,44 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
 
 
     private void addArticleBtn_Click(object sender, RoutedEventArgs e){
-        DTOAddArticle dto = new(
-            nameTxtBox.Text,
-            typeComboBox.Text,
-            decimal.Parse(priceCostBox.Text),
-            decimal.Parse(priceBuyBox.Text),
-            int.Parse(stockBox.Text),
-            descriptionBox.Text
-        );
+        if (priceCostBox.Text.Equals("Precio Costo") || priceBuyBox.Text.Equals("Precio Venta") ||
+            typeComboBox.Text.Equals("Tipo Articulo"))
+        {
+            MessageBox.Show("Porfavor llene los campos vacíos");
+        }
+        else
+        {
+            DTOAddArticle dto = new(
+                nameTxtBox.Text,
+                typeComboBox.Text,
+                decimal.Parse(priceCostBox.Text),
+                decimal.Parse(priceBuyBox.Text),
+                int.Parse(stockBox.Text),
+                descriptionBox.Text);
+            _articleRepository.AddArticle(dto);
 
-        _articleRepository.AddArticle(dto);
-
-        MessageBox.Show("Articulo Agregado con exito!");
-        LoadItems();
-        nameTxtBox.Clear();
-        typeComboBox.Text = "Tipo Articulo";
-        priceCostBox.Clear();
-        priceBuyBox.Clear();
-        stockBox.Clear();
-        descriptionBox.Clear();
-        UIElementsUtil.lostFocus("Nombre Item", nameTxtBox);
-        UIElementsUtil.lostFocus("Tipo Item", typeComboBox);
-        UIElementsUtil.lostFocus("Precio Costo", priceCostBox);
-        UIElementsUtil.lostFocus("Stock", stockBox);
-        UIElementsUtil.lostFocus("Precio Venta", priceBuyBox);
-        UIElementsUtil.lostFocus("Descripcion", descriptionBox);
+            MessageBox.Show("Articulo Agregado con exito!");
+            LoadItems();
+            nameTxtBox.Clear();
+            typeComboBox.Text = "Tipo Articulo";
+            priceCostBox.Clear();
+            priceBuyBox.Clear();
+            stockBox.Clear();
+            descriptionBox.Clear();
+            UIElementsUtil.lostFocus("Nombre Item", nameTxtBox);
+            UIElementsUtil.lostFocus("Tipo Item", typeComboBox);
+            UIElementsUtil.lostFocus("Precio Costo", priceCostBox);
+            UIElementsUtil.lostFocus("Stock", stockBox);
+            UIElementsUtil.lostFocus("Precio Venta", priceBuyBox);
+            UIElementsUtil.lostFocus("Descripcion", descriptionBox);
+        }
     }
 
     private void typeComboBox_Loaded(object sender, RoutedEventArgs e){
         var textBox = typeComboBox;
 
         var types = _typeRepository.getTypes();
-        foreach (var i in types) typeComboBox.Items.Add(i.typeName);
+        foreach (var i in types) typeComboBox.Items.Add(i.article_type);
 
         if (textBox.Text.Equals("Tipo Articulo")) textBox.Foreground = new SolidColorBrush(Colors.Gray);
     }
@@ -206,8 +237,6 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-   
-
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null){
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
@@ -228,24 +257,24 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
 
 
         var item = new Article(new DTOUpdateArticle(
-            selectedItem.article_id,
-            selectedItem.article_name,
-            _typeRepository.getTypeId(selectedItem.article_type),
-            selectedItem.price_cost,
-            selectedItem.price_buy,
-            selectedItem.stock,
-            selectedItem.description));
+            selectedItem.ArticleId,
+            selectedItem.ArticleName,
+            _typeRepository.getTypeId(selectedItem.ArticleType),
+            selectedItem.PriceCost,
+            selectedItem.PriceBuy,
+            selectedItem.Stock,
+            selectedItem.Description));
 
         try
         {
             _articleRepository.UpdateArticle(item);
             MessageBox.Show("Artículo actualizado exitosamente");
-            var currentArticleId = selectedItem.article_id;
+            var currentArticleId = selectedItem.ArticleId;
             LoadItems();
             for (int i = 0; i < itemGrid.Items.Count; i++)
             {
                 var article = (DTOGetArticles)itemGrid.Items[i];
-                if (article.article_id == currentArticleId)
+                if (article.ArticleId == currentArticleId)
                 {
                     itemGrid.SelectedIndex = i;
                     itemGrid.ScrollIntoView(itemGrid.SelectedItem);
@@ -267,14 +296,14 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
 
         var result = MessageBox.Show(
-            $"¿Está seguro que desea eliminar el artículo '{SelectedArticle.article_name}'?",
+            $"¿Está seguro que desea eliminar el artículo '{SelectedArticle.ArticleName}'?",
             "Confirmar eliminación",
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
 
         if (result == MessageBoxResult.Yes)
         {
-            _articleRepository.DeleteArticle(SelectedArticle.article_id);
+            _articleRepository.DeleteArticle(SelectedArticle.ArticleId);
 
             MessageBox.Show("Artículo eliminado exitosamente");
             LoadItems();
@@ -342,7 +371,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         var types = _typeRepository.getTypes();
         sortComboBox.Items.Add("Todo");
         sortComboBox.SelectedIndex = 0;
-        foreach (var i in types) sortComboBox.Items.Add(i.typeName);
+        foreach (var i in types) sortComboBox.Items.Add(i.article_type);
 
         if (sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Gray);
     }
@@ -363,7 +392,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
                 _articlesView.Filter = (o) =>
                 {
                     var article = (DTOGetArticles)o;
-                    return article.article_type.Equals(itemSelected);
+                    return article.ArticleType.Equals(itemSelected);
                 };
             }
             else
@@ -390,30 +419,23 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     private void searchTxtBox_GotFocus(object sender, RoutedEventArgs e){
         UIElementsUtil.gotFocus("Nombre...", searchTxtBox);
     }
-    
+
     private void nameTxtBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
-       
     }
 
-    private void stockBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
+    private void stockBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
         UIElementsUtil.onlyDigits(stockBox, e);
     }
 
-    private void priceBuyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
+    private void priceBuyBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
         UIElementsUtil.onlyDigits(priceBuyBox, e);
     }
 
-    private void priceCostBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
+    private void priceCostBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
         UIElementsUtil.onlyDigits(priceCostBox, e);
     }
 
-    private void addTypeBtn_Click(object sender, RoutedEventArgs e)
-    {
+    private void addTypeBtn_Click(object sender, RoutedEventArgs e){
         _windowsManager.NavigateToWindow<TypeArticleWindow>(() => LoadItems());
     }
-
-
 }

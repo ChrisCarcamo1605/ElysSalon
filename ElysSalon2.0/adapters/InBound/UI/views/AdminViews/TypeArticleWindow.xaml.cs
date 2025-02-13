@@ -104,7 +104,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
             if (index != -1)
             {
                 var type = typesCollection[index];
-                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.typeName}",
+                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.article_type}",
                     "Eliminar",
                     MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
@@ -123,7 +123,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
             var index = typeGrid.SelectedIndex;
             var selectedItem = typesCollection[index];
 
-            var type = (new DTOGetArticleType(selectedItem.typeId, selectedItem.typeName));
+            var type = (new DTOGetArticleType(selectedItem.typeId, selectedItem.article_type));
 
             if (index != -1)
             {

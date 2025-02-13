@@ -64,7 +64,7 @@ public static class UIElementsUtil
             {
                 if (obj is DTOGetArticles article)
                 {
-                    return article.article_name.ToLower().Contains(searchText);
+                    return article.ArticleName.ToLower().Contains(searchText);
                 }
 
                 return false;
