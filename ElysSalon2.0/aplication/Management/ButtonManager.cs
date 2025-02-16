@@ -23,20 +23,34 @@ public class ButtonManager {
         loadButtons();
     }
 
-    public void loadButtons(){
+    public void loadButtons()
+    {
         var articles = _articleRepository.GetArticlesToButton();
 
         if (articles != null && articles.Any())
+        {
             foreach (var article in articles)
             {
                 var btn = new Button
                 {
-                    Content = article.articleName,
                     Tag = article.articleId,
-                    Style = (Style)Application.Current.FindResource("articlesBtn")
+                    Style = (Style)Application.Current.FindResource("articlesBtn"),
+                    Padding = new Thickness(10), 
                 };
 
+                var textBlock = new TextBlock
+                {
+                    Text = article.articleName,
+                    TextWrapping = TextWrapping.Wrap,
+                    TextAlignment = TextAlignment.Center,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                btn.Content = textBlock;
                 ArticlesButtons.Add(btn);
             }
+        }
     }
+
 }
