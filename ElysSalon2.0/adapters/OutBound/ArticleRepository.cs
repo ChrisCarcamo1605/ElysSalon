@@ -25,7 +25,8 @@ public class ArticleRepository : IArticleRepository {
             {
                 return new DTOGetArticlesButton(
                     reader.GetInt32(0),
-                    reader.GetString(1));
+                    reader.GetString(1),
+                    reader.GetDecimal(4));
             });
 
         return articles;

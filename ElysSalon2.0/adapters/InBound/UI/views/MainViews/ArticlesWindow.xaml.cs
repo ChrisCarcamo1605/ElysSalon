@@ -18,8 +18,9 @@ public partial class ArticlesWindow : Window {
     public ArticlesWindow(IArticleRepository articleRepository, WindowsManager windowsManager){
         _windowsManager = windowsManager;
         _articleRepository = articleRepository;
-        DataContext = new ButtonManager(articleRepository);
+      
         InitializeComponent();
+        DataContext = new ButtonManager(articleRepository, cartItemsGrid);
     }
 
     private void listoBtn(object sender, RoutedEventArgs e){

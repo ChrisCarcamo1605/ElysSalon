@@ -1,6 +1,6 @@
 ﻿namespace ElysSalon2._0.domain.Entities;
 
-internal class Ticket {
+public class Ticket {
     private string ticketId { get; set; }
     public string ticketDetails { get; set; }
     private DateTime emissionDateTime { get; set; }

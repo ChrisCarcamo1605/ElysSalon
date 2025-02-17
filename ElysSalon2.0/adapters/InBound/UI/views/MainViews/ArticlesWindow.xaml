@@ -20,8 +20,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        <ScrollViewer x:Name="articleListViewer" HorizontalAlignment="Left" Height="415" Margin="966,88,0,0"
-                      VerticalAlignment="Top" Width="278" Background="#FFEFECE7" />
+        
         <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49"
                 Margin="62,41,0,0" VerticalAlignment="Top" Width="140" FontFamily="Bahnschrift Condensed" FontSize="24"
                 FontWeight="Bold"
@@ -29,6 +28,15 @@
         <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118"
                 Margin="966,538,0,0" VerticalAlignment="Top" Width="278"
                 FontFamily="Bahnschrift Condensed" FontSize="48" Click="listoBtn_Click" />
+        <DataGrid x:Name="cartItemsGrid"  Margin="966,112,10,193" ItemsSource="{Binding cartItems}" AutoGenerateColumns="False" FontFamily="Bahnschrift Light Condensed">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="120" MaxWidth="140" Header="Nombre" Binding="{Binding Article.articleName }"></DataGridTextColumn>
+                <DataGridTextColumn Width="55" Header="Cantidad" Binding="{Binding quantity }"></DataGridTextColumn>
+                <DataGridTextColumn Width="55" Header="Price" Binding="{Binding price}"></DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>
