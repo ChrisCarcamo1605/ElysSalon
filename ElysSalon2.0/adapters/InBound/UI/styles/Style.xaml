@@ -394,19 +394,18 @@
     </Style>
 
     <Style x:Key="articlesBtn" TargetType="Button">
-        <Setter Property="Width" Value="270" />
+        <Setter Property="Width" Value="216" />
         <Setter Property="Margin" Value="6 9 " />
         <Setter Property="Height" Value="120" />
         <Setter Property="Background" Value="White" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderThickness" Value="1.6" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontFamily" Value="Bahnschrift Condensed" />
-        <Setter Property="FontSize" Value="32" />
+        <Setter Property="FontSize" Value="28" />
         <Setter Property="BorderBrush">
             <Setter.Value>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" />
-                    <GradientStop Color="#FFDC00D4" Offset="1" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
@@ -789,6 +788,64 @@
                             <Setter Property="UIElement.Visibility" TargetName="ContentSite" Value="Hidden" />
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <Style x:Key="TrashBtn" TargetType="Button">
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Margin" Value="1,11,8,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="trashGrid">
+                        <Border Height="70"
+                            Width="114" />
+                        <Grid.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1" />
+                        </Grid.RenderTransform>
+                        <Grid.RenderTransformOrigin>
+                            <Point X="0.5" Y="0.5" />
+                        </Grid.RenderTransformOrigin>
+
+                        <Grid.Background>
+                            <ImageBrush ImageSource="/adapters/InBound/UI/styles/trash.png" Stretch="Fill"/>
+                        </Grid.Background>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                     Storyboard.TargetProperty="ScaleX" To="1.2"
+                                                     Duration="00:00:0.2" />
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                     Storyboard.TargetProperty="ScaleY" To="1.2"
+                                                     Duration="00:00:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                     Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
+                                        <DoubleAnimation Storyboard.TargetName="scaleTransform"
+                                                     Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

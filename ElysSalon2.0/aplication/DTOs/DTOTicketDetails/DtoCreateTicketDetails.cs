@@ -19,6 +19,6 @@ public class DtoCreateTicketDetails
         this.Ticket = Ticket;
         this.Article = Article;
         this.quantity = quantity;
-        this.price = price;
+        this.price = price*this.quantity;
     }
 };

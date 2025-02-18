@@ -10,26 +10,30 @@
         <Grid.Background>
             <ImageBrush ImageSource="/images/wallpaper3.jpg" />
         </Grid.Background>
-        <ScrollViewer VerticalScrollBarVisibility="Visible" x:Name="articleViewer" HorizontalAlignment="Left"
-                      Height="544" Margin="62,112,0,0" VerticalAlignment="Top" Width="870" Background="#FFEFECE7">
-            <ItemsControl ItemsSource="{Binding ArticlesButtons}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
-        
+        <Border Margin="26,112,528,40" BorderThickness="2" BorderBrush="Black">
+            <ScrollViewer VerticalScrollBarVisibility="Visible" x:Name="articleViewer" HorizontalAlignment="Left"
+                          Height="544"  VerticalAlignment="Top"  Background="#d1d5d7">
+                <ItemsControl ItemsSource="{Binding ArticlesButtons}" Width="722">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
         <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49"
                 Margin="62,41,0,0" VerticalAlignment="Top" Width="140" FontFamily="Bahnschrift Condensed" FontSize="24"
                 FontWeight="Bold"
                 Foreground="#FFEFECE7" Click="atrasBtn_Click" />
-        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="118"
-                Margin="966,538,0,0" VerticalAlignment="Top" Width="278"
-                FontFamily="Bahnschrift Condensed" FontSize="48" Click="listoBtn_Click" />
-        <DataGrid x:Name="cartItemsGrid"  Margin="966,112,10,193" ItemsSource="{Binding cartItems}" AutoGenerateColumns="False" FontFamily="Bahnschrift Light Condensed">
-            
+        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="78"
+                Margin="1008,552,0,0" VerticalAlignment="Top" Width="210"
+                FontFamily="Bahnschrift Condensed" FontSize="48" Click="listoBtn_Click"
+                RenderTransformOrigin="0.294,0.436" />
+        <DataGrid x:Name="cartItemsGrid" Margin="267,6,709,614" ItemsSource="{Binding cartItems}"
+                  AutoGenerateColumns="False" FontFamily="Bahnschrift Light Condensed">
+
             <DataGrid.Columns>
                 <DataGridTextColumn Width="120" MaxWidth="140" Header="Nombre" Binding="{Binding Article.articleName }"></DataGridTextColumn>
                 <DataGridTextColumn Width="55" Header="Cantidad" Binding="{Binding quantity }"></DataGridTextColumn>
@@ -37,6 +41,58 @@
 
             </DataGrid.Columns>
         </DataGrid>
+        <Border Margin="773,112,22,171" BorderThickness="2" BorderBrush="Black">
+            <ScrollViewer VerticalScrollBarVisibility="Visible">
+                <ItemsControl Background="#d1d5d7
+                          " ItemsSource="{Binding cartItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Height="75" Background="White" BorderThickness="1" BorderBrush="Black"
+                                    Padding="12"
+                                    Margin="6,3"
+                                    CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Nombre del Producto -->
+                                    <TextBlock Text="{Binding Article.articleName}" FontSize="21"
+                                               FontFamily="Bahnschrift Condensed"
+                                               Grid.Column="0"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="4, 0 " />
+                                    <!-- Cantidad -->
 
+                                    <TextBlock Grid.Column="1" Text="{Binding quantity}"
+                                               TextAlignment="Center" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" FontSize="24"
+                                               FontFamily="Bahnschrift Condensed" />
+
+
+                                    <!-- Precio -->
+                                    <TextBlock Text="{Binding price, StringFormat=C}" FontSize="23"
+                                               FontFamily="Bahnschrift Condensed"
+                                               Grid.Column="2"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left" />
+                                    <!-- Botón de Eliminar -->
+                                    <Button Style="{DynamicResource TrashBtn}" Grid.Column="3"
+                                            Width="28"
+                                            Height="28"
+                                            Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}">
+
+
+                                    </Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>
