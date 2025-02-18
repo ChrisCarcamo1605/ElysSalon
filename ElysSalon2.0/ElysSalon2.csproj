@@ -18,7 +18,10 @@
     <None Remove="adapters\InBound\UI\views\MainViews\trashIMG.png" />
     <None Remove="adapters\InBound\UI\views\NEGRO LOGO_Mesa de trabajo 1.png" />
     <None Remove="adapters\InBound\UI\views\wallpaper2.png" />
+    <None Remove="images\minusSymbol.png" />
+    <None Remove="images\plusSymbol.png" />
     <None Remove="images\row.png" />
+    <None Remove="images\trash.png" />
     <None Remove="images\wallpaper3.jpg" />
     <None Remove="images\wallpaper3.png" />
     <None Remove="images\wallpaper4.jpeg" />
@@ -29,7 +32,10 @@
     <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
     <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
     <Resource Include="adapters\InBound\UI\views\MainViews\trashIMG.png" />
+    <Resource Include="images\minusSymbol.png" />
+    <Resource Include="images\plusSymbol.png" />
     <Resource Include="images\row.png" />
+    <Resource Include="images\trash.png" />
     <Resource Include="images\wallpaper.jpg" />
     <Resource Include="images\NEGRO LOGO_Mesa de trabajo 1.png" />
     <Resource Include="images\products.jpg">
@@ -60,6 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">

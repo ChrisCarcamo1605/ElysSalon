@@ -20,7 +20,7 @@ public partial class ArticlesWindow : Window {
         _articleRepository = articleRepository;
       
         InitializeComponent();
-        DataContext = new ButtonManager(articleRepository, cartItemsGrid);
+        DataContext = new ButtonManager(articleRepository);
     }
 
     private void listoBtn(object sender, RoutedEventArgs e){

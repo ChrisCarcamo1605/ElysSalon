@@ -9,13 +9,7 @@ public class TicketDetails {
     private Article article { get; set; }
     private int quantity { get; set; }
     private decimal price { get; set; }
+    private decimal totalPrice { get; set; }
 
-    public TicketDetails(DtoCreateTicketDetails dto)
-    {
-        this.ticketDetailsId = dto.TicketDetailsId;
-        this.ticket = dto.Ticket;
-        this.article = dto.Article;
-        this.quantity = dto.quantity;
-        this.price = dto.price;
-    }
+    
 }

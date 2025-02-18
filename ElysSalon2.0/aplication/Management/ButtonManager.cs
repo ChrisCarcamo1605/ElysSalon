@@ -10,38 +10,66 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.aplication.Management;
 
 public class ButtonManager : INotifyPropertyChanged
 {
+    public ICommand AddToCartCommand { get; }
+    public ICommand RemoveFromCartCommand { get; }
+    public ICommand IncreaseQuantityCommand { get; }
+    public ICommand DecreaseQuantityCommand { get; }
+
+
     private IArticleRepository _articleRepository;
     public ICollectionView cartItemsView;
     private DataGrid _grid;
     private ObservableCollection<DtoCreateTicketDetails> _cartItems;
+    public decimal _totalPrice;
+
+    public decimal totalPrice
+    {
+        get => _totalPrice;
+        set
+        {
+            _totalPrice = value;
+            OnPropertyChanged(nameof(totalPrice));
+        }
+    }
 
     public ObservableCollection<DtoCreateTicketDetails> cartItems
     {
         get => _cartItems;
-        set => OnPropertyChanged(nameof(cartItems));
+        set
+        {
+            _cartItems = value;
+            OnPropertyChanged(nameof(cartItems));
+        }
     }
 
     public ObservableCollection<Button> ArticlesButtons { get; set; }
 
-    public ButtonManager(IArticleRepository articleRepository, DataGrid grid)
+    public ButtonManager(IArticleRepository articleRepository)
     {
-        _grid = grid;
         _cartItems = new ObservableCollection<DtoCreateTicketDetails>();
+        cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
         ArticlesButtons = new ObservableCollection<Button>();
         _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
         loadButtons();
+
+        RemoveFromCartCommand = new RelayCommand<DtoCreateTicketDetails>(RemoveFromCart);
+        DecreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(DecreaseFromCart);
+        IncreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(IncreaseQuantity);
     }
 
-    public void loadButtons()
+    private void loadButtons()
     {
         var articles = _articleRepository.GetArticlesToButton();
 
@@ -70,9 +98,9 @@ public class ButtonManager : INotifyPropertyChanged
     }
 
 
-    public void addToCart(DTOGetArticlesButton article)
+    private void addToCart(DTOGetArticlesButton article)
     {
-        var existingItem = _cartItems.FirstOrDefault(x => x.Article.articleId == article.articleId);
+        var existingItem = cartItems.FirstOrDefault(x => x.Article.articleId == article.articleId);
 
         if (existingItem != null)
         {
@@ -82,19 +110,13 @@ public class ButtonManager : INotifyPropertyChanged
         {
             existingItem = new DtoCreateTicketDetails(article.articleId, null,
                 _articleRepository.GetArticle(article.articleId), 1, article.price);
-
-            _cartItems.Add(existingItem);
+            cartItems.Add(existingItem);
         }
 
-        cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
-        _grid.ItemsSource = cartItemsView;
+        totalPrice += existingItem.price;
         cartItemsView?.Refresh();
     }
 
-
-    public void loadCartItems()
-    {
-    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -102,6 +124,51 @@ public class ButtonManager : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+
+    public void RemoveFromCart(DtoCreateTicketDetails ticket)
+    {
+        if (ticket == null) ;
+        cartItems.Remove(ticket);
+        UpdateTotalPrice();
+    }
+
+    private void DecreaseFromCart(DtoCreateTicketDetails ticket)
+    {
+        if (ticket.quantity > 1)
+        {
+            ticket.quantity -= 1;
+        }
+        else
+        {
+            RemoveFromCart(ticket);
+        }
+
+        UpdateTotalPrice();
+    }
+
+    private void IncreaseQuantity(DtoCreateTicketDetails ticket)
+    {
+        if (ticket == null) return;
+        ticket.quantity++;
+        UpdateTotalPrice();
+    }
+
+    private void UpdateTotalPrice()
+    {
+        decimal total = 0;
+       
+        foreach (var item in cartItems)
+        {
+            total += item.totalPrice;
+        }
+
+        totalPrice = total;
+        cartItemsView.Refresh();
+
+
+    }
+
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

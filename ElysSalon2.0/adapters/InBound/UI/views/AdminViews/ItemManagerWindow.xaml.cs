@@ -26,7 +26,6 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     private DTOGetArticles _selectedArticle;
     public ICollectionView _articlesView;
     private IArticleTypeRepository _typeRepository;
-    private DTOAddArticle dto;
     private WindowsManager _windowsManager;
 
     public ObservableCollection<string> typeCollections
