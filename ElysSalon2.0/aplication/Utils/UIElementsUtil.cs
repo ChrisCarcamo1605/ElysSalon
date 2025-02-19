@@ -62,9 +62,9 @@ public static class UIElementsUtil
         {
             view.Filter = (obj) =>
             {
-                if (obj is DTOGetArticles article)
+                if (obj is DTOGetArticleGrid article)
                 {
-                    return article.ArticleName.ToLower().Contains(searchText);
+                    return article.articleName.ToLower().Contains(searchText);
                 }
 
                 return false;

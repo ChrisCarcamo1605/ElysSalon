@@ -11,7 +11,7 @@
         <Grid.Background>
             <ImageBrush ImageSource="/images/wallpaper3.jpg" />
         </Grid.Background>
-        <Border Margin="26,112,528,40" BorderThickness="2" BorderBrush="Black">
+        <Border Margin="26,112,528,58" BorderThickness="2" BorderBrush="Black">
             <ScrollViewer VerticalScrollBarVisibility="Visible" x:Name="articleViewer" HorizontalAlignment="Left"
                           Height="544" VerticalAlignment="Top" Background="#d1d5d7">
                 <ItemsControl ItemsSource="{Binding ArticlesButtons}" Width="722">
@@ -52,7 +52,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <!-- Nombre del Producto -->
-                                    <TextBlock Text="{Binding Article.articleName}" FontSize="21"
+                                    <TextBlock Text="{Binding article.articleName}" FontSize="21"
                                                FontFamily="Bahnschrift Condensed"
                                                Grid.Column="0"
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
@@ -94,9 +94,9 @@
                 </ItemsControl>
             </ScrollViewer>
         </Border>
-        <Label Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,549,0,0"
+        <Label Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,566,0,0"
                FontSize="45" Content="TOTAL:" Height="63" Width="103" />
-        <TextBlock FontFamily="Bahnschrift Condensed" HorizontalAlignment="Left" FontSize="45" Margin="881,554,0,0"
+        <TextBlock FontFamily="Bahnschrift Condensed" HorizontalAlignment="Left" FontSize="45" Margin="881,571,0,0"
                    TextWrapping="Wrap" Text="{Binding totalPrice,StringFormat=C}" VerticalAlignment="Top" Width="106"
                    Height="48" />
 

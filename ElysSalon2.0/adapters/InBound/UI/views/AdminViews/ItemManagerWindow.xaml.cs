@@ -20,10 +20,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
-public partial class ItemManager : Window, INotifyPropertyChanged {
+public partial class ItemManager : Window, INotifyPropertyChanged
+{
     private readonly IArticleRepository _articleRepository;
     private ObservableCollection<string> _typeCollections;
-    private DTOGetArticles _selectedArticle;
+    private DTOGetArticleGrid _selectedArticle;
     public ICollectionView _articlesView;
     private IArticleTypeRepository _typeRepository;
     private WindowsManager _windowsManager;
@@ -38,7 +39,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    public ObservableCollection<DTOGetArticles> articlesCollection
+    public ObservableCollection<Article> articlesCollection
     {
         get { return _articlesCollection; }
         set
@@ -48,7 +49,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    public DTOGetArticles SelectedArticle
+    public DTOGetArticleGrid SelectedArticle
     {
         get => _selectedArticle;
         set
@@ -62,7 +63,8 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     }
 
     public ItemManager(IServiceProvider serviceProvider, WindowsManager windowsManager,
-        IArticleRepository articleRepository, IArticleTypeRepository TypeRepository){
+        IArticleRepository articleRepository, IArticleTypeRepository TypeRepository)
+    {
         InitializeComponent();
         _typeRepository = TypeRepository;
         _articleRepository = articleRepository;
@@ -73,10 +75,11 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         LoadItems();
     }
 
-    private ObservableCollection<DTOGetArticles> _articlesCollection;
+    private ObservableCollection<Article> _articlesCollection;
 
 
-    public void LoadItems(){
+    public void LoadItems()
+    {
         var articles = _articleRepository.GetArticles();
         var types = _typeRepository.getTypes();
 
@@ -95,7 +98,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
 
         if (_articlesCollection == null)
         {
-            _articlesCollection = new ObservableCollection<DTOGetArticles>(articles);
+            _articlesCollection = new ObservableCollection<Article>(articles);
             _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
             itemGrid.ItemsSource = _articlesView;
         }
@@ -112,61 +115,75 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
     }
 
 
-    private void exitBtn_Click(object sender, RoutedEventArgs e){
+    private void exitBtn_Click(object sender, RoutedEventArgs e)
+    {
         _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(this);
     }
 
 
-    private void TextBox_GotFocus(object sender, RoutedEventArgs e){
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Nombre Item", nameTxtBox);
     }
 
-    private void nameTxtBox_LostFocus(object sender, RoutedEventArgs e){
+    private void nameTxtBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Nombre Item", nameTxtBox);
     }
 
-    private void nameTxtBox_Loaded_1(object sender, RoutedEventArgs e){
+    private void nameTxtBox_Loaded_1(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Nombre Item", nameTxtBox);
     }
 
-    private void priceCostBox_Loaded(object sender, RoutedEventArgs e){
+    private void priceCostBox_Loaded(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Precio Costo", priceCostBox);
     }
 
-    private void priceCostBox_LostFocus(object sender, RoutedEventArgs e){
+    private void priceCostBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Precio Costo", priceCostBox);
     }
 
-    private void priceCostBox_GotFocus(object sender, RoutedEventArgs e){
+    private void priceCostBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Precio Costo", priceCostBox);
     }
 
-    private void priceBuyBox_GotFocus(object sender, RoutedEventArgs e){
+    private void priceBuyBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Precio Venta", priceBuyBox);
     }
 
-    private void priceBuyBox_LostFocus(object sender, RoutedEventArgs e){
+    private void priceBuyBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Precio Venta", priceBuyBox);
     }
 
-    private void priceBuyBox_Loaded(object sender, RoutedEventArgs e){
+    private void priceBuyBox_Loaded(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Precio Venta", priceBuyBox);
     }
 
-    private void descriptionBox_GotFocus(object sender, RoutedEventArgs e){
+    private void descriptionBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Descripcion", descriptionBox);
     }
 
-    private void descriptionBox_LostFocus(object sender, RoutedEventArgs e){
+    private void descriptionBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Descripcion", descriptionBox);
     }
 
-    private void descriptionBox_Loaded(object sender, RoutedEventArgs e){
+    private void descriptionBox_Loaded(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Descripcion", descriptionBox);
     }
 
 
-    private void addArticleBtn_Click(object sender, RoutedEventArgs e){
+    private void addArticleBtn_Click(object sender, RoutedEventArgs e)
+    {
         if (priceCostBox.Text.Equals("Precio Costo") || priceBuyBox.Text.Equals("Precio Venta") ||
             typeComboBox.Text.Equals("Tipo Articulo"))
         {
@@ -174,14 +191,16 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
         else
         {
-            DTOAddArticle dto = new(
-                nameTxtBox.Text,
-                typeComboBox.Text,
+            int typeId = _typeRepository.getTypeId(typeComboBox.Text);
+            var newArticle = new Article(new DTOAddArticle(
+                nameTxtBox.Text, 
+                _typeRepository.getArticleType(typeId),
                 decimal.Parse(priceCostBox.Text),
                 decimal.Parse(priceBuyBox.Text),
                 int.Parse(stockBox.Text),
-                descriptionBox.Text);
-            _articleRepository.AddArticle(dto);
+                descriptionBox.Text));
+
+            _articleRepository.AddArticle(newArticle);
 
             MessageBox.Show("Articulo Agregado con exito!");
             LoadItems();
@@ -200,7 +219,8 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    private void typeComboBox_Loaded(object sender, RoutedEventArgs e){
+    private void typeComboBox_Loaded(object sender, RoutedEventArgs e)
+    {
         var textBox = typeComboBox;
 
         var types = _typeRepository.getTypes();
@@ -209,42 +229,50 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         if (textBox.Text.Equals("Tipo Articulo")) textBox.Foreground = new SolidColorBrush(Colors.Gray);
     }
 
-    private void stockBox_Loaded(object sender, RoutedEventArgs e){
+    private void stockBox_Loaded(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Stock", stockBox);
     }
 
-    private void stockBox_LostFocus(object sender, RoutedEventArgs e){
+    private void stockBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Stock", stockBox);
     }
 
-    private void stockBox_GotFocus(object sender, RoutedEventArgs e){
+    private void stockBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Stock", stockBox);
     }
 
-    private void typeComboBox_LostFocus(object sender, RoutedEventArgs e){
+    private void typeComboBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Tipo Articulo", typeComboBox);
     }
 
-    private void typeComboBox_GotFocus(object sender, RoutedEventArgs e){
+    private void typeComboBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         if (!typeComboBox.Text.Equals("Tipo Articulo")) typeComboBox.Foreground = new SolidColorBrush(Colors.Black);
     }
 
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null){
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
 
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null){
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
         if (EqualityComparer<T>.Default.Equals(field, value)) return false;
         field = value;
         OnPropertyChanged(propertyName);
         return true;
     }
 
-    private void updateBtn_Click(object sender, RoutedEventArgs e){
+    private void updateBtn_Click(object sender, RoutedEventArgs e)
+    {
         var selectedIndex = itemGrid.SelectedIndex;
         if (selectedIndex == -1)
         {
@@ -252,28 +280,28 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
             return;
         }
 
-        var selectedItem = (DTOGetArticles)itemGrid.Items[selectedIndex];
+        var selectedItem = (Article)itemGrid.Items[selectedIndex];
 
 
         var item = new Article(new DTOUpdateArticle(
-            selectedItem.ArticleId,
-            selectedItem.ArticleName,
-            _typeRepository.getTypeId(selectedItem.ArticleType),
-            selectedItem.PriceCost,
-            selectedItem.PriceBuy,
-            selectedItem.Stock,
-            selectedItem.Description));
+            selectedItem.articleId,
+            selectedItem.articleName,
+            selectedItem.articleType.articleTypeId,
+            selectedItem.priceCost,
+            selectedItem.priceBuy,
+            selectedItem.stock,
+            selectedItem.description));
 
         try
         {
             _articleRepository.UpdateArticle(item);
             MessageBox.Show("Artículo actualizado exitosamente");
-            var currentArticleId = selectedItem.ArticleId;
+            var currentArticleId = selectedItem.articleId;
             LoadItems();
             for (int i = 0; i < itemGrid.Items.Count; i++)
             {
-                var article = (DTOGetArticles)itemGrid.Items[i];
-                if (article.ArticleId == currentArticleId)
+                var article = (DTOUpdateArticle)itemGrid.Items[i];
+                if (article.articleId == currentArticleId)
                 {
                     itemGrid.SelectedIndex = i;
                     itemGrid.ScrollIntoView(itemGrid.SelectedItem);
@@ -287,7 +315,8 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    private void deleteBtn_Click(object sender, RoutedEventArgs e){
+    private void deleteBtn_Click(object sender, RoutedEventArgs e)
+    {
         if (SelectedArticle == null)
         {
             MessageBox.Show("Por favor, seleccione un artículo para eliminar.");
@@ -295,28 +324,30 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
 
         var result = MessageBox.Show(
-            $"¿Está seguro que desea eliminar el artículo '{SelectedArticle.ArticleName}'?",
+            $"¿Está seguro que desea eliminar el artículo '{SelectedArticle.articleName}'?",
             "Confirmar eliminación",
             MessageBoxButton.YesNo,
             MessageBoxImage.Warning);
 
         if (result == MessageBoxResult.Yes)
         {
-            _articleRepository.DeleteArticle(SelectedArticle.ArticleId);
+            _articleRepository.DeleteArticle(SelectedArticle.articleId);
 
             MessageBox.Show("Artículo eliminado exitosamente");
             LoadItems();
         }
     }
 
-    private void itemGrid_SelectionChanged(object sender, SelectionChangedEventArgs e){
-        if (itemGrid.SelectedItem is DTOGetArticles article)
+    private void itemGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (itemGrid.SelectedItem is DTOGetArticleGrid article)
         {
             SelectedArticle = article;
         }
     }
 
-    private void itemGrid_KeyDown(object sender, KeyEventArgs e){
+    private void itemGrid_KeyDown(object sender, KeyEventArgs e)
+    {
         if (e.Key == Key.Enter)
         {
             e.Handled = true;
@@ -345,12 +376,13 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
                     element.Focus();
                 }
 
-                SelectedArticle = nextItem as DTOGetArticles;
+                SelectedArticle = nextItem as DTOGetArticleGrid;
             }
         }
     }
 
-    private void itemGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e){
+    private void itemGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
         e.Handled = true;
 
         var currentCell = itemGrid.CurrentCell;
@@ -366,7 +398,8 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    private void sortComboBox_Loaded(object sender, RoutedEventArgs e){
+    private void sortComboBox_Loaded(object sender, RoutedEventArgs e)
+    {
         var types = _typeRepository.getTypes();
         sortComboBox.Items.Add("Todo");
         sortComboBox.SelectedIndex = 0;
@@ -375,23 +408,26 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         if (sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Gray);
     }
 
-    private void sortComboBox_GotFocus(object sender, RoutedEventArgs e){
+    private void sortComboBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         if (!sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Black);
     }
 
-    private void sortComboBox_LostFocus(object sender, RoutedEventArgs e){
+    private void sortComboBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Todo", sortComboBox);
     }
 
-    private void sortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e){
+    private void sortComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
         if (sortComboBox.SelectedItem is string itemSelected && sortComboBox.IsMouseCaptured)
         {
             if (!itemSelected.Equals("Todo"))
             {
                 _articlesView.Filter = (o) =>
                 {
-                    var article = (DTOGetArticles)o;
-                    return article.ArticleType.Equals(itemSelected);
+                    var article = (DTOGetArticleGrid)o;
+                    return article.articleType.Equals(itemSelected);
                 };
             }
             else
@@ -403,38 +439,47 @@ public partial class ItemManager : Window, INotifyPropertyChanged {
         }
     }
 
-    private void searchTxtBox_TextChanged(object sender, TextChangedEventArgs e){
+    private void searchTxtBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
         UIElementsUtil.searchInGrid(e, searchTxtBox, _articlesView);
     }
 
-    private void searchTxtBox_Loaded(object sender, RoutedEventArgs e){
+    private void searchTxtBox_Loaded(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Nombre...", searchTxtBox);
     }
 
-    private void searchTxtBox_LostFocus(object sender, RoutedEventArgs e){
+    private void searchTxtBox_LostFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.lostFocus("Nombre...", searchTxtBox);
     }
 
-    private void searchTxtBox_GotFocus(object sender, RoutedEventArgs e){
+    private void searchTxtBox_GotFocus(object sender, RoutedEventArgs e)
+    {
         UIElementsUtil.gotFocus("Nombre...", searchTxtBox);
     }
 
-    private void nameTxtBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
+    private void nameTxtBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
     }
 
-    private void stockBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
+    private void stockBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
         UIElementsUtil.onlyDigits(stockBox, e);
     }
 
-    private void priceBuyBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
+    private void priceBuyBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
         UIElementsUtil.onlyDigits(priceBuyBox, e);
     }
 
-    private void priceCostBox_PreviewTextInput(object sender, TextCompositionEventArgs e){
+    private void priceCostBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
         UIElementsUtil.onlyDigits(priceCostBox, e);
     }
 
-    private void addTypeBtn_Click(object sender, RoutedEventArgs e){
+    private void addTypeBtn_Click(object sender, RoutedEventArgs e)
+    {
         _windowsManager.NavigateToWindow<TypeArticleWindow>(() => LoadItems());
     }
 }

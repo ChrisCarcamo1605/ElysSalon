@@ -45,7 +45,7 @@ public class DtoCreateTicketDetails :INotifyPropertyChanged
     }
 
     public DtoCreateTicketDetails() { }
-    public DtoCreateTicketDetails(int TicketDetailsId, Ticket Ticket, Article Article, int quantity, decimal price)
+    public DtoCreateTicketDetails(Ticket Ticket, Article Article, int quantity, decimal price)
     {
         this.TicketDetailsId = TicketDetailsId;
         this.Ticket = Ticket;

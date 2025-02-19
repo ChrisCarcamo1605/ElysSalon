@@ -9,50 +9,56 @@ using Microsoft.Data.SqlClient;
 
 namespace ElysSalon2._0.adapters.OutBound;
 
-public class ArticleRepository : IArticleRepository {
+public class ArticleRepository : IArticleRepository
+{
     private DbUtil db;
     private readonly IArticleTypeRepository _typeRepository;
 
-    public ArticleRepository(IArticleTypeRepository typeRepository){
+    public ArticleRepository(IArticleTypeRepository typeRepository)
+    {
         _typeRepository = typeRepository;
     }
 
-    public ObservableCollection<DTOGetArticlesButton> GetArticlesToButton(){
+    public ObservableCollection<Article> GetArticlesToButton()
+    {
         db = DbUtil.getInstance();
 
-        ObservableCollection<DTOGetArticlesButton> articles = db.GetFromDB<DTOGetArticlesButton>("Article", "*",
+        ObservableCollection<Article> articles = db.GetFromDB<Article>("Article", "*",
             (reader) =>
             {
-                return new DTOGetArticlesButton(
+                return new Article(new DTOGetArticlesButton(
                     reader.GetInt32(0),
                     reader.GetString(1),
-                    reader.GetDecimal(4));
+                    reader.GetDecimal(4)));
             });
 
         return articles;
     }
 
 
-    public ObservableCollection<DTOGetArticles> GetArticles(){
+    public ObservableCollection<Article> GetArticles()
+    {
         db = DbUtil.getInstance();
 
-        var articles = db.GetFromDB<DTOGetArticles>("Article", "*", (reader) =>
+        var articles = db.GetFromDB<Article>("Article", "*", (reader) =>
         {
-            return new DTOGetArticles(
+           
+            return new Article(new DTOGetArticlesRepository(
                 reader.GetInt32(0),
                 reader.GetString(1),
-                _typeRepository.getArticleType((reader.GetInt32(2))).name,
+                _typeRepository.getArticleType(reader.GetInt32(2)),
                 reader.GetDecimal(3),
                 reader.GetDecimal(4),
                 reader.GetInt32(5),
-                reader.GetString(6)
+                reader.GetString(6))
             );
         });
 
         return articles;
     }
 
-    public Article GetArticle(int id){
+    public Article GetArticle(int id)
+    {
         db = DbUtil.getInstance();
 
         var article = (Article)db.GetFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
@@ -67,15 +73,16 @@ public class ArticleRepository : IArticleRepository {
         return article;
     }
 
-    public void AddArticle(DTOAddArticle article){
+
+    public void AddArticle(Article article)
+    {
         var db = DbUtil.getInstance();
 
         var d = new Dictionary<string, object>
         {
             { "article_name", article.articleName },
             {
-                "article_type_id",
-                db.GetIdFrom("article_type", "article_type_id", "article_type_name", article.articleType)
+                "article_type_id", article.articleType.articleTypeId
             },
             { "price_Buy", article.priceBuy },
             { "price_cost", article.priceCost },
@@ -87,7 +94,8 @@ public class ArticleRepository : IArticleRepository {
     }
 
 
-    public void UpdateArticle(Article article){
+    public void UpdateArticle(Article article)
+    {
         var db = DbUtil.getInstance();
 
         var d = new Dictionary<string, Object>
@@ -99,10 +107,11 @@ public class ArticleRepository : IArticleRepository {
             { "stock", article.stock },
             { "description", article.description }
         };
-        db.Update<Article>("Article", "article_id",d, article.articleId);
+        db.Update<Article>("Article", "article_id", d, article.articleId);
     }
 
-    public void DeleteArticle(int id){
+    public void DeleteArticle(int id)
+    {
         var db = DbUtil.getInstance();
         db.Delete("Article", "article_id", id);
     }

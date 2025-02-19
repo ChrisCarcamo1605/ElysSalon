@@ -22,7 +22,6 @@ namespace ElysSalon2._0.aplication.Management;
 
 public class ButtonManager : INotifyPropertyChanged
 {
-    public ICommand AddToCartCommand { get; }
     public ICommand RemoveFromCartCommand { get; }
     public ICommand IncreaseQuantityCommand { get; }
     public ICommand DecreaseQuantityCommand { get; }
@@ -31,7 +30,7 @@ public class ButtonManager : INotifyPropertyChanged
     private IArticleRepository _articleRepository;
     public ICollectionView cartItemsView;
     private DataGrid _grid;
-    private ObservableCollection<DtoCreateTicketDetails> _cartItems;
+    private ObservableCollection<TicketDetails> _cartItems;
     public decimal _totalPrice;
 
     public decimal totalPrice
@@ -44,7 +43,7 @@ public class ButtonManager : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<DtoCreateTicketDetails> cartItems
+    public ObservableCollection<TicketDetails> cartItems
     {
         get => _cartItems;
         set
@@ -58,15 +57,15 @@ public class ButtonManager : INotifyPropertyChanged
 
     public ButtonManager(IArticleRepository articleRepository)
     {
-        _cartItems = new ObservableCollection<DtoCreateTicketDetails>();
+        _cartItems = new ObservableCollection<TicketDetails>();
         cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
         ArticlesButtons = new ObservableCollection<Button>();
         _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
         loadButtons();
 
-        RemoveFromCartCommand = new RelayCommand<DtoCreateTicketDetails>(RemoveFromCart);
-        DecreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(DecreaseFromCart);
-        IncreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(IncreaseQuantity);
+        RemoveFromCartCommand = new RelayCommand<TicketDetails>(RemoveFromCart);
+        DecreaseQuantityCommand = new RelayCommand<TicketDetails>(DecreaseFromCart);
+        IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
     }
 
     private void loadButtons()
@@ -98,9 +97,9 @@ public class ButtonManager : INotifyPropertyChanged
     }
 
 
-    private void addToCart(DTOGetArticlesButton article)
+    private void addToCart(Article article)
     {
-        var existingItem = cartItems.FirstOrDefault(x => x.Article.articleId == article.articleId);
+        var existingItem = cartItems.FirstOrDefault(x => x.article.articleId == article.articleId);
 
         if (existingItem != null)
         {
@@ -108,8 +107,7 @@ public class ButtonManager : INotifyPropertyChanged
         }
         else
         {
-            existingItem = new DtoCreateTicketDetails(article.articleId, null,
-                _articleRepository.GetArticle(article.articleId), 1, article.price);
+            existingItem = new TicketDetails(new DtoCreateTicketDetails(new Ticket(), article, 1, article.priceBuy));
             cartItems.Add(existingItem);
         }
 
@@ -126,14 +124,14 @@ public class ButtonManager : INotifyPropertyChanged
     }
 
 
-    public void RemoveFromCart(DtoCreateTicketDetails ticket)
+    public void RemoveFromCart(TicketDetails ticket)
     {
         if (ticket == null) ;
         cartItems.Remove(ticket);
         UpdateTotalPrice();
     }
 
-    private void DecreaseFromCart(DtoCreateTicketDetails ticket)
+    private void DecreaseFromCart(TicketDetails ticket)
     {
         if (ticket.quantity > 1)
         {
@@ -147,7 +145,7 @@ public class ButtonManager : INotifyPropertyChanged
         UpdateTotalPrice();
     }
 
-    private void IncreaseQuantity(DtoCreateTicketDetails ticket)
+    private void IncreaseQuantity(TicketDetails ticket)
     {
         if (ticket == null) return;
         ticket.quantity++;

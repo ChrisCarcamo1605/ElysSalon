@@ -14,10 +14,8 @@ namespace ElysSalon2._0.aplication.Management
     {
         IServiceProvider _serviceProvider;
         private Dictionary<Type, Window> _windows = new Dictionary<Type, Window>();
-
         public delegate void GridUpdateRequestedHandler();
         public event GridUpdateRequestedHandler GridUpdateRequested;
-
         public WindowsManager(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

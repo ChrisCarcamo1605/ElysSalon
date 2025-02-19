@@ -74,9 +74,9 @@
                 <Style />
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID Artículo" Binding="{Binding ArticleId}" IsReadOnly="True" />
+                <DataGridTextColumn Header="ID Artículo" Binding="{Binding articleId}" IsReadOnly="True" />
                 <DataGridTextColumn Header="Nombre"
-                                    Binding="{Binding ArticleName, UpdateSourceTrigger=PropertyChanged}" />
+                                    Binding="{Binding articleName, UpdateSourceTrigger=PropertyChanged}" />
 
                 <DataGridComboBoxColumn Header="Tipo">
                     <DataGridComboBoxColumn.ElementStyle>
@@ -85,7 +85,7 @@
                                     Value="{Binding DataContext.typeCollections, 
                             RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             <Setter Property="SelectedItem" 
-                                    Value="{Binding ArticleType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Value="{Binding articleType.ArticleTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Setter Property="IsReadOnly" Value="True"/>
                         </Style>
                     </DataGridComboBoxColumn.ElementStyle>
@@ -95,18 +95,18 @@
                                     Value="{Binding DataContext.typeCollections, 
                             RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
                             <Setter Property="SelectedItem" 
-                                    Value="{Binding ArticleType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Value="{Binding articleType.ArticleTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         </Style>
                     </DataGridComboBoxColumn.EditingElementStyle>
                 </DataGridComboBoxColumn>
 
                 <DataGridTextColumn Header="Precio Costo"
-                                    Binding="{Binding PriceCost, UpdateSourceTrigger=PropertyChanged}" />
+                                    Binding="{Binding priceCost, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Precio Venta"
-                                    Binding="{Binding PriceBuy, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Stock" Binding="{Binding Stock, UpdateSourceTrigger=PropertyChanged}" />
+                                    Binding="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Stock" Binding="{Binding stock, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Descripción"
-                                    Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                                    Binding="{Binding description, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <Button Style="{StaticResource addBtn}" x:Name="updateBtn" Content="Actualizar" Grid.ColumnSpan="2"

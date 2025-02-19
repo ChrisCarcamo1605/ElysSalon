@@ -2,7 +2,7 @@
 
 public record DTOAddArticle(
     string articleName,
-    string articleType,
+    domain.Entities.ArticleType articleType,
     decimal priceCost,
     decimal priceBuy,
     int stock,
