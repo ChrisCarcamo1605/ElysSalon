@@ -6,7 +6,7 @@ namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 public record DTOGetArticlesRepository(
     int articleId,
     string articleName,
-    domain.Entities.ArticleType articleType,
+    ArticleType articleType,
     decimal priceCost,
     decimal priceBuy,
     int stock,

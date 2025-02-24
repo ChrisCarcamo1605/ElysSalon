@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ElysSalon2._0.domain.Entities;
+using System.ComponentModel;
 using System.Windows;
 
 namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
@@ -6,7 +7,7 @@ namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 public record DTOGetArticleGrid()
 {
     public int articleId { get; set; }
-    public domain.Entities.ArticleType articleType { get; set; }
+    public ArticleType articleType { get; set; }
     public string articleName { get; set; }
 
     public decimal priceCost { get; set; }

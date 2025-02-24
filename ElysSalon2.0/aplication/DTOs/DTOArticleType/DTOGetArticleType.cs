@@ -1,5 +1,5 @@
 ﻿using Windows.Web.Http.Headers;
 
-namespace ElysSalon2._0.aplication.DTOs.ArticleType;
+namespace ElysSalon2._0.aplication.DTOs;
 
 public record DTOGetArticleType(int type_id, string type_name);

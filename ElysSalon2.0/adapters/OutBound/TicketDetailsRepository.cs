@@ -9,16 +9,7 @@ public class TicketDetailsRepository : ITicketDetailsRepository
 {
     public void createTicketDetails(TicketDetails ticket)
     {
-        var db = DbUtil.getInstance();
-        Dictionary<string, object> Dic = new Dictionary<string, object>
-        {
-            {"ticketDetailsId", ticket.ticketDetailsId},
-            {"ticketId", ticket.ticket},
-            {"articleId", ticket.article.articleId},
-            {"quantity", ticket.quantity},
-            {"amount", ticket.price}
-        };
-        db.AddToDb<TicketDetails>("ticketDetails",Dic);
+        
     }
 
     public List<TicketDetails> GetTicketDetails(string ticketId)

@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Windows.UI.WindowManagement.Preview;
-using ElysSalon2._0.aplication.DTOs.ArticleType;
+using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
@@ -25,11 +25,11 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
     public partial class TypeArticleWindow : Window, INotifyPropertyChanged, IChildWindow
     {
         private IArticleTypeRepository _typeRepository;
-        private DTOGetTypeArticles selectItem;
+        private DTOGetArticleType selectItem;
         private ItemManager _itemsManager;
         private WindowsManager _windowManagement;
         public event Action? UpdateParentGrid;
-        public ObservableCollection<DTOGetTypeArticles> typesCollection
+        public ObservableCollection<ArticleType> typesCollection
         {
             get { return _typesCollection; }
             set
@@ -40,7 +40,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
         }
 
         private ICollectionView _view;
-        private ObservableCollection<DTOGetTypeArticles> _typesCollection;
+        private ObservableCollection<ArticleType> _typesCollection;
 
 
         public TypeArticleWindow(IArticleTypeRepository typeRepository, WindowsManager windowManagement, ItemManager itemsManager){
@@ -57,7 +57,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
 
             if (_typesCollection == null)
             {
-                _typesCollection = new ObservableCollection<DTOGetTypeArticles>(types);
+                _typesCollection = new ObservableCollection<ArticleType>(types);
                 _view = CollectionViewSource.GetDefaultView(typesCollection);
                 typeGrid.ItemsSource = _view;
             }
@@ -104,12 +104,12 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
             if (index != -1)
             {
                 var type = typesCollection[index];
-                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.article_type}",
+                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.ArticleTypeName}",
                     "Eliminar",
                     MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _typeRepository.deleteType(type.typeId);
+                    _typeRepository.deleteType(type.articleTypeId);
                     loadItems();
                 }
             }
@@ -120,22 +120,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
         }
 
         private void updateTypeBtn_Click(object sender, RoutedEventArgs e){
-            var index = typeGrid.SelectedIndex;
-            var selectedItem = typesCollection[index];
-
-            var type = (new DTOGetArticleType(selectedItem.typeId, selectedItem.article_type));
-
-            if (index != -1)
-            {
-                _typeRepository.updateType(type);
-                MessageBox.Show("Item actualizado");
-                loadItems();
-            }
-
-            else
-            {
-                MessageBox.Show("Seleccione un item primero");
-            }
+            //
         }
 
         private void exitBtn_Click(object sender, RoutedEventArgs e){
@@ -144,6 +129,13 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
             this.Close();
         }
 
-        
+        private void addTypeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string nombre = nameTypeTxt.Text;
+
+            _typeRepository.addType(nombre);
+            MessageBox.Show("Tipo agregado con exito!");
+            loadItems();
+        }
     }
 }

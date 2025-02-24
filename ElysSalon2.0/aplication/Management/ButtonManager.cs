@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
@@ -26,7 +27,7 @@ public class ButtonManager : INotifyPropertyChanged
     public ICommand IncreaseQuantityCommand { get; }
     public ICommand DecreaseQuantityCommand { get; }
 
-
+    private IMapper _mapper;
     private IArticleRepository _articleRepository;
     public ICollectionView cartItemsView;
     private DataGrid _grid;
@@ -55,8 +56,9 @@ public class ButtonManager : INotifyPropertyChanged
 
     public ObservableCollection<Button> ArticlesButtons { get; set; }
 
-    public ButtonManager(IArticleRepository articleRepository)
+    public ButtonManager(IArticleRepository articleRepository, IMapper mapper)
     {
+        _mapper = mapper;
         _cartItems = new ObservableCollection<TicketDetails>();
         cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
         ArticlesButtons = new ObservableCollection<Button>();
@@ -81,7 +83,7 @@ public class ButtonManager : INotifyPropertyChanged
                     Style = (Style)Application.Current.FindResource("articlesBtn"),
                     Padding = new Thickness(10),
                 };
-                btn.Click += async (e, s) => { addToCart(article); };
+                btn.Click += async (e, s) => { addToCart(_mapper.Map<Article>(article)); };
                 var textBlock = new TextBlock
                 {
                     Text = article.articleName,
@@ -107,7 +109,7 @@ public class ButtonManager : INotifyPropertyChanged
         }
         else
         {
-            existingItem = new TicketDetails(new DtoCreateTicketDetails(new Ticket(), article, 1, article.priceBuy));
+            existingItem = new TicketDetails{ticketId = "1", article = article, quantity = 1, price = article.priceBuy};
             cartItems.Add(existingItem);
         }
 

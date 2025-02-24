@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Navigation;
+using ElysSalon2._0.aplication;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
@@ -12,107 +13,50 @@ namespace ElysSalon2._0.adapters.OutBound;
 public class ArticleRepository : IArticleRepository
 {
     private DbUtil db;
+    private ElyDbContext _context;
     private readonly IArticleTypeRepository _typeRepository;
 
-    public ArticleRepository(IArticleTypeRepository typeRepository)
+    public ArticleRepository(IArticleTypeRepository typeRepository, ElyDbContext context)
     {
+        _context   = context;
         _typeRepository = typeRepository;
     }
 
-    public ObservableCollection<Article> GetArticlesToButton()
+    public ObservableCollection<DTOGetArticlesButton> GetArticlesToButton()
     {
-        db = DbUtil.getInstance();
+       var articles = _context.Articles.Select(x=>
+            new DTOGetArticlesButton(x.articleId,x.articleName,x.priceBuy)).ToList();
 
-        ObservableCollection<Article> articles = db.GetFromDB<Article>("Article", "*",
-            (reader) =>
-            {
-                return new Article(new DTOGetArticlesButton(
-                    reader.GetInt32(0),
-                    reader.GetString(1),
-                    reader.GetDecimal(4)));
-            });
-
-        return articles;
+        return new ObservableCollection<DTOGetArticlesButton>(articles);
     }
-
 
     public ObservableCollection<Article> GetArticles()
     {
-        db = DbUtil.getInstance();
-
-        var articles = db.GetFromDB<Article>("Article", "*", (reader) =>
-        {
-           
-            return new Article(new DTOGetArticlesRepository(
-                reader.GetInt32(0),
-                reader.GetString(1),
-                _typeRepository.getArticleType(reader.GetInt32(2)),
-                reader.GetDecimal(3),
-                reader.GetDecimal(4),
-                reader.GetInt32(5),
-                reader.GetString(6))
-            );
-        });
-
-        return articles;
+        ICollection<Article> articles = _context.Articles.ToList();
+        return new ObservableCollection<Article>(articles);
     }
+
 
     public Article GetArticle(int id)
     {
-        db = DbUtil.getInstance();
 
-        var article = (Article)db.GetFromDB(id, "Article", "Article_id", (reader) => new Article(new DTOGetArticle(
-            reader.GetInt32(0),
-            reader.GetString(1),
-            reader.GetInt32(2),
-            reader.GetDecimal(3),
-            reader.GetDecimal(4),
-            reader.GetInt32(5),
-            reader.GetString(6))));
-
-        return article;
+        return _context.Articles.Find(id) ?? throw new NullReferenceException("No trajo na pa"); ;
     }
 
 
     public void AddArticle(Article article)
     {
-        var db = DbUtil.getInstance();
-
-        var d = new Dictionary<string, object>
-        {
-            { "article_name", article.articleName },
-            {
-                "article_type_id", article.articleType.articleTypeId
-            },
-            { "price_Buy", article.priceBuy },
-            { "price_cost", article.priceCost },
-            { "stock", article.stock },
-            { "description", article.description }
-        };
-
-        db.AddToDb<Article>("Article", d);
+        _context.Articles.Add(article);
     }
 
 
     public void UpdateArticle(Article article)
     {
-        var db = DbUtil.getInstance();
-
-        var d = new Dictionary<string, Object>
-        {
-            { "article_name", article.articleName },
-            { "article_type_id", article.articleType },
-            { "price_Buy", article.priceBuy },
-            { "price_cost", article.priceCost },
-            { "stock", article.stock },
-            { "description", article.description }
-        };
-        db.Update<Article>("Article", "article_id", d, article.articleId);
+        _context.Articles.Update(article);
     }
 
     public void DeleteArticle(int id)
     {
-        var db = DbUtil.getInstance();
-        db.Delete("Article", "article_id", id);
+        _context.Articles.Remove(_context.Articles.Find(id)?? throw new NullReferenceException());
     }
 }

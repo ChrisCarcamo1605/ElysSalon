@@ -8,10 +8,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using AutoMapper;
 using ElysSalon2._0.aplication.DTOs;
-using ElysSalon2._0.aplication.DTOs.ArticleType;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Management;
+using ElysSalon2._0.aplication.Mappers;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
@@ -24,6 +25,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged
 {
     private readonly IArticleRepository _articleRepository;
     private ObservableCollection<string> _typeCollections;
+    private IMapper _articleMap;
     private DTOGetArticleGrid _selectedArticle;
     public ICollectionView _articlesView;
     private IArticleTypeRepository _typeRepository;
@@ -63,9 +65,12 @@ public partial class ItemManager : Window, INotifyPropertyChanged
     }
 
     public ItemManager(IServiceProvider serviceProvider, WindowsManager windowsManager,
-        IArticleRepository articleRepository, IArticleTypeRepository TypeRepository)
+        IArticleRepository articleRepository, IArticleTypeRepository TypeRepository, IMapper articleMapping)
     {
+
+
         InitializeComponent();
+        _articleMap = articleMapping;
         _typeRepository = TypeRepository;
         _articleRepository = articleRepository;
         _windowsManager = windowsManager;
@@ -92,7 +97,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged
             _typeCollections.Clear();
             foreach (var type in types)
             {
-                _typeCollections.Add(type.article_type);
+                _typeCollections.Add(type.ArticleTypeName);
             }
         }
 
@@ -192,15 +197,15 @@ public partial class ItemManager : Window, INotifyPropertyChanged
         else
         {
             int typeId = _typeRepository.getTypeId(typeComboBox.Text);
-            var newArticle = new Article(new DTOAddArticle(
+            var newArticle =new DTOAddArticle(
                 nameTxtBox.Text, 
                 _typeRepository.getArticleType(typeId),
                 decimal.Parse(priceCostBox.Text),
                 decimal.Parse(priceBuyBox.Text),
                 int.Parse(stockBox.Text),
-                descriptionBox.Text));
+                descriptionBox.Text);
 
-            _articleRepository.AddArticle(newArticle);
+            _articleRepository.AddArticle(_articleMap.Map<Article>(newArticle));
 
             MessageBox.Show("Articulo Agregado con exito!");
             LoadItems();
@@ -224,7 +229,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged
         var textBox = typeComboBox;
 
         var types = _typeRepository.getTypes();
-        foreach (var i in types) typeComboBox.Items.Add(i.article_type);
+        foreach (var i in types) typeComboBox.Items.Add(i.ArticleTypeName);
 
         if (textBox.Text.Equals("Tipo Articulo")) textBox.Foreground = new SolidColorBrush(Colors.Gray);
     }
@@ -283,10 +288,10 @@ public partial class ItemManager : Window, INotifyPropertyChanged
         var selectedItem = (Article)itemGrid.Items[selectedIndex];
 
 
-        var item = new Article(new DTOUpdateArticle(
+        var item = (new DTOUpdateArticle(
             selectedItem.articleId,
             selectedItem.articleName,
-            selectedItem.articleType.articleTypeId,
+            _typeRepository.getArticleType(selectedItem.articleTypeId),
             selectedItem.priceCost,
             selectedItem.priceBuy,
             selectedItem.stock,
@@ -294,7 +299,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged
 
         try
         {
-            _articleRepository.UpdateArticle(item);
+            _articleRepository.UpdateArticle(_articleMap.Map<Article>(item));
             MessageBox.Show("Artículo actualizado exitosamente");
             var currentArticleId = selectedItem.articleId;
             LoadItems();
@@ -403,7 +408,7 @@ public partial class ItemManager : Window, INotifyPropertyChanged
         var types = _typeRepository.getTypes();
         sortComboBox.Items.Add("Todo");
         sortComboBox.SelectedIndex = 0;
-        foreach (var i in types) sortComboBox.Items.Add(i.article_type);
+        foreach (var i in types) sortComboBox.Items.Add(i.ArticleTypeName);
 
         if (sortComboBox.Text.Equals("Todo")) sortComboBox.Foreground = new SolidColorBrush(Colors.Gray);
     }

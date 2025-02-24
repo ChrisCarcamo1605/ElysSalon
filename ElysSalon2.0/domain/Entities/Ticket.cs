@@ -1,11 +1,19 @@
-﻿namespace ElysSalon2._0.domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace ElysSalon2._0.domain.Entities;
 
 public class Ticket {
-    private string ticketId { get; set; }
-    public TicketDetails[] ticketDetails { get; set; }
-    private DateTime emissionDateTime { get; set; }
-    private string issuer { get; set; }
-    private decimal totalOutTaxes { get; set; }
-    private decimal totalWithTaxes { get; set; }
-    private decimal totalAmount { get; set; }
+
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public string ticketId { get; set; }
+    public DateTime emissionDateTime { get; set; }
+    public string issuer { get; set; }
+    public decimal totalOutTaxes { get; set; }
+    public decimal totalWithTaxes { get; set; }
+    public decimal totalAmount { get; set; }
+
+    public ICollection<Ticket> TicketDetails { get; set; }
+    public Ticket(){}
 }
