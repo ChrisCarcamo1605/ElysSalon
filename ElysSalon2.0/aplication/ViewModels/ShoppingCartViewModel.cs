@@ -19,9 +19,9 @@ using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElysSalon2._0.aplication.Management;
+namespace ElysSalon2._0.aplication.ViewModels;
 
-public class ButtonManager : INotifyPropertyChanged
+public class ShoppingCartViewModel : INotifyPropertyChanged
 {
     public ICommand RemoveFromCartCommand { get; }
     public ICommand IncreaseQuantityCommand { get; }
@@ -30,17 +30,19 @@ public class ButtonManager : INotifyPropertyChanged
     private IMapper _mapper;
     private IArticleRepository _articleRepository;
     public ICollectionView cartItemsView;
-    private DataGrid _grid;
     private ObservableCollection<TicketDetails> _cartItems;
-    public decimal _totalPrice;
+    private decimal _totalAmount;
 
-    public decimal totalPrice
+    public decimal totalAmount
     {
-        get => _totalPrice;
+        get
+        {
+            return _totalAmount;
+        }
         set
         {
-            _totalPrice = value;
-            OnPropertyChanged(nameof(totalPrice));
+            _totalAmount = value;
+            OnPropertyChanged(nameof(totalAmount));
         }
     }
 
@@ -56,7 +58,7 @@ public class ButtonManager : INotifyPropertyChanged
 
     public ObservableCollection<Button> ArticlesButtons { get; set; }
 
-    public ButtonManager(IArticleRepository articleRepository, IMapper mapper)
+    public ShoppingCartViewModel(IArticleRepository articleRepository, IMapper mapper)
     {
         _mapper = mapper;
         _cartItems = new ObservableCollection<TicketDetails>();
@@ -70,9 +72,9 @@ public class ButtonManager : INotifyPropertyChanged
         IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
     }
 
-    private void loadButtons()
+    private async Task loadButtons()
     {
-        var articles = _articleRepository.GetArticlesToButton();
+        var articles = await _articleRepository.GetArticlesToButton();
 
         if (articles != null && articles.Any())
             foreach (var article in articles)
@@ -83,7 +85,7 @@ public class ButtonManager : INotifyPropertyChanged
                     Style = (Style)Application.Current.FindResource("articlesBtn"),
                     Padding = new Thickness(10),
                 };
-                btn.Click += async (e, s) => { addToCart(_mapper.Map<Article>(article)); };
+                btn.Click += async (e, s) => { addToCart(article); };
                 var textBlock = new TextBlock
                 {
                     Text = article.articleName,
@@ -99,21 +101,26 @@ public class ButtonManager : INotifyPropertyChanged
     }
 
 
-    private void addToCart(Article article)
+    private void addToCart(DTOGetArticlesButton article)
     {
-        var existingItem = cartItems.FirstOrDefault(x => x.article.articleId == article.articleId);
+        var existingItem = cartItems.FirstOrDefault(x => x.ArticleId == article.articleId);
 
         if (existingItem != null)
         {
-            existingItem.quantity++;
+            existingItem.Quantity++;
         }
         else
         {
-            existingItem = new TicketDetails{ticketId = "1", article = article, quantity = 1, price = article.priceBuy};
+            existingItem = new TicketDetails
+            {
+                TicketId = "1", ArticleId = article.articleId, Quantity = 1, Price = article.price,
+                Article = _mapper.Map<Article>(article)
+            };
+
             cartItems.Add(existingItem);
         }
 
-        totalPrice += existingItem.price;
+        totalAmount += existingItem.Price;
         cartItemsView?.Refresh();
     }
 
@@ -135,9 +142,9 @@ public class ButtonManager : INotifyPropertyChanged
 
     private void DecreaseFromCart(TicketDetails ticket)
     {
-        if (ticket.quantity > 1)
+        if (ticket.Quantity > 1)
         {
-            ticket.quantity -= 1;
+            ticket.Quantity -= 1;
         }
         else
         {
@@ -150,25 +157,24 @@ public class ButtonManager : INotifyPropertyChanged
     private void IncreaseQuantity(TicketDetails ticket)
     {
         if (ticket == null) return;
-        ticket.quantity++;
+        ticket.Quantity++;
         UpdateTotalPrice();
     }
 
     private void UpdateTotalPrice()
     {
         decimal total = 0;
-       
+        
         foreach (var item in cartItems)
         {
-            total += item.totalPrice;
+            total += item.TotalPrice;
         }
 
-        totalPrice = total;
+        totalAmount = total;
         cartItemsView.Refresh();
-
-
     }
 
+   
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

@@ -7,6 +7,7 @@ using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.adapters.OutBound;
 
@@ -18,45 +19,49 @@ public class ArticleRepository : IArticleRepository
 
     public ArticleRepository(IArticleTypeRepository typeRepository, ElyDbContext context)
     {
-        _context   = context;
+        _context = context;
         _typeRepository = typeRepository;
     }
 
-    public ObservableCollection<DTOGetArticlesButton> GetArticlesToButton()
+    public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButton()
     {
-       var articles = _context.Articles.Select(x=>
-            new DTOGetArticlesButton(x.articleId,x.articleName,x.priceBuy)).ToList();
+        var articles = await _context.Article.Select(x => 
+            new DTOGetArticlesButton(x.ArticleId, x.ArticleName, x.PriceBuy)).ToListAsync();
 
         return new ObservableCollection<DTOGetArticlesButton>(articles);
     }
 
-    public ObservableCollection<Article> GetArticles()
+    public async Task<ObservableCollection<Article>> GetArticles()
     {
-        ICollection<Article> articles = _context.Articles.ToList();
+        var articles = await _context.Article.ToListAsync();
+
         return new ObservableCollection<Article>(articles);
     }
 
 
-    public Article GetArticle(int id)
+    public async Task<Article> GetArticle(int id)
     {
-
-        return _context.Articles.Find(id) ?? throw new NullReferenceException("No trajo na pa"); ;
+        return await _context.Article.FindAsync(id) ?? throw new NullReferenceException("No trajo na pa");
+        
     }
 
 
-    public void AddArticle(Article article)
+    public async Task AddArticle(Article article)
     {
-        _context.Articles.Add(article);
+        _context.Article.Add(article);
+      await   _context.SaveChangesAsync();
     }
 
 
-    public void UpdateArticle(Article article)
+    public async Task UpdateArticle(Article article)
     {
-        _context.Articles.Update(article);
+        _context.Entry(article).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
 
-    public void DeleteArticle(int id)
+    public async Task DeleteArticle(int id)
     {
-        _context.Articles.Remove(_context.Articles.Find(id)?? throw new NullReferenceException());
+        _context.Article.Remove(_context.Article.Find(id) ?? throw new NullReferenceException());
+        await _context.SaveChangesAsync();
     }
 }

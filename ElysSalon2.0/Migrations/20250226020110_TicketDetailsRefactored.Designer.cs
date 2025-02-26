@@ -4,6 +4,7 @@ using ElysSalon2._0.aplication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226020110_TicketDetailsRefactored")]
+    partial class TicketDetailsRefactored
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,12 +41,13 @@ namespace ElysSalon2._0.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PriceBuy")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("PriceCost")
+                    b.Property<decimal>("PriceCost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Stock")

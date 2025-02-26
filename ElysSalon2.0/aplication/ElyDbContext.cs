@@ -11,8 +11,8 @@ public class ElyDbContext: DbContext
 
     }
 
-    public DbSet<Article> Articles { get; set; }
-    public DbSet<ArticleType>  ArticleTypes { get; set; }
+    public DbSet<Article> Article { get; set; }
+    public DbSet<ArticleType>  ArticleType { get; set; }
     public DbSet<TicketDetails> TicketDetails { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     

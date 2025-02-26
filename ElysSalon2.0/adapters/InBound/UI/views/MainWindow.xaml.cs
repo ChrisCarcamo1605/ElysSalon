@@ -27,7 +27,7 @@ public partial class MainWindow : Window {
     }
 
     private async void btnServices_Click(object sender, RoutedEventArgs e){
-        _windowsManager.CloseCurrentWindowandShowWindow<ArticlesWindow>(this);
+        _windowsManager.CloseCurrentWindowandShowWindow<ShoppingCartWindow>(this);
     }
 
     private void btnProducts_Click(object sender, RoutedEventArgs e){

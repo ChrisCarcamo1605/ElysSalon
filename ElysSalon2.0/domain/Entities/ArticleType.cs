@@ -1,4 +1,5 @@
-﻿using ElysSalon2._0.aplication.DTOs;
+﻿using System.Collections.ObjectModel;
+using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.DTOs;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
@@ -9,9 +10,10 @@ public class ArticleType
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int articleTypeId { get; set; }
+    public int ArticleTypeId { get; set; }
 
     public string ArticleTypeName { get; set; }
+
 
     public ArticleType()
     {

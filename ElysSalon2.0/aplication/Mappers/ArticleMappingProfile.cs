@@ -11,11 +11,15 @@ public class ArticleMappingProfile : Profile
     {
         //Article to DTO
         CreateMap<Article, DTOGetArticle>();
+        CreateMap<DTOGetArticlesButton, Article>();
         CreateMap<Article,DTOGetArticlesButton>();
 
         //DTO to Article
         CreateMap<DTOAddArticle, Article>();
-        CreateMap<DTOUpdateArticle, Article>().ForAllMembers(opt => opt.Condition(
-            (src, dest, srcMember) => srcMember != null));
+        CreateMap<DTOUpdateArticle, Article>()
+            .ForMember(dest => dest.ArticleType, opt => opt.Ignore()) // Ignora la navegación
+            .AfterMap((dto, entity) => {
+                entity.ArticleTypeId = dto.articleType;
+            });
     }
 }

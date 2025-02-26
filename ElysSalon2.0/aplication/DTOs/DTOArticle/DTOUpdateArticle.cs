@@ -5,7 +5,7 @@ namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 public record DTOUpdateArticle(
     int articleId,
     string articleName,
-    ArticleType articleType,
+    int articleType,
     decimal priceCost,
     decimal priceBuy,
     int stock,

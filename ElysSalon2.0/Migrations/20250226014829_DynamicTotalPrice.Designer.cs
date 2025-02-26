@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    [Migration("20250224221428_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250226014829_DynamicTotalPrice")]
+    partial class DynamicTotalPrice
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,189 +27,149 @@ namespace ElysSalon2._0.Migrations
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
                 {
-                    b.Property<int>("articleId")
+                    b.Property<int>("ArticleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("articleId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleId"));
 
-                    b.Property<int?>("articleId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("articleName")
+                    b.Property<string>("ArticleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("articleTypeId")
+                    b.Property<int>("ArticleTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("description")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("priceBuy")
+                    b.Property<decimal>("PriceBuy")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("priceCost")
+                    b.Property<decimal>("PriceCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("stock")
+                    b.Property<int>("Stock")
                         .HasColumnType("int");
 
-                    b.HasKey("articleId");
+                    b.HasKey("ArticleId");
 
-                    b.HasIndex("articleId1");
+                    b.HasIndex("ArticleTypeId");
 
-                    b.HasIndex("articleTypeId");
-
-                    b.ToTable("Articles");
+                    b.ToTable("Article");
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.ArticleType", b =>
                 {
-                    b.Property<int>("articleTypeId")
+                    b.Property<int>("ArticleTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("articleTypeId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleTypeId"));
 
                     b.Property<string>("ArticleTypeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("articleTypeId");
+                    b.HasKey("ArticleTypeId");
 
-                    b.ToTable("ArticleTypes");
+                    b.ToTable("ArticleType");
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
                 {
-                    b.Property<string>("ticketId")
+                    b.Property<string>("TicketId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("emissionDateTime")
+                    b.Property<DateTime>("EmissionDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("issuer")
+                    b.Property<string>("Issuer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ticketId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("totalAmount")
+                    b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("totalOutTaxes")
+                    b.Property<decimal>("TotalOutTaxes")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("totalWithTaxes")
+                    b.Property<decimal>("TotalWithTaxes")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ticketId");
-
-                    b.HasIndex("ticketId1");
+                    b.HasKey("TicketId");
 
                     b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
                 {
-                    b.Property<int>("ticketDetailsId")
+                    b.Property<int>("TicketDetailsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ticketDetailsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketDetailsId"));
 
-                    b.Property<int>("articleId")
+                    b.Property<int>("ArticleId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("quantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ticketDetailsId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ticketId")
+                    b.Property<string>("TicketId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal>("totalPrice")
+                    b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ticketDetailsId");
+                    b.HasKey("TicketDetailsId");
 
-                    b.HasIndex("articleId");
+                    b.HasIndex("ArticleId");
 
-                    b.HasIndex("ticketDetailsId1");
-
-                    b.HasIndex("ticketId");
+                    b.HasIndex("TicketId");
 
                     b.ToTable("TicketDetails");
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
                 {
-                    b.HasOne("ElysSalon2._0.domain.Entities.Article", null)
-                        .WithMany("Articles")
-                        .HasForeignKey("articleId1");
-
                     b.HasOne("ElysSalon2._0.domain.Entities.ArticleType", "ArticleType")
                         .WithMany()
-                        .HasForeignKey("articleTypeId")
+                        .HasForeignKey("ArticleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ArticleType");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
-                {
-                    b.HasOne("ElysSalon2._0.domain.Entities.Ticket", null)
-                        .WithMany("TicketDetails")
-                        .HasForeignKey("ticketId1");
-                });
-
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
                 {
-                    b.HasOne("ElysSalon2._0.domain.Entities.Article", "article")
+                    b.HasOne("ElysSalon2._0.domain.Entities.Article", "Article")
                         .WithMany()
-                        .HasForeignKey("articleId")
+                        .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ElysSalon2._0.domain.Entities.TicketDetails", null)
-                        .WithMany("tickets")
-                        .HasForeignKey("ticketDetailsId1");
 
                     b.HasOne("ElysSalon2._0.domain.Entities.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("ticketId")
+                        .WithMany("TicketDetails")
+                        .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Article");
+
                     b.Navigation("Ticket");
-
-                    b.Navigation("article");
-                });
-
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
-                {
-                    b.Navigation("Articles");
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
                 {
                     b.Navigation("TicketDetails");
-                });
-
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
-                {
-                    b.Navigation("tickets");
                 });
 #pragma warning restore 612, 618
         }

@@ -25,7 +25,6 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
     public partial class TypeArticleWindow : Window, INotifyPropertyChanged, IChildWindow
     {
         private IArticleTypeRepository _typeRepository;
-        private DTOGetArticleType selectItem;
         private ItemManager _itemsManager;
         private WindowsManager _windowManagement;
         public event Action? UpdateParentGrid;
@@ -57,14 +56,14 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
 
             if (_typesCollection == null)
             {
-                _typesCollection = new ObservableCollection<ArticleType>(types);
+                _typesCollection = new ObservableCollection<ArticleType>(types.Result);
                 _view = CollectionViewSource.GetDefaultView(typesCollection);
                 typeGrid.ItemsSource = _view;
             }
             else
             {
                 typesCollection.Clear();
-                foreach (var type in types)
+                foreach (var type in types.Result)
                 {
                     _typesCollection.Add(type);
                 }
@@ -109,7 +108,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
                     MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _typeRepository.deleteType(type.articleTypeId);
+                    _typeRepository.deleteType(type.ArticleTypeId);
                     loadItems();
                 }
             }

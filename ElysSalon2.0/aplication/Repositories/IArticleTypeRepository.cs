@@ -9,7 +9,7 @@ public interface IArticleTypeRepository {
     void deleteType(int id);
     void addType(string type_name);
     void updateType(ArticleType articleType);
-    ObservableCollection<ArticleType> getTypes();
+    Task<ObservableCollection<ArticleType>> getTypes();
     int getTypeId(string type_name);
 
     ArticleType getArticleType(int id);

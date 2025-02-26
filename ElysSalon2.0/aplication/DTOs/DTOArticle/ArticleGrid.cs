@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
-public record DTOGetArticleGrid()
+public record ArticleGrid()
 {
     public int articleId { get; set; }
     public ArticleType articleType { get; set; }

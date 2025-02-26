@@ -4,25 +4,26 @@ using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 using ElysSalon2._0.adapters.OutBound;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
+using ElysSalon2._0.aplication.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views;
 
 /// <summary>
-/// Lógica de interacción para ArticlesWindow.xaml
+/// Lógica de interacción para ShoppingCartWindow.xaml
 /// </summary>
-public partial class ArticlesWindow : Window {
+public partial class ShoppingCartWindow : Window {
     private readonly WindowsManager _windowsManager;
     private readonly IArticleRepository _articleRepository;
     private readonly IMapper _mapper;
 
-    public ArticlesWindow(IArticleRepository articleRepository, WindowsManager windowsManager, IMapper mapper){
+    public ShoppingCartWindow(IArticleRepository articleRepository, WindowsManager windowsManager, IMapper mapper){
         _windowsManager = windowsManager;
         _articleRepository = articleRepository;
         _mapper = mapper;
       
         InitializeComponent();
-        DataContext = new ButtonManager(articleRepository,_mapper);
+        DataContext = new ShoppingCartViewModel(articleRepository,_mapper);
     }
 
     private void listoBtn(object sender, RoutedEventArgs e){

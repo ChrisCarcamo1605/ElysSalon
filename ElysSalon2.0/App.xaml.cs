@@ -7,6 +7,7 @@ using ElysSalon2._0.aplication;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
+using ElysSalon2._0.aplication.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,8 @@ public partial class App : Application
         services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
         services.AddSingleton<WindowsManager>();
         services.AddSingleton<DbUtil>();
-        services.AddTransient<ArticlesWindow>();
+        services.AddTransient<ItemManagerViewModel>();
+        services.AddTransient<ShoppingCartWindow>();
         services.AddTransient<AdminWindow>();
         services.AddTransient<MainWindow>();
         services.AddTransient<SalesWindow>();
