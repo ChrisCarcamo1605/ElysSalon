@@ -13,7 +13,7 @@ public class Article
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ArticleId { get; set; }
-    public string ArticleName { get; set; }
+    public string Name { get; set; }
     public int ArticleTypeId { get; set; }
     public decimal? PriceCost { get; set; }
     public decimal PriceBuy { get; set; }

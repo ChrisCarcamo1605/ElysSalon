@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,7 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
-public partial class ItemManager 
+public partial class ItemManager : Window
 {
 
     private WindowsManager _windowsManager;
@@ -30,16 +31,23 @@ public partial class ItemManager
         IArticleRepository articleRepository, IArticleTypeRepository TypeRepository)
     {
         InitializeComponent();
+
         _windowsManager = windowsManager;
-        ItemManagerViewModel viewModel = new ItemManagerViewModel(articleRepository, TypeRepository);
-        this.DataContext = viewModel;
-        viewModel.loadArticles();
-    
+        this.DataContext = new ItemManagerViewModel(articleRepository, TypeRepository);
+
+
     }
+
+
+
+
 
     private void exitBtn_Click(object sender, RoutedEventArgs e)
     {
         _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(this);
     }
 
+   
+
+   
 }

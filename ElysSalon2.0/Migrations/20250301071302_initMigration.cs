@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ElysSalon2._0.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class initMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +19,7 @@ namespace ElysSalon2._0.Migrations
                 {
                     ArticleTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ArticleTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,12 +48,12 @@ namespace ElysSalon2._0.Migrations
                 {
                     ArticleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ArticleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArticleTypeId = table.Column<int>(type: "int", nullable: false),
-                    PriceCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PriceCost = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     PriceBuy = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,8 +75,7 @@ namespace ElysSalon2._0.Migrations
                     TicketId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ArticleId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,6 +92,36 @@ namespace ElysSalon2._0.Migrations
                         principalTable: "Tickets",
                         principalColumn: "TicketId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "ArticleType",
+                columns: new[] { "ArticleTypeId", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Todo" },
+                    { 2, "Elegir Tipo" },
+                    { 3, "Cabello" },
+                    { 4, "Servicio" },
+                    { 5, "Tintes" },
+                    { 6, "Producto" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Article",
+                columns: new[] { "ArticleId", "ArticleTypeId", "Description", "Name", "PriceBuy", "PriceCost", "Stock" },
+                values: new object[,]
+                {
+                    { 1, 2, "MEESI", "Tinte", 12.59m, 2.5m, 10 },
+                    { 2, 3, "MEESI", "Uñas Acrilicas", 22.59m, 2.5m, 1 },
+                    { 3, 3, "MEESI", "Pedicure", 32.59m, 2.5m, 1 },
+                    { 4, 3, "MEESI", "Manicure", 52.59m, 1.5m, 1 },
+                    { 5, 3, "MEESI", "Corte Hombre", 5.5m, 2.5m, 1 },
+                    { 6, 3, "MEESI", "Corte Mujer", 7.59m, 3.5m, 1 },
+                    { 7, 5, "MEESI", "Aritos", 32.59m, 2.5m, 15 },
+                    { 8, 5, "MEESI", "Pestañas", 52.59m, 1.5m, 10 },
+                    { 9, 3, "MEESI", "Depilado Cejas", 42.59m, 1.6m, 1 },
+                    { 10, 2, "MEESI", "Kersel", 65.59m, 11.6m, 21 }
                 });
 
             migrationBuilder.CreateIndex(

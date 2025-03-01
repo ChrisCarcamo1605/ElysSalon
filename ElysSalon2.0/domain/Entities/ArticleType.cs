@@ -12,7 +12,7 @@ public class ArticleType
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ArticleTypeId { get; set; }
 
-    public string ArticleTypeName { get; set; }
+    public string Name { get; set; }
 
 
     public ArticleType()

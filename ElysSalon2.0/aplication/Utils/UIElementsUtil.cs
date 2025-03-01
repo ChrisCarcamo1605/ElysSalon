@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Net.Mime;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Data;
@@ -6,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Identity.Client;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using System.Text.RegularExpressions;
 
 namespace ElysSalon2._0.aplication.Utils;
 
@@ -13,31 +15,17 @@ public static class UIElementsUtil
 {
 
 
-    public static void onlyDigits(dynamic textBox, TextCompositionEventArgs e)
-    {
-        char caracter = e.Text[0];
 
-        if (!char.IsDigit(caracter) && !char.IsControl(caracter) && caracter != '.')
-        {
-            e.Handled = true;
-        }
-        else if (caracter == '.' && textBox.Text.Contains('.')) // Evitar múltiples puntos
-        {
-            e.Handled = true;
-        }
+    public static void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^\d*$"); 
     }
 
-    public static void gotFocus(string text, dynamic textBox)
+    public static void TextBoxGotFocus(object sender, RoutedEventArgs e)
     {
-        if (!string.IsNullOrWhiteSpace(textBox.Text))
+        if (sender is TextBox textBox)
         {
-            textBox.Text = "";
-            textBox.Foreground = new SolidColorBrush(Colors.Black);
-        }
-        else
-        {
-            textBox.Text = text;
-            textBox.Foreground = new SolidColorBrush(Colors.Gray);
+            textBox.Clear(); 
         }
     }
 

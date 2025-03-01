@@ -28,7 +28,7 @@ public class ArticleTypeRepository : IArticleTypeRepository
 
     public void addType(string type_name)
     {
-        _context.ArticleType.Add(new ArticleType { ArticleTypeName = type_name });
+        _context.ArticleType.Add(new ArticleType { Name = type_name });
         _context.SaveChanges();
     }
 
@@ -49,7 +49,7 @@ public class ArticleTypeRepository : IArticleTypeRepository
 
     public  int getTypeId(string type_name)
     {
-        var type =  _context.ArticleType.FirstOrDefault(x => x.ArticleTypeName == type_name);
+        var type =  _context.ArticleType.FirstOrDefault(x => x.Name == type_name);
         return type.ArticleTypeId;
     }
 

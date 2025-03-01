@@ -26,7 +26,7 @@ public class ArticleRepository : IArticleRepository
     public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButton()
     {
         var articles = await _context.Article.Select(x => 
-            new DTOGetArticlesButton(x.ArticleId, x.ArticleName, x.PriceBuy)).ToListAsync();
+            new DTOGetArticlesButton(x.ArticleId, x.Name, x.PriceBuy)).ToListAsync();
 
         return new ObservableCollection<DTOGetArticlesButton>(articles);
     }

@@ -30,14 +30,14 @@ namespace ElysSalon2._0.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleId"));
 
-                    b.Property<string>("ArticleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ArticleTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PriceBuy")
@@ -54,6 +54,108 @@ namespace ElysSalon2._0.Migrations
                     b.HasIndex("ArticleTypeId");
 
                     b.ToTable("Article");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticleId = 1,
+                            ArticleTypeId = 5,
+                            Description = "MEESI",
+                            Name = "Tinte Rojo",
+                            PriceBuy = 12.59m,
+                            PriceCost = 2.5m,
+                            Stock = 10
+                        },
+                        new
+                        {
+                            ArticleId = 2,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Uñas Acrilicas",
+                            PriceBuy = 22.59m,
+                            PriceCost = 2.5m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 3,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Pedicure",
+                            PriceBuy = 32.59m,
+                            PriceCost = 2.5m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 4,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Manicure",
+                            PriceBuy = 52.59m,
+                            PriceCost = 1.5m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 5,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Corte Hombre",
+                            PriceBuy = 5.5m,
+                            PriceCost = 2.5m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 6,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Corte Mujer",
+                            PriceBuy = 7.59m,
+                            PriceCost = 3.5m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 7,
+                            ArticleTypeId = 5,
+                            Description = "MEESI",
+                            Name = "Aritos",
+                            PriceBuy = 32.59m,
+                            PriceCost = 2.5m,
+                            Stock = 15
+                        },
+                        new
+                        {
+                            ArticleId = 8,
+                            ArticleTypeId = 5,
+                            Description = "MEESI",
+                            Name = "Pestañas",
+                            PriceBuy = 52.59m,
+                            PriceCost = 1.5m,
+                            Stock = 10
+                        },
+                        new
+                        {
+                            ArticleId = 9,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Depilado Cejas",
+                            PriceBuy = 42.59m,
+                            PriceCost = 1.6m,
+                            Stock = 1
+                        },
+                        new
+                        {
+                            ArticleId = 10,
+                            ArticleTypeId = 3,
+                            Description = "MEESI",
+                            Name = "Kersel",
+                            PriceBuy = 65.59m,
+                            PriceCost = 11.6m,
+                            Stock = 21
+                        });
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.ArticleType", b =>
@@ -64,13 +166,45 @@ namespace ElysSalon2._0.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticleTypeId"));
 
-                    b.Property<string>("ArticleTypeName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ArticleTypeId");
 
                     b.ToTable("ArticleType");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticleTypeId = 1,
+                            Name = "Todo"
+                        },
+                        new
+                        {
+                            ArticleTypeId = 2,
+                            Name = "Elegir Tipo"
+                        },
+                        new
+                        {
+                            ArticleTypeId = 3,
+                            Name = "Cabello"
+                        },
+                        new
+                        {
+                            ArticleTypeId = 4,
+                            Name = "Servicio"
+                        },
+                        new
+                        {
+                            ArticleTypeId = 5,
+                            Name = "Tintes"
+                        },
+                        new
+                        {
+                            ArticleTypeId = 6,
+                            Name = "Producto"
+                        });
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>

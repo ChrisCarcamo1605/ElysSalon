@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -20,11 +21,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     public string searchText
     {
-        get
-        {
-            
-            return _searchText;
-        }
+        get { return _searchText; }
         set
         {
             _searchText = value;
@@ -41,6 +38,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     private int _articleId;
 
     private ICollectionView _articlesView;
+
     public ICollectionView ArticlesView
     {
         get { return _articlesView; }
@@ -62,7 +60,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    private string _articleName;
+    private string _articleName = "Nombre...";
 
     public string articleName
     {
@@ -74,7 +72,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    private int _articleTypeId;
+    private int _articleTypeId = 2;
 
     public int articleTypeId
     {
@@ -83,6 +81,19 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         {
             SetField(ref _articleTypeId, value);
             OnPropertyChanged(nameof(articleTypeId));
+        }
+    }
+
+    private int _articleTypeSort = 1;
+
+    public int articleTypeSort
+    {
+        get { return _articleTypeSort; }
+        set
+        {
+            _articleTypeSort = value;
+            OnPropertyChanged(nameof(articleTypeSort));
+            SortArticles(_articleTypeSort);
         }
     }
 
@@ -109,6 +120,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(priceBuy));
         }
     }
+
 
     private int _stock;
 
@@ -151,7 +163,24 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         set
         {
             _articleTypesCollection = value;
-            OnPropertyChanged(nameof(_articlesView));
+            OnPropertyChanged(nameof(articleTypesCollection));
+        }
+    }
+
+    private ObservableCollection<ArticleType> _articleSortCollection;
+
+    public ObservableCollection<ArticleType> articleSortCollection
+    {
+        get
+        {
+            //  MessageBox.Show("Cargando tipos de articulos");
+            return _articleSortCollection;
+        }
+
+        set
+        {
+            _articleSortCollection = value;
+            OnPropertyChanged(nameof(articleSortCollection));
         }
     }
 
@@ -167,9 +196,11 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
         _articlesCollection = new ObservableCollection<Article>();
         _articleTypesCollection = new ObservableCollection<ArticleType>();
+        _articleSortCollection = new ObservableCollection<ArticleType>();
+        loadArticles();
+
         _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
         _articlesView.Filter = FilterArticles;
-
 
         addArticleCommand = new AsyncRelayCommand(addArticle);
         deleteArticleCommand = new AsyncRelayCommand<Article>(DeleteArticle);
@@ -179,8 +210,13 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     public async Task loadArticles()
     {
-        var articles = await _articleRepo.GetArticles();
+        _articleSortCollection = await _artTypeRepo.getTypes();
         var articleTypes = await _artTypeRepo.getTypes();
+        var articles = await _articleRepo.GetArticles();
+
+
+        _articleSortCollection.Remove(articleTypes.First(x => x.ArticleTypeId == 2));
+        articleTypes.Remove(articleTypes.First(x => x.ArticleTypeId == 1));
 
 
         if (_articleTypesCollection == null)
@@ -212,6 +248,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             }
         }
 
+        articleTypeId = 2;
         _articlesView?.Refresh();
     }
 
@@ -221,11 +258,29 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             return true;
 
         var article = item as Article;
-        return article.ArticleName.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+        return article.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
+
+    private async void SortArticles(int typeId)
+    {
+        await loadArticles();
+
+        if (typeId != 1)
+        {
+            var sorted = _articlesCollection.Where(item => item.ArticleTypeId.Equals(typeId)).ToList();
+            _articlesCollection.Clear();
+            foreach (var item in sorted)
+            {
+                _articlesCollection.Add(item);
+            }
+
+            _articlesView.Refresh();
+        }
+    }
+
     private void FilterItems()
     {
-        _articlesView.Refresh(); 
+        _articlesView.Refresh();
     }
 
     private async Task addArticle()
@@ -236,7 +291,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (articleTypeId <= 0)
+        if (articleTypeId == 2)
         {
             MessageBox.Show("Seleccione un tipo de articulo");
             return;
@@ -256,7 +311,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
         var newArticle = new Article
         {
-            ArticleName = articleName,
+            Name = articleName,
             ArticleTypeId = articleTypeId,
             PriceBuy = priceBuy,
             PriceCost = priceCost,
@@ -264,8 +319,20 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             Description = description
         };
         await _articleRepo.AddArticle(newArticle);
+
         MessageBox.Show("Articulo guardado con exito!");
         await loadArticles();
+        cleanForm();
+    }
+
+    public void cleanForm()
+    {
+        articleTypeId = 2;
+        articleName = "";
+        priceBuy = 0;
+        priceCost = 0;
+        stock = 0;
+        description = "";
     }
 
     private async Task UpdateArticle(Article article)
@@ -273,6 +340,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         if (article == null) throw new NullReferenceException("Articulo nulo");
         _articleRepo.UpdateArticle(article);
         await loadArticles();
+        cleanForm();
     }
 
     private async Task DeleteArticle(Article article)
@@ -281,7 +349,20 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         if (article == null) throw new NullReferenceException("Articulo nulo");
         await _articleRepo.DeleteArticle(article.ArticleId);
         await loadArticles();
+        cleanForm();
     }
+
+
+    public void TextBoxGotFocus(Object sender, RoutedEventArgs e)
+    {
+        UIElementsUtil.TextBoxGotFocus(sender, e);
+    }
+
+    public void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        UIElementsUtil.NumericOnly_PreviewTextInput(sender, e);
+    }
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -82,7 +82,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
         }
 
         private void nameTypeTxt_GotFocus(object sender, RoutedEventArgs e){
-            UIElementsUtil.gotFocus("Nombre...", nameTypeTxt);
+            UIElementsUtil.TextBoxGotFocus(sender,e);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -103,7 +103,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews {
             if (index != -1)
             {
                 var type = typesCollection[index];
-                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.ArticleTypeName}",
+                MessageBoxResult result = MessageBox.Show($"¿Está seguro de eliminar este item? {type.Name}",
                     "Eliminar",
                     MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)

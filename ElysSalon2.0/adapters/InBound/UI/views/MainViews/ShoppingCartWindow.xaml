@@ -52,7 +52,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <!-- Nombre del Producto -->
-                                    <TextBlock Text="{Binding Article.ArticleName, StringFormat=C}" FontSize="21"
+                                    <TextBlock Text="{Binding Article.Name, StringFormat=C}" FontSize="21"
                                                FontFamily="Bahnschrift Condensed"
                                                Grid.Column="0"
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
