@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utils="clr-namespace:ElysSalon2._0.aplication.Utils"
-        mc:Ignorable="d"
+        xmlns:ValidationRules="clr-namespace:ElysSalon2._0.aplication.ValidationRules"
         Title="ItemManager" Height="720" Width="1280"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
@@ -27,13 +27,21 @@
                  Margin="50,162,0,0"
                  VerticalAlignment="Top" Width="207"
                  Grid.ColumnSpan="2" />
-        <TextBox Text="{Binding priceCost, UpdateSourceTrigger=PropertyChanged}" x:Name="priceCostBox"
-                 Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="49"
+
+        <TextBox Text="{Binding priceCost, UpdateSourceTrigger=PropertyChanged}"
+                 x:Name="priceCostBox"
+                 PreviewTextInput="OnlyDigits"
+                 Style="{StaticResource textInput}"
+                 HorizontalAlignment="Left"
+                 Height="49"
                  Margin="525,166,0,0"
                  TextWrapping="Wrap"
-                 VerticalAlignment="Top" Width="173"
-                 Grid.ColumnSpan="2"  />
+                 VerticalAlignment="Top"
+                 Width="173"
+                 Grid.ColumnSpan="2" />
+
         <ComboBox Text="Tipo Articulo" ItemsSource="{Binding articleTypesCollection}"
+                  
                   Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox"
                   HorizontalAlignment="Left" Height="51" Margin="285,164,0,0" VerticalAlignment="Top" Width="215"
                   RenderTransformOrigin="0.781,0.671"
@@ -41,7 +49,7 @@
                   SelectedValuePath="ArticleTypeId"
                   SelectedValue="{Binding articleTypeId, UpdateSourceTrigger=PropertyChanged}"
                   Grid.ColumnSpan="2"
-                  SelectedIndex="0"/>
+                  SelectedIndex="0" />
         <TextBox Text="{Binding description, UpdateSourceTrigger=PropertyChanged}" x:Name="descriptionBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
                  Margin="420,265,0,0"
@@ -50,16 +58,21 @@
                  Grid.ColumnSpan="2" />
 
 
-        <TextBox Text="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}" x:Name="priceBuyBox"
+        <TextBox Text="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}" 
+                 x:Name="priceBuyBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
+                 PreviewTextInput="OnlyDigits"
                  Margin="213,265,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top" Width="172"
-                 Grid.ColumnSpan="2"  />
+                 Grid.ColumnSpan="2" />
+
         <TextBox Text="{Binding stock, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textInput}"
                  x:Name="stockBox" HorizontalAlignment="Left" Height="48"
+                 PreviewTextInput="OnlyDigits"
                  Margin="50,267,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"
                  Grid.ColumnSpan="2" />
+
         <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
                 Height="58" Margin="745,162,0,0" VerticalAlignment="Top" Width="147"
                 Grid.ColumnSpan="2"
@@ -71,7 +84,7 @@
                FontFamily="Bahnschrift Condensed" FontSize="27" />
         <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2"
                 HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="276"
-                Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="3,3,3,3" />
+                Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="2" />
         <ScrollViewer Grid.ColumnSpan="2" Margin="50,360,52,24">
             <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}">
                 <ItemsControl.ItemTemplate>
@@ -129,6 +142,8 @@
                                            Padding="4, 0 ">
                                 </TextBlock>
                                 <Button Content="Editar" Grid.Column="7" Background="Indigo"
+                                        Command="{Binding DataContext.updateArticleCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
                                         FontFamily="Bahnschrift Condensed"
                                         VerticalAlignment="Center"
                                         Padding="4, 15">
@@ -158,6 +173,7 @@
                HorizontalAlignment="Left" Margin="215,230,0,0" Height="32" Width="114" />
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Descripción" Grid.ColumnSpan="2"
                HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="100" />
+
         <ComboBox Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding articleSortCollection}"
                   DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId"
                   SelectedValue="{Binding articleTypeSort, UpdateSourceTrigger=PropertyChanged}"

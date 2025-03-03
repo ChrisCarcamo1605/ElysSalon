@@ -18,8 +18,10 @@ public static class UIElementsUtil
 
     public static void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-        e.Handled = !Regex.IsMatch(e.Text, @"^\d*$"); 
+        e.Handled = !Regex.IsMatch(e.Text, @"^[0-9]*\.?[0-9]*$") ||
+                    ((sender as System.Windows.Controls.TextBox)?.Text.Contains('.') == true && e.Text == ".");
     }
+
 
     public static void TextBoxGotFocus(object sender, RoutedEventArgs e)
     {

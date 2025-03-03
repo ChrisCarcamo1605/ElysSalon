@@ -31,6 +31,7 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        services.AddTransient<UpdateArticleViewModel>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
         services.AddSingleton<WindowsManager>();
@@ -45,8 +46,7 @@ public partial class App : Application
         services.AddAutoMapper(typeof(App).Assembly);
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ItemManager>();
-        services.AddDbContext<ElyDbContext>(options =>
-            options.UseSqlServer(
+        services.AddDbContext<ElyDbContext>( options => options.UseSqlServer(
                 "Server=CHRIS\\CHRISSERVER;Database=elysalondb;User ID=sa;Password=1234;TrustServerCertificate=True;"));
 
     }

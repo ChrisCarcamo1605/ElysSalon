@@ -25,7 +25,6 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
 public partial class ItemManager : Window
 {
-
     private WindowsManager _windowsManager;
     public ItemManager(WindowsManager windowsManager,
         IArticleRepository articleRepository, IArticleTypeRepository TypeRepository)
@@ -33,11 +32,15 @@ public partial class ItemManager : Window
         InitializeComponent();
 
         _windowsManager = windowsManager;
-        this.DataContext = new ItemManagerViewModel(articleRepository, TypeRepository);
+        this.DataContext = new ItemManagerViewModel(articleRepository, TypeRepository, windowsManager);
 
 
     }
 
+    public void OnlyDigits(object sender, TextCompositionEventArgs e)
+    {
+        UIElementsUtil.NumericOnly_PreviewTextInput(sender, e);
+    }
 
 
 
