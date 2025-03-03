@@ -18,9 +18,9 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private IArticleTypeRepository _articleTypeRepository;
     private IArticleRepository _articleRepository;
     private Article _article;
-    private int _articleId;
+    private  int _articleId;
 
-    public int articleId
+    public  int articleId
     {
         get { return _articleId; }
         set

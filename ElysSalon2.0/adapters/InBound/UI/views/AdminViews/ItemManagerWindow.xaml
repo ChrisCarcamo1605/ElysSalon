@@ -41,7 +41,7 @@
                  Grid.ColumnSpan="2" />
 
         <ComboBox Text="Tipo Articulo" ItemsSource="{Binding articleTypesCollection}"
-                  
+
                   Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox"
                   HorizontalAlignment="Left" Height="51" Margin="285,164,0,0" VerticalAlignment="Top" Width="215"
                   RenderTransformOrigin="0.781,0.671"
@@ -58,7 +58,7 @@
                  Grid.ColumnSpan="2" />
 
 
-        <TextBox Text="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}" 
+        <TextBox Text="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}"
                  x:Name="priceBuyBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
                  PreviewTextInput="OnlyDigits"
@@ -85,76 +85,84 @@
         <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2"
                 HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="276"
                 Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" BorderThickness="2" />
-        <ScrollViewer Grid.ColumnSpan="2" Margin="50,360,52,24">
-            <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}">
+        <ScrollViewer Grid.ColumnSpan="2" Margin="58,360,56,24">
+            <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}" Width="1145">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="Azure" BorderBrush="Black" BorderThickness="1" Margin="0 2">
-                            <Grid Margin="4 0">
+                        <Border Height="45" Background="White" BorderBrush="Black" BorderThickness="1" Margin="0 2">
+                            <Grid Margin="0 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="0.5*" />
                                     <ColumnDefinition Width="1.5*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                    <ColumnDefinition Width="2*" />
+
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding ArticleId}" Grid.Column="0" Background="Aqua" FontSize="20"
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 7 ">
-                                </TextBlock>
+                                <Grid Grid.Column="0" Background="Gainsboro">
+
+                                    <TextBlock Text="{Binding ArticleId}" Background="Gainsboro"
+                                               FontSize="20"
+                                              
+                                               FontFamily="Bahnschrift Condensed" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               TextAlignment="Center"  TextWrapping="Wrap" />
+                                </Grid>
                                 <TextBlock FontSize="18" Text="{Binding Name}" Grid.Column="1"
-                                           Background="AliceBlue"
+
                                            FontFamily="Bahnschrift Condensed"
                                            TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
+                                           Padding="0, 0 ">
                                 </TextBlock>
-                                <TextBlock FontSize="18" Text="{Binding ArticleType.Name}" Grid.Column="2"
-                                           Background="Azure" FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
-                                </TextBlock>
+                                <Grid Background="Gainsboro" Grid.Column="2">
+                                    <TextBlock FontSize="18" Text="{Binding ArticleType.Name}" 
+                                               Background="Gainsboro" FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="0, 10 ">
+                                    </TextBlock>
+                                </Grid>
                                 <TextBlock FontSize="20" Text="{Binding PriceCost}" Grid.Column="3"
-                                           Background="Firebrick"
+
                                            FontFamily="Bahnschrift Condensed"
                                            TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
+                                           Padding="0, 0 ">
                                 </TextBlock>
                                 <TextBlock FontSize="20" Text="{Binding PriceBuy}" Grid.Column="4"
                                            Background="Gainsboro"
                                            FontFamily="Bahnschrift Condensed"
                                            TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
+                                           Padding="0, 10 ">
                                 </TextBlock>
-                                <TextBlock FontSize="20" Text="{Binding Stock}" Grid.Column="5" Background="HotPink"
+                                <TextBlock FontSize="20" Text="{Binding Stock}" Grid.Column="5"
                                            FontFamily="Bahnschrift Condensed"
                                            TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
+                                           Padding="0, 0 ">
                                 </TextBlock>
-                                <TextBlock FontSize="20" Text="{Binding Description}" Grid.Column="6"
-                                           Background="Khaki"
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="4, 0 ">
-                                </TextBlock>
-                                <Button Content="Editar" Grid.Column="7" Background="Indigo"
-                                        Command="{Binding DataContext.updateArticleCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}"
-                                        FontFamily="Bahnschrift Condensed"
-                                        VerticalAlignment="Center"
-                                        Padding="4, 15">
-                                </Button>
-                                <Button Content="Eliminar" Grid.Column="8" Background="Indigo"
-                                        FontFamily="Bahnschrift Condensed"
-                                        VerticalAlignment="Center"
-                                        Padding="4, 15 "
-                                        Command="{Binding DataContext.deleteArticleCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding}">
-                                </Button>
+
+                                <Grid Grid.Column="6" Background="Gainsboro">
+
+                                    <TextBlock FontSize="20" Text="{Binding Description}"
+                                               FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center"
+                                               Padding="0, 5 ">
+                                    </TextBlock>
+                                </Grid>
+
+                                <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Style="{StaticResource editBtn}" Content="Editar" Foreground="Black"
+                                            Command="{Binding DataContext.updateArticleCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                    </Button>
+                                    <Button Style="{StaticResource TrashBtn}" Content="Eliminar"
+                                            FontFamily="Bahnschrift Condensed"
+                                            VerticalAlignment="Center"
+
+                                            Command="{Binding DataContext.deleteArticleCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                    </Button>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -181,6 +189,40 @@
                   VerticalAlignment="Top" Width="276" />
         <Label Content="ORDENAR" Grid.ColumnSpan="2" Margin="954,215,104,0" VerticalAlignment="Top"
                FontFamily="Bahnschrift Condensed" FontSize="27" Height="36" />
+
+        <StackPanel HorizontalAlignment="Left" Height="26" Margin="60,334,0,0"
+                    VerticalAlignment="Top" Width="1145" Grid.Column="1">
+
+            <Grid Height="26" Background="Black">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="2*" />
+
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource header}" Text="ID" Height="26" Width="60" />
+                <TextBlock Style="{StaticResource header}" Text="Nombre" Grid.Column="1" Height="26" Width="180" />
+                <TextBlock Style="{StaticResource header}" Text="Tipo" Grid.Column="2" TextAlignment="Center"
+                           Width="120" Height="26">
+                </TextBlock>
+                <TextBlock Style="{StaticResource header}" Text="Costo" Grid.Column="3" Height="26" Width="120"></TextBlock>
+                <TextBlock Style="{StaticResource header}" Text="Precio" Grid.Column="4" Height="26" Width="120"></TextBlock>
+                <TextBlock Style="{StaticResource header}" Margin="2 0 0 0" Text="Stock" Grid.Column="5" Height="26"
+                           Width="120">
+                </TextBlock>
+                <TextBlock Style="{StaticResource header}" Margin="1 0 0 0" Text="Descripcion" Grid.Column="6"
+                           Height="26" Width="180" />
+                <TextBlock Style="{StaticResource header}" Text="Acciones" Grid.Column="7" Width="241" Height="26" />
+            </Grid>
+
+        </StackPanel>
 
 
     </Grid>

@@ -18,7 +18,7 @@
         </Border.Background>
         <Grid>
             
-            <TextBox Text="{Binding articleId}" Style="{StaticResource textInput}" x:Name="ArticleIdTextBox"
+            <TextBox IsReadOnly="True" Foreground="LightSlateGray" Text="{Binding articleId}" Style="{StaticResource textInput}" x:Name="ArticleIdTextBox"
                      HorizontalAlignment="Left"
                      Height="42" Margin="34,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" />
             <TextBox Style="{StaticResource textInput}" Text="{Binding articleName}" x:Name="NameTextBox"
@@ -50,7 +50,7 @@
                      Height="62" Margin="0,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
                      Width="422" />
             <Button Content="Actualizar" Style="{StaticResource addBtn}" Command="{Binding updateArticleCommand}"  HorizontalAlignment="Left" Height="40"
-                    Margin="334,434,0,0" VerticalAlignment="Top" Width="124" />
+                    Margin="334,437,0,0" VerticalAlignment="Top" Width="124" />
             <Label Style="{StaticResource TitleText}" FontSize="35" Content="ACTUALIZAR ARTICULO" Height="48"
                    Margin="0,13,0,0" Width="256" />
             <ComboBox x:Name="typesComboBox" ItemsSource="{Binding articleTypes}"
