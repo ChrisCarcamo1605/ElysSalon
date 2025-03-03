@@ -1,7 +1,7 @@
 ﻿using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElysSalon2._0.aplication;
+namespace ElysSalon2._0.adapters.OutBound.DataBase;
 
 public class ElyDbContext : DbContext
 {

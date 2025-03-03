@@ -88,7 +88,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
                 btn.Click += async (e, s) => { addToCart(article); };
                 var textBlock = new TextBlock
                 {
-                    Text = article.articleName,
+                    Text = article.Name,
                     TextWrapping = TextWrapping.Wrap,
                     TextAlignment = TextAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center,

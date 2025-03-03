@@ -2,5 +2,5 @@
 
 public record DTOGetArticlesButton(
     int articleId,
-    string articleName,
+    string Name,
     decimal price);

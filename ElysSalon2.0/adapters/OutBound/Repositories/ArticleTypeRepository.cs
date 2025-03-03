@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using ElysSalon2._0.aplication;
+using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Repositories;
@@ -8,7 +8,7 @@ using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElysSalon2._0.adapters.OutBound;
+namespace ElysSalon2._0.adapters.OutBound.Repository;
 
 public class ArticleTypeRepository : IArticleTypeRepository
 {

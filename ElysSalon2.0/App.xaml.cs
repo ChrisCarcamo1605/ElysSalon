@@ -2,8 +2,8 @@
 using System.Windows;
 using ElysSalon2._0.adapters.InBound.UI.views;
 using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
-using ElysSalon2._0.adapters.OutBound;
-using ElysSalon2._0.aplication;
+using ElysSalon2._0.adapters.OutBound.DataBase;
+using ElysSalon2._0.adapters.OutBound.Repository;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
@@ -46,8 +46,8 @@ public partial class App : Application
         services.AddAutoMapper(typeof(App).Assembly);
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ItemManager>();
-        services.AddDbContext<ElyDbContext>( options => options.UseSqlServer(
-                "Server=CHRIS\\CHRISSERVER;Database=elysalondb;User ID=sa;Password=1234;TrustServerCertificate=True;"));
+        services.AddDbContext<ElyDbContext>(options => options.UseSqlServer(
+            "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"));
 
     }
 

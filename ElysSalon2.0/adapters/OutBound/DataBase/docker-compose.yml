@@ -1,0 +1,13 @@
+﻿version: '3.8'
+
+services:
+    sqlserver:
+            image: mcr.microsoft.com/mssql/server:2022-latest
+            container_name: my_sqlserver
+            ports:
+                - "1433:1433"
+            environment:
+               MSSQL_SA_PASSWORD: "Carcamito*-*2024$1605"
+               ACCEPT_EULA: "Y"
+            volumes:
+               - ./init.sql:/docker-entrypoint-initdb.d/init.sql
