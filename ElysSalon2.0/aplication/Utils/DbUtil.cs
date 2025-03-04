@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using ElysSalon2._0.aplication.Management;
 using Microsoft.Data.SqlClient;
 

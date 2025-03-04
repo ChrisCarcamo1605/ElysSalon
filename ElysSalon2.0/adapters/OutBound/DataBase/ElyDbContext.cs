@@ -26,7 +26,6 @@ public class ElyDbContext : DbContext
             new ArticleType { ArticleTypeId = 6, Name = "Producto" });
 
 
-
         modelBuilder.Entity<Article>().HasData(
             new Article
             {

@@ -667,9 +667,6 @@
         </Setter>
     </Style>
 
-    
-
-
 
     <ControlTemplate TargetType="ToggleButton" x:Key="ComboBoxToggleButtonTemplate">
         <Grid>
@@ -734,7 +731,7 @@
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Grid> 
+                    <Grid>
 
                         <ToggleButton Name="ToggleButton" Grid.Column="2"
                                       ClickMode="Press" Focusable="False"
@@ -798,8 +795,6 @@
     </Style>
 
 
-
-
     <Style x:Key="TrashBtn" TargetType="Button">
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -809,7 +804,7 @@
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="trashGrid">
                         <Border Height="36"
-                            Width="36" />
+                                Width="36" />
                         <Grid.RenderTransform>
                             <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1" />
                         </Grid.RenderTransform>
@@ -818,7 +813,7 @@
                         </Grid.RenderTransformOrigin>
 
                         <Grid.Background>
-                            <ImageBrush ImageSource="/images/trash.png" Stretch="Fill"/>
+                            <ImageBrush ImageSource="/images/trash.png" Stretch="Fill" />
                         </Grid.Background>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -828,11 +823,11 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                     Storyboard.TargetProperty="ScaleX" To="1.2"
-                                                     Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1.2"
+                                                         Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                     Storyboard.TargetProperty="ScaleY" To="1.2"
-                                                     Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1.2"
+                                                         Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -840,9 +835,9 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                     Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                     Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

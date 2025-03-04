@@ -11,7 +11,7 @@
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="trashGrid">
                         <Border Height="23"
-                         Width="25" />
+                                Width="25" />
                         <Grid.RenderTransform>
                             <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1" />
                         </Grid.RenderTransform>
@@ -20,9 +20,9 @@
                         </Grid.RenderTransformOrigin>
 
                         <Grid.Background>
-                            <ImageBrush ImageSource="/images/plusSymbol.png" Stretch="Fill"/>
+                            <ImageBrush ImageSource="/images/plusSymbol.png" Stretch="Fill" />
                         </Grid.Background>
-                        
+
                     </Grid>
                     <ControlTemplate.Triggers>
 
@@ -31,11 +31,11 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                  Storyboard.TargetProperty="ScaleX" To="1.2"
-                                                  Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1.2"
+                                                         Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                  Storyboard.TargetProperty="ScaleY" To="1.2"
-                                                  Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1.2"
+                                                         Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -43,9 +43,9 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                  Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                                  Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -67,7 +67,7 @@
                 <ControlTemplate TargetType="Button">
                     <Grid x:Name="trashGrid">
                         <Border Height="22"
-                     Width="25" />
+                                Width="25" />
                         <Grid.RenderTransform>
                             <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1" />
                         </Grid.RenderTransform>
@@ -76,7 +76,7 @@
                         </Grid.RenderTransformOrigin>
 
                         <Grid.Background>
-                            <ImageBrush ImageSource="/images/minusSymbol.png" Stretch="Fill"/>
+                            <ImageBrush ImageSource="/images/minusSymbol.png" Stretch="Fill" />
                         </Grid.Background>
 
                     </Grid>
@@ -87,11 +87,11 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                              Storyboard.TargetProperty="ScaleX" To="1.2"
-                                              Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1.2"
+                                                         Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                              Storyboard.TargetProperty="ScaleY" To="1.2"
-                                              Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1.2"
+                                                         Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -99,9 +99,9 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                              Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleX" To="1" Duration="00:00:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="scaleTransform"
-                                              Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
+                                                         Storyboard.TargetProperty="ScaleY" To="1" Duration="00:00:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -122,7 +122,7 @@
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="FontFamily" Value="Bahnschrift Condensed" />
         <Setter Property="Foreground" Value="Black" />
-        <Setter Property="Padding" Value="25"/>
+        <Setter Property="Padding" Value="25" />
         <Setter Property="Template">
             <Setter.Value>
 
@@ -139,21 +139,19 @@
                         </Grid.RenderTransformOrigin>
 
                         <Border x:Name="border"
-                        Background="White"
-                        Width="110"
-                        Padding="6 0"
-                        Margin=" 8 5"
-                        CornerRadius="8"
-                        BorderThickness="2"
-                        BorderBrush="Black" 
-                        />
+                                Background="White"
+                                Width="110"
+                                Padding="6 0"
+                                Margin=" 8 5"
+                                CornerRadius="8"
+                                BorderThickness="2"
+                                BorderBrush="Black" />
                         <ContentPresenter x:Name="contentPresenter"
-                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                  Content="{TemplateBinding Content}"
-                                  
-                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                 />
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -163,15 +161,15 @@
                                     <Storyboard>
 
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleX"
-                                    To="1.03"
-                                    Duration="0:0:0.1" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="1.03"
+                                            Duration="0:0:0.1" />
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleY"
-                                    To="1.03"
-                                    Duration="0:0:0.1" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="1.03"
+                                            Duration="0:0:0.1" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -180,15 +178,15 @@
                                     <Storyboard>
 
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleX"
-                                    To="1.0"
-                                    Duration="0:0:0.2" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleY"
-                                    To="1.0"
-                                    Duration="0:0:0.2" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -200,15 +198,15 @@
                                     <Storyboard>
 
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleX"
-                                    To="1.1"
-                                    Duration="0:0:0.1" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="1.1"
+                                            Duration="0:0:0.1" />
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleY"
-                                    To="1.1"
-                                    Duration="0:0:0.1" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="1.1"
+                                            Duration="0:0:0.1" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -217,15 +215,15 @@
                                     <Storyboard>
 
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleX"
-                                    To="1.0"
-                                    Duration="0:0:0.2" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleX"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
                                         <DoubleAnimation
-                                    Storyboard.TargetName="scaleTransform"
-                                    Storyboard.TargetProperty="ScaleY"
-                                    To="1.0"
-                                    Duration="0:0:0.2" />
+                                            Storyboard.TargetName="scaleTransform"
+                                            Storyboard.TargetProperty="ScaleY"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

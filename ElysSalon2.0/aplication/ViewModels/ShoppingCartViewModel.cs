@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,49 +8,19 @@ using System.Windows.Input;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
-using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.domain.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.aplication.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
-    public ICommand RemoveFromCartCommand { get; }
-    public ICommand IncreaseQuantityCommand { get; }
-    public ICommand DecreaseQuantityCommand { get; }
+    private readonly IArticleRepository _articleRepository;
 
-    private IMapper _mapper;
-    private IArticleRepository _articleRepository;
-    public ICollectionView cartItemsView;
+    private readonly IMapper _mapper;
     private ObservableCollection<TicketDetails> _cartItems;
     private decimal _totalAmount;
-
-    public decimal totalAmount
-    {
-        get
-        {
-            return _totalAmount;
-        }
-        set
-        {
-            _totalAmount = value;
-            OnPropertyChanged(nameof(totalAmount));
-        }
-    }
-
-    public ObservableCollection<TicketDetails> cartItems
-    {
-        get => _cartItems;
-        set
-        {
-            _cartItems = value;
-            OnPropertyChanged(nameof(cartItems));
-        }
-    }
-
-    public ObservableCollection<Button> ArticlesButtons { get; set; }
+    public ICollectionView cartItemsView;
 
     public ShoppingCartViewModel(IArticleRepository articleRepository, IMapper mapper)
     {
@@ -72,6 +36,35 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
     }
 
+    public ICommand RemoveFromCartCommand { get; }
+    public ICommand IncreaseQuantityCommand { get; }
+    public ICommand DecreaseQuantityCommand { get; }
+
+    public decimal totalAmount
+    {
+        get => _totalAmount;
+        set
+        {
+            _totalAmount = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<TicketDetails> cartItems
+    {
+        get => _cartItems;
+        set
+        {
+            _cartItems = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<Button> ArticlesButtons { get; set; }
+
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     private async Task loadButtons()
     {
         var articles = await _articleRepository.GetArticlesToButton();
@@ -83,7 +76,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
                 {
                     Tag = article.articleId,
                     Style = (Style)Application.Current.FindResource("articlesBtn"),
-                    Padding = new Thickness(10),
+                    Padding = new Thickness(10)
                 };
                 btn.Click += async (e, s) => { addToCart(article); };
                 var textBlock = new TextBlock
@@ -124,9 +117,6 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         cartItemsView?.Refresh();
     }
 
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -143,13 +133,9 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     private void DecreaseFromCart(TicketDetails ticket)
     {
         if (ticket.Quantity > 1)
-        {
             ticket.Quantity -= 1;
-        }
         else
-        {
             RemoveFromCart(ticket);
-        }
 
         UpdateTotalPrice();
     }
@@ -164,17 +150,13 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     private void UpdateTotalPrice()
     {
         decimal total = 0;
-        
-        foreach (var item in cartItems)
-        {
-            total += item.TotalPrice;
-        }
+
+        foreach (var item in cartItems) total += item.TotalPrice;
 
         totalAmount = total;
         cartItemsView.Refresh();
     }
 
-   
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

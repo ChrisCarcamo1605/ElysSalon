@@ -1,46 +1,34 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Security.RightsManagement;
-using Windows.UI.Notifications;
-using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
-using AutoMapper.Configuration.Annotations;
 
 namespace ElysSalon2._0.domain.Entities;
 
 public class TicketDetails : INotifyPropertyChanged
 {
+    private int _quantity;
+
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int TicketDetailsId { get; set; }
 
-    public string TicketId { get; set; } 
-    public int ArticleId { get; set; } 
-
-    private int _quantity;
+    public string TicketId { get; set; }
+    public int ArticleId { get; set; }
 
     public int Quantity
     {
-        get { return _quantity; }
+        get => _quantity;
         set
         {
-            if (SetField(ref _quantity, value))
-            {
-                OnPropertyChanged(nameof(TotalPrice));
-            }
+            if (SetField(ref _quantity, value)) OnPropertyChanged(nameof(TotalPrice));
         }
     }
 
     public decimal Price { get; set; }
 
-    
-    public decimal TotalPrice
-    {
-        get { return Quantity * Price; }
-        
-    }
+
+    public decimal TotalPrice => Quantity * Price;
 
     [ForeignKey("TicketId")] public virtual Ticket Ticket { get; set; }
 

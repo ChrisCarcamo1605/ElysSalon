@@ -1,10 +1,8 @@
 ﻿using ElysSalon2._0.domain.Entities;
-using System.ComponentModel;
-using System.Windows;
 
 namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
-public record ArticleGrid()
+public record ArticleGrid
 {
     public int articleId { get; set; }
     public ArticleType articleType { get; set; }
@@ -15,4 +13,4 @@ public record ArticleGrid()
     public decimal stocl { get; set; }
     public int stock { get; set; }
     public string description { get; set; }
-};
+}

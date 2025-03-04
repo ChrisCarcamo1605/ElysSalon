@@ -1,56 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Windows.Web.UI;
+﻿using System.Windows;
 using ElysSalon2._0.adapters.InBound.UI.views;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ElysSalon2._0.aplication.Management
+namespace ElysSalon2._0.aplication.Management;
+
+public class WindowsManager
 {
-    public class WindowsManager
+    public delegate void GridUpdateRequestedHandler();
+
+    private readonly IServiceProvider _serviceProvider;
+    private readonly Dictionary<Type, Window> _windows = new();
+
+    public WindowsManager(IServiceProvider serviceProvider)
     {
-        IServiceProvider _serviceProvider;
-        private Dictionary<Type, Window> _windows = new Dictionary<Type, Window>();
-        public delegate void GridUpdateRequestedHandler();
-        public event GridUpdateRequestedHandler GridUpdateRequested;
-        public WindowsManager(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        _serviceProvider = serviceProvider;
+    }
 
-        public void NavigateToWindow<TWindow>(Action onGridUpdateRequested = null) where TWindow : Window
-        {
-            if (!_windows.TryGetValue(typeof(TWindow), out var newWindow))
-            {
-                newWindow = _serviceProvider.GetRequiredService<TWindow>();
-                _windows[typeof(TWindow)] = newWindow;
-                newWindow.Closed += (s, e) => _windows.Remove(typeof(TWindow));
+    public event GridUpdateRequestedHandler GridUpdateRequested;
 
-                // Si la ventana implementa IChildWindow, suscribirse al evento
-                if (newWindow is IChildWindow childWindow)
+    public void NavigateToWindow<TWindow>(Action onGridUpdateRequested = null) where TWindow : Window
+    {
+        if (!_windows.TryGetValue(typeof(TWindow), out var newWindow))
+        {
+            newWindow = _serviceProvider.GetRequiredService<TWindow>();
+            _windows[typeof(TWindow)] = newWindow;
+            newWindow.Closed += (s, e) => _windows.Remove(typeof(TWindow));
+
+
+            if (newWindow is IChildWindow childWindow)
+                childWindow.UpdateParentGrid += () =>
                 {
-                    childWindow.UpdateParentGrid += () =>
-                    {
-                        onGridUpdateRequested?.Invoke();
-                        GridUpdateRequested?.Invoke();
-                    };
-                }
-            }
-
-            if (!newWindow.IsVisible)
-            {
-                newWindow.Show();
-            }
-            newWindow.Activate();
+                    onGridUpdateRequested?.Invoke();
+                    GridUpdateRequested?.Invoke();
+                };
         }
 
-        public void CloseCurrentWindowandShowWindow<TWindow>(Window currentWindow, Action onGridUpdateRequested = null) where TWindow : Window
-        {
-            NavigateToWindow<TWindow>(onGridUpdateRequested);
-            currentWindow.Close();
-        }
+        if (!newWindow.IsVisible) newWindow.Show();
+        newWindow.Activate();
+    }
+
+    public void CloseCurrentWindowandShowWindow<TWindow>(Window currentWindow, Action onGridUpdateRequested = null)
+        where TWindow : Window
+    {
+        NavigateToWindow<TWindow>(onGridUpdateRequested);
+        currentWindow.Close();
     }
 }

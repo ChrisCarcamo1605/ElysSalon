@@ -7,8 +7,8 @@ namespace ElysSalon2._0.aplication.Repositories;
 public interface IArticleRepository
 {
     Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButton();
-     Task<ObservableCollection<Article>>  GetArticles();
-     Task<Article> GetArticle(int id);
+    Task<ObservableCollection<Article>> GetArticles();
+    Task<Article> GetArticle(int id);
     Task AddArticle(Article article);
     Task UpdateArticle(Article article);
     Task DeleteArticle(int id);

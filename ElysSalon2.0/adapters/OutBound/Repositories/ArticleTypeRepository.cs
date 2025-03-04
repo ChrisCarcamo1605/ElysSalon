@@ -1,10 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
 using ElysSalon2._0.adapters.OutBound.DataBase;
-using ElysSalon2._0.aplication.DTOs;
-using ElysSalon2._0.aplication.DTOs;
 using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,21 +31,19 @@ public class ArticleTypeRepository : IArticleTypeRepository
 
     public void updateType(ArticleType articleType)
     {
-        
         _context.ArticleType.Update(articleType);
         _context.SaveChanges();
     }
 
     public async Task<ObservableCollection<ArticleType>> getTypes()
     {
-            var types = await _context.ArticleType.ToListAsync();
-            return new ObservableCollection<ArticleType>(types);
-        
+        var types = await _context.ArticleType.ToListAsync();
+        return new ObservableCollection<ArticleType>(types);
     }
 
-    public  int getTypeId(string type_name)
+    public int getTypeId(string type_name)
     {
-        var type =  _context.ArticleType.FirstOrDefault(x => x.Name == type_name);
+        var type = _context.ArticleType.FirstOrDefault(x => x.Name == type_name);
         return type.ArticleTypeId;
     }
 

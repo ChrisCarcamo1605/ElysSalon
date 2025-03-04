@@ -6,7 +6,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Adapters/InBound/UI/styles/LabelStyles.xaml" />
                 <ResourceDictionary Source="Adapters/InBound/UI/styles/Style.xaml" />
-                <ResourceDictionary Source="adapters/InBound/UI/styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="adapters/InBound/UI/styles/ButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

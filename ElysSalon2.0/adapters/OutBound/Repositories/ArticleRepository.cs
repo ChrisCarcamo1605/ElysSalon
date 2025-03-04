@@ -1,21 +1,18 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Navigation;
 using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.adapters.OutBound.Repository;
 
 public class ArticleRepository : IArticleRepository
 {
-    private DbUtil db;
-    private ElyDbContext _context;
+    private readonly ElyDbContext _context;
     private readonly IArticleTypeRepository _typeRepository;
+    private DbUtil db;
 
     public ArticleRepository(IArticleTypeRepository typeRepository, ElyDbContext context)
     {
@@ -25,7 +22,7 @@ public class ArticleRepository : IArticleRepository
 
     public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButton()
     {
-        var articles = await _context.Article.Select(x => 
+        var articles = await _context.Article.Select(x =>
             new DTOGetArticlesButton(x.ArticleId, x.Name, x.PriceBuy)).ToListAsync();
 
         return new ObservableCollection<DTOGetArticlesButton>(articles);
@@ -42,14 +39,13 @@ public class ArticleRepository : IArticleRepository
     public async Task<Article> GetArticle(int id)
     {
         return await _context.Article.FindAsync(id) ?? throw new NullReferenceException("No trajo na pa");
-        
     }
 
 
     public async Task AddArticle(Article article)
     {
         _context.Article.Add(article);
-      await   _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
 

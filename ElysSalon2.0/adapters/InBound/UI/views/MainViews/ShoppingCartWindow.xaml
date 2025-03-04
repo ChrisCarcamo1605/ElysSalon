@@ -56,21 +56,21 @@
                                                FontFamily="Bahnschrift Condensed"
                                                Grid.Column="0"
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                               Padding="4, 0 "  />
+                                               Padding="4, 0 " />
                                     <!-- Cantidad -->
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
                                         <Button
                                             Style="{DynamicResource MinusBtn}"
                                             Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding}" />
                                         <TextBlock Text="{Binding Quantity}" Padding="8,0"
                                                    TextAlignment="Center" HorizontalAlignment="Center"
                                                    VerticalAlignment="Center" FontSize="28"
                                                    FontFamily="Bahnschrift Condensed" />
                                         <Button Style="{DynamicResource PlusBtn}"
-                                            Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                                Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" />
 
                                     </StackPanel>
                                     <!-- Precio -->
@@ -83,10 +83,7 @@
                                     <!-- Botón de Eliminar -->
                                     <Button Style="{DynamicResource TrashBtn}" Grid.Column="3"
                                             Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                            CommandParameter="{Binding}">
-
-
-                                    </Button>
+                                            CommandParameter="{Binding}" />
                                 </Grid>
                             </Border>
                         </DataTemplate>

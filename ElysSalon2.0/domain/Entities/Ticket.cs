@@ -1,6 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace ElysSalon2._0.domain.Entities;
 
@@ -17,5 +16,5 @@ public class Ticket
     public decimal TotalAmount { get; set; }
 
 
-   public virtual ICollection<TicketDetails> TicketDetails { get; set; } = new List<TicketDetails>();
+    public virtual ICollection<TicketDetails> TicketDetails { get; set; } = new List<TicketDetails>();
 }
