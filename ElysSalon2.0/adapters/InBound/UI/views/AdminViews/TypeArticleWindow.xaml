@@ -6,25 +6,70 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Title="TypeArticleWindow" Height="350" Width="600">
-    <Grid>
-        <TextBox x:Name="nameTypeTxt" Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="44"
-                 Margin="25,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="398" FontSize="20"
-                 Loaded="nameTypeTxt_Loaded" LostFocus="nameTypeTxt_LostFocus" GotFocus="nameTypeTxt_GotFocus" />
-        <Button x:Name="updateTypeBtn" Style="{StaticResource addBtn}" Content="Actualizar" HorizontalAlignment="Left"
-                Height="43" Margin="451,216,0,0" VerticalAlignment="Top" Width="128" Click="updateTypeBtn_Click" />
-        <DataGrid ItemsSource="{Binding typesCollection}" x:Name="typeGrid" HorizontalAlignment="Left" Height="165"
-                  Margin="25,157,0,0" VerticalAlignment="Top" Width="398" d:ItemsSource="{d:SampleData ItemCount=5}"
-                  SelectionChanged="typeGrid_SelectionChanged" />
-        <Label Style="{StaticResource TitleText}" Content="GESTION TIPOS" Height="50" Margin="0,10,0,0" Width="181"
-               FontSize="36" />
-        <Button x:Name="deleteTypeBtn" Style="{StaticResource addBtn}" Content="Borrar" HorizontalAlignment="Left"
-                Height="46" Margin="451,276,0,0" VerticalAlignment="Top" Width="128" Background="#FFBF1111"
-                Click="deleteTypeBtn_Click" />
-        <Button DataContext="" x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Agregar"
-                HorizontalAlignment="Left" Height="44" Margin="451,83,0,0" VerticalAlignment="Top" Width="128"
-                Click="addTypeBtn_Click" />
-        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button" Click="exitBtn_Click" Height="41"
-                Width="67" Margin="25,19,0,0" />
-    </Grid>
+        Title="TypeArticleWindow" Height="304" Width="389"
+        Background="Transparent">
+    <Border Background="AliceBlue" CornerRadius="6">
+        <Grid>
+            <TextBox x:Name="nameTypeTxt" Style="{StaticResource textInput}" Text="{Binding Name}"
+                     HorizontalAlignment="Left" Height="44"
+                     Margin="30,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216" FontSize="20" />
+            <Label Style="{StaticResource TitleText}" Content="GESTION TIPOS" Height="44" Margin="0,10,0,0" Width="175"
+                   FontSize="35" />
+            <Button  x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Agregar"
+                    HorizontalAlignment="Left" Height="44" Margin="257,72,0,0" VerticalAlignment="Top" Width="102"
+                    RenderTransformOrigin="-1.017,0.754" FontSize="18"
+                    Command="{Binding addTypeCommand}"
+                     />
+            <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="27,19,0,0"
+                    Content="Salir" FontSize="18" Height="32" Width="49" Command="{Binding exitCommand}" />
+
+            <ScrollViewer Margin="27,125,36,20">
+                <Border CornerRadius="5" BorderBrush="Black" BorderThickness="1">
+                    <ItemsControl ItemsSource="{Binding TypesCollection }" Background="LightGray">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                                        <ColumnDefinition Width="2*"></ColumnDefinition>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Grid.Column="0" Background="AntiqueWhite">
+                                        <TextBlock Text="{Binding ArticleTypeId}" Background="Gainsboro"
+                                                   FontSize="20"
+                                                   FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   TextAlignment="Center" TextWrapping="Wrap" />
+                                    </Grid>
+
+                                    <Grid Grid.Column="1" Background="Red">
+                                        <TextBox Text="{Binding Name}"
+                                                 FontSize="20"
+
+                                                 FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
+                                                 HorizontalAlignment="Center"
+                                                 TextAlignment="Center" TextWrapping="Wrap" />
+                                    </Grid>
+
+                                    <Grid Background="AntiqueWhite" Grid.Column="2">
+                                        <StackPanel
+                                            Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Margin="0 0 8 0" Style="{DynamicResource addBtn}" Content="Editar"></Button>
+                                            <Button Margin="8  0 0 0" Style="{DynamicResource addBtn}"
+                                                    Content="Borrar" Command="{Binding DataContext.deleteTypeCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"></Button>
+                                        </StackPanel>
+                                    </Grid>
+
+
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </ScrollViewer>
+
+        </Grid>
+    </Border>
 </Window>

@@ -10,4 +10,8 @@ public interface IArticleService
     Task AddArticle(DTOAddArticle dto);
     Task UpdateArticle(Article _article);
     Task DeleteArticle(int id);
+    Task AddType(String typeName);
+    Task EditType(ArticleType type);
+    Task DeleteType(int id);
+
 }

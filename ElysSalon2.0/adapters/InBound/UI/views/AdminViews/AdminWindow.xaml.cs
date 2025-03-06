@@ -30,6 +30,6 @@ public partial class AdminWindow : Window
 
     private void itemsBtn_Click(object sender, RoutedEventArgs e)
     {
-        _windowManager.CloseCurrentWindowandShowWindow<ItemManager>(this);
+        _windowManager.CloseCurrentWindowandShowWindow<ItemManagerWindow>(this);
     }
 }

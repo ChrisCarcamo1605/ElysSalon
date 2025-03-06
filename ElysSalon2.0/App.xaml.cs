@@ -29,9 +29,11 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
+        services.AddTransient<ItemManagerWindow>();
         services.AddScoped<IArticleService, ArticleService>();
         services.AddTransient<UpdateArticleViewModel>();
         services.AddScoped<IArticleRepository, ArticleRepository>();
+        services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
         services.AddSingleton<WindowsManager>();
         services.AddSingleton<DbUtil>();
@@ -44,9 +46,9 @@ public partial class App : Application
         services.AddTransient<MailWindow>();
         services.AddAutoMapper(typeof(App).Assembly);
         services.AddTransient<TypeArticleWindow>();
-        services.AddTransient<ItemManager>();
         services.AddDbContext<ElyDbContext>(options => options.UseSqlServer(
-            "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"), ServiceLifetime.Scoped);
+                "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"),
+            ServiceLifetime.Scoped);
     }
 
     protected override void OnStartup(StartupEventArgs e)

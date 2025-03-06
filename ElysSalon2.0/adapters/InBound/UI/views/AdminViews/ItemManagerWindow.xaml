@@ -1,17 +1,16 @@
-﻿<Window x:Class="ElysSalon2._0.adapters.InBound.UI.views.AdminViews.ItemManager"
+﻿<Window x:Class="ElysSalon2._0.adapters.InBound.UI.views.AdminViews.ItemManagerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
         xmlns:events="http://schemas.microsoft.com/xaml/behaviors"
-        Title="ItemManager" Height="720" Width="1280"
+        Title="ItemManagerWindow" Height="720" Width="1280"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
 
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+       
         <Grid.Background>
             <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" />
         </Grid.Background>
@@ -31,8 +30,8 @@
                  x:Name="priceCostBox"
                  Style="{StaticResource textInput}"
                  HorizontalAlignment="Left"
-                 Height="49"
-                 Margin="525,166,0,0"
+                 Height="51"
+                 Margin="525,164,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="173"
@@ -81,9 +80,9 @@
         </TextBox>
 
         <TextBox Text="{Binding stock, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textInput}"
-                 x:Name="stockBox" HorizontalAlignment="Left" Height="48"
+                 x:Name="stockBox" HorizontalAlignment="Left" Height="50"
 
-                 Margin="50,267,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"
+                 Margin="50,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"
                  Grid.ColumnSpan="2">
             <events:Interaction.Triggers>
                 <events:EventTrigger EventName="PreviewTextInput">
@@ -94,18 +93,22 @@
         </TextBox>
 
         <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
-                Height="58" Margin="745,162,0,0" VerticalAlignment="Top" Width="147"
+                Height="51" Margin="722,164,0,0" VerticalAlignment="Top" Width="160"
                 Grid.ColumnSpan="2"
                 Command="{Binding addArticleCommand}" />
         <TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" x:Name="searchTxtBox"
                  Style="{StaticResource textInput}" Grid.ColumnSpan="2"
-                 HorizontalAlignment="Left" Height="54" Margin="952,150,0,0" VerticalAlignment="Top" Width="276" />
-        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,108,106,0" VerticalAlignment="Top"
-               FontFamily="Bahnschrift Condensed" FontSize="27" />
-        <Button x:Name="addTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipos" Grid.ColumnSpan="2"
-                HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="276"
-                Foreground="Black" BorderBrush="Black" Background="#FFFFF8D6" />
+                 HorizontalAlignment="Left" Height="54" Margin="952,150,0,0" VerticalAlignment="Top" Width="268" />
+        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,114,112,0" VerticalAlignment="Top"
+               FontFamily="Bahnschrift Condensed" FontSize="27" Height="36" />
+        <Button x:Name="ManagementTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipo Productos"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="268"
+                Foreground="White" BorderBrush="Black" Background="Black" Command="{Binding OpenTypesManagementCommand}" />
+
+
         <ScrollViewer Grid.ColumnSpan="2" Margin="58,360,56,24">
+
             <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}" Width="1145">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -191,16 +194,16 @@
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Costo" Grid.ColumnSpan="2"
                HorizontalAlignment="Left" Margin="528,127,0,0" Height="32" Width="84" />
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Precio Venta" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="215,230,0,0" Height="32" Width="114" />
+               HorizontalAlignment="Left" Margin="213,232,0,0" Height="32" Width="114" />
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Descripción" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="100" />
+               HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="106" />
 
         <ComboBox Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding articleSortCollection}"
                   DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId"
                   SelectedValue="{Binding articleTypeSort, UpdateSourceTrigger=PropertyChanged}"
-                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="62" Margin="952,253,0,0"
-                  VerticalAlignment="Top" Width="276" />
-        <Label Content="ORDENAR" Grid.ColumnSpan="2" Margin="954,215,104,0" VerticalAlignment="Top"
+                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="50" Margin="952,265,0,0"
+                  VerticalAlignment="Top" Width="268" />
+        <Label Content="ORDENAR" Grid.ColumnSpan="2" Margin="952,229,112,0" VerticalAlignment="Top"
                FontFamily="Bahnschrift Condensed" FontSize="27" Height="36" />
 
         <StackPanel HorizontalAlignment="Left" Height="26" Margin="60,334,0,0"

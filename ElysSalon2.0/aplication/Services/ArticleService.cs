@@ -88,10 +88,11 @@ public class ArticleService : IArticleService
 
         MessageBox.Show("Artículo guardado con éxito!");
         reloadItems?.Invoke();
+        clearForms?.Invoke();
     }
 
 
-    public async Task UpdateArticle( Article _article)
+    public async Task UpdateArticle(Article _article)
     {
         if (string.IsNullOrEmpty(_article.Name))
         {
@@ -129,7 +130,7 @@ public class ArticleService : IArticleService
             MessageBox.Show("Ingrese la cantidad en stock.");
             return;
         }
-        
+
         _article.ArticleTypeId = _article.ArticleTypeId;
         _article.Name = _article.Name;
         _article.PriceBuy = decimal.Round(Convert.ToDecimal(_article.PriceBuy), 2);
@@ -141,9 +142,26 @@ public class ArticleService : IArticleService
         reloadItems?.Invoke();
     }
 
-
     public async Task DeleteArticle(int id)
     {
         await _articleRepository.DeleteArticle(id);
+        +
+    }
+
+    public async Task AddType(String Name)
+    {
+        _typeRepository.addType(Name);
+        reloadItems?.Invoke();
+    }
+
+    public async Task EditType(ArticleType type)
+    {
+        _typeRepository.updateType(type);
+    }
+
+    public async Task DeleteType(int id)
+    {
+        _typeRepository.deleteType(id);
+        reloadItems?.Invoke();
     }
 }

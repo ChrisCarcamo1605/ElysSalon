@@ -21,7 +21,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     private readonly IArticleTypeRepository _artTypeRepo;
     private readonly IArticleService _service;
     private readonly WindowsManager _windowsManager;
-    private readonly ItemManager window;
+    private Window window { get; set; }
     private int _articleId;
 
     private string _articleName;
@@ -105,7 +105,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         set
         {
             _articleTypeSort = value;
-            OnPropertyChanged(); 
+            OnPropertyChanged();
             SortArticles(_articleTypeSort);
         }
     }
@@ -187,6 +187,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     public ICommand updateArticleCommand { get; }
     public ICommand onlyDigitsCommand { get; }
     public ICommand exitCommand { get; }
+    public ICommand OpenTypesManagementCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -196,7 +197,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     }
 
     public ItemManagerViewModel(IArticleRepository articleRepository, IArticleTypeRepository articleTypeRepository,
-        ItemManager windows, IArticleService service, WindowsManager windowsManager)
+        Window windows, IArticleService service, WindowsManager windowsManager)
     {
         _windowsManager = windowsManager;
         _service = service;
@@ -213,22 +214,23 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         addArticleCommand = new AsyncRelayCommand(AddArticle);
         deleteArticleCommand = new AsyncRelayCommand<Article>(DeleteArticle);
         updateArticleCommand = new AsyncRelayCommand<Article>(EditArticle);
+        OpenTypesManagementCommand = new AsyncRelayCommand(openTypesManagement);
 
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
         exitCommand = new RelayCommand(exit);
         LoadArticles();
-        _service.reloadItems += async () => await LoadArticles();
+
+        _service.reloadItems += async () => await SortArticles(articleTypeSort);
         _service.clearForms += cleanForm;
     }
 
 
-    public async Task LoadArticles()
+    public async Task LoadArticles() //Load the articles and article's types to the view
     {
-        _articleSortCollection = await Task.Run(() => _artTypeRepo.getTypes());
+        _articleSortCollection = await _artTypeRepo.getTypes();
         OnPropertyChanged(nameof(articleSortCollection));
 
-        var articleTypes = await Task.Run(() => _artTypeRepo.getTypes());
-
+        var articleTypes = await _artTypeRepo.getTypes();
         var articles = await _articleRepo.GetArticles();
 
 
@@ -264,8 +266,34 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         _articlesView?.Refresh();
     }
 
+    private async Task AddArticle()
+    {
+        var dto = new DTOAddArticle(articleName, articleTypeId, priceBuy,
+            priceCost, stock, description);
+        await _service.AddArticle(dto);
+      
+    }
 
-    private bool FilterArticles(object item)
+
+    private Task EditArticle(Article article)
+    {
+        var updateWindow = new UpdateItemWindow();
+        var updateViewModel = new UpdateArticleViewModel(_artTypeRepo, _articleRepo, article, updateWindow, _service);
+        updateWindow.DataContext = updateViewModel;
+        updateWindow.Show();
+        return Task.CompletedTask;
+    }
+
+    private async Task DeleteArticle(Article article)
+    {
+        int typeSort = articleTypeSort;
+        await _service.DeleteArticle(article.ArticleId);
+        MessageBox.Show("Artículo eliminado con éxito");
+       
+    }
+
+
+    private bool FilterArticles(object item) //Filter the articles by name on the search bar
     {
         if (string.IsNullOrEmpty(searchText))
             return true;
@@ -274,10 +302,10 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         return article.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 
-    private async Task SortArticles(int typeId)
+    private async Task SortArticles(int typeId) //Sort the articles by type
     {
         await LoadArticles();
-        
+
         if (typeId != 1)
         {
             var sorted = _articlesCollection.Where(item => item.ArticleTypeId.Equals(typeId)).ToList();
@@ -286,6 +314,11 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
             _articlesView.Refresh();
         }
+    }
+
+    private async Task openTypesManagement()
+    {
+        _windowsManager.NavigateToWindow<TypeArticleWindow>();
     }
 
     private void FilterItems()
@@ -303,30 +336,8 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         description = "";
     }
 
-    private async Task AddArticle()
-    {
-        var dto = new DTOAddArticle(articleName, articleTypeId, priceBuy,
-            priceCost, stock, description);
-        await _service.AddArticle(dto);
-    }
 
-
-    private async Task EditArticle(Article article)
-    {
-        var updateWindow = new UpdateItemWindow();
-        var updateViewModel = new UpdateArticleViewModel(_artTypeRepo, _articleRepo, article, updateWindow, _service);
-        updateWindow.DataContext = updateViewModel;
-        updateWindow.Show();
-    }
-
-    private async Task DeleteArticle(Article article)
-    {
-        int typeSort = articleTypeSort;
-        await _service.DeleteArticle(article.ArticleId);
-        await SortArticles(typeSort);
-    }
-
-    public void exit()
+    public void exit() //exit to Item Manager
     {
         _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(window);
     }
