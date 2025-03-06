@@ -4,6 +4,7 @@ using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
 using ElysSalon2._0.aplication.ViewModels;
 using ElysSalon2._0.domain.Entities;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.aplication.Services;
 
@@ -30,17 +31,31 @@ public class ArticleService : IArticleService
             return;
         }
 
+        if (dto.priceCost.IsNullOrEmpty())
+        {
+            MessageBox.Show("Ingrese un precio ");
+            return;
+        }
+
+        if (dto.priceBuy.IsNullOrEmpty())
+        {
+            MessageBox.Show("Ingrese un precio venta");
+            return;
+        }
+
         if (dto.typeId == 2)
         {
             MessageBox.Show("Seleccione un tipo de artículo");
             return;
         }
-        if (!int.TryParse(dto.priceBuy.ToString(), out _))
+
+        if (!decimal.TryParse(dto.priceBuy.ToString(), out _))
         {
             MessageBox.Show("El precio de Venta debe ser un número válido.");
             return;
         }
-        if (!int.TryParse(dto.priceCost.ToString(), out _))
+
+        if (!decimal.TryParse(dto.priceCost.ToString(), out _))
         {
             MessageBox.Show("El precio de Costo debe ser un número válido.");
             return;
@@ -76,9 +91,54 @@ public class ArticleService : IArticleService
     }
 
 
-    public async Task EditArticle(DTOUpdateArticle dto)
+    public async Task UpdateArticle( Article _article)
     {
-       
+        if (string.IsNullOrEmpty(_article.Name))
+        {
+            MessageBox.Show("Ingrese un nombre");
+            return;
+        }
+
+        if (_article.ArticleTypeId == 2)
+        {
+            MessageBox.Show("Seleccione un tipo de artículo");
+            return;
+        }
+
+        if (!decimal.TryParse(_article.PriceBuy.ToString(), out _))
+        {
+            MessageBox.Show("El precio de Venta debe ser un número válido.");
+            return;
+        }
+
+        if (!decimal.TryParse(_article.PriceCost.ToString(), out _))
+        {
+            MessageBox.Show("El precio de Costo debe ser un número válido.");
+            return;
+        }
+
+
+        if (!int.TryParse(_article.Stock.ToString(), out _))
+        {
+            MessageBox.Show("El stock debe ser un número entero válido.");
+            return;
+        }
+
+        if (_article.Stock <= 0)
+        {
+            MessageBox.Show("Ingrese la cantidad en stock.");
+            return;
+        }
+        
+        _article.ArticleTypeId = _article.ArticleTypeId;
+        _article.Name = _article.Name;
+        _article.PriceBuy = decimal.Round(Convert.ToDecimal(_article.PriceBuy), 2);
+        _article.Stock = _article.Stock;
+        _article.PriceCost = decimal.Round(Convert.ToDecimal(_article.PriceCost), 2);
+        _article.Description = _article.Description;
+        await _articleRepository.UpdateArticle(_article);
+        MessageBox.Show("Artículo actualizado correctamente");
+        reloadItems?.Invoke();
     }
 
 

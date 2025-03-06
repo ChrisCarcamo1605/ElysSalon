@@ -44,30 +44,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private int _stock;
 
-    public ItemManagerViewModel(IArticleRepository articleRepository, IArticleTypeRepository articleTypeRepository,
-        ItemManager windows, IArticleService service, WindowsManager windowsManager)
-    {
-        _windowsManager = windowsManager;
-        _service = service;
-        _artTypeRepo = articleTypeRepository;
-        _articleRepo = articleRepository;
-        window = windows;
-        _articlesCollection = new ObservableCollection<Article>();
-        _articleTypesCollection = new ObservableCollection<ArticleType>();
-        _articleSortCollection = new ObservableCollection<ArticleType>();
-        LoadArticles();
-
-        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
-        _articlesView.Filter = FilterArticles;
-
-        addArticleCommand = new AsyncRelayCommand(AddArticle);
-        deleteArticleCommand = new AsyncRelayCommand<Article>(DeleteArticle);
-        updateArticleCommand = new AsyncRelayCommand<Article>(EditArticle);
-
-        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
-        exitCommand = new RelayCommand(exit);
-    }
-
     public string searchText
     {
         get => _searchText;
@@ -129,7 +105,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         set
         {
             _articleTypeSort = value;
-            OnPropertyChanged();
+            OnPropertyChanged(); 
             SortArticles(_articleTypeSort);
         }
     }
@@ -219,6 +195,32 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         UIElementsUtil.NumericOnly_PreviewTextInput(e.OriginalSource as UIElement, e);
     }
 
+    public ItemManagerViewModel(IArticleRepository articleRepository, IArticleTypeRepository articleTypeRepository,
+        ItemManager windows, IArticleService service, WindowsManager windowsManager)
+    {
+        _windowsManager = windowsManager;
+        _service = service;
+        _artTypeRepo = articleTypeRepository;
+        _articleRepo = articleRepository;
+        window = windows;
+        _articlesCollection = new ObservableCollection<Article>();
+        _articleTypesCollection = new ObservableCollection<ArticleType>();
+        _articleSortCollection = new ObservableCollection<ArticleType>();
+
+        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
+        _articlesView.Filter = FilterArticles;
+
+        addArticleCommand = new AsyncRelayCommand(AddArticle);
+        deleteArticleCommand = new AsyncRelayCommand<Article>(DeleteArticle);
+        updateArticleCommand = new AsyncRelayCommand<Article>(EditArticle);
+
+        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
+        exitCommand = new RelayCommand(exit);
+        LoadArticles();
+        _service.reloadItems += async () => await LoadArticles();
+        _service.clearForms += cleanForm;
+    }
+
 
     public async Task LoadArticles()
     {
@@ -258,6 +260,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
 
         articleTypeId = 2;
+
         _articlesView?.Refresh();
     }
 
@@ -271,10 +274,10 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         return article.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 
-    private async void SortArticles(int typeId)
+    private async Task SortArticles(int typeId)
     {
         await LoadArticles();
-
+        
         if (typeId != 1)
         {
             var sorted = _articlesCollection.Where(item => item.ArticleTypeId.Equals(typeId)).ToList();
@@ -302,30 +305,25 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private async Task AddArticle()
     {
-        _service.clearForms += cleanForm;
-
         var dto = new DTOAddArticle(articleName, articleTypeId, priceBuy,
             priceCost, stock, description);
         await _service.AddArticle(dto);
-        await LoadArticles();
     }
 
 
     private async Task EditArticle(Article article)
     {
         var updateWindow = new UpdateItemWindow();
-        var updateViewModel =
-            new UpdateArticleViewModel(_artTypeRepo, _articleRepo, article, updateWindow);
+        var updateViewModel = new UpdateArticleViewModel(_artTypeRepo, _articleRepo, article, updateWindow, _service);
         updateWindow.DataContext = updateViewModel;
-        updateViewModel.reloadItems += async () => { await LoadArticles(); };
         updateWindow.Show();
     }
 
     private async Task DeleteArticle(Article article)
     {
-        _service.DeleteArticle(article.ArticleId);
-        await LoadArticles();
-        cleanForm();
+        int typeSort = articleTypeSort;
+        await _service.DeleteArticle(article.ArticleId);
+        await SortArticles(typeSort);
     }
 
     public void exit()

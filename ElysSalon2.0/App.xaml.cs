@@ -46,7 +46,7 @@ public partial class App : Application
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ItemManager>();
         services.AddDbContext<ElyDbContext>(options => options.UseSqlServer(
-            "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"));
+            "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"), ServiceLifetime.Scoped);
     }
 
     protected override void OnStartup(StartupEventArgs e)

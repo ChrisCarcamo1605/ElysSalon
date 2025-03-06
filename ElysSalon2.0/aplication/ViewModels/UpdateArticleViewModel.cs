@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
+using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
+using ElysSalon2._0.aplication.Services;
 using ElysSalon2._0.aplication.Utils;
 using ElysSalon2._0.domain.Entities;
 
@@ -18,7 +20,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private readonly IArticleTypeRepository _articleTypeRepository;
     private readonly UpdateItemWindow _window;
     private int _articleId;
-
+    private IArticleService _service;
     private string _articleName;
 
     private int _articleTypeId;
@@ -34,7 +36,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private int _stock;
 
     public UpdateArticleViewModel(IArticleTypeRepository articleTypeRepository, IArticleRepository articleRepository,
-        Article article, UpdateItemWindow window)
+        Article article, UpdateItemWindow window, IArticleService service)
     {
         _window = window;
         _article = article;
@@ -44,6 +46,9 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
         exitCommand = new AsyncRelayCommand(Exit);
         updateArticleCommand = new AsyncRelayCommand(UpdateArticle);
+
+
+        _service = service;
         LoadItem(_article);
     }
 
@@ -161,52 +166,16 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     private async Task UpdateArticle()
     {
-        if (string.IsNullOrEmpty(articleName))
-        {
-            MessageBox.Show("Ingrese un nombre");
-            return;
-        }
-
-        if (articleTypeId == 2)
-        {
-            MessageBox.Show("Seleccione un tipo de artículo");
-            return;
-        }
-        if (!int.TryParse(priceBuy.ToString(), out _))
-        {
-            MessageBox.Show("El precio de Venta debe ser un número válido.");
-            return;
-        }
-        if (!int.TryParse(priceCost.ToString(), out _))
-        {
-            MessageBox.Show("El precio de Costo debe ser un número válido.");
-            return;
-        }
-
-
-        if (!int.TryParse(stock.ToString(), out _))
-        {
-            MessageBox.Show("El stock debe ser un número entero válido.");
-            return;
-        }
-
-        if (stock <= 0)
-        {
-            MessageBox.Show("Ingrese la cantidad en stock.");
-            return;
-        }
-
-
-        _article.ArticleId = articleId;
-        _article.ArticleTypeId = articleTypeId;
-        _article.Name = articleName;
-        _article.PriceBuy = decimal.Round(priceBuy,2);
-        _article.Stock = stock;
-        _article.PriceCost = decimal.Round(priceCost,2);
-        _article.Description = description;
-        await _articleRepository.UpdateArticle(_article);
-        MessageBox.Show("Artículo actualizado correctamente");
-        reloadItems?.Invoke();
+        _article.Name = _articleName;
+        _article.ArticleTypeId = _articleTypeId;
+        _article.PriceBuy = _priceBuy;
+        _article.Stock = _stock;
+        _article.PriceCost = _priceCost;
+        _article.Description = _description;
+        _article.ArticleTypeId = _articleTypeId;
+        _article.PriceBuy = _priceBuy;
+        
+        _service.UpdateArticle(_article);
         Exit();
     }
 
