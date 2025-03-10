@@ -29,26 +29,34 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        services.AddTransient<ItemManagerWindow>();
-        services.AddScoped<IArticleService, ArticleService>();
+        //ViewModels
+        services.AddTransient<TypesManagementViewModel>();
         services.AddTransient<UpdateArticleViewModel>();
-        services.AddScoped<IArticleRepository, ArticleRepository>();
-        services.AddScoped<IArticleService, ArticleService>();
-        services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
-        services.AddSingleton<WindowsManager>();
-        services.AddSingleton<DbUtil>();
         services.AddTransient<ItemManagerViewModel>();
         services.AddTransient<ShoppingCartWindow>();
+
+        //Interfaces/Services and Repositories
+        services.AddTransient<IArticleRepository, ArticleRepository>();
+        services.AddTransient<IArticleTypeRepository, ArticleTypeRepository>();
+        services.AddTransient<IArticleService, ArticleService>();
+        services.AddSingleton<WindowsManager>();
+        
+        //Windows
         services.AddTransient<AdminWindow>();
         services.AddTransient<MainWindow>();
         services.AddTransient<SalesWindow>();
         services.AddTransient<ConfirmWindow>();
         services.AddTransient<MailWindow>();
-        services.AddAutoMapper(typeof(App).Assembly);
+        services.AddTransient<UpdateItemWindow>(); 
+        services.AddTransient<ItemManagerWindow>();
         services.AddTransient<TypeArticleWindow>();
-        services.AddDbContext<ElyDbContext>(options => options.UseSqlServer(
-                "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"),
-            ServiceLifetime.Scoped);
+
+        //Mapper
+        services.AddAutoMapper(typeof(App).Assembly);
+
+        //DbContext
+        services.AddDbContextFactory<ElyDbContext>(options => options.UseSqlServer(
+            "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;"));
     }
 
     protected override void OnStartup(StartupEventArgs e)

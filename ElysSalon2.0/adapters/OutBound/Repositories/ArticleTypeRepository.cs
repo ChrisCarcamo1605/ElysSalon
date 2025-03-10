@@ -16,39 +16,39 @@ public class ArticleTypeRepository : IArticleTypeRepository
     }
 
 
-    public void deleteType(int id)
+    public async Task DeleteTypeAsync(int id)
     {
-        _context.Remove(_context.ArticleType.Find(id));
-        _context.SaveChanges();
+        _context.Remove(await _context.ArticleType.FindAsync(id));
+        await _context.SaveChangesAsync();
     }
 
-    public void addType(string type_name)
+    public async Task AddTypeAsync(string type_name)
     {
         _context.ArticleType.Add(new ArticleType { Name = type_name });
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
 
-    public void updateType(ArticleType articleType)
+    public async Task UpdateTypeAsync(ArticleType articleType)
     {
         _context.ArticleType.Update(articleType);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
-    public async Task<ObservableCollection<ArticleType>> getTypes()
+    public async Task<ObservableCollection<ArticleType>> GetTypesAsync()
     {
         var types = await _context.ArticleType.ToListAsync();
         return new ObservableCollection<ArticleType>(types);
     }
 
-    public int getTypeId(string type_name)
+    public async Task<int> GetTypeIdAsync(string type_name)
     {
-        var type = _context.ArticleType.FirstOrDefault(x => x.Name == type_name);
+        var type = await _context.ArticleType.FirstOrDefaultAsync(x => x.Name == type_name);
         return type.ArticleTypeId;
     }
 
-    public ArticleType getArticleType(int id)
+    public async Task<ArticleType> GetArticleTypeAsync(int id)
     {
-        return _context.ArticleType.Find(id);
+        return await _context.ArticleType.FindAsync(id);
     }
 }

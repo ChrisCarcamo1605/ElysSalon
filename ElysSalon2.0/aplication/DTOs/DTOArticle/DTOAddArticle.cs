@@ -1,9 +1,9 @@
 ﻿namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
 public record DTOAddArticle(
-    string articleName,
-    int typeId,
-    string priceCost,
-    string priceBuy,
-    int stock,
-    string description);
+    string Name,
+    int ArticleTypeId,
+    decimal PriceCost,
+    decimal PriceBuy,
+    int Stock,
+    string Description);

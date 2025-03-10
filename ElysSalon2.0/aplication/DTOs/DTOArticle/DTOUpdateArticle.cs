@@ -1,14 +1,11 @@
-﻿using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.domain.Entities;
-
-namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
+﻿namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
 
 public record DTOUpdateArticle(
-    int articleId,
+    int ArticleId,
     string Name,
-    int typeId,
-    string priceCost,
-    string priceBuy,
-    int stock,
-    string description
+    int ArticleTypeId,
+    decimal PriceCost,
+    decimal PriceBuy,
+    int Stock,
+    string Description
 );

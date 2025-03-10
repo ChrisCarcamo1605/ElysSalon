@@ -14,43 +14,42 @@ namespace ElysSalon2._0.aplication.ViewModels;
 
 public class TypesManagementViewModel : INotifyPropertyChanged
 {
-    private IArticleTypeRepository _typeRepository;
-    private WindowsManager _windowManager;
-    private IArticleService _service;
+    private readonly IArticleService _service;
+    private readonly IArticleTypeRepository _typeRepository;
+    private readonly TypeArticleWindow _window;
+    private string _name;
     private int _typeId;
-    private TypeArticleWindow _window;
+
+    private ObservableCollection<ArticleType> _typesCollection;
+    private WindowsManager _windowManager;
 
     public int TypeId
     {
-        get { return _typeId; }
+        get => _typeId;
         set
         {
             _typeId = value;
-            OnPropertyChanged(nameof(TypeId));
+            OnPropertyChanged();
         }
     }
-
-    private string _name;
 
     public string Name
     {
-        get { return _name; }
+        get => _name;
         set
         {
             _name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged();
         }
     }
 
-    private ObservableCollection<ArticleType> _typesCollection;
-
     public ObservableCollection<ArticleType> TypesCollection
     {
-        get { return _typesCollection; }
+        get => _typesCollection;
         set
         {
             _typesCollection = value;
-            OnPropertyChanged(nameof(TypesCollection));
+            OnPropertyChanged();
         }
     }
 
@@ -73,10 +72,11 @@ public class TypesManagementViewModel : INotifyPropertyChanged
         exitCommand = new RelayCommand(Exit);
         LoadTypes();
     }
-    
+
+
     public async Task LoadTypes()
     {
-        var types = await _typeRepository.getTypes();
+        var types = await _typeRepository.GetTypesAsync();
 
         types.Remove(types.First(x => x.ArticleTypeId.Equals(1)));
         types.Remove(types.First(x => x.ArticleTypeId.Equals(2)));
@@ -84,50 +84,78 @@ public class TypesManagementViewModel : INotifyPropertyChanged
 
         if (TypesCollection == null)
         {
-            TypesCollection = types;
+            foreach (var type in types)
+            {
+                var artType = new ArticleType
+                {
+                    ArticleTypeId = type.ArticleTypeId,
+                    Name = type.Name
+                };
+                TypesCollection.Add(artType);
+            }
         }
         else
         {
-            MessageBox.Show("Entramosss");
             TypesCollection.Clear();
             foreach (var type in types)
             {
-                TypesCollection.Add(type);
+                var artType = new ArticleType
+                {
+                    ArticleTypeId = type.ArticleTypeId,
+                    Name = type.Name
+                };
+                TypesCollection.Add(artType);
             }
         }
     }
 
     public async Task AddType()
     {
-        await _service.AddType(Name);
-        MessageBox.Show("Se guardó exitosamente");
+        var result = await _service.AddType(Name);
+        if (result.Success is true)
+        {
+            Name = "";
+        }
+
+        MessageBox.Show(result.Message);
         await LoadTypes();
-        _name = "";
     }
 
     public async Task EditType(ArticleType type)
     {
-        await _service.EditType(type);
+        var result = await _service.EditType(type);
+        if (result.Success is true)
+        {
+            Name = "";
+        }
+
+        MessageBox.Show(result.Message);
+        await LoadTypes();
     }
 
     public async Task DeleteType(ArticleType type)
     {
-        await _service.DeleteType(type.ArticleTypeId);
-        MessageBox.Show("Se eliminó exitosamente");
+        var result = await _service.DeleteType(type.ArticleTypeId);
+        if (result.Success is true)
+        {
+            _name = "";
+        }
+
+        MessageBox.Show(result.Message);
         await LoadTypes();
     }
 
     public void Exit()
     {
-        _window.Close();
+        _windowManager.CloseCurrentWindowandShowWindow<ItemManagerWindow>(_window);
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

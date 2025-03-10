@@ -22,10 +22,10 @@
                      Style="{StaticResource textInput}" x:Name="ArticleIdTextBox"
                      HorizontalAlignment="Left"
                      Height="42" Margin="34,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" />
-            <TextBox Style="{StaticResource textInput}" Text="{Binding articleName}" x:Name="NameTextBox"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding Name}" x:Name="NameTextBox"
                      HorizontalAlignment="Left" Height="42"
                      Margin="271,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" />
-            <TextBox Style="{StaticResource textInput}" Text="{Binding priceCost}" x:Name="PriceCostBox"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding PriceCost}" x:Name="PriceCostBox"
                      HorizontalAlignment="Left" Height="42"
                      Margin="271,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185">
                 <b:Interaction.Triggers>
@@ -35,7 +35,7 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </TextBox>
-            <TextBox Style="{StaticResource textInput}" Text="{Binding priceBuy}" x:Name="PriceBuyTextBox"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding PriceBuy}" x:Name="PriceBuyTextBox"
                      HorizontalAlignment="Left" Height="42"
                      Margin="34,277,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185">
                 <b:Interaction.Triggers>
@@ -45,7 +45,7 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
             </TextBox>
-            <TextBox Style="{StaticResource textInput}" Text="{Binding stock}" x:Name="StockTextBox" Height="42"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding Stock}" x:Name="StockTextBox" Height="42"
                      Margin="271,277,36,0"
                      TextWrapping="Wrap" VerticalAlignment="Top">
                 <b:Interaction.Triggers>
@@ -69,7 +69,7 @@
                    Margin="271,246,0,0" Width="125" />
             <Label Style="{StaticResource h2}" Content="Description" HorizontalAlignment="Left" Height="34"
                    Margin="34,328,0,0" Width="125" />
-            <TextBox Style="{StaticResource textInput}" Text="{Binding description}" x:Name="DescriptionTextBox"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding Description}" x:Name="DescriptionTextBox"
                      HorizontalAlignment="Center"
                      Height="62" Margin="0,362,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
                      Width="422" />
@@ -78,7 +78,8 @@
                     Margin="334,437,0,0" VerticalAlignment="Top" Width="124" />
             <Label Style="{StaticResource TitleText}" FontSize="35" Content="ACTUALIZAR ARTICULO" Height="48"
                    Margin="0,13,0,0" Width="256" />
-            <ComboBox x:Name="typesComboBox" ItemsSource="{Binding articleTypes}"
+
+            <ComboBox x:Name="typesComboBox" ItemsSource="{Binding ArticleTypes}"
                       Style="{StaticResource ComboBoxFlatStyle}"
                       HorizontalAlignment="Left" Height="42"
                       DisplayMemberPath="Name"

@@ -12,7 +12,6 @@ public class ArticleRepository : IArticleRepository
 {
     private readonly ElyDbContext _context;
     private readonly IArticleTypeRepository _typeRepository;
-    private DbUtil db;
 
     public ArticleRepository(IArticleTypeRepository typeRepository, ElyDbContext context)
     {
@@ -20,7 +19,7 @@ public class ArticleRepository : IArticleRepository
         _typeRepository = typeRepository;
     }
 
-    public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButton()
+    public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtonAsync()
     {
         var articles = await _context.Article.Select(x =>
             new DTOGetArticlesButton(x.ArticleId, x.Name, x.PriceBuy)).ToListAsync();
@@ -28,7 +27,7 @@ public class ArticleRepository : IArticleRepository
         return new ObservableCollection<DTOGetArticlesButton>(articles);
     }
 
-    public async Task<ObservableCollection<Article>> GetArticles()
+    public async Task<ObservableCollection<Article>> GetArticlesAsync()
     {
         var articles = await _context.Article.ToListAsync();
 
@@ -36,26 +35,26 @@ public class ArticleRepository : IArticleRepository
     }
 
 
-    public async Task<Article> GetArticle(int id)
+    public async Task<Article> GetArticleAsync(int id)
     {
         return await _context.Article.FindAsync(id) ?? throw new NullReferenceException("No trajo na pa");
     }
 
 
-    public async Task AddArticle(Article article)
+    public async Task AddArticleAsync(Article article)
     {
         _context.Article.Add(article);
         await _context.SaveChangesAsync();
     }
 
 
-    public async Task UpdateArticle(Article article)
+    public async Task UpdateArticleAsync(Article article)
     {
         _context.Entry(article).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteArticle(int id)
+    public async Task DeleteArticleAsync(int id)
     {
         _context.Article.Remove(_context.Article.Find(id) ?? throw new NullReferenceException());
         await _context.SaveChangesAsync();

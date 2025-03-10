@@ -15,12 +15,12 @@ namespace ElysSalon2._0.aplication.ViewModels;
 
 public class UpdateArticleViewModel : INotifyPropertyChanged
 {
-    private readonly Article _article;
+    private Article _article;
     private readonly IArticleRepository _articleRepository;
     private readonly IArticleTypeRepository _articleTypeRepository;
+    private readonly IArticleService _service;
     private readonly UpdateItemWindow _window;
     private int _articleId;
-    private IArticleService _service;
     private string _articleName;
 
     private int _articleTypeId;
@@ -32,25 +32,23 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private decimal _priceBuy;
 
     private decimal _priceCost;
-    public ICommand onlyDigitsCommand { get; }
     private int _stock;
 
     public UpdateArticleViewModel(IArticleTypeRepository articleTypeRepository, IArticleRepository articleRepository,
-        Article article, UpdateItemWindow window, IArticleService service)
+        int article, UpdateItemWindow window, IArticleService service)
     {
         _window = window;
-        _article = article;
         _articleTypes = new ObservableCollection<ArticleType>();
         _articleRepository = articleRepository;
         _articleTypeRepository = articleTypeRepository;
-        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
-        exitCommand = new AsyncRelayCommand(Exit);
+        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(OnlyDigits);
+        exitCommand = new RelayCommand(Exit);
         updateArticleCommand = new AsyncRelayCommand(UpdateArticle);
-
-
         _service = service;
-        LoadItem(_article);
+        LoadItem(article);
     }
+
+    public ICommand onlyDigitsCommand { get; }
 
     public int articleId
     {
@@ -68,67 +66,66 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         set
         {
             _articleTypeId = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(articleTypeId));
         }
     }
 
-    public string articleName
+    public string Name
     {
         get => _articleName;
         set
         {
-            _articleName = value;
-            OnPropertyChanged();
+            SetField(ref _articleName, value);
         }
     }
 
-    public decimal priceBuy
+    public decimal PriceBuy
     {
         get => _priceBuy;
         set
         {
             _priceBuy = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(PriceBuy));
         }
     }
 
-    public int stock
+    public int Stock
     {
         get => _stock;
         set
         {
             _stock = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(Stock));
         }
     }
 
-    public decimal priceCost
+    public decimal PriceCost
     {
         get => _priceCost;
         set
         {
             _priceCost = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(PriceCost));
         }
     }
 
-    public string description
+    public string Description
     {
         get => _description;
         set
         {
             _description = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(Description));
         }
     }
 
-    public ObservableCollection<ArticleType> articleTypes
+    public ObservableCollection<ArticleType> ArticleTypes
     {
         get => _articleTypes;
         set
         {
             _articleTypes = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(ArticleTypes));
         }
     }
 
@@ -139,17 +136,19 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     public event Action? reloadItems;
 
-    private async Task LoadItem(Article article)
+    private async Task LoadItem(int articleId)
     {
-        _articleId = article.ArticleId;
-        _articleName = article.Name;
-        _articleTypeId = article.ArticleTypeId;
-        _priceBuy = article.PriceBuy;
-        _stock = article.Stock;
-        _priceCost = Convert.ToDecimal(article.PriceCost);
-        _description = article.Description;
+        _article = await _articleRepository.GetArticleAsync(articleId);
 
-        var articleTypes = await _articleTypeRepository.getTypes();
+        _articleId = articleId;
+        _articleName = _article.Name;
+        _articleTypeId = _article.ArticleTypeId;
+        _priceBuy = _article.PriceBuy;
+        _stock = _article.Stock;
+        _priceCost = _article.PriceCost;
+        _description = _article.Description;
+
+        var articleTypes = await _articleTypeRepository.GetTypesAsync();
         articleTypes.Remove(articleTypes.First(x => x.ArticleTypeId == 2));
         articleTypes.Remove(articleTypes.First(x => x.ArticleTypeId == 1));
 
@@ -166,26 +165,23 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     private async Task UpdateArticle()
     {
-        _article.Name = _articleName;
-        _article.ArticleTypeId = _articleTypeId;
-        _article.PriceBuy = _priceBuy;
-        _article.Stock = _stock;
-        _article.PriceCost = _priceCost;
-        _article.Description = _description;
-        _article.ArticleTypeId = _articleTypeId;
-        _article.PriceBuy = _priceBuy;
-        
-        _service.UpdateArticle(_article);
-        Exit();
+        var dto = new DTOUpdateArticle(articleId, Name, articleTypeId, PriceCost, PriceBuy, Stock, Description);
+        var result = await _service.UpdateArticle(dto);
+
+        if (result.Success)
+        {
+            Exit();
+        }
+
+        MessageBox.Show(result.Message);
     }
 
-    private async Task Exit()
+    private void Exit()
     {
         _window.Close();
     }
 
-
-    private void onlyDigits(TextCompositionEventArgs e)
+    private void OnlyDigits(TextCompositionEventArgs e)
     {
         UIElementsUtil.NumericOnly_PreviewTextInput(e.OriginalSource as UIElement, e);
     }

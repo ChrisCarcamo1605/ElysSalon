@@ -1,8 +1,9 @@
-﻿using System.Windows;
-using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Windows;
+using AutoMapper;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.ViewModels;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,156 +13,116 @@ public class ArticleService : IArticleService
 {
     private readonly IArticleRepository _articleRepository;
     private readonly IArticleTypeRepository _typeRepository;
+    private readonly IMapper _mapper;
+    private ObservableCollection<ArticleType> _typesCollection;
+    private ObservableCollection<Article> _articlesCollection;
 
-    public ArticleService(IArticleRepository articleRepository, IArticleTypeRepository typeRepository)
+    public ArticleService(IArticleRepository articleRepository, IArticleTypeRepository typeRepository, IMapper mapper)
     {
         _articleRepository = articleRepository;
         _typeRepository = typeRepository;
+        _mapper = mapper;
     }
 
     public event Action reloadItems;
     public event Action clearForms;
 
 
-    public async Task AddArticle(DTOAddArticle dto)
+    public async Task<ServiceResult> AddArticle(DTOAddArticle dto)
     {
-        if (string.IsNullOrEmpty(dto.articleName))
+        _articlesCollection = await _articleRepository.GetArticlesAsync();
+        var validate = ArticleValidations.ValidateAddArticle(dto, _articlesCollection);
+        if (validate.Success is false)
         {
-            MessageBox.Show("Ingrese un nombre");
-            return;
+            return validate;
         }
 
-        if (dto.priceCost.IsNullOrEmpty())
-        {
-            MessageBox.Show("Ingrese un precio ");
-            return;
-        }
-
-        if (dto.priceBuy.IsNullOrEmpty())
-        {
-            MessageBox.Show("Ingrese un precio venta");
-            return;
-        }
-
-        if (dto.typeId == 2)
-        {
-            MessageBox.Show("Seleccione un tipo de artículo");
-            return;
-        }
-
-        if (!decimal.TryParse(dto.priceBuy.ToString(), out _))
-        {
-            MessageBox.Show("El precio de Venta debe ser un número válido.");
-            return;
-        }
-
-        if (!decimal.TryParse(dto.priceCost.ToString(), out _))
-        {
-            MessageBox.Show("El precio de Costo debe ser un número válido.");
-            return;
-        }
-
-
-        if (!int.TryParse(dto.stock.ToString(), out _))
-        {
-            MessageBox.Show("El stock debe ser un número entero válido.");
-            return;
-        }
-
-        if (dto.stock <= 0)
-        {
-            MessageBox.Show("Ingrese la cantidad en stock.");
-            return;
-        }
-
-        var newArticle = new Article
-        {
-            Name = dto.articleName,
-            ArticleTypeId = dto.typeId,
-            PriceBuy = Math.Round(Convert.ToDecimal(dto.priceBuy), 2),
-            PriceCost = Math.Round(Convert.ToDecimal(dto.priceCost), 2),
-            Stock = dto.stock,
-            Description = dto.description
-        };
-
-        await _articleRepository.AddArticle(newArticle);
-
-        MessageBox.Show("Artículo guardado con éxito!");
+        await _articleRepository.AddArticleAsync(_mapper.Map<Article>(dto));
         reloadItems?.Invoke();
         clearForms?.Invoke();
+        return validate;
     }
 
 
-    public async Task UpdateArticle(Article _article)
+    public async Task<ServiceResult> UpdateArticle(DTOUpdateArticle dto)
     {
-        if (string.IsNullOrEmpty(_article.Name))
+        _articlesCollection = await _articleRepository.GetArticlesAsync();
+        var art = await _articleRepository.GetArticleAsync(dto.ArticleId);
+        var validate = ArticleValidations.ValidateUpdateArticle(art, dto, _articlesCollection);
+
+        if (validate.Success is false)
         {
-            MessageBox.Show("Ingrese un nombre");
-            return;
+            return validate;
+        }
+        else
+        {
+            art.Name = dto.Name;
+            art.ArticleTypeId = dto.ArticleTypeId;
+            art.PriceCost = dto.PriceCost;
+            art.PriceBuy = dto.PriceBuy;
+            art.Stock = dto.Stock;
+            art.Description = dto.Description;
+            await _articleRepository.UpdateArticleAsync(art);
+            reloadItems?.Invoke();
+            clearForms?.Invoke();
         }
 
-        if (_article.ArticleTypeId == 2)
+        return validate;
+    }
+
+    public async Task<ServiceResult> DeleteArticle(int id)
+    {
+        if (id == 0)
         {
-            MessageBox.Show("Seleccione un tipo de artículo");
-            return;
+            return ServiceResult.Failed("Seleccione un artículo para eliminar");
         }
 
-        if (!decimal.TryParse(_article.PriceBuy.ToString(), out _))
+        await _articleRepository.DeleteArticleAsync(id);
+        return ServiceResult.successResult("Artículo eliminado correctamente");
+    }
+
+    public async Task<ServiceResult> AddType(string name)
+    {
+        _typesCollection = await _typeRepository.GetTypesAsync();
+        var validate = ArticleValidations.ValidateAddType(name, _typesCollection);
+
+        if (validate.Success is false)
         {
-            MessageBox.Show("El precio de Venta debe ser un número válido.");
-            return;
+            return validate;
         }
 
-        if (!decimal.TryParse(_article.PriceCost.ToString(), out _))
-        {
-            MessageBox.Show("El precio de Costo debe ser un número válido.");
-            return;
-        }
-
-
-        if (!int.TryParse(_article.Stock.ToString(), out _))
-        {
-            MessageBox.Show("El stock debe ser un número entero válido.");
-            return;
-        }
-
-        if (_article.Stock <= 0)
-        {
-            MessageBox.Show("Ingrese la cantidad en stock.");
-            return;
-        }
-
-        _article.ArticleTypeId = _article.ArticleTypeId;
-        _article.Name = _article.Name;
-        _article.PriceBuy = decimal.Round(Convert.ToDecimal(_article.PriceBuy), 2);
-        _article.Stock = _article.Stock;
-        _article.PriceCost = decimal.Round(Convert.ToDecimal(_article.PriceCost), 2);
-        _article.Description = _article.Description;
-        await _articleRepository.UpdateArticle(_article);
-        MessageBox.Show("Artículo actualizado correctamente");
+        await _typeRepository.AddTypeAsync(name);
         reloadItems?.Invoke();
+        return ServiceResult.successResult("Tipo creado correctamente");
     }
 
-    public async Task DeleteArticle(int id)
+    public async Task<ServiceResult> EditType(ArticleType type)
     {
-        await _articleRepository.DeleteArticle(id);
-        +
-    }
+        var typeUpdated = await _typeRepository.GetArticleTypeAsync(type.ArticleTypeId);
+        _typesCollection = await _typeRepository.GetTypesAsync();
+        var validate = ArticleValidations.ValidateUpdateType(type, _typesCollection);
 
-    public async Task AddType(String Name)
-    {
-        _typeRepository.addType(Name);
+        if (validate.Success is false)
+        {
+            return validate;
+        }
+
+        typeUpdated.Name = type.Name;
+        await _typeRepository.UpdateTypeAsync(typeUpdated);
+
         reloadItems?.Invoke();
+        return ServiceResult.successResult("Tipo actualizado correctamente");
     }
 
-    public async Task EditType(ArticleType type)
+    public async Task<ServiceResult> DeleteType(int id)
     {
-        _typeRepository.updateType(type);
-    }
+        if (id == 0)
+        {
+            return ServiceResult.Failed("Seleccione un artículo para eliminar");
+        }
 
-    public async Task DeleteType(int id)
-    {
-        _typeRepository.deleteType(id);
+        await _typeRepository.DeleteTypeAsync(id);
         reloadItems?.Invoke();
+        return ServiceResult.successResult("Tipo eliminado correctamente");
     }
 }

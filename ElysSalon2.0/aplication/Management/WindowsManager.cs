@@ -18,14 +18,21 @@ public class WindowsManager
 
     public event GridUpdateRequestedHandler GridUpdateRequested;
 
-    public void NavigateToWindow<TWindow>(Action onGridUpdateRequested = null) where TWindow : Window
+    public void NavigateToWindow<TWindow>(object parameter = null, Action onGridUpdateRequested = null) where TWindow : Window
     {
         if (!_windows.TryGetValue(typeof(TWindow), out var newWindow))
         {
-            newWindow = _serviceProvider.GetRequiredService<TWindow>();
+            if (parameter != null)
+            {
+                newWindow = (TWindow)Activator.CreateInstance(typeof(TWindow), parameter);
+            }
+            else
+            {
+                newWindow = _serviceProvider.GetRequiredService<TWindow>();
+            }
+
             _windows[typeof(TWindow)] = newWindow;
             newWindow.Closed += (s, e) => _windows.Remove(typeof(TWindow));
-
 
             if (newWindow is IChildWindow childWindow)
                 childWindow.UpdateParentGrid += () =>

@@ -31,20 +31,4 @@ public static class UIElementsUtil
         }
     }
 
-    public static void searchInGrid(string search, ICollectionView view)
-    {
-        var _searchText = search.ToLower();
-
-        if (string.IsNullOrWhiteSpace(_searchText) || _searchText.Equals("nombre..."))
-            view.Filter = null;
-        else
-            view.Filter = obj =>
-            {
-                if (obj is ArticleGrid article) return article.articleName.ToLower().Contains(_searchText);
-
-                return false;
-            };
-
-        view.Refresh();
-    }
 }

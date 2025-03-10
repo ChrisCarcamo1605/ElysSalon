@@ -11,7 +11,7 @@ public class Article
 
     public string Name { get; set; }
     public int ArticleTypeId { get; set; }
-    public decimal? PriceCost { get; set; }
+    public decimal PriceCost { get; set; }
     public decimal PriceBuy { get; set; }
     public int Stock { get; set; }
 

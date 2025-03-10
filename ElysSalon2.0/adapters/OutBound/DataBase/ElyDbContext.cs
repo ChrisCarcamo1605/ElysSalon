@@ -17,6 +17,8 @@ public class ElyDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<ArticleType>().HasData(
             new ArticleType { ArticleTypeId = 1, Name = "Todo" },
             new ArticleType { ArticleTypeId = 2, Name = "Elegir Tipo" },

@@ -1,86 +1,86 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
-    <RootNamespace>ElysSalon2._0</RootNamespace>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <UserSecretsId>97490ffb-a837-47d6-b199-a8f815882ca0</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+		<RootNamespace>ElysSalon2._0</RootNamespace>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<UserSecretsId>97490ffb-a837-47d6-b199-a8f815882ca0</UserSecretsId>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="adapters\InBound\UI\styles\trash.png" />
-    <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper.jpg" />
-    <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
-    <None Remove="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
-    <None Remove="adapters\InBound\UI\views\MainViews\trashIMG.png" />
-    <None Remove="adapters\InBound\UI\views\NEGRO LOGO_Mesa de trabajo 1.png" />
-    <None Remove="adapters\InBound\UI\views\wallpaper2.png" />
-    <None Remove="images\minusSymbol.png" />
-    <None Remove="images\plusSymbol.png" />
-    <None Remove="images\row.png" />
-    <None Remove="images\trash.png" />
-    <None Remove="images\wallpaper3.jpg" />
-    <None Remove="images\wallpaper3.png" />
-    <None Remove="images\wallpaper4.jpeg" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="adapters\InBound\UI\styles\trash.png" />
+		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper.jpg" />
+		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
+		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
+		<None Remove="adapters\InBound\UI\views\MainViews\trashIMG.png" />
+		<None Remove="adapters\InBound\UI\views\NEGRO LOGO_Mesa de trabajo 1.png" />
+		<None Remove="adapters\InBound\UI\views\wallpaper2.png" />
+		<None Remove="images\minusSymbol.png" />
+		<None Remove="images\plusSymbol.png" />
+		<None Remove="images\row.png" />
+		<None Remove="images\trash.png" />
+		<None Remove="images\wallpaper3.jpg" />
+		<None Remove="images\wallpaper3.png" />
+		<None Remove="images\wallpaper4.jpeg" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="adapters\InBound\UI\styles\trash.png" />
-    <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
-    <Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
-    <Resource Include="adapters\InBound\UI\views\MainViews\trashIMG.png" />
-    <Resource Include="images\minusSymbol.png" />
-    <Resource Include="images\plusSymbol.png" />
-    <Resource Include="images\row.png" />
-    <Resource Include="images\trash.png" />
-    <Resource Include="images\wallpaper.jpg" />
-    <Resource Include="images\NEGRO LOGO_Mesa de trabajo 1.png" />
-    <Resource Include="images\products.jpg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\Services.jpg">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="images\wallpaper2.png" />
-    <Resource Include="images\wallpaper3.jpg" />
-    <Resource Include="images\wallpaper3.png" />
-    <Resource Include="images\wallpaper4.jpeg" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="adapters\InBound\UI\styles\trash.png" />
+		<Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
+		<Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
+		<Resource Include="adapters\InBound\UI\views\MainViews\trashIMG.png" />
+		<Resource Include="images\minusSymbol.png" />
+		<Resource Include="images\plusSymbol.png" />
+		<Resource Include="images\row.png" />
+		<Resource Include="images\trash.png" />
+		<Resource Include="images\wallpaper.jpg" />
+		<Resource Include="images\NEGRO LOGO_Mesa de trabajo 1.png" />
+		<Resource Include="images\products.jpg">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\Services.jpg">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="images\wallpaper2.png" />
+		<Resource Include="images\wallpaper3.jpg" />
+		<Resource Include="images\wallpaper3.png" />
+		<Resource Include="images\wallpaper4.jpeg" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="SharpYaml" Version="2.1.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="14.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="SharpYaml" Version="2.1.1" />
+	</ItemGroup>
 
 </Project>

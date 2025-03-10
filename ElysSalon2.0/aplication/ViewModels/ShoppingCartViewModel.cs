@@ -67,7 +67,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     private async Task loadButtons()
     {
-        var articles = await _articleRepository.GetArticlesToButton();
+        var articles = await _articleRepository.GetArticlesToButtonAsync();
 
         if (articles != null && articles.Any())
             foreach (var article in articles)

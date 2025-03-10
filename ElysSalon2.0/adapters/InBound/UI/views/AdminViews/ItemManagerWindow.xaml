@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid>
-       
+
         <Grid.Background>
             <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" />
         </Grid.Background>
@@ -20,13 +20,13 @@
                 Command="{Binding exitCommand}"
                 Grid.ColumnSpan="2" />
 
-        <TextBox Text="{Binding articleName, UpdateSourceTrigger=PropertyChanged}" x:Name="nameTxtBox"
+        <TextBox Text="{Binding ArticleName, UpdateSourceTrigger=PropertyChanged}" x:Name="nameTxtBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="53"
                  Margin="50,162,0,0"
                  VerticalAlignment="Top" Width="207"
                  Grid.ColumnSpan="2" />
 
-        <TextBox Text="{Binding priceCost, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding PriceCost, UpdateSourceTrigger=PropertyChanged}"
                  x:Name="priceCostBox"
                  Style="{StaticResource textInput}"
                  HorizontalAlignment="Left"
@@ -45,17 +45,17 @@
 
         </TextBox>
 
-        <ComboBox Text="Tipo Articulo" ItemsSource="{Binding articleTypesCollection}"
+        <ComboBox Text="Tipo Articulo" ItemsSource="{Binding ArticleTypesCollection}"
 
                   Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox"
                   HorizontalAlignment="Left" Height="51" Margin="285,164,0,0" VerticalAlignment="Top" Width="215"
                   RenderTransformOrigin="0.781,0.671"
                   DisplayMemberPath="Name"
                   SelectedValuePath="ArticleTypeId"
-                  SelectedValue="{Binding articleTypeId, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
                   Grid.ColumnSpan="2"
                   SelectedIndex="0" />
-        <TextBox Text="{Binding description, UpdateSourceTrigger=PropertyChanged}" x:Name="descriptionBox"
+        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" x:Name="descriptionBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
                  Margin="420,265,0,0"
                  TextWrapping="Wrap"
@@ -63,7 +63,7 @@
                  Grid.ColumnSpan="2" />
 
 
-        <TextBox Text="{Binding priceBuy, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding PriceBuy, UpdateSourceTrigger=PropertyChanged}"
                  x:Name="priceBuyBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
 
@@ -79,7 +79,7 @@
             </events:Interaction.Triggers>
         </TextBox>
 
-        <TextBox Text="{Binding stock, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textInput}"
+        <TextBox Text="{Binding Stock, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textInput}"
                  x:Name="stockBox" HorizontalAlignment="Left" Height="50"
 
                  Margin="50,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"
@@ -104,7 +104,7 @@
         <Button x:Name="ManagementTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipo Productos"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="268"
-                Foreground="White" BorderBrush="Black" Background="Black" Command="{Binding OpenTypesManagementCommand}" />
+                BorderBrush="Black" Command="{Binding OpenTypesManagementCommand}" />
 
 
         <ScrollViewer Grid.ColumnSpan="2" Margin="58,360,56,24">
@@ -198,9 +198,9 @@
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Descripción" Grid.ColumnSpan="2"
                HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="106" />
 
-        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding articleSortCollection}"
+        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ArticleSortCollection}"
                   DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId"
-                  SelectedValue="{Binding articleTypeSort, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedValue="{Binding ArticleTypeSort, UpdateSourceTrigger=PropertyChanged}"
                   Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="50" Margin="952,265,0,0"
                   VerticalAlignment="Top" Width="268" />
         <Label Content="ORDENAR" Grid.ColumnSpan="2" Margin="952,229,112,0" VerticalAlignment="Top"
