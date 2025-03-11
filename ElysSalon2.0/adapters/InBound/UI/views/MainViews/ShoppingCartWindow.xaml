@@ -27,11 +27,13 @@
         <Button Style="{StaticResource Btn}" x:Name="atrasBtn" Content="ATRÁS" HorizontalAlignment="Left" Height="49"
                 Margin="62,41,0,0" VerticalAlignment="Top" Width="140" FontFamily="Bahnschrift Condensed" FontSize="24"
                 FontWeight="Bold"
-                Foreground="#FFEFECE7" Click="atrasBtn_Click" />
+                Foreground="#FFEFECE7"
+                Command="{Binding CloseShopingCartCommand}"/>
         <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="78"
                 Margin="1031,559,0,0" VerticalAlignment="Top" Width="210"
-                FontFamily="Bahnschrift Condensed" FontSize="48" Click="listoBtn_Click"
-                RenderTransformOrigin="0.294,0.436" />
+                FontFamily="Bahnschrift Condensed" FontSize="48"
+                RenderTransformOrigin="0.294,0.436"
+                Command ="{Binding OpenConfirmsWindowCommand}"/>
 
 
         <Border Margin="773,112,22,171" BorderThickness="2" BorderBrush="Black">
@@ -52,7 +54,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <!-- Nombre del Producto -->
-                                    <TextBlock Text="{Binding Article.Name, StringFormat=C}" FontSize="21"
+                                    <TextBlock Text="{Binding ArticleName, StringFormat=C}" FontSize="21"
                                                FontFamily="Bahnschrift Condensed"
                                                Grid.Column="0"
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
@@ -94,7 +96,7 @@
         <Label Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,566,0,0"
                FontSize="45" Content="TOTAL:" Height="63" Width="103" />
         <TextBlock FontFamily="Bahnschrift Condensed" HorizontalAlignment="Left" FontSize="45" Margin="881,571,0,0"
-                   TextWrapping="Wrap" Text="{Binding totalAmount,StringFormat=C}" VerticalAlignment="Top" Width="106"
+                   TextWrapping="Wrap" Text="{Binding totalAmount,StringFormat=C}" VerticalAlignment="Top" Width="135"
                    Height="48" />
 
     </Grid>

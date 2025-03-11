@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ElysSalon2._0.aplication.ViewModels;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views;
 
@@ -7,9 +8,11 @@ namespace ElysSalon2._0.adapters.InBound.UI.views;
 /// </summary>
 public partial class ConfirmWindow : Window
 {
-    public ConfirmWindow()
+    public ConfirmWindow(ShoppingCartViewModel viewModel)
     {
         InitializeComponent();
+        DataContext = viewModel;
+
     }
 
     private void siBtn_Click(object sender, RoutedEventArgs e)

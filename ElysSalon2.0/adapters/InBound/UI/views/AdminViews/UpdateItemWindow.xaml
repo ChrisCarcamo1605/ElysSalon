@@ -18,7 +18,7 @@
         </Border.Background>
         <Grid>
 
-            <TextBox IsReadOnly="True" Foreground="LightSlateGray" Text="{Binding articleId}"
+            <TextBox IsReadOnly="True" Foreground="LightSlateGray" Text="{Binding ArticleId}"
                      Style="{StaticResource textInput}" x:Name="ArticleIdTextBox"
                      HorizontalAlignment="Left"
                      Height="42" Margin="34,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" />

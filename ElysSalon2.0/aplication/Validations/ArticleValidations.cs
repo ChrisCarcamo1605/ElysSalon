@@ -55,7 +55,7 @@ public class ArticleValidations
             return ServiceResult.Failed("Articulo ya existente");
         }
 
-        return ServiceResult.successResult("Articulo guardado exitosamente!");
+        return ServiceResult.SuccessResult("Articulo guardado exitosamente!");
     }
 
     public static ServiceResult ValidateUpdateArticle(Article art, DTOUpdateArticle dto,
@@ -97,7 +97,7 @@ public class ArticleValidations
             }
         }
 
-        return ServiceResult.successResult("Articulo actualizado correctamente!");
+        return ServiceResult.SuccessResult("Articulo actualizado correctamente!");
     }
 
 
@@ -116,7 +116,7 @@ public class ArticleValidations
             return ServiceResult.Failed("Tipo ya existente");
         }
 
-        return ServiceResult.successResult("Tipo creado correctamente");
+        return ServiceResult.SuccessResult("Tipo creado correctamente");
     }
 
     public static ServiceResult ValidateUpdateType(ArticleType type, ObservableCollection<ArticleType> articleTypes)
@@ -134,6 +134,6 @@ public class ArticleValidations
             return ServiceResult.Failed("Tipo ya existente");
         }
 
-        return ServiceResult.successResult("Tipo actualizado correctamente");
+        return ServiceResult.SuccessResult("Tipo actualizado correctamente");
     }
 }

@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250310231230_taxes Atributtes can be null")]
+    partial class taxesAtributtescanbenull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,10 +247,6 @@ namespace ElysSalon2._0.Migrations
 
                     b.Property<int>("ArticleId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ArticleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");

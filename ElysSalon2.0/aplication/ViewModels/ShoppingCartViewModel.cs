@@ -7,8 +7,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
+using ElysSalon2._0.adapters.InBound.UI.views;
 using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.DTOTicket;
+using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
+using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.aplication.Repositories;
+using ElysSalon2._0.aplication.Services;
 using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.aplication.ViewModels;
@@ -16,26 +21,25 @@ namespace ElysSalon2._0.aplication.ViewModels;
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
     private readonly IArticleRepository _articleRepository;
-
+    private readonly WindowsManager _windowsManager;
+    private Window _confirmWindow;
     private readonly IMapper _mapper;
     private ObservableCollection<TicketDetails> _cartItems;
     private decimal _totalAmount;
     public ICollectionView cartItemsView;
+    private Ticket _ticket;
+    private string _issuer = "messi";
+    private ITicketService _service;
+    private Window _window;
 
-    public ShoppingCartViewModel(IArticleRepository articleRepository, IMapper mapper)
-    {
-        _mapper = mapper;
-        _cartItems = new ObservableCollection<TicketDetails>();
-        cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
-        ArticlesButtons = new ObservableCollection<Button>();
-        _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
-        loadButtons();
 
-        RemoveFromCartCommand = new RelayCommand<TicketDetails>(RemoveFromCart);
-        DecreaseQuantityCommand = new RelayCommand<TicketDetails>(DecreaseFromCart);
-        IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
-    }
+    public ObservableCollection<Button> ArticlesButtons { get; set; }
 
+    //COMMANDS 
+    public ICommand OpenConfirmsWindowCommand { get; }
+    public ICommand SaveTicketsDetailsCommand { get; }
+    public ICommand CloseConfirmWindowCommand { get; }
+    public ICommand CloseShopingCartCommand { get; }
     public ICommand RemoveFromCartCommand { get; }
     public ICommand IncreaseQuantityCommand { get; }
     public ICommand DecreaseQuantityCommand { get; }
@@ -60,10 +64,36 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<Button> ArticlesButtons { get; set; }
+    public string Issuer
+    {
+        get => _issuer;
+        set => SetField(ref _issuer, value);
+    }
 
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public ShoppingCartViewModel(IArticleRepository articleRepository, IMapper mapper, ITicketService service,
+        WindowsManager windowsManager, Window window)
+    {
+        _service = service;
+        _mapper = mapper;
+        _window = window;
+        _windowsManager = windowsManager;
+        _cartItems = new ObservableCollection<TicketDetails>();
+        cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
+        ArticlesButtons = new ObservableCollection<Button>();
+        _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
+        loadButtons();
+
+
+        RemoveFromCartCommand = new RelayCommand<TicketDetails>(RemoveFromCart);
+        DecreaseQuantityCommand = new RelayCommand<TicketDetails>(DecreaseFromCart);
+        IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
+
+        CloseShopingCartCommand = new RelayCommand(CloseShopingCart);
+        OpenConfirmsWindowCommand = new RelayCommand(OpenConfirmWindow);
+        CloseConfirmWindowCommand = new RelayCommand(CloseConfirmWindow);
+        SaveTicketsDetailsCommand = new AsyncRelayCommand(SaveTicketDetails);
+    }
 
     private async Task loadButtons()
     {
@@ -74,11 +104,11 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
             {
                 var btn = new Button
                 {
-                    Tag = article.articleId,
+                    Tag = article.ArticleId,
                     Style = (Style)Application.Current.FindResource("articlesBtn"),
                     Padding = new Thickness(10)
                 };
-                btn.Click += async (e, s) => { addToCart(article); };
+                btn.Click += async (e, s) => { AddToCart(article); };
                 var textBlock = new TextBlock
                 {
                     Text = article.Name,
@@ -94,9 +124,14 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     }
 
 
-    private void addToCart(DTOGetArticlesButton article)
+    private async Task AddToCart(DTOGetArticlesButton article)
     {
-        var existingItem = cartItems.FirstOrDefault(x => x.ArticleId == article.articleId);
+        if (_ticket == null)
+        {
+            await GenerateTicket();
+        }
+
+        var existingItem = cartItems.FirstOrDefault(x => x.ArticleId == article.ArticleId);
 
         if (existingItem != null)
         {
@@ -106,8 +141,8 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         {
             existingItem = new TicketDetails
             {
-                TicketId = "1", ArticleId = article.articleId, Quantity = 1, Price = article.price,
-                Article = _mapper.Map<Article>(article)
+                TicketId = _ticket.TicketId, Quantity = 1, Price = article.Price, ArticleName = article.Name,
+                ArticleId = article.ArticleId
             };
 
             cartItems.Add(existingItem);
@@ -117,9 +152,51 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         cartItemsView?.Refresh();
     }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    public async Task GenerateTicket()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        var dto = new DtoCreateTicket(DateTime.Now, Issuer, totalAmount);
+        var result = await _service.SaveTicketAsync(dto);
+        if (result != null)
+        {
+            _ticket = (Ticket)result.Data;
+        }
+    }
+
+    public async Task SaveTicketDetails()
+    {
+        var result = await _service.SaveTicketsDetailsAsync(cartItems);
+        _ticket.TotalAmount = totalAmount;
+        _service.UpdateTicket(_ticket);
+        if (result.Success is true)
+        {
+            ClearCart();
+            _window.Close();
+            _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
+        }
+    }
+
+    public void ClearCart()
+    {
+        cartItems.Clear();
+        totalAmount = 0;
+    }
+
+    private void OpenConfirmWindow()
+    {
+        var confirmWindow = new ConfirmWindow(this);
+        _confirmWindow = confirmWindow;
+        confirmWindow.Show();
+    }
+
+    private void CloseConfirmWindow()
+    {
+        if (_confirmWindow == null) return;
+        _windowsManager.CloseCurrentWindowandShowWindow<ShoppingCartWindow>(_confirmWindow);
+    }
+
+    private void CloseShopingCart()
+    {
+        _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_window);
     }
 
 
@@ -157,6 +234,12 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         cartItemsView.Refresh();
     }
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

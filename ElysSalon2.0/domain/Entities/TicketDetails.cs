@@ -14,6 +14,8 @@ public class TicketDetails : INotifyPropertyChanged
     public int TicketDetailsId { get; set; }
 
     public string TicketId { get; set; }
+
+    public string ArticleName { get; set; }
     public int ArticleId { get; set; }
 
     public int Quantity

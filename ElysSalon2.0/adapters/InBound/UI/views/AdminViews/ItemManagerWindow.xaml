@@ -26,7 +26,7 @@
                  VerticalAlignment="Top" Width="207"
                  Grid.ColumnSpan="2" />
 
-        <TextBox Text="{Binding PriceCost, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding PriceCost}"
                  x:Name="priceCostBox"
                  Style="{StaticResource textInput}"
                  HorizontalAlignment="Left"
@@ -63,7 +63,7 @@
                  Grid.ColumnSpan="2" />
 
 
-        <TextBox Text="{Binding PriceBuy, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox Text="{Binding PriceBuy}"
                  x:Name="priceBuyBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
 

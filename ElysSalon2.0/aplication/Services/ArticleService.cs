@@ -58,8 +58,8 @@ public class ArticleService : IArticleService
         {
             art.Name = dto.Name;
             art.ArticleTypeId = dto.ArticleTypeId;
-            art.PriceCost = dto.PriceCost;
-            art.PriceBuy = dto.PriceBuy;
+            art.PriceCost = decimal.Round(dto.PriceCost,2);
+            art.PriceBuy = decimal.Round(dto.PriceBuy,2);
             art.Stock = dto.Stock;
             art.Description = dto.Description;
             await _articleRepository.UpdateArticleAsync(art);
@@ -78,7 +78,7 @@ public class ArticleService : IArticleService
         }
 
         await _articleRepository.DeleteArticleAsync(id);
-        return ServiceResult.successResult("Artículo eliminado correctamente");
+        return ServiceResult.SuccessResult("Artículo eliminado correctamente");
     }
 
     public async Task<ServiceResult> AddType(string name)
@@ -93,7 +93,7 @@ public class ArticleService : IArticleService
 
         await _typeRepository.AddTypeAsync(name);
         reloadItems?.Invoke();
-        return ServiceResult.successResult("Tipo creado correctamente");
+        return ServiceResult.SuccessResult("Tipo creado correctamente");
     }
 
     public async Task<ServiceResult> EditType(ArticleType type)
@@ -111,7 +111,7 @@ public class ArticleService : IArticleService
         await _typeRepository.UpdateTypeAsync(typeUpdated);
 
         reloadItems?.Invoke();
-        return ServiceResult.successResult("Tipo actualizado correctamente");
+        return ServiceResult.SuccessResult("Tipo actualizado correctamente");
     }
 
     public async Task<ServiceResult> DeleteType(int id)
@@ -123,6 +123,6 @@ public class ArticleService : IArticleService
 
         await _typeRepository.DeleteTypeAsync(id);
         reloadItems?.Invoke();
-        return ServiceResult.successResult("Tipo eliminado correctamente");
+        return ServiceResult.SuccessResult("Tipo eliminado correctamente");
     }
 }
