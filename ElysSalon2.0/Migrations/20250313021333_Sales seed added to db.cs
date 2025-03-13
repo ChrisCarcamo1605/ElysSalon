@@ -13,8 +13,7 @@ namespace ElysSalon2._0.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Sale");
+            
 
             migrationBuilder.InsertData(
                 table: "Sales",

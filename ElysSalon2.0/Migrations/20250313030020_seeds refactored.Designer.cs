@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250313030020_seeds refactored")]
+    partial class seedsrefactored
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,31 +292,31 @@ namespace ElysSalon2._0.Migrations
                         new
                         {
                             SaleId = 11,
-                            SaleDate = new DateTime(2025, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SaleDate = new DateTime(2023, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 70.0
                         },
                         new
                         {
                             SaleId = 12,
-                            SaleDate = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SaleDate = new DateTime(2023, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 95.5
                         },
                         new
                         {
                             SaleId = 13,
-                            SaleDate = new DateTime(2025, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SaleDate = new DateTime(2023, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 140.25
                         },
                         new
                         {
                             SaleId = 14,
-                            SaleDate = new DateTime(2025, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SaleDate = new DateTime(2023, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 50.75
                         },
                         new
                         {
                             SaleId = 15,
-                            SaleDate = new DateTime(2025, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SaleDate = new DateTime(2023, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 110.0
                         });
                 });
