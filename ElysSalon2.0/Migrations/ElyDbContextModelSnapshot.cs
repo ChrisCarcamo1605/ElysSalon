@@ -22,7 +22,7 @@ namespace ElysSalon2._0.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Article", b =>
                 {
                     b.Property<int>("ArticleId")
                         .ValueGeneratedOnAdd()
@@ -158,7 +158,7 @@ namespace ElysSalon2._0.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.ArticleType", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.ArticleType", b =>
                 {
                     b.Property<int>("ArticleTypeId")
                         .ValueGeneratedOnAdd()
@@ -207,7 +207,118 @@ namespace ElysSalon2._0.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Sales", b =>
+                {
+                    b.Property<int>("SaleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"));
+
+                    b.Property<DateTime>("SaleDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
+
+                    b.HasKey("SaleId");
+
+                    b.ToTable("Sales");
+
+                    b.HasData(
+                        new
+                        {
+                            SaleId = 1,
+                            SaleDate = new DateTime(2023, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 50.0
+                        },
+                        new
+                        {
+                            SaleId = 2,
+                            SaleDate = new DateTime(2023, 11, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 75.5
+                        },
+                        new
+                        {
+                            SaleId = 3,
+                            SaleDate = new DateTime(2023, 11, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 120.25
+                        },
+                        new
+                        {
+                            SaleId = 4,
+                            SaleDate = new DateTime(2023, 11, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 30.75
+                        },
+                        new
+                        {
+                            SaleId = 5,
+                            SaleDate = new DateTime(2023, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 90.0
+                        },
+                        new
+                        {
+                            SaleId = 6,
+                            SaleDate = new DateTime(2023, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 60.0
+                        },
+                        new
+                        {
+                            SaleId = 7,
+                            SaleDate = new DateTime(2023, 10, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 85.5
+                        },
+                        new
+                        {
+                            SaleId = 8,
+                            SaleDate = new DateTime(2023, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 130.25
+                        },
+                        new
+                        {
+                            SaleId = 9,
+                            SaleDate = new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 40.75
+                        },
+                        new
+                        {
+                            SaleId = 10,
+                            SaleDate = new DateTime(2023, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 100.0
+                        },
+                        new
+                        {
+                            SaleId = 11,
+                            SaleDate = new DateTime(2023, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 70.0
+                        },
+                        new
+                        {
+                            SaleId = 12,
+                            SaleDate = new DateTime(2023, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 95.5
+                        },
+                        new
+                        {
+                            SaleId = 13,
+                            SaleDate = new DateTime(2023, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 140.25
+                        },
+                        new
+                        {
+                            SaleId = 14,
+                            SaleDate = new DateTime(2023, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 50.75
+                        },
+                        new
+                        {
+                            SaleId = 15,
+                            SaleDate = new DateTime(2023, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 110.0
+                        });
+                });
+
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Ticket", b =>
                 {
                     b.Property<string>("TicketId")
                         .ValueGeneratedOnAdd()
@@ -234,7 +345,7 @@ namespace ElysSalon2._0.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.TicketDetails", b =>
                 {
                     b.Property<int>("TicketDetailsId")
                         .ValueGeneratedOnAdd()
@@ -268,9 +379,9 @@ namespace ElysSalon2._0.Migrations
                     b.ToTable("TicketDetails");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Article", b =>
                 {
-                    b.HasOne("ElysSalon2._0.domain.Entities.ArticleType", "ArticleType")
+                    b.HasOne("ElysSalon2._0.Core.domain.Entities.ArticleType", "ArticleType")
                         .WithMany()
                         .HasForeignKey("ArticleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -279,15 +390,15 @@ namespace ElysSalon2._0.Migrations
                     b.Navigation("ArticleType");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.TicketDetails", b =>
                 {
-                    b.HasOne("ElysSalon2._0.domain.Entities.Article", "Article")
+                    b.HasOne("ElysSalon2._0.Core.domain.Entities.Article", "Article")
                         .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElysSalon2._0.domain.Entities.Ticket", "Ticket")
+                    b.HasOne("ElysSalon2._0.Core.domain.Entities.Ticket", "Ticket")
                         .WithMany("TicketDetails")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -298,7 +409,7 @@ namespace ElysSalon2._0.Migrations
                     b.Navigation("Ticket");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
+            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Ticket", b =>
                 {
                     b.Navigation("TicketDetails");
                 });

@@ -1,13 +1,14 @@
 ﻿using System.Windows;
+using ElysSalon2._0.adapters.InBound.UI.ViewModels;
 using ElysSalon2._0.adapters.InBound.UI.views;
 using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
+using ElysSalon2._0.adapters.InBound.UI.views.MainViews;
 using ElysSalon2._0.adapters.OutBound.DataBase;
-using ElysSalon2._0.adapters.OutBound.Repository;
-using ElysSalon2._0.aplication.Management;
-using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.Services;
-using ElysSalon2._0.aplication.Utils;
-using ElysSalon2._0.aplication.ViewModels;
+using ElysSalon2._0.adapters.OutBound.Repositories;
+using ElysSalon2._0.Core.aplication.Management;
+using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
+using ElysSalon2._0.Core.domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,6 +35,7 @@ public partial class App : Application
         services.AddTransient<UpdateArticleViewModel>();
         services.AddTransient<ItemManagerViewModel>();
         services.AddTransient<ShoppingCartViewModel>();
+        services.AddTransient<SalesViewModel>();
 
         //Interfaces/Services and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();
@@ -42,7 +44,7 @@ public partial class App : Application
         services.AddSingleton<WindowsManager>();
         services.AddTransient<ITicketRepository, TicketRepository>();
         services.AddTransient<ITicketService, TicketService>();
-
+        services.AddTransient<ISalesRepository, SalesRepository>();
 
         //Windows
         services.AddTransient<AdminWindow>();
@@ -50,7 +52,7 @@ public partial class App : Application
         services.AddTransient<SalesWindow>();
         services.AddTransient<ConfirmWindow>();
         services.AddTransient<MailWindow>();
-        services.AddTransient<UpdateItemWindow>(); 
+        services.AddTransient<UpdateItemWindow>();
         services.AddTransient<ItemManagerWindow>();
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ShoppingCartWindow>();

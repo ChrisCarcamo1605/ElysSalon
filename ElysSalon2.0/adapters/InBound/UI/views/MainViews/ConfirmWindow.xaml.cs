@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using ElysSalon2._0.aplication.ViewModels;
+using ElysSalon2._0.adapters.InBound.UI.ViewModels;
 
-namespace ElysSalon2._0.adapters.InBound.UI.views;
+namespace ElysSalon2._0.adapters.InBound.UI.views.MainViews;
 
 /// <summary>
 ///     Lógica de interacción para confirmWindow.xaml
@@ -12,7 +12,6 @@ public partial class ConfirmWindow : Window
     {
         InitializeComponent();
         DataContext = viewModel;
-
     }
 
     private void siBtn_Click(object sender, RoutedEventArgs e)

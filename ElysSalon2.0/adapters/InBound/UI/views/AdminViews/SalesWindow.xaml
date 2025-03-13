@@ -10,13 +10,76 @@
 
 
     <Grid>
-        <Grid x:Name="gridViewer" Margin="78,210,78,40" Background="#FFB3B3B3" />
+        <Grid.Background>
+            <ImageBrush ImageSource="/images/wallpaper3.jpg" />
+        </Grid.Background>
+
         <Label Style="{DynamicResource TitleText}" Content="REGISTRO DE VENTAS" Width="426" Height="84" />
-        <ComboBox x:Name="filterCombo" HorizontalAlignment="Left" Height="50" Margin="723,128,0,0"
-                  VerticalAlignment="Top" Width="230" />
+        <ComboBox x:Name="FilterComboBox" 
+                  Style="{DynamicResource ComboBoxFlatStyle}"
+                  Width="200" 
+                  Height="45" 
+                  VerticalAlignment="Top" 
+                  HorizontalAlignment="Left" 
+                  Margin="640,153,0,0"
+                  SelectedItem="{Binding SelectedFilter, Mode=TwoWay}">
+            <ComboBoxItem Content="Últimos 7 días" />
+            <ComboBoxItem Content="Último mes" />
+            <ComboBoxItem Content="Últimos 3 meses" />
+        </ComboBox>
         <ComboBox x:Name="orderCombo" HorizontalAlignment="Left" Height="50" Margin="972,128,0,0"
                   VerticalAlignment="Top" Width="230" />
-        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button" Click="Button_Click" />
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Command="{Binding exitCommand}" Content="Button" />
+
+        <Button Background="Gray" FontSize="25" Content="GUARDAR" Command="{Binding saveCommand}"
+                HorizontalAlignment="Left" Height="48" Margin="972,265,0,0" VerticalAlignment="Top" Width="167" />
+
+        <ScrollViewer Background="LightGray" HorizontalAlignment="Left" Height="419" Margin="78,245,0,0"
+                      VerticalAlignment="Top" Width="795"
+                      RenderTransformOrigin="0.5,0.5" >
+
+            <ItemsControl ItemsSource="{Binding SalesView}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1"
+                                Margin="0 2">
+                            <Grid Margin="0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="1*" />
+                                </Grid.ColumnDefinitions>
+
+
+                                <TextBlock Grid.Column="0" Text="{Binding SaleId}" Background="Gainsboro"
+                                               FontSize="20"
+
+                                               FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               TextAlignment="Center" TextWrapping="Wrap" />
+
+
+                                <TextBlock FontSize="18" Text="{Binding SaleDate}" Grid.Column="1"
+
+                                           FontFamily="Bahnschrift Condensed"
+                                           TextAlignment="Center" VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Padding="0, 0 " />
+
+                                <TextBlock FontSize="20" Text="{Binding Total}" Grid.Column="2"
+
+                                           FontFamily="Bahnschrift Condensed"
+                                           TextAlignment="Center" VerticalAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Padding="0, 0 " />
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
 
     </Grid>
 </Window>

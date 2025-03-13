@@ -1,4 +1,4 @@
-﻿using ElysSalon2._0.domain.Entities;
+﻿using ElysSalon2._0.Core.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.adapters.OutBound.DataBase;
@@ -13,6 +13,7 @@ public class ElyDbContext : DbContext
     public DbSet<ArticleType> ArticleType { get; set; }
     public DbSet<TicketDetails> TicketDetails { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<Sales> Sales { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -89,6 +90,29 @@ public class ElyDbContext : DbContext
                 PriceCost = 11.6M,
                 Stock = 21
             }
+        );
+
+        modelBuilder.Entity<Sales>().HasData(
+            // Últimos 7 días (5 registros)
+            new Sales { SaleId = 1, SaleDate = new DateTime(2023, 11, 20), Total = 50.00 }, //Fecha estatica
+            new Sales { SaleId = 2, SaleDate = new DateTime(2023, 11, 19), Total = 75.50 }, //Fecha estatica
+            new Sales { SaleId = 3, SaleDate = new DateTime(2023, 11, 18), Total = 120.25 }, //Fecha estatica
+            new Sales { SaleId = 4, SaleDate = new DateTime(2023, 11, 17), Total = 30.75 }, //Fecha estatica
+            new Sales { SaleId = 5, SaleDate = new DateTime(2023, 11, 16), Total = 90.00 }, //Fecha estatica
+
+            // Último mes (5 registros)
+            new Sales { SaleId = 6, SaleDate = new DateTime(2023, 10, 25), Total = 60.00 },//Fecha estatica
+            new Sales { SaleId = 7, SaleDate = new DateTime(2023, 10, 20), Total = 85.50 },//Fecha estatica
+            new Sales { SaleId = 8, SaleDate = new DateTime(2023, 10, 15), Total = 130.25 },//Fecha estatica
+            new Sales { SaleId = 9, SaleDate = new DateTime(2023, 10, 10), Total = 40.75 },//Fecha estatica
+            new Sales { SaleId = 10, SaleDate = new DateTime(2023, 10, 5), Total = 100.00 },//Fecha estatica
+
+            // Últimos 3 meses (5 registros)
+            new Sales { SaleId = 11, SaleDate = new DateTime(2023, 9, 27), Total = 70.00 },//Fecha estatica
+            new Sales { SaleId = 12, SaleDate = new DateTime(2023, 9, 22), Total = 95.50 },//Fecha estatica
+            new Sales { SaleId = 13, SaleDate = new DateTime(2023, 8, 28), Total = 140.25 },//Fecha estatica
+            new Sales { SaleId = 14, SaleDate = new DateTime(2023, 8, 23), Total = 50.75 },//Fecha estatica
+            new Sales { SaleId = 15, SaleDate = new DateTime(2023, 8, 18), Total = 110.00 }//Fecha estatica
         );
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using ElysSalon2._0.aplication.Management;
-using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.Services;
-using ElysSalon2._0.aplication.ViewModels;
+using ElysSalon2._0.adapters.InBound.UI.ViewModels;
+using ElysSalon2._0.Core.aplication.Management;
+using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 

@@ -1,22 +1,20 @@
 ﻿using System.Collections.ObjectModel;
 using ElysSalon2._0.adapters.OutBound.DataBase;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
-using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.Utils;
-using ElysSalon2._0.domain.Entities;
+using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElysSalon2._0.adapters.OutBound.Repository;
+namespace ElysSalon2._0.adapters.OutBound.Repositories;
 
 public class ArticleRepository : IArticleRepository
 {
     private readonly ElyDbContext _context;
-    private readonly IArticleTypeRepository _typeRepository;
 
-    public ArticleRepository(IArticleTypeRepository typeRepository, ElyDbContext context)
+
+    public ArticleRepository(ElyDbContext context)
     {
         _context = context;
-        _typeRepository = typeRepository;
     }
 
     public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtonAsync()
@@ -30,7 +28,6 @@ public class ArticleRepository : IArticleRepository
     public async Task<ObservableCollection<Article>> GetArticlesAsync()
     {
         var articles = await _context.Article.ToListAsync();
-
         return new ObservableCollection<Article>(articles);
     }
 

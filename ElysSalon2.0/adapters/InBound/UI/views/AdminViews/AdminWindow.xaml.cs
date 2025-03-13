@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ElysSalon2._0.aplication.Management;
+using ElysSalon2._0.Core.aplication.Management;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 

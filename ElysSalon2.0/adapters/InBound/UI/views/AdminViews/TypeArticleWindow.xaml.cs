@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using ElysSalon2._0.aplication.Management;
-using ElysSalon2._0.aplication.Repositories;
-using ElysSalon2._0.aplication.Services;
-using ElysSalon2._0.aplication.ViewModels;
-using ElysSalon2._0.domain.Entities;
+using ElysSalon2._0.adapters.InBound.UI.ViewModels;
+using ElysSalon2._0.Core.aplication.Management;
+using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
+using ElysSalon2._0.Core.domain.Entities;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 
