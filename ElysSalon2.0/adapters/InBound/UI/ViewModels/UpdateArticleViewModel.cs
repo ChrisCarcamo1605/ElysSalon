@@ -42,7 +42,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         _articleRepository = articleRepository;
         _articleTypeRepository = articleTypeRepository;
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(OnlyDigits);
-        exitCommand = new RelayCommand(Exit);
+        ExitCommand = new RelayCommand(Exit);
         updateArticleCommand = new AsyncRelayCommand(UpdateArticle);
         _service = service;
         LoadItem(article);
@@ -127,7 +127,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     }
 
     public ICommand updateArticleCommand { get; }
-    public ICommand exitCommand { get; }
+    public ICommand ExitCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

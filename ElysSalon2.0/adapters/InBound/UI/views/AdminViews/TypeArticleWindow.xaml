@@ -10,7 +10,7 @@
         Background="Transparent">
     <Border Background="AliceBlue" CornerRadius="6">
         <Grid>
-            <TextBox  Style="{StaticResource textInput}" Text="{Binding  Name}"
+            <TextBox Style="{StaticResource textInput}" Text="{Binding  Name}"
                      HorizontalAlignment="Left" Height="44"
                      Margin="30,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="207" FontSize="20" />
             <Label Style="{StaticResource TitleText}" Content="GESTION TIPOS" Height="44" Margin="0,10,0,0" Width="175"
@@ -19,7 +19,7 @@
                     HorizontalAlignment="Left" Height="44" Margin="252,72,0,0" VerticalAlignment="Top" Width="102"
                     RenderTransformOrigin="-1.017,0.754" FontSize="18"
                     Command="{Binding addTypeCommand}" />
-            <Button  Style="{DynamicResource ExitBtn}" Margin="27,19,0,0"
+            <Button Style="{DynamicResource ExitBtn}" Margin="27,19,0,0"
                     Content="Salir" FontSize="18" Height="32" Width="49" Command="{Binding ExitCommand}" />
 
             <ScrollViewer Margin="27,125,36,20">

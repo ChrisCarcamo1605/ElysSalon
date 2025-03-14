@@ -34,7 +34,7 @@ public class TypesManagementViewModel : INotifyPropertyChanged
         addTypeCommand = new AsyncRelayCommand(AddType);
         editTypeCommand = new AsyncRelayCommand<ArticleType>(EditType);
         deleteTypeCommand = new AsyncRelayCommand<ArticleType>(DeleteType);
-        exitCommand = new RelayCommand(Exit);
+        ExitCommand = new RelayCommand(Exit);
         LoadTypes();
     }
 
@@ -71,7 +71,7 @@ public class TypesManagementViewModel : INotifyPropertyChanged
     public ICommand addTypeCommand { get; }
     public ICommand deleteTypeCommand { get; }
     public ICommand editTypeCommand { get; }
-    public ICommand exitCommand { get; }
+    public ICommand ExitCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -101,18 +101,18 @@ public class ElyDbContext : DbContext
             new Sales { SaleId = 5, SaleDate = new DateTime(2025, 01, 16), Total = 90.00 }, //Fecha estatica
 
             // Último mes (5 registros)
-            new Sales { SaleId = 6, SaleDate = new DateTime(2025, 02, 25), Total = 60.00 },//Fecha estatica
-            new Sales { SaleId = 7, SaleDate = new DateTime(2025, 02, 20), Total = 85.50 },//Fecha estatica
-            new Sales { SaleId = 8, SaleDate = new DateTime(2025, 02, 15), Total = 130.25 },//Fecha estatica
-            new Sales { SaleId = 9, SaleDate = new DateTime(2025, 02, 10), Total = 40.75 },//Fecha estatica
-            new Sales { SaleId = 10, SaleDate = new DateTime(2025, 02, 5), Total = 100.00 },//Fecha estatica
+            new Sales { SaleId = 6, SaleDate = new DateTime(2025, 02, 25), Total = 60.00 }, //Fecha estatica
+            new Sales { SaleId = 7, SaleDate = new DateTime(2025, 02, 20), Total = 85.50 }, //Fecha estatica
+            new Sales { SaleId = 8, SaleDate = new DateTime(2025, 02, 15), Total = 130.25 }, //Fecha estatica
+            new Sales { SaleId = 9, SaleDate = new DateTime(2025, 02, 10), Total = 40.75 }, //Fecha estatica
+            new Sales { SaleId = 10, SaleDate = new DateTime(2025, 02, 5), Total = 100.00 }, //Fecha estatica
 
             // Últimos 3 meses (5 registros)
-            new Sales { SaleId = 11, SaleDate = new DateTime(2025, 03, 07), Total = 70.00 },//Fecha estatica
-            new Sales { SaleId = 12, SaleDate = new DateTime(2025, 03, 12), Total = 95.50 },//Fecha estatica
-            new Sales { SaleId = 13, SaleDate = new DateTime(2025, 03, 08), Total = 140.25 },//Fecha estatica
-            new Sales { SaleId = 14, SaleDate = new DateTime(2025, 03, 03), Total = 50.75 },//Fecha estatica
-            new Sales { SaleId = 15, SaleDate = new DateTime(2025, 03, 08), Total = 110.00 }//Fecha estatica
+            new Sales { SaleId = 11, SaleDate = new DateTime(2025, 03, 07), Total = 70.00 }, //Fecha estatica
+            new Sales { SaleId = 12, SaleDate = new DateTime(2025, 03, 12), Total = 95.50 }, //Fecha estatica
+            new Sales { SaleId = 13, SaleDate = new DateTime(2025, 03, 08), Total = 140.25 }, //Fecha estatica
+            new Sales { SaleId = 14, SaleDate = new DateTime(2025, 03, 03), Total = 50.75 }, //Fecha estatica
+            new Sales { SaleId = 15, SaleDate = new DateTime(2025, 03, 08), Total = 110.00 } //Fecha estatica
         );
     }
 }

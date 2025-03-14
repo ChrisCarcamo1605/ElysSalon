@@ -64,7 +64,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         OpenTypesManagementCommand = new AsyncRelayCommand(openTypesManagement);
 
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
-        exitCommand = new RelayCommand(Exit);
+        ExitCommand = new RelayCommand(Exit);
         LoadArticles();
 
         _service.reloadItems += async () => await SortArticles(ArticleTypeSort);
@@ -215,7 +215,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     public ICommand deleteArticleCommand { get; }
     public ICommand updateArticleCommand { get; }
     public ICommand onlyDigitsCommand { get; }
-    public ICommand exitCommand { get; }
+    public ICommand ExitCommand { get; }
     public ICommand OpenTypesManagementCommand { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
