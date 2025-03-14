@@ -18,20 +18,19 @@
         <ComboBox x:Name="FilterComboBox" 
                   Style="{DynamicResource ComboBoxFlatStyle}"
                   Width="200" 
+                  ItemsSource="{Binding FilterOptions}"
+                  DisplayMemberPath="Value"
                   Height="45" 
                   VerticalAlignment="Top" 
                   HorizontalAlignment="Left" 
                   Margin="640,153,0,0"
-                  SelectedItem="{Binding SelectedFilter, Mode=TwoWay}">
-            <ComboBoxItem Content="Últimos 7 días" />
-            <ComboBoxItem Content="Último mes" />
-            <ComboBoxItem Content="Últimos 3 meses" />
+                  SelectedItem="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}">
         </ComboBox>
         <ComboBox x:Name="orderCombo" HorizontalAlignment="Left" Height="50" Margin="972,128,0,0"
                   VerticalAlignment="Top" Width="230" />
-        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Command="{Binding exitCommand}" Content="Button" />
+        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Command="{Binding ExitCommand}" Content="Button" />
 
-        <Button Background="Gray" FontSize="25" Content="GUARDAR" Command="{Binding saveCommand}"
+        <Button Background="Gray" FontSize="25" Content="GUARDAR" Command="{Binding SaveCommand}"
                 HorizontalAlignment="Left" Height="48" Margin="972,265,0,0" VerticalAlignment="Top" Width="167" />
 
         <ScrollViewer Background="LightGray" HorizontalAlignment="Left" Height="419" Margin="78,245,0,0"

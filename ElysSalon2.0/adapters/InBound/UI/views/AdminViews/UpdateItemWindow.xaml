@@ -79,14 +79,14 @@
             <Label Style="{StaticResource TitleText}" FontSize="35" Content="ACTUALIZAR ARTICULO" Height="48"
                    Margin="0,13,0,0" Width="256" />
 
-            <ComboBox x:Name="typesComboBox" ItemsSource="{Binding ArticleTypes}"
+            <ComboBox ItemsSource="{Binding ArticleTypes}"
                       Style="{StaticResource ComboBoxFlatStyle}"
                       HorizontalAlignment="Left" Height="42"
                       DisplayMemberPath="Name"
                       SelectedValuePath="ArticleTypeId"
                       SelectedValue="{Binding articleTypeId, UpdateSourceTrigger=PropertyChanged}"
                       Margin="34,191,0,0" VerticalAlignment="Top" Width="185" />
-            <Button Style="{StaticResource ExitBtn}" Command="{Binding exitCommand}" Content="Button" Height="38"
+            <Button Style="{StaticResource ExitBtn}" Command="{Binding ExitCommand}" Content="Button" Height="38"
                     Margin="26,18,402,0" RenderTransformOrigin="0.486,0.529" HorizontalAlignment="Stretch" />
 
         </Grid>

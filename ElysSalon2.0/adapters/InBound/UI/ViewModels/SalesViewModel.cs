@@ -15,15 +15,17 @@ namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 public class SalesViewModel : INotifyPropertyChanged
 {
     private readonly ISalesRepository _saleRepo;
-    private Window _window;
-    private int _sortBy;
+    private readonly Window _window;
 
-    public int sortBy
+    //Where saves our filters options
+    private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
+
+    public ObservableCollection<KeyValuePair<FilterSales, string>>? FilterOptions
     {
-        get => _sortBy;
+        get => _filterOptions;
         set
         {
-            SetField(ref _sortBy, value);
+            SetField(ref _filterOptions, value);
             OnPropertyChanged();
         }
     }
@@ -46,7 +48,7 @@ public class SalesViewModel : INotifyPropertyChanged
     }
 
     private ICollectionView _saleView;
-    private WindowsManager _winManager;
+    private readonly WindowsManager _winManager;
 
     public ICollectionView SalesView
     {
@@ -58,57 +60,17 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    public ICommand saveCommand { get; }
-    public ICommand exitCommand { get; }
-    public ICommand FilterLast7DaysCommand { get; }
-    public ICommand FilterLastMonthCommand { get; }
-    public ICommand FilterLast3MonthsCommand { get; }
+    public ICommand SaveCommand { get; }
+    public ICommand ExitCommand { get; }
 
-    private bool _filterLast7Days;
-    private bool _filterLastMonth;
-    private bool _filterLast3Months;
-
-    public bool FilterLast7Days
-    {
-        get => _filterLast7Days;
-        set
-        {
-            SetField(ref _filterLast7Days, value);
-            OnPropertyChanged();
-            ApplyFilter();
-        }
-    }
-
-    public bool FilterLastMonth
-    {
-        get => _filterLastMonth;
-        set
-        {
-            SetField(ref _filterLastMonth, value);
-            OnPropertyChanged();
-            ApplyFilter();
-        }
-    }
-
-    public bool FilterLast3Months
-    {
-        get => _filterLast3Months;
-        set
-        {
-            SetField(ref _filterLast3Months, value);
-            OnPropertyChanged();
-            ApplyFilter();
-        }
-    }
-
-    private string _selectedFilter;
-    public string SelectedFilter
+    //Binding to ComboBox
+    private KeyValuePair<FilterSales, string> _selectedFilter;
+    public KeyValuePair<FilterSales, string> SelectedFilter
     {
         get => _selectedFilter;
         set
         {
             SetField(ref _selectedFilter, value);
-            OnPropertyChanged();
             ApplyFilter();
         }
     }
@@ -117,71 +79,102 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         _saleRepo = saleRepo;
         _winManager = windowsManager;
-        _salesCollection = new ObservableCollection<Sales>();
+        _salesCollection = [];
+
         _saleView = CollectionViewSource.GetDefaultView(_salesCollection);
         _window = window;
 
-        saveCommand = new AsyncRelayCommand(SaveVenta);
-        exitCommand = new RelayCommand(Exit);
-        FilterLast7DaysCommand = new RelayCommand(() => FilterLast7Days = true);
-        FilterLastMonthCommand = new RelayCommand(() => FilterLastMonth = true);
-        FilterLast3MonthsCommand = new RelayCommand(() => FilterLast3Months = true);
+        InitializeFilterOptions();
 
+        SaveCommand = new AsyncRelayCommand(SaveVenta);
+        ExitCommand = new RelayCommand(Exit);
         _ = GetSales();
+    }
+
+
+    //Load all options in FilterOptions
+    private void InitializeFilterOptions()
+    {
+        //It saves in ObservableCollection<KeyValuePair<...> to have a key to use and a value to show on front end
+        _filterOptions = new ObservableCollection<KeyValuePair<FilterSales, string>>
+        {
+            new KeyValuePair<FilterSales, string>(FilterSales.Todo, "Todo"),
+            new KeyValuePair<FilterSales, string>(FilterSales.Ultimos7Dias, "Últimos 7 días"),
+            new KeyValuePair<FilterSales, string>(FilterSales.UltimoMes, "Último mes"),
+            new KeyValuePair<FilterSales, string>(FilterSales.Ultimos3Meses, "Últimos 3 meses")
+        };
+
+        _selectedFilter = _filterOptions[0];
     }
 
     public async Task GetSales()
     {
-        var sales = await _saleRepo.GetSales();
-
-        _salesCollection.Clear();
-        foreach (var item in sales)
+        try
         {
-            _salesCollection.Add(item);
-        }
+            var sales = await _saleRepo.GetSales();
+            _salesCollection.Clear();
 
-        ApplyFilter();
+            foreach (var item in sales)
+            {
+                _salesCollection.Add(item);
+            }
+
+            ApplyFilter();
+            OnPropertyChanged(nameof(SalesView));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error al cargar ventas: {ex.Message}");
+        }
     }
 
     private void ApplyFilter()
     {
         DateTime now = DateTime.Now;
 
-        if (SelectedFilter == "Últimos 7 días")
+        switch (_selectedFilter.Key)
         {
-            _saleView.Filter = item =>
-            {
-                var sale = item as Sales;
-                return sale != null && sale.SaleDate >= now.AddDays(-7);
-            };
-        }
-        else if (SelectedFilter == "Último mes")
-        {
-            _saleView.Filter = item =>
-            {
-                var sale = item as Sales;
-                return sale != null && sale.SaleDate >= now.AddMonths(-1);
-            };
-        }
-        else if (SelectedFilter == "Últimos 3 meses")
-        {
-            _saleView.Filter = item =>
-            {
-                var sale = item as Sales;
-                return sale != null && sale.SaleDate >= now.AddMonths(-3);
-            };
-        }
-        else
-        {
-            _saleView.Filter = null;
+            case FilterSales.Ultimos7Dias:
+
+                DateTime sevenDaysAgo = now.AddDays(-7);
+                _saleView.Filter = item =>
+                {
+                    var sale = item as Sales;
+                    return sale != null && sale.SaleDate >= sevenDaysAgo;
+                };
+
+                break;
+
+            case FilterSales.UltimoMes:
+                DateTime oneMonthAgo = now.AddMonths(-1);
+                _saleView.Filter = item =>
+                {
+                    var sale = item as Sales;
+                    return sale != null && sale.SaleDate >= oneMonthAgo;
+                };
+                break;
+
+            case FilterSales.Ultimos3Meses:
+                DateTime threeMonthsAgo = now.AddMonths(-3);
+                _saleView.Filter = item =>
+                {
+                    var sale = item as Sales;
+                    return sale != null && sale.SaleDate >= threeMonthsAgo;
+                };
+                break;
+
+            case FilterSales.Todo:
+            default:
+                _saleView.Filter = null;
+                break;
         }
 
         _saleView.Refresh();
     }
 
+
     public async Task SaveVenta()
     {
-        var sale = new ObservableCollection<Sales>();
         await _saleRepo.SavesSale(SalesCollection);
         MessageBox.Show("Venta creada correctamente");
         await GetSales();
