@@ -45,16 +45,16 @@
 
         </TextBox>
 
+
         <ComboBox Text="Tipo Articulo" ItemsSource="{Binding ArticleTypesCollection}"
 
-                  Style="{StaticResource ComboBoxFlatStyle}" x:Name="typeComboBox"
-                  HorizontalAlignment="Left" Height="51" Margin="285,164,0,0" VerticalAlignment="Top" Width="215"
-                  RenderTransformOrigin="0.781,0.671"
+                  x:Name="typeComboBox"
+                  Height="41" Margin="270,174,788,0"
                   DisplayMemberPath="Name"
                   SelectedValuePath="ArticleTypeId"
                   SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
-                  Grid.ColumnSpan="2"
-                  SelectedIndex="0" />
+                  SelectedIndex="0" Background="#0FFFFFFF" VerticalAlignment="Top" />
+
         <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" x:Name="descriptionBox"
                  Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
                  Margin="420,265,0,0"
@@ -198,7 +198,7 @@
         <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Descripción" Grid.ColumnSpan="2"
                HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="106" />
 
-        <ComboBox Style="{StaticResource ComboBoxFlatStyle}" ItemsSource="{Binding ArticleSortCollection}"
+        <ComboBox Style="{StaticResource ComboBoxModernStyle}" ItemsSource="{Binding ArticleSortCollection}"
                   DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId"
                   SelectedValue="{Binding ArticleTypeSort, UpdateSourceTrigger=PropertyChanged}"
                   Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="50" Margin="952,265,0,0"
@@ -237,6 +237,8 @@
             </Grid>
 
         </StackPanel>
+
+        <ComboBox HorizontalAlignment="Left" Margin="714,103,0,0" VerticalAlignment="Top" Width="168" Height="40"/>
 
 
     </Grid>

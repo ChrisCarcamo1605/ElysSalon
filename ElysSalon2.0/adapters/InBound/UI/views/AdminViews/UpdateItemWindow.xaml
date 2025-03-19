@@ -80,7 +80,7 @@
                    Margin="0,13,0,0" Width="256" />
 
             <ComboBox ItemsSource="{Binding ArticleTypes}"
-                      Style="{StaticResource ComboBoxFlatStyle}"
+                      Style="{StaticResource ComboBoxModernStyle}"
                       HorizontalAlignment="Left" Height="42"
                       DisplayMemberPath="Name"
                       SelectedValuePath="ArticleTypeId"

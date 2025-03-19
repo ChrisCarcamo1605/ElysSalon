@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ElysSalon2._0.adapters.InBound.UI.ViewModels;
-using ElysSalon2._0.adapters.OutBound.Repositories;
-using ElysSalon2._0.Core.aplication.Management;
-using ElysSalon2._0.Core.aplication.Ports.Repositories;
 
 namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
 {
     /// <summary>
-    /// Interaction logic for SalesWindow.xaml
+    /// Interaction logic for prueba.xaml
     /// </summary>
-    public partial class SalesWindow : Window
+    public partial class prueba : Page
     {
-        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager)
+        public prueba()
         {
             InitializeComponent();
-            DataContext = new SalesViewModel(saleRepo, this, winManager);
         }
     }
 }
