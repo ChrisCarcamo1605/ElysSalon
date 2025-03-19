@@ -28,13 +28,13 @@ public class ArticleValidations
 
         if (dto.ArticleTypeId == 2) return ServiceResult.Failed("Seleccione un tipo de artículo");
 
-        if (!decimal.TryParse(dto.PriceBuy.ToString(), out _) || Convert.ToDecimal(dto.PriceBuy) == 0)
+        if (!decimal.TryParse(dto.PriceBuy, out _) || Convert.ToDecimal(dto.PriceBuy) == 0)
             return ServiceResult.Failed("El precio de Venta debe ser un número válido.");
 
-        if (!decimal.TryParse(dto.PriceCost.ToString(), out _) || Convert.ToDecimal(dto.PriceCost) == 0)
+        if (!decimal.TryParse(dto.PriceCost, out _) || Convert.ToDecimal(dto.PriceCost) == 0)
             return ServiceResult.Failed("El precio de Costo debe ser un número válido.");
 
-        if (dto.Stock == 0 || !int.TryParse(dto.Stock.ToString(), out _))
+        if (!int.TryParse(dto.Stock, out _) || Convert.ToDecimal(dto.PriceCost) == 0)
             return ServiceResult.Failed("El stock debe ser un número entero válido.");
 
         if (existing != null) return ServiceResult.Failed("Articulo ya existente");

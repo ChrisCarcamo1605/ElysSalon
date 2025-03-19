@@ -3,7 +3,7 @@
 public record DTOAddArticle(
     string Name,
     int ArticleTypeId,
-    decimal PriceCost,
-    decimal PriceBuy,
-    int Stock,
+    string PriceCost,
+    string PriceBuy,
+    string Stock,
     string Description);

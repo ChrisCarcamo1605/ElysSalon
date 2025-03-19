@@ -60,9 +60,9 @@
                     FontSize="72" Click="noBtn_Click" Margin="367,295,39,33"
                     Command="{Binding CloseConfirmWindowCommand}" />
 
-            <Label Content="TOTAL A PAGAR:" HorizontalAlignment="Left" Height="76" Margin="36,61,0,0"
+            <TextBlock Text="TOTAL A PAGAR:" HorizontalAlignment="Left" Height="76" Margin="36,61,0,0"
                    VerticalAlignment="Top" Width="382" FontFamily="Bahnschrift Condensed" FontSize="72"
-                   Foreground="Black" BorderBrush="Black" />
+                   Foreground="Black"/>
             <TextBlock Text="{Binding totalAmount,StringFormat=C}" HorizontalAlignment="Left" Height="76"
                        Margin="418,61,0,0"
                        VerticalAlignment="Top" Width="235" FontFamily="Bahnschrift Condensed"

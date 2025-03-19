@@ -35,13 +35,13 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private string _description;
 
-    private decimal _priceBuy;
+    private string _priceBuy;
 
-    private decimal _priceCost;
+    private string _priceCost;
     private string? _searchText;
 
 
-    private int _stock;
+    private string _stock;
 
     public ItemManagerViewModel(IArticleRepository articleRepository, IArticleTypeRepository articleTypeRepository,
         Window windows, IArticleService service, WindowsManager windowsManager)
@@ -139,7 +139,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    public decimal PriceCost
+    public string PriceCost
     {
         get => _priceCost;
         set
@@ -149,7 +149,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    public decimal PriceBuy
+    public string PriceBuy
     {
         get => _priceBuy;
         set
@@ -159,7 +159,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         }
     }
 
-    public int Stock
+    public string Stock
     {
         get => _stock;
         set
@@ -271,9 +271,9 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     {
         var dto = new DTOAddArticle(ArticleName,
             ArticleTypeId,
-            PriceCost,
-            PriceBuy,
-            Stock, Description);
+            PriceCost ?? "0",
+            PriceBuy ?? "0",
+            Stock ?? "0", Description);
 
         var result = await _service.AddArticle(dto);
         MessageBox.Show(result.Message);
@@ -334,9 +334,9 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     {
         ArticleTypeId = 2;
         ArticleName = "";
-        PriceBuy = 0;
-        PriceCost = 0;
-        Stock = 0;
+        PriceBuy = "";
+        PriceCost = "";
+        Stock = "";
         Description = "";
     }
 

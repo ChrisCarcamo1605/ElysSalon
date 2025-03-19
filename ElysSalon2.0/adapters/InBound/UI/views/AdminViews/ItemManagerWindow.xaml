@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         xmlns:events="http://schemas.microsoft.com/xaml/behaviors"
         Title="ItemManagerWindow" Height="720" Width="1280"
@@ -10,204 +11,185 @@
         WindowStartupLocation="CenterScreen">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="127"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
 
         <Grid.Background>
-            <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" />
+            <ImageBrush ImageSource="/adapters/InBound/UI/views/AdminViews/wallpaper3.jpg" Opacity="0.5" />
         </Grid.Background>
-        <Label Style="{DynamicResource TitleText}" Content="Gestion de Articulos" Width="420" Height="67"
-               Grid.Column="1" />
-        <Button x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Content="Button"
-                Command="{Binding ExitCommand}"
-                Grid.ColumnSpan="2" />
 
-        <TextBox Text="{Binding ArticleName, UpdateSourceTrigger=PropertyChanged}" x:Name="nameTxtBox"
-                 Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="53"
-                 Margin="50,162,0,0"
-                 VerticalAlignment="Top" Width="207"
-                 Grid.ColumnSpan="2" />
-
-        <TextBox Text="{Binding PriceCost}"
-                 x:Name="priceCostBox"
-                 Style="{StaticResource textInput}"
-                 HorizontalAlignment="Left"
-                 Height="51"
-                 Margin="525,164,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="173"
-                 Grid.ColumnSpan="2">
-            <events:Interaction.Triggers>
-                <events:EventTrigger EventName="PreviewTextInput">
-                    <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
-                                                PassEventArgsToCommand="True" />
-                </events:EventTrigger>
-            </events:Interaction.Triggers>
-
-        </TextBox>
+        <StackPanel HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal">
+            <Grid Width="1220">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="14*" />
+                    <RowDefinition Height="113*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
 
 
-        <ComboBox Text="Tipo Articulo" ItemsSource="{Binding ArticleTypesCollection}"
+                <Button Grid.Column="0" x:Name="exitBtn" Style="{DynamicResource ExitBtn}" Margin="0 0 0 0"
+                        Content="Button" HorizontalAlignment="Left"
+                        Command="{Binding ExitCommand}" Height="70" Width="114" Grid.Row="1" />
+                <TextBlock Grid.Column="1" Style="{DynamicResource TitleText}" Text="Gestion de Articulos" Width="420"
+                           Height="66" Grid.Row="1" />
+                <ui:Button Grid.Column="2" x:Name="ManagementTypeBtn" Content="Gestionar Tipo Productos"
 
-                  x:Name="typeComboBox"
-                  Height="41" Margin="270,174,788,0"
-                  DisplayMemberPath="Name"
-                  SelectedValuePath="ArticleTypeId"
-                  SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedIndex="0" Background="#0FFFFFFF" VerticalAlignment="Top" />
+                           Command="{Binding OpenTypesManagementCommand}" Background="{x:Null}" Foreground="Black"
+                           Height="50"
+                           Width="253" HorizontalAlignment="Center" Margin="0,24,0,0" Grid.Row="1"
+                           VerticalAlignment="Top" />
+            </Grid>
 
-        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" x:Name="descriptionBox"
-                 Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
-                 Margin="420,265,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top" Width="472"
-                 Grid.ColumnSpan="2" />
+        </StackPanel>
 
+        <StackPanel Grid.Row="1" Margin="20 0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1.5*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
 
-        <TextBox Text="{Binding PriceBuy}"
-                 x:Name="priceBuyBox"
-                 Style="{StaticResource textInput}" HorizontalAlignment="Left" Height="50"
+                <StackPanel Grid.Column="0" Margin="20 0 ">
 
-                 Margin="213,265,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top" Width="172"
-                 Grid.ColumnSpan="2">
-            <events:Interaction.Triggers>
-                <events:EventTrigger EventName="PreviewTextInput">
-                    <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
-                                                PassEventArgsToCommand="True" />
-                </events:EventTrigger>
-            </events:Interaction.Triggers>
-        </TextBox>
+                    <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Nombre"
+                               HorizontalAlignment="Left"  Height="27" Width="84" />
 
-        <TextBox Text="{Binding Stock, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource textInput}"
-                 x:Name="stockBox" HorizontalAlignment="Left" Height="50"
+                    <ui:TextBox PlaceholderText="Nombre..."
+                                Text="{Binding ArticleName, UpdateSourceTrigger=PropertyChanged}"
+                                x:Name="nameTxtBox"
+                                VerticalAlignment="Top" Height="36" />
 
-                 Margin="50,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="131"
-                 Grid.ColumnSpan="2">
-            <events:Interaction.Triggers>
-                <events:EventTrigger EventName="PreviewTextInput">
-                    <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
-                                                PassEventArgsToCommand="True" />
-                </events:EventTrigger>
-            </events:Interaction.Triggers>
-        </TextBox>
+                    <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Tipo Articulo"
+                               HorizontalAlignment="Left" Height="27" Width="122" />
 
-        <Button Style="{DynamicResource addBtn}" x:Name="addArticleBtn" Content="Agregar" HorizontalAlignment="Left"
-                Height="51" Margin="722,164,0,0" VerticalAlignment="Top" Width="160"
-                Grid.ColumnSpan="2"
-                Command="{Binding addArticleCommand}" />
-        <TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" x:Name="searchTxtBox"
-                 Style="{StaticResource textInput}" Grid.ColumnSpan="2"
-                 HorizontalAlignment="Left" Height="54" Margin="952,150,0,0" VerticalAlignment="Top" Width="268" />
-        <Label Content="BUSCAR POR NOMBRE" Grid.ColumnSpan="2" Margin="952,114,112,0" VerticalAlignment="Top"
-               FontFamily="Bahnschrift Condensed" FontSize="27" Height="36" />
-        <Button x:Name="ManagementTypeBtn" Style="{StaticResource addBtn}" Content="Gestionar Tipo Productos"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Left" Height="57" Margin="952,40,0,0" VerticalAlignment="Top" Width="268"
-                BorderBrush="Black" Command="{Binding OpenTypesManagementCommand}" />
+                    <ComboBox Text="Tipo Articulo" ItemsSource="{Binding ArticleTypesCollection}"
+
+                              x:Name="typeComboBox"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="ArticleTypeId"
+                              SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedIndex="0" VerticalAlignment="Top" Height="37" />
+
+                </StackPanel>
 
 
-        <ScrollViewer Grid.ColumnSpan="2" Margin="58,360,56,24">
+                <StackPanel Grid.Column="1" Margin="20 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
 
-            <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}" Width="1145">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Height="45" Background="White" BorderBrush="Black" BorderThickness="1" Margin="0 2">
-                            <Grid Margin="0 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.5*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1*" />
-                                    <ColumnDefinition Width="1.5*" />
-                                    <ColumnDefinition Width="2*" />
+                        <Grid Grid.Column="0" Margin=" 0 0 20 0">
+                            <StackPanel>
+                                <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Stock"
+                                           HorizontalAlignment="Left"  Height="27" Width="78" />
 
-                                </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0" Background="Gainsboro">
+                                <ui:TextBox Text="{Binding Stock, UpdateSourceTrigger=PropertyChanged}"
+                                            x:Name="stockBox" PlaceholderText="Stock..."
+                                            TextWrapping="Wrap" VerticalAlignment="Top" Height="36">
+                                    <events:Interaction.Triggers>
+                                        <events:EventTrigger EventName="PreviewTextInput">
+                                            <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
+                                                                        PassEventArgsToCommand="True" />
+                                        </events:EventTrigger>
+                                    </events:Interaction.Triggers>
+                                </ui:TextBox>
+                            </StackPanel>
+                        </Grid>
 
-                                    <TextBlock Text="{Binding ArticleId}" Background="Gainsboro"
-                                               FontSize="20"
+                        <Grid Grid.Column="1" Margin="20  0 0 0">
+                            <StackPanel>
+                                <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Precio Costo"
+                                           HorizontalAlignment="Left"  Height="27" Width="106" />
+                                <ui:TextBox Text="{Binding PriceCost}"
+                                            x:Name="priceCostBox"
+                                            PlaceholderText="Precio costo..."
+                                            TextWrapping="Wrap"
+                                            VerticalAlignment="Top"
+                                            Height="36">
+                                    <events:Interaction.Triggers>
+                                        <events:EventTrigger EventName="PreviewTextInput">
+                                            <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
+                                                                        PassEventArgsToCommand="True" />
+                                        </events:EventTrigger>
+                                    </events:Interaction.Triggers>
 
-                                               FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
-                                               HorizontalAlignment="Center"
-                                               TextAlignment="Center" TextWrapping="Wrap" />
-                                </Grid>
-                                <TextBlock FontSize="18" Text="{Binding Name}" Grid.Column="1"
+                                </ui:TextBox>
+                            </StackPanel>
+                        </Grid>
 
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="0, 0 " />
-                                <Grid Background="Gainsboro" Grid.Column="2">
-                                    <TextBlock FontSize="18" Text="{Binding ArticleType.Name}"
-                                               Background="Gainsboro" FontFamily="Bahnschrift Condensed"
-                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                               Padding="0, 10 " />
-                                </Grid>
-                                <TextBlock FontSize="20" Text="{Binding PriceCost}" Grid.Column="3"
+                    </Grid>
 
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="0, 0 " />
-                                <TextBlock FontSize="20" Text="{Binding PriceBuy}" Grid.Column="4"
-                                           Background="Gainsboro"
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="0, 10 " />
-                                <TextBlock FontSize="20" Text="{Binding Stock}" Grid.Column="5"
-                                           FontFamily="Bahnschrift Condensed"
-                                           TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                                           Padding="0, 0 " />
 
-                                <Grid Grid.Column="6" Background="Gainsboro">
+                    <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Descripción"
+                               HorizontalAlignment="Left"  Height="27" Width="106" />
+                    <ui:TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                x:Name="descriptionBox"
+                                PlaceholderText="Descripcion..."
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Top" Height="36" />
+                </StackPanel>
 
-                                    <TextBlock FontSize="20" Text="{Binding Description}"
-                                               FontFamily="Bahnschrift Condensed"
-                                               TextAlignment="Center" VerticalAlignment="Center"
-                                               Padding="0, 5 " />
-                                </Grid>
+                <StackPanel Grid.Column="2" Margin="20 0">
+                    <TextBlock Style="{DynamicResource TitleText}" FontSize="24" Text="Precio Venta"
+                               HorizontalAlignment="Left" Height="27" Width="100" />
+                    <ui:TextBox Text="{Binding PriceBuy}"
+                                x:Name="priceBuyBox"
+                                PlaceholderText="Precio venta..."
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Top" Height="36">
+                        <events:Interaction.Triggers>
+                            <events:EventTrigger EventName="PreviewTextInput">
+                                <events:InvokeCommandAction Command="{Binding onlyDigitsCommand}"
+                                                            PassEventArgsToCommand="True" />
+                            </events:EventTrigger>
+                        </events:Interaction.Triggers>
+                    </ui:TextBox>
 
-                                <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Style="{StaticResource editBtn}" Content="Editar"
-                                            Command="{Binding DataContext.updateArticleCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}" />
-                                    <Button Style="{StaticResource TrashBtn}" Content="Eliminar"
-                                            FontFamily="Bahnschrift Condensed"
-                                            VerticalAlignment="Center"
 
-                                            Command="{Binding DataContext.deleteArticleCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Nombre" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="53,127,0,0" Height="32" Width="84" />
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Stock" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="53,230,0,0" Height="32" Width="78" />
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Tipo Articulo" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="289,127,0,0" Height="32" Width="122" />
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Costo" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="528,127,0,0" Height="32" Width="84" />
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Precio Venta" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="213,232,0,0" Height="32" Width="114" />
-        <Label Style="{DynamicResource TitleText}" FontSize="24" Content="Descripción" Grid.ColumnSpan="2"
-               HorizontalAlignment="Left" Margin="420,230,0,0" Height="35" Width="106" />
+                    <ui:Button VerticalAlignment="Top" Margin="0 33 0 0" Appearance="Dark" x:Name="addArticleBtn"
+                               Content="Agregar"
+                               Height="41" Width="150"
 
-        <ComboBox Style="{StaticResource ComboBoxModernStyle}" ItemsSource="{Binding ArticleSortCollection}"
-                  DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId"
-                  SelectedValue="{Binding ArticleTypeSort, UpdateSourceTrigger=PropertyChanged}"
-                  Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="50" Margin="952,265,0,0"
-                  VerticalAlignment="Top" Width="268" />
-        <Label Content="ORDENAR" Grid.ColumnSpan="2" Margin="952,229,112,0" VerticalAlignment="Top"
-               FontFamily="Bahnschrift Condensed" FontSize="27" Height="36" />
+                               Command="{Binding addArticleCommand}">
+                    </ui:Button>
 
-        <StackPanel HorizontalAlignment="Left" Height="26" Margin="60,334,0,0"
-                    VerticalAlignment="Top" Width="1145" Grid.Column="1">
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" Margin="20 0">
+                    <TextBlock Text="Buscar por nombre" Style="{StaticResource TitleText}"
+                               FontSize="24"  Height="27"
+                               HorizontalAlignment="Left" Width="175" />
+
+                    <ui:TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" x:Name="searchTxtBox"
+                                PlaceholderText="Buscar..." Height="36" VerticalAlignment="Top" />
+
+
+                    <TextBlock Text="Ordenar" Style="{StaticResource TitleText}"
+                               FontSize="24"  Height="27"
+                               HorizontalAlignment="Left" Width="76" />
+                    <ComboBox ItemsSource="{Binding ArticleSortCollection}"
+                              DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId" VerticalAlignment="Top"
+                              SelectedValue="{Binding ArticleTypeSort, UpdateSourceTrigger=PropertyChanged}"
+                              Height="37" />
+
+
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="40 30 40 0">
 
             <Grid Height="26" Background="Black">
 
@@ -229,17 +211,94 @@
                            Width="120" Height="26" />
                 <TextBlock Style="{StaticResource header}" Text="Costo" Grid.Column="3" Height="26" Width="120" />
                 <TextBlock Style="{StaticResource header}" Text="Precio" Grid.Column="4" Height="26" Width="120" />
-                <TextBlock Style="{StaticResource header}" Margin="2 0 0 0" Text="Stock" Grid.Column="5" Height="26"
+                <TextBlock Style="{StaticResource header}" Margin="2 0 0 0" Text="Stock" Grid.Column="5"
+                           Height="26"
                            Width="120" />
                 <TextBlock Style="{StaticResource header}" Margin="1 0 0 0" Text="Descripcion" Grid.Column="6"
                            Height="26" Width="180" />
                 <TextBlock Style="{StaticResource header}" Text="Acciones" Grid.Column="7" Width="241" Height="26" />
             </Grid>
 
+            <ScrollViewer Height="351">
+
+                <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Height="45" Background="White" BorderBrush="Black" BorderThickness="1" Margin="0 2">
+                                <Grid Margin="0 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="1.5*" />
+                                        <ColumnDefinition Width="2*" />
+
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" Background="Gainsboro">
+
+                                        <TextBlock Text="{Binding ArticleId}" Background="Gainsboro"
+                                                   FontSize="20"
+
+                                                   FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   TextAlignment="Center" TextWrapping="Wrap" />
+                                    </Grid>
+                                    <TextBlock FontSize="18" Text="{Binding Name}" Grid.Column="1"
+
+                                               FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="0, 0 " />
+                                    <Grid Background="Gainsboro" Grid.Column="2">
+                                        <TextBlock FontSize="18" Text="{Binding ArticleType.Name}"
+                                                   Background="Gainsboro" FontFamily="Bahnschrift Condensed"
+                                                   TextAlignment="Center" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap"
+                                                   Padding="0, 10 " />
+                                    </Grid>
+                                    <TextBlock FontSize="20" Text="{Binding PriceCost}" Grid.Column="3"
+
+                                               FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="0, 0 " />
+                                    <TextBlock FontSize="20" Text="{Binding PriceBuy}" Grid.Column="4"
+                                               Background="Gainsboro"
+                                               FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="0, 10 " />
+                                    <TextBlock FontSize="20" Text="{Binding Stock}" Grid.Column="5"
+                                               FontFamily="Bahnschrift Condensed"
+                                               TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Padding="0, 0 " />
+
+                                    <Grid Grid.Column="6" Background="Gainsboro">
+
+                                        <TextBlock FontSize="20" Text="{Binding Description}"
+                                                   FontFamily="Bahnschrift Condensed"
+                                                   TextAlignment="Center" VerticalAlignment="Center"
+                                                   Padding="0, 5 " />
+                                    </Grid>
+
+                                    <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button Style="{StaticResource editBtn}" Content="Editar"
+                                                Command="{Binding DataContext.updateArticleCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" />
+                                        <Button Style="{StaticResource TrashBtn}" Content="Eliminar"
+                                                FontFamily="Bahnschrift Condensed"
+                                                VerticalAlignment="Center"
+
+                                                Command="{Binding DataContext.deleteArticleCommand,RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
         </StackPanel>
-
-        <ComboBox HorizontalAlignment="Left" Margin="714,103,0,0" VerticalAlignment="Top" Width="168" Height="40"/>
-
-
     </Grid>
 </Window>

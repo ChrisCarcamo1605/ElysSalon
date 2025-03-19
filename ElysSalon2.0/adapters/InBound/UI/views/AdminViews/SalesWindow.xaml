@@ -7,21 +7,20 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         WindowStyle="None"
-        Title="SalesWindow" Height="450" Width="800">
+        Title="SalesWindow" Height="720" Width="1280">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="/images/wallpaper2.png"/>
         </Grid.Background>
 
-        <ComboBox ItemsSource="{Binding FilterOptions}" 
-                  Width="160" Height="40" 
-                  Margin="316,114,324,0" 
+        <ComboBox ItemsSource="{Binding FilterOptions}" Height="34" 
+                  Margin="965,303,53,0" 
                   VerticalAlignment="Top"
                   DisplayMemberPath="Value"
                   SelectedItem="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <ScrollViewer  HorizontalAlignment="Left" Height="242" Margin="29,183,0,0"
-               VerticalAlignment="Top" Width="735"
+        <ScrollViewer  HorizontalAlignment="Left" Height="373" Margin="40,303,0,0"
+               VerticalAlignment="Top" Width="882"
                RenderTransformOrigin="0.5,0.5">
 
             <ItemsControl Background="#FFDFDFDF" ItemsSource="{Binding SalesView}">
@@ -65,6 +64,12 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <Button Style="{StaticResource ExitBtn}" Content="Button" Margin="29,10,0,0" Command="{Binding ExitCommand}"/>
+        <DatePicker  Margin="272,250,799,0" VerticalAlignment="Top"/>
+        <DatePicker Margin="40,250,1031,0" VerticalAlignment="Top"/>
+        <ui:Button Content="Generar Reporte"
+                   Height="35" Margin="522,250,0,0"
+                   VerticalAlignment="Top" Width="155"
+                   />
+        <Button Style="{StaticResource ExitBtn}" Content="Button" Margin="22,34,0,0" Command="{Binding ExitCommand}" Height="66" Width="122" HorizontalAlignment="Left" VerticalAlignment="Top"/>
     </Grid>
 </Window>

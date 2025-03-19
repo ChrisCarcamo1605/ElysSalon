@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -10,19 +11,45 @@
         Background="Transparent">
     <Border Background="AliceBlue" CornerRadius="6">
         <Grid>
-            <TextBox Style="{StaticResource textInput}" Text="{Binding  Name}"
-                     HorizontalAlignment="Left" Height="44"
-                     Margin="30,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="207" FontSize="20" />
-            <Label Style="{StaticResource TitleText}" Content="GESTION TIPOS" Height="44" Margin="0,10,0,0" Width="175"
-                   FontSize="35" />
-            <Button Style="{StaticResource addBtn}" Content="Agregar"
-                    HorizontalAlignment="Left" Height="44" Margin="252,72,0,0" VerticalAlignment="Top" Width="102"
-                    RenderTransformOrigin="-1.017,0.754" FontSize="18"
-                    Command="{Binding addTypeCommand}" />
-            <Button Style="{DynamicResource ExitBtn}" Margin="27,19,0,0"
-                    Content="Salir" FontSize="18" Height="32" Width="49" Command="{Binding ExitCommand}" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*" />
+                <RowDefinition Height="0.5*" />
+                <RowDefinition Height="1.5*" />
+            </Grid.RowDefinitions>
 
-            <ScrollViewer Margin="27,125,36,20">
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Width="470">
+                <Grid Width="469">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <Button Grid.Column="0" Style="{DynamicResource ExitBtn}"
+                            Content="Salir" FontSize="18" Height="32" Width="49" Command="{Binding ExitCommand}"
+                            HorizontalAlignment="Left" Margin="27,16,0,0" VerticalAlignment="Top" />
+                    <TextBlock Grid.Column="1" Style="{StaticResource TitleText}" Text="GESTION TIPOS" Height="44"
+                               Width="175"
+                               FontSize="35" Margin="0,12,0,0" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ui:TextBox Text="{Binding  Name}"
+                            PlaceholderText="Nombre..."
+                            TextWrapping="Wrap" Width="300" VerticalAlignment="Top"  FontSize="20" />
+
+                <ui:Button Appearance="Dark" Content="Agregar" Margin="20 0 0 0"
+                           HorizontalAlignment="Left" Height="44" VerticalAlignment="Top" Width="102"
+                           FontSize="18"
+                           Command="{Binding addTypeCommand}" />
+            </StackPanel>
+
+
+            
+            <ScrollViewer Grid.Row="2" Padding="20 10">
                 <Border CornerRadius="5" BorderBrush="Black" BorderThickness="1">
                     <ItemsControl ItemsSource="{Binding TypesCollection }" Background="Gray">
                         <ItemsControl.ItemTemplate>

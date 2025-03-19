@@ -93,8 +93,8 @@
                 </ItemsControl>
             </ScrollViewer>
         </Border>
-        <Label Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,566,0,0"
-               FontSize="45" Content="TOTAL:" Height="63" Width="103" />
+        <TextBlock Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,566,0,0"
+               FontSize="45" Text="TOTAL:" Height="63" Width="103" />
         <TextBlock FontFamily="Bahnschrift Condensed" HorizontalAlignment="Left" FontSize="45" Margin="881,571,0,0"
                    TextWrapping="Wrap" Text="{Binding totalAmount,StringFormat=C}" VerticalAlignment="Top" Width="135"
                    Height="48" />

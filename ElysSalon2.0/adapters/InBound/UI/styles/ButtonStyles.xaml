@@ -234,4 +234,10 @@
         </Setter>
     </Style>
 
+
+    <Style x:Key="TextBoxPrueba" TargetType="TextBox">
+        <Setter Property="BorderThickness" Value="2"></Setter>
+        <Setter Property="BorderBrush" Value="Black"></Setter>
+    </Style>
+
 </ResourceDictionary>
