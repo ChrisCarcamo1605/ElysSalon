@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 using ElysSalon2._0.adapters.InBound.UI.views.MainViews;
 using ElysSalon2._0.Core.aplication.Management;
@@ -10,28 +12,35 @@ public partial class MainWindow : Window
     private readonly IServiceProvider _serviceProvider;
     private readonly WindowsManager _windowsManager;
 
+    public ICommand ServiceClickCommand { get; }
+    public ICommand AdminClickCommand { get; }
+
     public MainWindow(IServiceProvider serviceProvider, WindowsManager windows)
     {
         _windowsManager = windows;
         _serviceProvider = serviceProvider;
         InitializeComponent();
+        DataContext = this;
+        AdminClickCommand = new RelayCommand(adminBtnClick);
+        ServiceClickCommand = new RelayCommand(ProductsClick);
+
     }
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {
     }
 
-    private void adminBtn_Click(object sender, RoutedEventArgs e)
+    private void adminBtnClick()
     {
         _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(this);
     }
 
-    private async void btnServices_Click(object sender, RoutedEventArgs e)
+    private  void ProductsClick()
     {
         _windowsManager.CloseCurrentWindowandShowWindow<ShoppingCartWindow>(this);
     }
 
-    private void btnProducts_Click(object sender, RoutedEventArgs e)
+    private void AdministradorClick()
     {
     }
 }

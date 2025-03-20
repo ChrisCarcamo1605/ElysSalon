@@ -75,7 +75,7 @@ public partial class App : Application
             context.Database.Migrate();
         }
 
-        var mainWindow = _serviceProvider.GetRequiredService<SalesWindow>();
+        var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
         mainWindow.Show();
     }
 }

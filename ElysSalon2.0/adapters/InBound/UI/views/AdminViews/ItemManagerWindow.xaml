@@ -160,7 +160,6 @@
                     <ui:Button VerticalAlignment="Top" Margin="0 33 0 0" Appearance="Dark" x:Name="addArticleBtn"
                                Content="Agregar"
                                Height="41" Width="150"
-
                                Command="{Binding addArticleCommand}">
                     </ui:Button>
 

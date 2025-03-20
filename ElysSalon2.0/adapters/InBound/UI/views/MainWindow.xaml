@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         Title="GridMainWindow" Height="720" Width="1280"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
@@ -19,37 +20,78 @@
         <Ellipse HorizontalAlignment="Center" Height="490" Margin="0,656,0,0" Stroke="Black" VerticalAlignment="Top"
                  Width="2604" Fill="Black" />
 
-        <Button x:Name="BtnServices" Style="{DynamicResource BtnMenu}" Content="SERVICIOS" HorizontalAlignment="Left"
-                Height="478" Margin="78,140,0,0" VerticalAlignment="Top" Width="366" FontSize="80" FontWeight="Bold"
-                FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC" Click="btnServices_Click">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="0.7*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Margin="60 0 0 0">
+
+                <Button Style="{StaticResource BtnMenu}" x:Name="BtnServices" 
+                        HorizontalAlignment="Left"
+                        Height="478" VerticalAlignment="Top" Width="366"
+                        Command="{Binding ServiceClickCommand}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/images/Services.jpg" />
+                    </Button.Background>
+
+                    <TextBlock Text="SERVICIOS" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC" FontSize="72"
+                               FontWeight="Bold">
+                    </TextBlock>
+                </Button>
+            </Grid>
+
+            <Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Margin="0 0 60 0">
 
 
-            <Button.Background>
-                <ImageBrush ImageSource="/images/Services.jpg" />
-            </Button.Background>
-        </Button>
-        <Button x:Name="BtnProducts" Style="{DynamicResource BtnMenu}" Content="PRODUCTOS" HorizontalAlignment="Left"
-                Height="478" Margin="494,140,0,0" VerticalAlignment="Top" Width="366" FontSize="80" FontWeight="Bold"
-                FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC" Click="btnProducts_Click">
-            <Button.Background>
-                <ImageBrush ImageSource="/images/products.jpg" />
-            </Button.Background>
-        </Button>
-        <Image HorizontalAlignment="Left" Height="341" Margin="906,61,0,0" VerticalAlignment="Top" Width="322"
-               Source="/images/NEGRO LOGO_Mesa de trabajo 1.png">
+                <Button Style="{StaticResource BtnMenu}" x:Name="BtnProducts"
+                        HorizontalAlignment="Left"
+                        Height="478" VerticalAlignment="Top" Width="366"
+                        Command="{Binding ServiceClickCommand}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/images/products.jpg" />
+                    </Button.Background>
 
-            <Image.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="35" ShadowDepth="1" Direction="360" />
-            </Image.Effect>
-            <Image.OpacityMask>
-                <ImageBrush ImageSource="/images/NEGRO LOGO_Mesa de trabajo 1.png" Stretch="Fill" />
-            </Image.OpacityMask>
-        </Image>
-        <Label Content="ELIJA UNA OPCIÓN" HorizontalAlignment="Left" Height="76" Margin="292,38,0,0"
-               VerticalAlignment="Top" Width="360" FontFamily="Bahnschrift Condensed" FontSize="60" FontWeight="Bold" />
-        <Button Style="{StaticResource Btn}" x:Name="AdminBtn" Content="ADMINISTRACION" HorizontalAlignment="Left"
-                Height="66" Margin="928,539,0,0" VerticalAlignment="Top" Width="278" FontFamily="Bahnschrift Condensed"
-                FontSize="24" FontWeight="Bold" Click="adminBtn_Click" />
+                    <TextBlock Text="SERVICIOS" HorizontalAlignment="Center" VerticalAlignment="Center"
+                               FontFamily="Bahnschrift Condensed" Foreground="#FFFFF9FC" FontSize="72"
+                               FontWeight="Bold">
+                    </TextBlock>
+                </Button>
+            </Grid>
+
+            <TextBlock Text="ELIJA UNA OPCIÓN" HorizontalAlignment="Left" Height="76"
+                       VerticalAlignment="Center" Width="357" FontFamily="Bahnschrift Condensed" FontSize="60"
+                       FontWeight="Bold" Grid.ColumnSpan="2" Margin="298,0,0,0" />
+
+            <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource Btn}" x:Name="AdminBtn"
+                    HorizontalAlignment="Left"
+                    Height="66" VerticalAlignment="Bottom" Width="225" FontFamily="Bahnschrift Condensed"
+                    FontSize="24" FontWeight="Bold" Command="{Binding AdminClickCommand}" Grid.ColumnSpan="2"
+                    Margin="474,0,0,8">
+                <TextBlock Text="ADMINISTRACIÓN" FontSize="20"></TextBlock>
+            </Button>
+
+            <Image Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Height="264" VerticalAlignment="Top"
+                   Width="269"
+                   Source="/images/NEGRO LOGO_Mesa de trabajo 1.png" Grid.ColumnSpan="2" Margin="450,0,0,0">
+
+                <Image.Effect>
+                    <DropShadowEffect Color="Black" BlurRadius="35" ShadowDepth="1" Direction="360" />
+                </Image.Effect>
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/images/NEGRO LOGO_Mesa de trabajo 1.png" Stretch="Fill" />
+                </Image.OpacityMask>
+            </Image>
+        </Grid>
+
 
     </Grid>
 </Window>
