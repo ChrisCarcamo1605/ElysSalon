@@ -132,7 +132,7 @@
                             <Point X="0.5" Y="0.5" />
                         </Grid.RenderTransformOrigin>
                         <Grid.Effect>
-                                <DropShadowEffect Color="Black" BlurRadius="25" ShadowDepth="3" Direction="210" />
+                                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="3" Direction="270" />
                         </Grid.Effect>
 
                         <Border x:Name="border"

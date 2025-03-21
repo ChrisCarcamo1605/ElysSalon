@@ -23,10 +23,10 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
     /// </summary>
     public partial class SalesWindow : Window
     {
-        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager)
+        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager, ITicketRepository ticketRepo)
         {
             InitializeComponent();
-            DataContext = new SalesViewModel(saleRepo, this, winManager);
+            DataContext = new SalesViewModel(saleRepo, this, winManager, ticketRepo);
         }
     }
 }

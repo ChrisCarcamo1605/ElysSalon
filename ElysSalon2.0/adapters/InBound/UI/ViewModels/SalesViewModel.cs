@@ -15,32 +15,76 @@ namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 public class SalesViewModel : INotifyPropertyChanged
 {
     private readonly ISalesRepository _saleRepo;
+    private readonly ITicketRepository _ticketRepo;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
 
-    private ObservableCollection<Sales> _salesCollection;
+    public ObservableCollection<Sales> _salesCollection;
+    private ObservableCollection<Ticket> _ticketsCollection;
 
-    private ICollectionView _saleView;
+    public ObservableCollection<Ticket> TicketsCollection
+    {
+        get => _ticketsCollection;
+        set
+        {
+            SetField(ref _ticketsCollection, value);
+            OnPropertyChanged();
+        }
+    }
+
+    private ICollectionView _collectionView;
+
+    private DateTime _fromDate = DateTime.Now.AddMonths(-1);
+
+    public DateTime FromDate
+    {
+        get => _fromDate;
+
+        set
+        {
+            SetField(ref _fromDate, value);
+            OnPropertyChanged(nameof(FromDate));
+            ApplyFilter();
+        }
+    }
+
+    private DateTime _untilDate = DateTime.Now;
+
+    public DateTime UntilDate
+    {
+        get => _untilDate;
+        set
+        {
+            SetField(ref _untilDate, value);
+            OnPropertyChanged(nameof(FromDate));
+
+            ApplyFilter();
+        }
+    }
 
     //Binding to ComboBox
     private KeyValuePair<FilterSales, string> _selectedFilter;
 
-    public SalesViewModel(ISalesRepository saleRepo, Window window, WindowsManager windowsManager)
+    public SalesViewModel(ISalesRepository saleRepo, Window window, WindowsManager windowsManager,
+        ITicketRepository TicketRepo)
     {
         _saleRepo = saleRepo;
+        _ticketRepo = TicketRepo;
         _winManager = windowsManager;
         _salesCollection = [];
+        _ticketsCollection = [];
 
-        _saleView = CollectionViewSource.GetDefaultView(_salesCollection);
+        _collectionView = CollectionViewSource.GetDefaultView(_ticketsCollection);
         _window = window;
 
         InitializeFilterOptions();
 
         SaveCommand = new AsyncRelayCommand(SaveVenta);
         ExitCommand = new RelayCommand(Exit);
+        GenerateReportCommand = new RelayCommand(generateReport);
         _ = GetSales();
     }
 
@@ -71,16 +115,17 @@ public class SalesViewModel : INotifyPropertyChanged
 
     public ICollectionView SalesView
     {
-        get => _saleView;
+        get => _collectionView;
         set
         {
-            SetField(ref _saleView, value);
+            SetField(ref _collectionView, value);
             OnPropertyChanged();
         }
     }
 
     public ICommand SaveCommand { get; }
     public ICommand ExitCommand { get; }
+    public ICommand GenerateReportCommand { get; }
 
     public KeyValuePair<FilterSales, string> SelectedFilter
     {
@@ -114,11 +159,13 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         try
         {
+            var tickets = await _ticketRepo.GetTicketsAsync();
             var sales = await _saleRepo.GetSales();
             _salesCollection.Clear();
+            _ticketsCollection.Clear();
 
             foreach (var item in sales) _salesCollection.Add(item);
-
+            foreach (var item in tickets) _ticketsCollection.Add(item);
             ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
         }
@@ -128,48 +175,69 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
+    private void generateReport()
+    {
+        MessageBox.Show(FromDate.ToString());
+    }
+
+
     private void ApplyFilter()
     {
-        var now = DateTime.Now;
 
-        switch (_selectedFilter.Key)
+        _collectionView.Filter = items =>
         {
-            case FilterSales.Ultimos7Dias:
+            var ticket = items as Ticket;
+            return ticket != null && ticket.EmissionDateTime >= FromDate && ticket.EmissionDateTime <= UntilDate;
+        };
 
-                var sevenDaysAgo = now.AddDays(-7);
-                _saleView.Filter = item =>
-                {
-                    var sale = item as Sales;
-                    return sale != null && sale.SaleDate >= sevenDaysAgo;
-                };
 
-                break;
+        //_saleView.Filter = items =>
+        //{
+        //    var sale = items as Sales;
+        //    return sale != null && sale.SaleDate >= FromDate && sale.SaleDate <= UntilDate;
+        //};
 
-            case FilterSales.UltimoMes:
-                var oneMonthAgo = now.AddMonths(-1);
-                _saleView.Filter = item =>
-                {
-                    var sale = item as Sales;
-                    return sale != null && sale.SaleDate >= oneMonthAgo;
-                };
-                break;
 
-            case FilterSales.Ultimos3Meses:
-                var threeMonthsAgo = now.AddMonths(-3);
-                _saleView.Filter = item =>
-                {
-                    var sale = item as Sales;
-                    return sale != null && sale.SaleDate >= threeMonthsAgo;
-                };
-                break;
+        //var now = DateTime.Now;
 
-            case FilterSales.Todo:
-            default:
-                _saleView.Filter = null;
-                break;
-        }
+        //switch (_selectedFilter.Key)
+        //{
+        //    case FilterSales.Ultimos7Dias:
 
-        _saleView.Refresh();
+        //        var sevenDaysAgo = now.AddDays(-7);
+        //        _saleView.Filter = item =>
+        //        {
+        //            var sale = item as Sales;
+        //            return sale != null && sale.SaleDate >= sevenDaysAgo;
+        //        };
+
+        //        break;
+
+        //    case FilterSales.UltimoMes:
+        //        var oneMonthAgo = now.AddMonths(-1);
+        //        _saleView.Filter = item =>
+        //        {
+        //            var sale = item as Sales;
+        //            return sale != null && sale.SaleDate >= oneMonthAgo;
+        //        };
+        //        break;
+
+        //    case FilterSales.Ultimos3Meses:
+        //        var threeMonthsAgo = now.AddMonths(-3);
+        //        _saleView.Filter = item =>
+        //        {
+        //            var sale = item as Sales;
+        //            return sale != null && sale.SaleDate >= threeMonthsAgo;
+        //        };
+        //        break;
+
+        //    case FilterSales.Todo:
+        //    default:
+        //        _saleView.Filter = null;
+        //        break;
+        //}
+
+        _collectionView.Refresh();
     }
 
 

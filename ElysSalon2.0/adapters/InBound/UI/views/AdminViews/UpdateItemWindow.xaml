@@ -12,11 +12,9 @@
         BorderBrush="Transparent"
         WindowStartupLocation="CenterScreen">
 
-    <Border BorderThickness="2" CornerRadius="12" BorderBrush="Transparent">
+    <Border BorderThickness="2" CornerRadius="12" BorderBrush="Transparent" Background="#f3f3f3">
 
-        <Border.Background>
-            <ImageBrush ImageSource="/images/wallpaper2.png" />
-        </Border.Background>
+      
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.8*" />

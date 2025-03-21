@@ -117,7 +117,8 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
                     TextWrapping = TextWrapping.Wrap,
                     TextAlignment = TextAlignment.Center,
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = 27,
                 };
 
                 btn.Content = textBlock;
