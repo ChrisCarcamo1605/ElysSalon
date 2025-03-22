@@ -29,11 +29,13 @@
                 FontWeight="Bold"
                 Foreground="#FFEFECE7"
                 Command="{Binding CloseShopingCartCommand}" />
-        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" Content="LISTO" HorizontalAlignment="Left" Height="78"
+        <Button Style="{StaticResource Btn}" x:Name="ListoBtn" HorizontalAlignment="Left" Height="78"
                 Margin="1031,559,0,0" VerticalAlignment="Top" Width="210"
                 FontFamily="Bahnschrift Condensed" FontSize="48"
                 RenderTransformOrigin="0.294,0.436"
-                Command="{Binding OpenConfirmsWindowCommand}" />
+                Command="{Binding OpenConfirmsWindowCommand}">
+            <TextBlock Text="LISTO" FontSize="30" ></TextBlock>
+        </Button>
 
 
         <Border Margin="773,112,22,171" BorderThickness="2" BorderBrush="Black">
@@ -93,8 +95,9 @@
                 </ItemsControl>
             </ScrollViewer>
         </Border>
-        <TextBlock Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left" Margin="773,566,0,0"
-               FontSize="45" Text="TOTAL:" Height="63" Width="103" />
+        <TextBlock Foreground="#ff0083" Style="{StaticResource TitleText}" HorizontalAlignment="Left"
+                   Margin="773,566,0,0"
+                   FontSize="45" Text="TOTAL:" Height="63" Width="103" />
         <TextBlock FontFamily="Bahnschrift Condensed" HorizontalAlignment="Left" FontSize="45" Margin="881,571,0,0"
                    TextWrapping="Wrap" Text="{Binding totalAmount,StringFormat=C}" VerticalAlignment="Top" Width="135"
                    Height="48" />

@@ -20,7 +20,7 @@ public class SalesRepository : ISalesRepository
         var sale = new Sales
         {
             SaleDate = DateTime.UtcNow,
-            Total = 25.52
+            Total = 25.52m
         };
 
         _context.Add(sale);

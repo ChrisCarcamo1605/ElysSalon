@@ -114,9 +114,16 @@ public class TypesManagementViewModel : INotifyPropertyChanged
     public async Task AddType()
     {
         var result = await _service.AddType(Name);
-        if (result.Success is true) Name = "";
+        if (result.Success is true)
+        {
+            Name = "";
+            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
+        }
+        else
+        {
+            MessageBox.Show(result.Message, "Error de formulario", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
 
-        MessageBox.Show(result.Message);
         await LoadTypes();
     }
 
@@ -131,10 +138,18 @@ public class TypesManagementViewModel : INotifyPropertyChanged
 
     public async Task DeleteType(ArticleType type)
     {
-        var result = await _service.DeleteType(type.ArticleTypeId);
-        if (result.Success is true) _name = "";
+        ;
 
-        MessageBox.Show(result.Message);
+
+        var option = MessageBox.Show("¿Seguro que quiere eliminar este tipo de articulo?", "Confirmar eliminación",
+            MessageBoxButton.YesNo);
+        if (option == MessageBoxResult.Yes)
+        {
+            var result = await _service.DeleteType(type.ArticleTypeId);
+            if (result.Success is true) _name = "";
+            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
+        }
+
         await LoadTypes();
     }
 
