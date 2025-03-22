@@ -10,5 +10,5 @@ public class Sales
     public int SaleId { get; set; }
 
     public DateTime SaleDate { get; set; }
-    public double Total { get; set; }
+    public decimal Total { get; set; }
 }

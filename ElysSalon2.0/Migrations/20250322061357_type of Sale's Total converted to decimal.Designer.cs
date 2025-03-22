@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250322061357_type of Sale's Total converted to decimal")]
+    partial class typeofSalesTotalconvertedtodecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,183 +346,6 @@ namespace ElysSalon2._0.Migrations
                     b.HasKey("TicketId");
 
                     b.ToTable("Tickets");
-
-                    b.HasData(
-                        new
-                        {
-                            TicketId = "000100",
-                            EmissionDateTime = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 50.00m
-                        },
-                        new
-                        {
-                            TicketId = "000101",
-                            EmissionDateTime = new DateTime(2025, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 50.00m
-                        },
-                        new
-                        {
-                            TicketId = "000102",
-                            EmissionDateTime = new DateTime(2025, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 100.00m
-                        },
-                        new
-                        {
-                            TicketId = "000103",
-                            EmissionDateTime = new DateTime(2025, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 100.00m
-                        },
-                        new
-                        {
-                            TicketId = "000104",
-                            EmissionDateTime = new DateTime(2025, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 200.00m
-                        },
-                        new
-                        {
-                            TicketId = "000105",
-                            EmissionDateTime = new DateTime(2025, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 200.00m
-                        },
-                        new
-                        {
-                            TicketId = "000106",
-                            EmissionDateTime = new DateTime(2025, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 400.00m
-                        },
-                        new
-                        {
-                            TicketId = "000107",
-                            EmissionDateTime = new DateTime(2025, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 400.00m
-                        },
-                        new
-                        {
-                            TicketId = "000108",
-                            EmissionDateTime = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 800.00m
-                        },
-                        new
-                        {
-                            TicketId = "000109",
-                            EmissionDateTime = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 800.00m
-                        },
-                        new
-                        {
-                            TicketId = "000110",
-                            EmissionDateTime = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 1600.00m
-                        },
-                        new
-                        {
-                            TicketId = "000111",
-                            EmissionDateTime = new DateTime(2025, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 1600.00m
-                        },
-                        new
-                        {
-                            TicketId = "000112",
-                            EmissionDateTime = new DateTime(2025, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 3200.00m
-                        },
-                        new
-                        {
-                            TicketId = "000113",
-                            EmissionDateTime = new DateTime(2025, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 3200.00m
-                        },
-                        new
-                        {
-                            TicketId = "000114",
-                            EmissionDateTime = new DateTime(2025, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 6400.00m
-                        },
-                        new
-                        {
-                            TicketId = "000115",
-                            EmissionDateTime = new DateTime(2025, 2, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 6400.00m
-                        },
-                        new
-                        {
-                            TicketId = "000116",
-                            EmissionDateTime = new DateTime(2025, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 128000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000117",
-                            EmissionDateTime = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 128000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000118",
-                            EmissionDateTime = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 256000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000119",
-                            EmissionDateTime = new DateTime(2025, 3, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 256000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000120",
-                            EmissionDateTime = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 512000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000121",
-                            EmissionDateTime = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 512000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000122",
-                            EmissionDateTime = new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 600000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000123",
-                            EmissionDateTime = new DateTime(2025, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 600000.00m
-                        },
-                        new
-                        {
-                            TicketId = "000124",
-                            EmissionDateTime = new DateTime(2025, 3, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 800000.00m
-                        });
                 });
 
             modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.TicketDetails", b =>

@@ -45,24 +45,26 @@
 
             <Button Style="{DynamicResource Btn}"
                     x:Name="ConfirmBtn"
-                    Content="SI"
                     FontFamily="Bahnschrift Condensed"
                     FontSize="72"
                     Margin="40,295,388,33" Click="siBtn_Click"
                     Command="{Binding DataContext.SaveTicketsDetailsCommand, 
                 RelativeSource={RelativeSource AncestorType=Window}}"
-                    CommandParameter="{Binding}" />
+                    CommandParameter="{Binding}">
+                <TextBlock FontSize="45" Text="SI"></TextBlock>
+            </Button>
 
             <Button Style="{DynamicResource Btn}"
                     x:Name="NoBtn"
-                    Content="NO"
                     FontFamily="Bahnschrift Condensed"
                     FontSize="72" Click="noBtn_Click" Margin="367,295,39,33"
-                    Command="{Binding CloseConfirmWindowCommand}" />
+                    Command="{Binding CloseConfirmWindowCommand}" >
+                <TextBlock FontSize="45" Text="NO"></TextBlock>
+            </Button>
 
             <TextBlock Text="TOTAL A PAGAR:" HorizontalAlignment="Left" Height="76" Margin="36,61,0,0"
-                   VerticalAlignment="Top" Width="382" FontFamily="Bahnschrift Condensed" FontSize="72"
-                   Foreground="Black"/>
+                       VerticalAlignment="Top" Width="382" FontFamily="Bahnschrift Condensed" FontSize="72"
+                       Foreground="Black" />
             <TextBlock Text="{Binding totalAmount,StringFormat=C}" HorizontalAlignment="Left" Height="76"
                        Margin="418,61,0,0"
                        VerticalAlignment="Top" Width="235" FontFamily="Bahnschrift Condensed"

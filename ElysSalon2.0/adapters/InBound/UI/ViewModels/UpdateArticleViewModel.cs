@@ -165,9 +165,16 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         var dto = new DTOUpdateArticle(articleId, Name, articleTypeId, PriceCost, PriceBuy, Stock, Description);
         var result = await _service.UpdateArticle(dto);
 
-        if (result.Success) Exit();
+        if (result.Success)
+        {
+            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
+            Exit();
+        }
+        else
+        {
+            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK,MessageBoxImage.Error);
 
-        MessageBox.Show(result.Message);
+        }
     }
 
     private void Exit()
