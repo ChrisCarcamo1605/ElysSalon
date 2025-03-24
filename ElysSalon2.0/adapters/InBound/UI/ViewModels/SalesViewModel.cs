@@ -20,7 +20,7 @@ public class SalesViewModel : INotifyPropertyChanged
     private readonly ITicketRepository _ticketRepo;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
-
+    private readonly SalesService _service;
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
 
@@ -71,10 +71,11 @@ public class SalesViewModel : INotifyPropertyChanged
     private KeyValuePair<FilterSales, string> _selectedFilter;
 
     public SalesViewModel(ISalesRepository saleRepo, Window window, WindowsManager windowsManager,
-        ITicketRepository TicketRepo)
+        ITicketRepository TicketRepo, SalesService service)
     {
         _saleRepo = saleRepo;
         _ticketRepo = TicketRepo;
+        _service = service;
         _winManager = windowsManager;
         _salesCollection = [];
         _ticketsCollection = [];
@@ -86,7 +87,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
         SaveCommand = new AsyncRelayCommand(SaveVenta);
         ExitCommand = new RelayCommand(Exit);
-        GenerateReportCommand = new RelayCommand(generateMonthReport);
+        GenerateReportCommand = new RelayCommand(GenerateReport);
         _ = GetSales();
     }
 
@@ -163,11 +164,13 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             var tickets = await _ticketRepo.GetTicketsAsync();
             var sales = await _saleRepo.GetSales();
+
             _salesCollection.Clear();
             _ticketsCollection.Clear();
 
             foreach (var item in sales) _salesCollection.Add(item);
             foreach (var item in tickets) _ticketsCollection.Add(item);
+
             ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
         }
@@ -177,72 +180,18 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    private void generateMonthReport()
+    private async void GenerateMonthReport()
     {
-        var month = 1;
-        decimal week1 = _salesCollection
-            .Where(x => x.SaleDate > DateTime.Now.AddDays(-28) && x.SaleDate < DateTime.Now.AddDays(-21))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        decimal week2 = _salesCollection
-            .Where(x => x.SaleDate > DateTime.Now.AddDays(-21) && x.SaleDate < DateTime.Now.AddDays(-14))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        decimal week3 = _salesCollection
-            .Where(x => x.SaleDate > DateTime.Now.AddDays(-14) && x.SaleDate < DateTime.Now.AddDays(-7))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        decimal week4 = _salesCollection.Where(x => x.SaleDate > DateTime.Now.AddDays(-7) && x.SaleDate < DateTime.Now)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-
-        var jenuary = _salesCollection
-            .Where(x => x.SaleDate.Month == 1)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var february = _salesCollection
-            .Where(x => x.SaleDate.Month == 2)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var march = _salesCollection
-            .Where(x => x.SaleDate.Month == 3)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var april = _salesCollection
-            .Where(x => x.SaleDate.Month == 4)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var may = _salesCollection
-            .Where(x => x.SaleDate.Month == 5)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var june = _salesCollection
-            .Where(x => x.SaleDate.Month == 6)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var july = _salesCollection
-            .Where(x => x.SaleDate.Month == 7)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var august = _salesCollection
-            .Where(x => x.SaleDate.Month == 8)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var september = _salesCollection
-            .Where(x => x.SaleDate.Month == 9)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var october = _salesCollection
-            .Where(x => x.SaleDate.Month == 10)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var november = _salesCollection
-            .Where(x => x.SaleDate.Month == 11)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var december = _salesCollection
-            .Where(x => x.SaleDate.Month == 12)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        ReportsGeneratorUtil.generateMonthReport(new DtoMonthFinancialData(month, week1, week2, week3, week4));
-
-        ReportsGeneratorUtil.generateAnualReport(new DtoAnualData(jenuary, february, march, april, may, june, july,
-            august, september, october, november, december
-        ));
-
+        _service.GenerateMonthReport(_salesCollection);
         MessageBox.Show("Reporte Generado");
     }
+
+    private async void GenerateReport()
+    {
+        var result = await _service.GenerateReport(FromDate,UntilDate,_ticketsCollection,(x=>x.EmissionDateTime),x=> x.TotalAmount);
+        MessageBox.Show(result.Message);
+    }
+
 
 
     private void ApplyFilter()

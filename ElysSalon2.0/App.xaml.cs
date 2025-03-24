@@ -37,14 +37,22 @@ public partial class App : Application
         services.AddTransient<ShoppingCartViewModel>();
         services.AddTransient<SalesViewModel>();
 
-        //Interfaces/Services and Repositories
+        //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();
         services.AddTransient<IArticleTypeRepository, ArticleTypeRepository>();
-        services.AddTransient<IArticleService, ArticleService>();
+        
         services.AddSingleton<WindowsManager>();
         services.AddTransient<ITicketRepository, TicketRepository>();
-        services.AddTransient<ITicketService, TicketService>();
         services.AddTransient<ISalesRepository, SalesRepository>();
+
+        //Services
+        services.AddTransient<IArticleService, ArticleService>();
+        services.AddTransient<ITicketService, TicketService>();
+        services.AddTransient<SalesService>();
+
+
+        //Configuration
+        services.AddTransient<ReportsConfiguration>();
 
         //Windows
         services.AddTransient<AdminWindow>();
