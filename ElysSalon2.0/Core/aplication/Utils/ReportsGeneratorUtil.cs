@@ -8,288 +8,367 @@ using System.Windows;
 using ElysSalon2._0.Core.aplication.DTOs;
 using ElysSalon2._0.Core.aplication.DTOs.DTOSales;
 using ElysSalon2._0.Core.domain.Entities;
+using Microsoft.Win32;
+using System.Text.RegularExpressions;
+using OfficeOpenXml.Style;
 
 namespace ElysSalon2._0.Core.domain.Services;
 
 public class ReportsGeneratorUtil
 {
-    public static void generateAnualReport(DtoAnualData dto)
+    public static void GenerateAnualReport(DtoAnualData dto)
     {
         ExcelPackage.LicenseContext = LicenseContext.Commercial;
-        ;
 
-        // Crear el archivo Excel
         using (var package = new ExcelPackage())
         {
-            // Crear una hoja de trabajo
-            var worksheet = package.Workbook.Worksheets.Add("Datos");
+            var worksheet = package.Workbook.Worksheets.Add("Data");
 
-            // Agregar encabezados
-            worksheet.Cells[1, 1].Value = "Mes";
-            worksheet.Cells[1, 2].Value = "Ventas";
-            worksheet.Cells[1, 3].Value = "Gastos";
+            worksheet.Cells[1, 1].Value = "Month";
+            worksheet.Cells[1, 2].Value = "Sales";
+            worksheet.Cells[1, 3].Value = "Expenses";
 
-            // Datos de ejemplo
-            var meses = new List<string>
+            var months = new List<string>
             {
-                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-                "Noviembre", "Diciembre"
+                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                "November", "December"
             };
-            var ventas = new List<decimal>
+            var sales = new List<decimal>
             {
                 dto.jenuaryTotal, dto.februaryTotal, dto.marchTotal, dto.aprilTotal, dto.mayTota, dto.juneTotal,
                 dto.julyTotal, dto.augustTotal, dto.septemberTotal, dto.octuberTotal, dto.novemberTotal,
                 dto.decemberTotal
             };
-            var gastos = new List<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var expenses = new List<double> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-            // Llenar datos
-            for (int i = 0; i < meses.Count; i++)
+            for (int i = 0; i < months.Count; i++)
             {
-                worksheet.Cells[i + 2, 1].Value = meses[i];
-                worksheet.Cells[i + 2, 2].Value = ventas[i];
-                worksheet.Cells[i + 2, 3].Value = gastos[i];
-                MessageBox.Show($"Mes: {meses[i]}  valor: {ventas[i]}");
+                worksheet.Cells[i + 2, 1].Value = months[i];
+                worksheet.Cells[i + 2, 2].Value = sales[i];
+                worksheet.Cells[i + 2, 3].Value = expenses[i];
             }
 
-            // Dar formato a los encabezados
             using (var range = worksheet.Cells[1, 1, 1, 3])
             {
                 range.Style.Font.Bold = true;
-                range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
             }
 
-            // Dar formato a los números
-            worksheet.Cells[2, 2, meses.Count + 1, 3].Style.Numberformat.Format = "#,##0.00";
+            worksheet.Cells[2, 2, months.Count + 1, 3].Style.Numberformat.Format = "#,##0.00";
 
-            // Ajustar el ancho de las columnas
             worksheet.Columns[1].AutoFit();
             worksheet.Columns[2].AutoFit();
             worksheet.Columns[3].AutoFit();
 
-            // Crear un gráfico de columnas
-            var chart = worksheet.Drawings.AddChart("Gráfico1", eChartType.ColumnClustered);
-            chart.Title.Text = $"Ventas y Gastos por el año {dto.year}";
+            var chart = worksheet.Drawings.AddChart("Chart1", eChartType.ColumnClustered);
+            chart.Title.Text = $"Sales and Expenses for the year {dto.year}";
             chart.SetPosition(1, 0, 5, 0);
             chart.SetSize(800, 400);
 
-            // Configurar las series del gráfico
-            var series1 =
-                chart.Series.Add(worksheet.Cells[2, 2, meses.Count + 1, 2], worksheet.Cells[2, 1, meses.Count + 1, 1]);
-            series1.Header = "Ventas";
+            var series1 = chart.Series.Add(worksheet.Cells[2, 2, months.Count + 1, 2],
+                worksheet.Cells[2, 1, months.Count + 1, 1]);
+            series1.Header = "Sales";
 
-            var series2 =
-                chart.Series.Add(worksheet.Cells[2, 3, meses.Count + 1, 3], worksheet.Cells[2, 1, meses.Count + 1, 1]);
-            series2.Header = "Gastos";
+            var series2 = chart.Series.Add(worksheet.Cells[2, 3, months.Count + 1, 3],
+                worksheet.Cells[2, 1, months.Count + 1, 1]);
+            series2.Header = "Expenses";
 
-            // Crear un gráfico de líneas en una nueva hoja
-            var worksheetGraph = package.Workbook.Worksheets.Add("Gráficos");
-            var lineChart = worksheetGraph.Drawings.AddChart("Gráfico2", eChartType.Line);
-            lineChart.Title.Text = "Tendencia de Ventas";
+            var worksheetGraph = package.Workbook.Worksheets.Add("Graphs");
+            var lineChart = worksheetGraph.Drawings.AddChart("Chart2", eChartType.Line);
+            lineChart.Title.Text = "Sales Trend";
             lineChart.SetPosition(1, 0, 1, 0);
             lineChart.SetSize(800, 400);
 
-            // Agregar serie al gráfico de líneas
-            var lineSeries = lineChart.Series.Add(worksheet.Cells[2, 2, meses.Count + 1, 2],
-                worksheet.Cells[2, 1, meses.Count + 1, 1]);
-            lineSeries.Header = "Ventas";
+            var lineSeries = lineChart.Series.Add(worksheet.Cells[2, 2, months.Count + 1, 2],
+                worksheet.Cells[2, 1, months.Count + 1, 1]);
+            lineSeries.Header = "Sales";
 
             var date = DateTime.Today.ToString("ddMMyyyy", CultureInfo.InvariantCulture);
 
-            // Guardar el archivo
-            var fileInfo = new FileInfo($"C:\\Users\\Christian\\Desktop\\ReporteTest\\ReporteVentaAnual{date}.xlsx");
+            var fileInfo = new FileInfo($"C:\\Users\\Christian\\Desktop\\ReporteTest\\AnualSalesReport{date}.xlsx");
             package.SaveAs(fileInfo);
-
-            Console.WriteLine("El archivo Excel ha sido creado exitosamente en: " + fileInfo.FullName);
         }
     }
-
 
     public static void GenerateMonthReport(DtoMonthFinancialData dto)
     {
-        ExcelPackage.LicenseContext = LicenseContext.Commercial;
-        ;
+        string documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string folderName = "Mis Reportes\\Reportes Mensuales";
+        string folderPath = Path.Combine(documentsDirectory, folderName);
 
-        // Crear el archivo Excel
+        string baseName =
+            $"Reporte_Mensual_{dto.month}.xlsx";
+
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+            Console.WriteLine($"Carpeta creada en: {folderPath}");
+        }
+
+        ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
         using (var package = new ExcelPackage())
         {
-            // Crear una hoja de trabajo
-            var worksheet = package.Workbook.Worksheets.Add("Datos");
+            var worksheet = package.Workbook.Worksheets.Add("Data");
 
-            // Agregar encabezados
-            worksheet.Cells[1, 1].Value = "Semana";
-            worksheet.Cells[1, 2].Value = "Ventas";
-            worksheet.Cells[1, 3].Value = "Gastos";
+            worksheet.Cells[1, 1].Value = "Week";
+            worksheet.Cells[1, 2].Value = "Sales";
+            worksheet.Cells[1, 3].Value = "Expenses";
 
-            // Datos de ejemplo
-            var weeks = new List<string> { "Semana1", "Semana2", "Semana3", "Semana4" };
-            var ventas = new List<decimal> { dto.week1Total, dto.week2Total, dto.week3Total, dto.week4Total };
-            var gastos = new List<double> { 800, 850, 900, 950 };
+            var weeks = new List<string> { "Week1", "Week2", "Week3", "Week4" };
+            var sales = new List<decimal> { dto.week1Total, dto.week2Total, dto.week3Total, dto.week4Total };
+            var expenses = new List<double> { 800, 850, 900, 950 };
 
-            // Llenar datos
             for (int i = 0; i < weeks.Count; i++)
             {
                 worksheet.Cells[i + 2, 1].Value = weeks[i];
-                worksheet.Cells[i + 2, 2].Value = ventas[i];
-                worksheet.Cells[i + 2, 3].Value = gastos[i];
+                worksheet.Cells[i + 2, 2].Value = sales[i];
+                worksheet.Cells[i + 2, 3].Value = expenses[i];
             }
 
-            // Dar formato a los encabezados
             using (var range = worksheet.Cells[1, 1, 1, 3])
             {
                 range.Style.Font.Bold = true;
-                range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
             }
 
-            // Dar formato a los números
             worksheet.Cells[2, 2, weeks.Count + 1, 3].Style.Numberformat.Format = "#,##0.00";
 
-            // Ajustar el ancho de las columnas
             worksheet.Columns[1].AutoFit();
             worksheet.Columns[2].AutoFit();
             worksheet.Columns[3].AutoFit();
 
-            // Crear un gráfico de columnas
-            var chart = worksheet.Drawings.AddChart("Gráfico1", eChartType.ColumnClustered);
-            chart.Title.Text = $"Ventas y Gastos por el Mes de {dto.month}";
+            var chart = worksheet.Drawings.AddChart("Chart1", eChartType.ColumnClustered);
+            chart.Title.Text = $"Sales and Expenses for the month of {dto.month}";
             chart.SetPosition(1, 0, 5, 0);
             chart.SetSize(800, 400);
 
-            // Configurar las series del gráfico
-            var series1 =
-                chart.Series.Add(worksheet.Cells[2, 2, weeks.Count + 1, 2], worksheet.Cells[2, 1, weeks.Count + 1, 1]);
-            series1.Header = "Ventas";
+            var series1 = chart.Series.Add(worksheet.Cells[2, 2, weeks.Count + 1, 2],
+                worksheet.Cells[2, 1, weeks.Count + 1, 1]);
+            series1.Header = "Sales";
 
-            var series2 =
-                chart.Series.Add(worksheet.Cells[2, 3, weeks.Count + 1, 3], worksheet.Cells[2, 1, weeks.Count + 1, 1]);
-            series2.Header = "Gastos";
+            var series2 = chart.Series.Add(worksheet.Cells[2, 3, weeks.Count + 1, 3],
+                worksheet.Cells[2, 1, weeks.Count + 1, 1]);
+            series2.Header = "Expenses";
 
-            // Crear un gráfico de líneas en una nueva hoja
-            var worksheetGraph = package.Workbook.Worksheets.Add("Gráficos");
-            var lineChart = worksheetGraph.Drawings.AddChart("Gráfico2", eChartType.Line);
-            lineChart.Title.Text = "Tendencia de Ventas";
+            var worksheetGraph = package.Workbook.Worksheets.Add("Graphs");
+            var lineChart = worksheetGraph.Drawings.AddChart("Chart2", eChartType.Line);
+            lineChart.Title.Text = "Sales Trend";
             lineChart.SetPosition(1, 0, 1, 0);
             lineChart.SetSize(800, 400);
 
-            // Agregar serie al gráfico de líneas
             var lineSeries = lineChart.Series.Add(worksheet.Cells[2, 2, weeks.Count + 1, 2],
                 worksheet.Cells[2, 1, weeks.Count + 1, 1]);
-            lineSeries.Header = "Ventas";
+            lineSeries.Header = "Sales";
 
-            var date = DateTime.Today.ToString("ddMMyyyy", CultureInfo.InvariantCulture);
-            // Guardar el archivo
-            var fileInfo = new FileInfo($"C:\\Users\\Christian\\Desktop\\ReporteTest\\ReporteVenta{date}.xlsx");
+            var filepath = Path.Combine(folderPath, baseName);
+            var fileInfo = new FileInfo(filepath);
             package.SaveAs(fileInfo);
-
-            Console.WriteLine("El archivo Excel ha sido creado exitosamente en: " + fileInfo.FullName);
         }
     }
 
-    public static void GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> collection, Func<T,DateTime> dateSelector, Func<T,decimal> totalSelector) where T: class
+    public static ServiceResult GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> collection,
+        Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector) where T : class
     {
+        string documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string folderName = "Mis Reportes";
+        string folderPath = Path.Combine(documentsDirectory, folderName);
+        string baseName =
+            $"Reporte_{fromDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_Hasta_{untilDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}.xlsx";
+
+        string uniqueName = GetUniqueFileNameInDirectory(folderPath, baseName);
+
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+            Console.WriteLine($"Carpeta creada en: {folderPath}");
+        }
+
+        SaveFileDialog saveFileDialog = new SaveFileDialog
+        {
+            Filter = "Archivos Excel (*.xlsx)|*.xlsx",
+            Title = "Guardar Reporte",
+            DefaultExt = "xlsx",
+            FileName = Path.GetFileName(uniqueName),
+            InitialDirectory = folderPath,
+            AddExtension = true
+        };
+
         ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
-        // Crear el archivo Excel
         using (var package = new ExcelPackage())
         {
-            // Crear una hoja de trabajo
             var worksheet = package.Workbook.Worksheets.Add("Datos");
 
-            // Agregar encabezados
             worksheet.Cells[1, 1].Value = "Fecha";
             worksheet.Cells[1, 2].Value = "Ventas";
             worksheet.Cells[1, 3].Value = "Gastos";
 
-            // Optimización: calcular gastos una sola vez
-            decimal gastoTotal = collection.Aggregate(0m, (acumulador, n) => acumulador + totalSelector(n)) / 4;
+            decimal totalExpenses =
+                collection.Aggregate(0m, (accumulator, item) => accumulator + totalSelector(item)) / 4;
 
-            // Preparar los datos
-            var ventas = collection.Select(x => totalSelector(x)).ToList(); // Copia directa de la colección
-            var gastos = new List<decimal>();
+            var sales = collection.Select(x => totalSelector(x)).ToList();
+            var expenses = new List<decimal>();
 
-            // Calcular gastos para cada elemento
             foreach (var _ in collection)
             {
-                gastos.Add(gastoTotal);
+                expenses.Add(totalExpenses);
             }
 
-            // Llenar datos
-            for (int i = 0; i < ventas.Count; i++)
+            for (int i = 0; i < sales.Count; i++)
             {
-                var dia = fromDate.AddDays(i);
-                worksheet.Cells[i + 2, 1].Value = dateSelector(collection[i]).ToString("ddMMMM", new CultureInfo("es-ES"));
-                worksheet.Cells[i + 2, 2].Value = ventas[i];
-                worksheet.Cells[i + 2, 3].Value = gastos[i];
+                var day = fromDate.AddDays(i);
+                worksheet.Cells[i + 2, 1].Value =
+                    dateSelector(collection[i]).ToString("ddMMMM", new CultureInfo("es-ES"));
+                worksheet.Cells[i + 2, 2].Value = sales[i];
+                worksheet.Cells[i + 2, 3].Value = expenses[i];
 
-                // Aplicar formato numérico a las celdas
                 worksheet.Cells[i + 2, 2].Style.Numberformat.Format = "#,##0.00";
                 worksheet.Cells[i + 2, 3].Style.Numberformat.Format = "#,##0.00";
             }
 
-            // Dar formato a los encabezados
             using (var range = worksheet.Cells[1, 1, 1, 3])
             {
                 range.Style.Font.Bold = true;
-                range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
             }
 
-            // Ajustar el ancho de las columnas
             worksheet.Columns[1].AutoFit();
             worksheet.Columns[2].AutoFit();
             worksheet.Columns[3].AutoFit();
 
-            // Crear un gráfico de columnas
             var chart = worksheet.Drawings.AddChart("Gráfico1", eChartType.ColumnClustered);
             chart.Title.Text = $"Ventas y Gastos desde {fromDate} hasta {untilDate}";
             chart.SetPosition(1, 0, 5, 0);
             chart.SetSize(800, 400);
 
-            // Configurar las series del gráfico correctamente
-            var series1 = chart.Series.Add(worksheet.Cells[2, 2, ventas.Count + 1, 2],
-                worksheet.Cells[2, 1, ventas.Count + 1, 1]);
+            var series1 = chart.Series.Add(worksheet.Cells[2, 2, sales.Count + 1, 2],
+                worksheet.Cells[2, 1, sales.Count + 1, 1]);
             series1.Header = "Ventas";
 
-            var series2 = chart.Series.Add(worksheet.Cells[2, 3, ventas.Count + 1, 3],
-                worksheet.Cells[2, 1, ventas.Count + 1, 1]);
+            var series2 = chart.Series.Add(worksheet.Cells[2, 3, sales.Count + 1, 3],
+                worksheet.Cells[2, 1, sales.Count + 1, 1]);
             series2.Header = "Gastos";
 
-            // Crear un gráfico de líneas en una nueva hoja
             var worksheetGraph = package.Workbook.Worksheets.Add("Gráficos");
             var lineChart = worksheetGraph.Drawings.AddChart("Gráfico2", eChartType.Line);
             lineChart.Title.Text = "Tendencia de Ventas";
             lineChart.SetPosition(1, 0, 1, 0);
             lineChart.SetSize(800, 400);
 
-            // Agregar serie al gráfico de líneas
-            var lineSeries = lineChart.Series.Add(worksheet.Cells[2, 2, ventas.Count + 1, 2],
-                worksheet.Cells[2, 1, ventas.Count + 1, 1]);
+            var lineSeries = lineChart.Series.Add(worksheet.Cells[2, 2, sales.Count + 1, 2],
+                worksheet.Cells[2, 1, sales.Count + 1, 1]);
             lineSeries.Header = "Ventas";
 
-            // Crear otro gráfico de líneas para gastos
-            var lineChartGastos = worksheetGraph.Drawings.AddChart("Gráfico3", eChartType.Line);
-            lineChartGastos.Title.Text = "Tendencia de Gastos";
-            lineChartGastos.SetPosition(21, 0, 1, 0); // Posicionado debajo del primer gráfico
-            lineChartGastos.SetSize(800, 400);
+            var lineChartExpenses = worksheetGraph.Drawings.AddChart("Gráfico3", eChartType.Line);
+            lineChartExpenses.Title.Text = "Tendencia de Gastos";
+            lineChartExpenses.SetPosition(21, 0, 1, 0);
+            lineChartExpenses.SetSize(800, 400);
 
-            var lineSeriesGastos = lineChartGastos.Series.Add(worksheet.Cells[2, 3, gastos.Count + 1, 3],
-                worksheet.Cells[2, 1, gastos.Count + 1, 1]);
-            lineSeriesGastos.Header = "Gastos";
+            var lineSeriesExpenses = lineChartExpenses.Series.Add(worksheet.Cells[2, 3, expenses.Count + 1, 3],
+                worksheet.Cells[2, 1, expenses.Count + 1, 1]);
+            lineSeriesExpenses.Header = "Gastos";
 
-            // Nombre de archivo con formato de fecha actual
-            var date = DateTime.Today.ToString("ddMMyyyy", CultureInfo.InvariantCulture);
-            var fileInfo =
-                new FileInfo(
-                    $"C:\\Users\\Christian\\Desktop\\ReporteTest\\Reporte_{fromDate.
-                        ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_Hasta_{untilDate.
-                        ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_{date}.xlsx");
+            string filePath =
+                $"Reporte_{fromDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_Hasta_{untilDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}.xlsx";
 
-            // Guardar el archivo
-         
-            package.SaveAs(fileInfo);
-            Console.WriteLine("El archivo Excel ha sido creado exitosamente en: " + fileInfo.FullName);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string selectedPath = saveFileDialog.FileName;
+                string finalPath = GetUniqueFileName(selectedPath);
+                package.SaveAs(new FileInfo(finalPath));
+                saveFileDialog.FileName = "";
+
+                return ServiceResult.SuccessResult("Archivo guardado correctamente");
+            }
+
+            return ServiceResult.Failed("Guardado cancelado");
         }
+    }
+
+    private static string GetUniqueFileNameInDirectory(string directory, string fileName)
+    {
+        string fullPath = Path.Combine(directory, fileName);
+
+        if (!File.Exists(fullPath))
+        {
+            return fileName;
+        }
+
+        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+        string extension = Path.GetExtension(fileName);
+
+        Regex regex = new Regex(@"(.*)\((\d+)\)$");
+        Match match = regex.Match(fileNameWithoutExtension);
+
+        string baseName;
+        int counter;
+
+        if (match.Success)
+        {
+            baseName = match.Groups[1].Value.TrimEnd();
+            counter = int.Parse(match.Groups[2].Value) + 1;
+        }
+        else
+        {
+            baseName = fileNameWithoutExtension;
+            counter = 1;
+        }
+
+        string newName;
+        string newPath;
+
+        do
+        {
+            newName = $"{baseName} ({counter}){extension}";
+            newPath = Path.Combine(directory, newName);
+            counter++;
+        } while (File.Exists(newPath));
+
+        return newName;
+    }
+
+    private static string GetUniqueFileName(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            return filePath;
+        }
+
+        string directory = Path.GetDirectoryName(filePath);
+        string fileName = Path.GetFileNameWithoutExtension(filePath);
+        string extension = Path.GetExtension(filePath);
+
+        Regex regex = new Regex(@"(.*)\((\d+)\)$");
+        Match match = regex.Match(fileName);
+
+        string baseName;
+        int counter;
+
+        if (match.Success)
+        {
+            baseName = match.Groups[1].Value.TrimEnd();
+            counter = int.Parse(match.Groups[2].Value) + 1;
+        }
+        else
+        {
+            baseName = fileName;
+            counter = 1;
+        }
+
+        string newName;
+        string newPath;
+
+        do
+        {
+            newName = $"{baseName} ({counter})";
+            newPath = Path.Combine(directory, newName + extension);
+            counter++;
+        } while (File.Exists(newPath));
+
+        return newPath;
     }
 }

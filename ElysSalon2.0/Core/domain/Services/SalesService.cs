@@ -28,7 +28,8 @@ public class SalesService
     }
 
     public async Task<ServiceResult> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
-        ObservableCollection<T> collection, Func<T, DateTime> dateSelector,Func<T,decimal> totalSelector) where T : class
+        ObservableCollection<T> collection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
+        where T : class
     {
         var collectionFilter =
             collection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
@@ -36,10 +37,10 @@ public class SalesService
         var fromDateFormated = fromDate.ToString("ddMMMM", new CultureInfo("es-ES"));
         var untilDateFormated = untilDate.ToString("ddMMMM", new CultureInfo("es-ES"));
 
-        ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, collectionFilter, dateSelector, totalSelector);
-        return ServiceResult.SuccessResult("Reporte generado correctamente");
+        var result =
+            ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, collectionFilter, dateSelector, totalSelector);
+        return result;
     }
-
 
     public async Task GenerateAnualReport(ObservableCollection<Sales> collection)
     {
@@ -87,7 +88,7 @@ public class SalesService
             .Where(x => x.SaleDate.Month == 12)
             .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
 
-        ReportsGeneratorUtil.generateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
+        ReportsGeneratorUtil.GenerateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
             july,
             august, september, october, november, december
         ));
@@ -140,7 +141,7 @@ public class SalesService
             .Where(x => x.EmissionDateTime.Month == 12)
             .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
 
-        ReportsGeneratorUtil.generateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
+        ReportsGeneratorUtil.GenerateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
             july,
             august, september, october, november, december
         ));
@@ -162,7 +163,8 @@ public class SalesService
         decimal week4 = collection.Where(x => x.SaleDate > dto.week4Start && x.SaleDate < dto.week4End)
             .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
 
-        var month = DateTime.Now.Month.ToString("MMMM", new CultureInfo("es-ES"));
+        var now = DateTime.Now;
+        var month = now.ToString("MMMM", new CultureInfo("es-ES")).ToUpper();
         ReportsGeneratorUtil.GenerateMonthReport(new DtoMonthFinancialData(month, week1, week2, week3, week4));
 
         //MessageBox.Show(
