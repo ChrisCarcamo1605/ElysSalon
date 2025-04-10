@@ -2,8 +2,7 @@
 
 public enum FilterSales
 {
-    Todo = 0,
-    Ultimos7Dias = 1,
-    UltimoMes = 2,
-    Ultimos3Meses = 3
+    Ticket = 0,
+    Ventas = 1,
+    
 }

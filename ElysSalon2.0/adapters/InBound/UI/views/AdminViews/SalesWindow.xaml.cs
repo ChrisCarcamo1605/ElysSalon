@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using AutoMapper;
 using ElysSalon2._0.adapters.InBound.UI.ViewModels;
 using ElysSalon2._0.adapters.OutBound.Repositories;
 using ElysSalon2._0.Core.aplication.Management;
@@ -25,11 +26,11 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
     /// </summary>
     public partial class SalesWindow : Window
     {
-        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager, ITicketRepository ticketRepo,SalesService service)
+        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager, ITicketRepository ticketRepo,SalesService service,IMapper mapper)
 
         {
             InitializeComponent();
-            DataContext = new SalesViewModel(saleRepo, this, winManager, ticketRepo, service);
+            DataContext = new SalesViewModel(saleRepo, this, winManager, ticketRepo, service,mapper);
         }
     }
 }
