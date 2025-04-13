@@ -12,6 +12,7 @@ using ElysSalon2._0.Core.aplication.Management;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
 using ElysSalon2._0.Core.domain.Entities;
 using ElysSalon2._0.Core.domain.Services;
+using LiveChartsCore;
 
 namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 
@@ -126,13 +127,11 @@ public class SalesViewModel : INotifyPropertyChanged
     public ICommand ExitCommand { get; }
     public ICommand GenerateReportCommand { get; }
 
+    public ICommand OpenChartWindowCommand { get; }
+
     public KeyValuePair<FilterSales, string> SelectedFilter
     {
-        get
-        {
-            return _selectedFilter;
-           
-        }
+        get { return _selectedFilter; }
         set
         {
             SetField(ref _selectedFilter, value);
@@ -158,6 +157,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
         ExitCommand = new RelayCommand(Exit);
         GenerateReportCommand = new RelayCommand(GenerateReport);
+        OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
         ApplyFilter();
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
         InitializeFilterOptions();
@@ -182,7 +182,7 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             var sales = await _saleRepo.GetSales();
             var tickets = await _ticketRepo.GetTicketsAsync();
-          
+
             _salesCollection.Clear();
             _ticketsCollection.Clear();
 
@@ -195,8 +195,8 @@ public class SalesViewModel : INotifyPropertyChanged
             {
                 _salesCollection.Add(new DtoSalesList(sale));
             }
-            
-          //  ApplyFilter();
+
+            //  ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
         }
         catch (Exception ex)
@@ -228,11 +228,10 @@ public class SalesViewModel : INotifyPropertyChanged
 
                 _collectionView.Filter = items =>
                 {
-                   
                     var SaleList = items as DtoSalesList;
                     return SaleList != null && SaleList.Date >= FromDate && SaleList.Date <= UntilDate;
                 };
-               
+
                 break;
 
             case FilterSales.Ticket:
@@ -244,12 +243,21 @@ public class SalesViewModel : INotifyPropertyChanged
                     return ticket != null && ticket.Date >= FromDate &&
                            ticket.Date <= UntilDate;
                 };
-               
+
                 break;
         }
 
         GetSales();
         _collectionView.Refresh();
+    }
+
+    public void OpenChartWindow()
+    {
+        Charts chart = new Charts(_winManager,
+            _salesCollection,
+            _ticketsCollection);
+
+        chart.ShowDialog();
     }
 
     public void Exit()

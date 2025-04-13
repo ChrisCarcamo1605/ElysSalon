@@ -36,6 +36,7 @@ public partial class App : Application
         services.AddTransient<ItemManagerViewModel>();
         services.AddTransient<ShoppingCartViewModel>();
         services.AddTransient<SalesViewModel>();
+       // services.AddTransient<Charts>();
 
         //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();

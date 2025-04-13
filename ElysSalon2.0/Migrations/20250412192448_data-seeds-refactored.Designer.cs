@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412192448_data-seeds-refactored")]
+    partial class dataseedsrefactored
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,129 +231,93 @@ namespace ElysSalon2._0.Migrations
                     b.HasData(
                         new
                         {
-                            SaleId = 200,
-                            SaleDate = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 60.50m
+                            SaleId = 1,
+                            SaleDate = new DateTime(2025, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 50.00m
                         },
                         new
                         {
-                            SaleId = 201,
-                            SaleDate = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 49.30m
+                            SaleId = 2,
+                            SaleDate = new DateTime(2025, 1, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 78.25m
                         },
                         new
                         {
-                            SaleId = 202,
-                            SaleDate = new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 30.50m
+                            SaleId = 3,
+                            SaleDate = new DateTime(2025, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 99.99m
                         },
                         new
                         {
-                            SaleId = 203,
-                            SaleDate = new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 43.70m
+                            SaleId = 4,
+                            SaleDate = new DateTime(2025, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 38.55m
                         },
                         new
                         {
-                            SaleId = 204,
-                            SaleDate = new DateTime(2025, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 36.40m
+                            SaleId = 5,
+                            SaleDate = new DateTime(2025, 1, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 91.80m
                         },
                         new
                         {
-                            SaleId = 205,
-                            SaleDate = new DateTime(2025, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 40.00m
+                            SaleId = 6,
+                            SaleDate = new DateTime(2025, 2, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 35.00m
                         },
                         new
                         {
-                            SaleId = 206,
-                            SaleDate = new DateTime(2025, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 35.10m
+                            SaleId = 7,
+                            SaleDate = new DateTime(2025, 2, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 87.75m
                         },
                         new
                         {
-                            SaleId = 207,
-                            SaleDate = new DateTime(2025, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 23.30m
+                            SaleId = 8,
+                            SaleDate = new DateTime(2025, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 98.60m
                         },
                         new
                         {
-                            SaleId = 208,
-                            SaleDate = new DateTime(2025, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 57.00m
+                            SaleId = 9,
+                            SaleDate = new DateTime(2025, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 40.25m
                         },
                         new
                         {
-                            SaleId = 209,
-                            SaleDate = new DateTime(2025, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 74.90m
+                            SaleId = 10,
+                            SaleDate = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 67.80m
                         },
                         new
                         {
-                            SaleId = 210,
-                            SaleDate = new DateTime(2025, 3, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 20.10m
+                            SaleId = 11,
+                            SaleDate = new DateTime(2025, 3, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 73.00m
                         },
                         new
                         {
-                            SaleId = 211,
-                            SaleDate = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 58.20m
+                            SaleId = 12,
+                            SaleDate = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 92.50m
                         },
                         new
                         {
-                            SaleId = 212,
-                            SaleDate = new DateTime(2025, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 47.40m
+                            SaleId = 13,
+                            SaleDate = new DateTime(2025, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 96.00m
                         },
                         new
                         {
-                            SaleId = 213,
-                            SaleDate = new DateTime(2025, 3, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 16.90m
+                            SaleId = 14,
+                            SaleDate = new DateTime(2025, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 39.95m
                         },
                         new
                         {
-                            SaleId = 214,
-                            SaleDate = new DateTime(2025, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 37.50m
-                        },
-                        new
-                        {
-                            SaleId = 215,
-                            SaleDate = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 49.90m
-                        },
-                        new
-                        {
-                            SaleId = 216,
-                            SaleDate = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 26.45m
-                        },
-                        new
-                        {
-                            SaleId = 217,
-                            SaleDate = new DateTime(2025, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 30.10m
-                        },
-                        new
-                        {
-                            SaleId = 218,
-                            SaleDate = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 50.40m
-                        },
-                        new
-                        {
-                            SaleId = 219,
-                            SaleDate = new DateTime(2025, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 29.40m
-                        },
-                        new
-                        {
-                            SaleId = 220,
-                            SaleDate = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 38.50m
+                            SaleId = 15,
+                            SaleDate = new DateTime(2025, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 88.10m
                         });
                 });
 
@@ -383,234 +350,178 @@ namespace ElysSalon2._0.Migrations
                     b.HasData(
                         new
                         {
-                            TicketId = "001100",
-                            EmissionDateTime = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000100",
+                            EmissionDateTime = new DateTime(2025, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 18.50m
+                            TotalAmount = 35.00m
                         },
                         new
                         {
-                            TicketId = "001101",
-                            EmissionDateTime = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000101",
+                            EmissionDateTime = new DateTime(2025, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 22.30m
+                            TotalAmount = 36.99m
                         },
                         new
                         {
-                            TicketId = "001102",
-                            EmissionDateTime = new DateTime(2025, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000102",
+                            EmissionDateTime = new DateTime(2025, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 19.70m
+                            TotalAmount = 29.99m
                         },
                         new
                         {
-                            TicketId = "001103",
-                            EmissionDateTime = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000103",
+                            EmissionDateTime = new DateTime(2025, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 24.10m
+                            TotalAmount = 21.50m
                         },
                         new
                         {
-                            TicketId = "001104",
-                            EmissionDateTime = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000104",
+                            EmissionDateTime = new DateTime(2025, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 25.20m
+                            TotalAmount = 38.20m
                         },
                         new
                         {
-                            TicketId = "001105",
-                            EmissionDateTime = new DateTime(2025, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000105",
+                            EmissionDateTime = new DateTime(2025, 1, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 30.50m
+                            TotalAmount = 18.00m
                         },
                         new
                         {
-                            TicketId = "001106",
-                            EmissionDateTime = new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000106",
+                            EmissionDateTime = new DateTime(2025, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 27.80m
+                            TotalAmount = 39.50m
                         },
                         new
                         {
-                            TicketId = "001107",
-                            EmissionDateTime = new DateTime(2025, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 15.90m
-                        },
-                        new
-                        {
-                            TicketId = "001108",
-                            EmissionDateTime = new DateTime(2025, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 36.40m
-                        },
-                        new
-                        {
-                            TicketId = "001109",
-                            EmissionDateTime = new DateTime(2025, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 22.10m
-                        },
-                        new
-                        {
-                            TicketId = "001110",
-                            EmissionDateTime = new DateTime(2025, 3, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 17.90m
-                        },
-                        new
-                        {
-                            TicketId = "001111",
-                            EmissionDateTime = new DateTime(2025, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 35.10m
-                        },
-                        new
-                        {
-                            TicketId = "001112",
-                            EmissionDateTime = new DateTime(2025, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 23.30m
-                        },
-                        new
-                        {
-                            TicketId = "001113",
-                            EmissionDateTime = new DateTime(2025, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 31.25m
-                        },
-                        new
-                        {
-                            TicketId = "001114",
-                            EmissionDateTime = new DateTime(2025, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000107",
+                            EmissionDateTime = new DateTime(2025, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
                             TotalAmount = 25.75m
                         },
                         new
                         {
-                            TicketId = "001115",
-                            EmissionDateTime = new DateTime(2025, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000108",
+                            EmissionDateTime = new DateTime(2025, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 38.90m
+                            TotalAmount = 19.99m
                         },
                         new
                         {
-                            TicketId = "001116",
-                            EmissionDateTime = new DateTime(2025, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000109",
+                            EmissionDateTime = new DateTime(2025, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 18.60m
+                            TotalAmount = 34.00m
                         },
                         new
                         {
-                            TicketId = "001117",
-                            EmissionDateTime = new DateTime(2025, 3, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TicketId = "000110",
+                            EmissionDateTime = new DateTime(2025, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 17.40m
+                            TotalAmount = 28.80m
                         },
                         new
                         {
-                            TicketId = "001118",
+                            TicketId = "000111",
+                            EmissionDateTime = new DateTime(2025, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 30.00m
+                        },
+                        new
+                        {
+                            TicketId = "000112",
+                            EmissionDateTime = new DateTime(2025, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 37.00m
+                        },
+                        new
+                        {
+                            TicketId = "000113",
+                            EmissionDateTime = new DateTime(2025, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 22.40m
+                        },
+                        new
+                        {
+                            TicketId = "000114",
+                            EmissionDateTime = new DateTime(2025, 2, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 33.33m
+                        },
+                        new
+                        {
+                            TicketId = "000115",
+                            EmissionDateTime = new DateTime(2025, 2, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 16.25m
+                        },
+                        new
+                        {
+                            TicketId = "000116",
+                            EmissionDateTime = new DateTime(2025, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 27.90m
+                        },
+                        new
+                        {
+                            TicketId = "000117",
+                            EmissionDateTime = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 38.99m
+                        },
+                        new
+                        {
+                            TicketId = "000118",
+                            EmissionDateTime = new DateTime(2025, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 20.00m
+                        },
+                        new
+                        {
+                            TicketId = "000119",
+                            EmissionDateTime = new DateTime(2025, 3, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 15.99m
+                        },
+                        new
+                        {
+                            TicketId = "000120",
+                            EmissionDateTime = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 36.00m
+                        },
+                        new
+                        {
+                            TicketId = "000121",
+                            EmissionDateTime = new DateTime(2025, 3, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 17.77m
+                        },
+                        new
+                        {
+                            TicketId = "000122",
+                            EmissionDateTime = new DateTime(2025, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 39.90m
+                        },
+                        new
+                        {
+                            TicketId = "000123",
+                            EmissionDateTime = new DateTime(2025, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 19.00m
+                        },
+                        new
+                        {
+                            TicketId = "000124",
                             EmissionDateTime = new DateTime(2025, 3, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
-                            TotalAmount = 20.10m
-                        },
-                        new
-                        {
-                            TicketId = "001119",
-                            EmissionDateTime = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 28.30m
-                        },
-                        new
-                        {
-                            TicketId = "001120",
-                            EmissionDateTime = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 29.90m
-                        },
-                        new
-                        {
-                            TicketId = "001121",
-                            EmissionDateTime = new DateTime(2025, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 21.60m
-                        },
-                        new
-                        {
-                            TicketId = "001122",
-                            EmissionDateTime = new DateTime(2025, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 25.80m
-                        },
-                        new
-                        {
-                            TicketId = "001123",
-                            EmissionDateTime = new DateTime(2025, 3, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 16.90m
-                        },
-                        new
-                        {
-                            TicketId = "001124",
-                            EmissionDateTime = new DateTime(2025, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 37.50m
-                        },
-                        new
-                        {
-                            TicketId = "001125",
-                            EmissionDateTime = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 27.80m
-                        },
-                        new
-                        {
-                            TicketId = "001126",
-                            EmissionDateTime = new DateTime(2025, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 22.10m
-                        },
-                        new
-                        {
-                            TicketId = "001127",
-                            EmissionDateTime = new DateTime(2025, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 26.45m
-                        },
-                        new
-                        {
-                            TicketId = "001128",
-                            EmissionDateTime = new DateTime(2025, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 30.10m
-                        },
-                        new
-                        {
-                            TicketId = "001129",
-                            EmissionDateTime = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 34.80m
-                        },
-                        new
-                        {
-                            TicketId = "001130",
-                            EmissionDateTime = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 15.60m
-                        },
-                        new
-                        {
-                            TicketId = "001131",
-                            EmissionDateTime = new DateTime(2025, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 29.40m
-                        },
-                        new
-                        {
-                            TicketId = "001132",
-                            EmissionDateTime = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 38.50m
+                            TotalAmount = 32.10m
                         });
                 });
 

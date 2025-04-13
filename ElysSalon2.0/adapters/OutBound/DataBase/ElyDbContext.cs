@@ -93,59 +93,164 @@ public class ElyDbContext : DbContext
         );
 
         modelBuilder.Entity<Sales>().HasData(
-            // Últimos 7 días (5 registros)
-            new Sales { SaleId = 1, SaleDate = new DateTime(2025, 01, 20), Total = 50.00m }, //Fecha estatica
-            new Sales { SaleId = 2, SaleDate = new DateTime(2025, 01, 19), Total = 75.50m }, //Fecha estatica
-            new Sales { SaleId = 3, SaleDate = new DateTime(2025, 01, 18), Total = 120.25m }, //Fecha estatica
-            new Sales { SaleId = 4, SaleDate = new DateTime(2025, 01, 17), Total = 30.75m }, //Fecha estatica
-            new Sales { SaleId = 5, SaleDate = new DateTime(2025, 01, 16), Total = 90.00m }, //Fecha estatica
+            new Sales { SaleId = 200, SaleDate = new DateTime(2025, 3, 15), Total = 60.50m },
+            new Sales { SaleId = 201, SaleDate = new DateTime(2025, 3, 16), Total = 49.30m },
+            new Sales { SaleId = 202, SaleDate = new DateTime(2025, 3, 17), Total = 30.50m },
+            new Sales { SaleId = 203, SaleDate = new DateTime(2025, 3, 18), Total = 43.70m },
+            new Sales { SaleId = 204, SaleDate = new DateTime(2025, 3, 20), Total = 36.40m },
+            new Sales { SaleId = 205, SaleDate = new DateTime(2025, 3, 21), Total = 40.00m },
+            new Sales { SaleId = 206, SaleDate = new DateTime(2025, 3, 22), Total = 35.10m },
+            new Sales { SaleId = 207, SaleDate = new DateTime(2025, 3, 23), Total = 23.30m },
+            new Sales { SaleId = 208, SaleDate = new DateTime(2025, 3, 24), Total = 57.00m },
+            new Sales { SaleId = 209, SaleDate = new DateTime(2025, 3, 25), Total = 74.90m },
+            new Sales { SaleId = 210, SaleDate = new DateTime(2025, 3, 26), Total = 20.10m },
+            new Sales { SaleId = 211, SaleDate = new DateTime(2025, 3, 27), Total = 58.20m },
+            new Sales { SaleId = 212, SaleDate = new DateTime(2025, 3, 28), Total = 47.40m },
+            new Sales { SaleId = 213, SaleDate = new DateTime(2025, 3, 29), Total = 16.90m },
+            new Sales { SaleId = 214, SaleDate = new DateTime(2025, 3, 30), Total = 37.50m },
+            new Sales { SaleId = 215, SaleDate = new DateTime(2025, 4, 1), Total = 49.90m },
+            new Sales { SaleId = 216, SaleDate = new DateTime(2025, 4, 2), Total = 26.45m },
+            new Sales { SaleId = 217, SaleDate = new DateTime(2025, 4, 3), Total = 30.10m },
+            new Sales { SaleId = 218, SaleDate = new DateTime(2025, 4, 5), Total = 50.40m },
+            new Sales { SaleId = 219, SaleDate = new DateTime(2025, 4, 6), Total = 29.40m },
+            new Sales { SaleId = 220, SaleDate = new DateTime(2025, 4, 7), Total = 38.50m }
 
-            // Último mes (5 registros)
-            new Sales { SaleId = 6, SaleDate = new DateTime(2025, 02, 25), Total = 60.00m }, //Fecha estatica
-            new Sales { SaleId = 7, SaleDate = new DateTime(2025, 02, 20), Total = 85.50m }, //Fecha estatica
-            new Sales { SaleId = 8, SaleDate = new DateTime(2025, 02, 15), Total = 130.25m }, //Fecha estatica
-            new Sales { SaleId = 9, SaleDate = new DateTime(2025, 02, 10), Total = 40.75m }, //Fecha estatica
-            new Sales { SaleId = 10, SaleDate = new DateTime(2025, 02, 5), Total = 100.00m }, //Fecha estatica
-
-            // Últimos 3 meses (5 registros)
-            new Sales { SaleId = 11, SaleDate = new DateTime(2025, 03, 07), Total = 70.00m }, //Fecha estatica
-            new Sales { SaleId = 12, SaleDate = new DateTime(2025, 03, 12), Total = 95.50m }, //Fecha estatica
-            new Sales { SaleId = 13, SaleDate = new DateTime(2025, 03, 08), Total = 140.25m }, //Fecha estatica
-            new Sales { SaleId = 14, SaleDate = new DateTime(2025, 03, 03), Total = 50.75m }, //Fecha estatica
-            new Sales { SaleId = 15, SaleDate = new DateTime(2025, 03, 08), Total = 110.00m } //Fecha estatica
         );
 
+
         modelBuilder.Entity<Ticket>().HasData(
-
-            new Ticket { TicketId = "000100", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 02), TotalAmount = 50.00m }, //Fecha estatica
-            new Ticket { TicketId = "000101", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 6), TotalAmount = 50.00m }, //Fecha estatica
-            new Ticket { TicketId = "000102", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 8), TotalAmount = 100.00m }, //Fecha estatica
-            new Ticket { TicketId = "000103", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 13), TotalAmount = 100.00m }, //Fecha estatica
-            new Ticket { TicketId = "000104", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 18), TotalAmount = 200.00m }, //Fecha estatica
-
-            new Ticket { TicketId = "000105", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 23), TotalAmount = 200.00m }, //Fecha estatica
-            new Ticket { TicketId = "000106", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 25), TotalAmount = 400.00m }, //Fecha estatica
-            new Ticket { TicketId = "000107", Issuer = "", EmissionDateTime = new DateTime(2025, 01, 29), TotalAmount = 400.00m }, //Fecha estatica
-            new Ticket { TicketId = "000108", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 02), TotalAmount = 800.00m }, //Fecha estatica
-            new Ticket { TicketId = "000109", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 05), TotalAmount = 800.00m },
-            new Ticket { TicketId = "000110", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 011), TotalAmount = 1600.00m },
-            new Ticket { TicketId = "000111", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 014), TotalAmount = 1600.00m }, //Fecha estatica
-
-            new Ticket { TicketId = "000112", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 19), TotalAmount = 3200.00m }, //Fecha estatica
-            new Ticket { TicketId = "000113", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 21), TotalAmount = 3200.00m }, //Fecha estatica
-            new Ticket { TicketId = "000114", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 24), TotalAmount = 6400.00m }, //Fecha estatica
-            new Ticket { TicketId = "000115", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 27), TotalAmount = 6400.00m }, //Fecha estatica
-            new Ticket { TicketId = "000116", Issuer = "", EmissionDateTime = new DateTime(2025, 02, 26), TotalAmount = 128000.00m },
-            new Ticket { TicketId = "000117", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 06), TotalAmount = 128000.00m },
-            new Ticket { TicketId = "000118", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 02), TotalAmount = 256000.00m },
-            new Ticket { TicketId = "000119", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 09), TotalAmount = 256000.00m },
-            new Ticket { TicketId = "000120", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 12), TotalAmount = 512000.00m },
-            new Ticket { TicketId = "000121", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 16), TotalAmount = 512000.00m },
-            new Ticket { TicketId = "000122", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 19), TotalAmount = 600000.00m },
-            new Ticket { TicketId = "000123", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 22), TotalAmount = 600000.00m },
-            new Ticket { TicketId = "000124", Issuer = "", EmissionDateTime = new DateTime(2025, 03, 26), TotalAmount = 800000.00m }
-
-        //Fecha estatica
+            new Ticket
+            {
+                TicketId = "001100", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 15), TotalAmount = 18.50m
+            },
+            new Ticket
+            {
+                TicketId = "001101", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 15), TotalAmount = 22.30m
+            },
+            new Ticket
+            {
+                TicketId = "001102", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 15), TotalAmount = 19.70m
+            },
+            new Ticket
+            {
+                TicketId = "001103", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 16), TotalAmount = 24.10m
+            },
+            new Ticket
+            {
+                TicketId = "001104", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 16), TotalAmount = 25.20m
+            },
+            new Ticket
+            {
+                TicketId = "001105", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 17), TotalAmount = 30.50m
+            },
+            new Ticket
+            {
+                TicketId = "001106", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 18), TotalAmount = 27.80m
+            },
+            new Ticket
+            {
+                TicketId = "001107", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 18), TotalAmount = 15.90m
+            },
+            new Ticket
+            {
+                TicketId = "001108", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 20), TotalAmount = 36.40m
+            },
+            new Ticket
+            {
+                TicketId = "001109", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 21), TotalAmount = 22.10m
+            },
+            new Ticket
+            {
+                TicketId = "001110", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 21), TotalAmount = 17.90m
+            },
+            new Ticket
+            {
+                TicketId = "001111", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 22), TotalAmount = 35.10m
+            },
+            new Ticket
+            {
+                TicketId = "001112", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 23), TotalAmount = 23.30m
+            },
+            new Ticket
+            {
+                TicketId = "001113", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 24), TotalAmount = 31.25m
+            },
+            new Ticket
+            {
+                TicketId = "001114", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 24), TotalAmount = 25.75m
+            },
+            new Ticket
+            {
+                TicketId = "001115", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 25), TotalAmount = 38.90m
+            },
+            new Ticket
+            {
+                TicketId = "001116", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 25), TotalAmount = 18.60m
+            },
+            new Ticket
+            {
+                TicketId = "001117", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 25), TotalAmount = 17.40m
+            },
+            new Ticket
+            {
+                TicketId = "001118", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 26), TotalAmount = 20.10m
+            },
+            new Ticket
+            {
+                TicketId = "001119", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 27), TotalAmount = 28.30m
+            },
+            new Ticket
+            {
+                TicketId = "001120", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 27), TotalAmount = 29.90m
+            },
+            new Ticket
+            {
+                TicketId = "001121", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 28), TotalAmount = 21.60m
+            },
+            new Ticket
+            {
+                TicketId = "001122", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 28), TotalAmount = 25.80m
+            },
+            new Ticket
+            {
+                TicketId = "001123", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 29), TotalAmount = 16.90m
+            },
+            new Ticket
+            {
+                TicketId = "001124", Issuer = "", EmissionDateTime = new DateTime(2025, 3, 30), TotalAmount = 37.50m
+            },
+            new Ticket
+            {
+                TicketId = "001125", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 1), TotalAmount = 27.80m
+            },
+            new Ticket
+            {
+                TicketId = "001126", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 1), TotalAmount = 22.10m
+            },
+            new Ticket
+            {
+                TicketId = "001127", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 2), TotalAmount = 26.45m
+            },
+            new Ticket
+            {
+                TicketId = "001128", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 3), TotalAmount = 30.10m
+            },
+            new Ticket
+            {
+                TicketId = "001129", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 5), TotalAmount = 34.80m
+            },
+            new Ticket
+            {
+                TicketId = "001130", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 5), TotalAmount = 15.60m
+            },
+            new Ticket
+            {
+                TicketId = "001131", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 6), TotalAmount = 29.40m
+            },
+            new Ticket
+            {
+                TicketId = "001132", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 7), TotalAmount = 38.50m
+            }
         );
     }
 }

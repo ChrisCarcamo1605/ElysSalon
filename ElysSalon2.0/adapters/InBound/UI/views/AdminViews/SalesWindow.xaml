@@ -131,7 +131,7 @@
                               DisplayMemberPath="Value"
                               SelectedItem="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <ui:Button Height="40" Width="260" Margin="0 20 0 0" Icon="CharMultiple20">
+                    <ui:Button Height="40" Width="260" Margin="0 20 0 0" Icon="CharMultiple20" Command="{Binding OpenChartWindowCommand}">
                         <Grid>
 
                             <ui:SymbolIcon Grid.Column="0" Margin="-87,1,126,0" FontSize="25" Symbol="ChartMultiple24"></ui:SymbolIcon>

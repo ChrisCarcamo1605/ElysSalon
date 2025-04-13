@@ -10,7 +10,6 @@
                 <ResourceDictionary Source="Adapters/InBound/UI/styles/ComboBox.xaml"/>
                 <ResourceDictionary Source="Adapters/InBound/UI/styles/Style.xaml" />
                 <ResourceDictionary Source="adapters/InBound/UI/styles/ButtonStyles.xaml" />
-
                 <markup:ThemesDictionary Theme="Light" />
                 <markup:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
