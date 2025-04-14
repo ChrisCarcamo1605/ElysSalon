@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
@@ -9,7 +10,7 @@ namespace ElysSalon2._0.adapters.OutBound.Repositories;
 
 public class ArticleRepository : IArticleRepository
 {
-    private readonly ElyDbContext _context;
+    private  ElyDbContext _context;
 
 
     public ArticleRepository(ElyDbContext context)

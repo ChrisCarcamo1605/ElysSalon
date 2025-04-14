@@ -20,7 +20,7 @@ namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
-    private readonly IArticleRepository _articleRepository;
+    private readonly IArticleService _articleService;
     private readonly IMapper _mapper;
     private readonly ITicketService _service;
     private readonly Window _window;
@@ -33,7 +33,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     public ICollectionView cartItemsView;
 
 
-    public ShoppingCartViewModel(IArticleRepository articleRepository, IMapper mapper, ITicketService service,
+    public ShoppingCartViewModel(IArticleService articleService, IMapper mapper, ITicketService service,
         WindowsManager windowsManager, Window window)
     {
         _service = service;
@@ -43,8 +43,8 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         _cartItems = new ObservableCollection<TicketDetails>();
         cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
         ArticlesButtons = new ObservableCollection<Button>();
-        _articleRepository = articleRepository ?? throw new ArgumentNullException(nameof(articleRepository));
-        loadButtons();
+        _articleService = articleService;
+        _ =  LoadButtons();
 
 
         RemoveFromCartCommand = new RelayCommand<TicketDetails>(RemoveFromCart);
@@ -97,11 +97,13 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private async Task loadButtons()
+    private async Task LoadButtons()
     {
-        var articles = await _articleRepository.GetArticlesToButtonAsync();
+        MessageBox.Show("MESSI");
+        var articles = await _articleService.GetArticlesToButtons();
 
-        if (articles != null && articles.Any())
+
+        if (articles != null)
             foreach (var article in articles)
             {
                 var btn = new Button

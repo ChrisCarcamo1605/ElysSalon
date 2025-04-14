@@ -16,7 +16,7 @@ public partial class ShoppingCartWindow : Window
     private readonly IMapper _mapper;
     private readonly WindowsManager _windowsManager;
 
-    public ShoppingCartWindow(IArticleRepository articleRepository, IMapper mapper, WindowsManager windowsManager,
+    public ShoppingCartWindow(IArticleService articleRepository, IMapper mapper, WindowsManager windowsManager,
         ITicketService service)
     {
         InitializeComponent();

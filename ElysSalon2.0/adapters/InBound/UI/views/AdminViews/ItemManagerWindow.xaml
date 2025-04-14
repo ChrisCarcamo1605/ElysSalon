@@ -219,7 +219,6 @@
             </Grid>
 
             <ScrollViewer Height="351">
-
                 <ItemsControl Background="DarkGray" ItemsSource="{Binding ArticlesView}" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

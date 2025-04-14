@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using AutoMapper;
 using ElysSalon2._0.Core.aplication.DTOs.DTOTicket;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
 using ElysSalon2._0.Core.aplication.Ports.Services;
 using ElysSalon2._0.Core.domain.Entities;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace ElysSalon2._0.Core.domain.Services;
 
@@ -25,6 +27,11 @@ public class TicketService : ITicketService
         return ServiceResult.SuccessResult(ticket, "Ticket generado exitosamente!");
     }
 
+    public async Task<ObservableCollection<TicketDetails>> GetTicketDetailsAsync()
+    {
+        return await _ticketRepo.GetTicketDetailsAsync();
+    }
+
 
     public Task<ServiceResult> DeleteTicketAsync(int id)
     {
@@ -33,7 +40,8 @@ public class TicketService : ITicketService
 
     public async Task<ObservableCollection<Ticket>> GetTicketsAsync()
     {
-        throw new NotImplementedException();
+        var tickets = await _ticketRepo.GetTicketsAsync();
+        return tickets;
     }
 
     public async Task<ServiceResult> GetTicketAsync(string id)

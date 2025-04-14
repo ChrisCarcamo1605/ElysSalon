@@ -8,6 +8,7 @@ namespace ElysSalon2._0.Core.aplication.Ports.Services;
 public interface ITicketService
 {
     Task<ServiceResult> SaveTicketAsync(DtoCreateTicket ticket);
+    Task<ObservableCollection<TicketDetails>> GetTicketDetailsAsync();
     Task<ServiceResult> DeleteTicketAsync(int id);
     Task<ObservableCollection<Ticket>> GetTicketsAsync();
     Task<ServiceResult> GetTicketAsync(string id);

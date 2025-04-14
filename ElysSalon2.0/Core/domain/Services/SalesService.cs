@@ -8,13 +8,14 @@ using ElysSalon2._0.Core.aplication.DTOs;
 using ElysSalon2._0.Core.aplication.DTOs.DTOSales;
 using ElysSalon2._0.Core.aplication.Management;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
 using ElysSalon2._0.Core.domain.Entities;
 using OfficeOpenXml;
 using OfficeOpenXml.Drawing.Chart;
 
 namespace ElysSalon2._0.Core.domain.Services;
 
-public class SalesService
+public class SalesService : ISalesService
 {
     private ISalesRepository _salesRepo;
     private ITicketRepository _ticketRepo;
@@ -147,7 +148,7 @@ public class SalesService
         ));
     }
 
-    public void GenerateMonthReport(ObservableCollection<Sales> collection)
+    public async Task GenerateMonthReport(ObservableCollection<Sales> collection)
     {
         var dto = _reportConfig.GetWeeksRanges(collection);
 
@@ -170,6 +171,16 @@ public class SalesService
         //MessageBox.Show(
         //    $"DiasPorSemana{daysPerWeek} week2= {daysPerWeek * 2} week4= {daysPerWeek * 3}" +
         //    $" week4= {daysPerWeek * 4}  TOTAL DE DIAS DEL MES= {totalsDaysInMonth} MES={firstDayMonth.Month}");
+    }
+
+    public async Task SaveSale(Sales sale)
+    {
+        _salesRepo.SavesSale(sale);
+    }
+
+    public async Task<ObservableCollection<Sales>> GetSales()
+    {
+        return await _salesRepo.GetSalesAsync();
     }
 
     public async Task GenerateMonthReport(ObservableCollection<Ticket> collection)

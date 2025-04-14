@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
 using ElysSalon2._0.Core.domain.Entities;
+using ElysSalon2._0.Core.domain.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.adapters.OutBound.Repositories;
@@ -32,6 +34,13 @@ public class TicketRepository : ITicketRepository
     {
         var tickets = await _context.Tickets.ToListAsync();
         return new ObservableCollection<Ticket>(tickets);
+    }
+
+    public async Task<ObservableCollection<TicketDetails>> GetTicketDetailsAsync()
+    {
+        var ticketDetails = await _context.TicketDetails.Include(td=> td.Article).ToListAsync();
+
+        return new ObservableCollection<TicketDetails>(ticketDetails);
     }
 
     public async Task<Ticket> GetTicketAsync(string id)

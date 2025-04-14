@@ -10,6 +10,7 @@ using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
 using ElysSalon2._0.Core.aplication.DTOs.DTOSales;
 using ElysSalon2._0.Core.aplication.Management;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
 using ElysSalon2._0.Core.domain.Entities;
 using ElysSalon2._0.Core.domain.Services;
 using LiveChartsCore;
@@ -18,12 +19,11 @@ namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 
 public class SalesViewModel : INotifyPropertyChanged
 {
-    private readonly ISalesRepository _saleRepo;
-    private readonly ITicketRepository _ticketRepo;
+    private readonly ITicketService _ticketService;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
 
-    private readonly SalesService _service;
+    private readonly ISalesService _service;
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
@@ -142,11 +142,10 @@ public class SalesViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public SalesViewModel(ISalesRepository saleRepo, Window window, WindowsManager windowsManager,
-        ITicketRepository TicketRepo, SalesService service, IMapper mapper)
+    public SalesViewModel(Window window, WindowsManager windowsManager,
+        ITicketService ticketService, ISalesService service, IMapper mapper)
     {
-        _saleRepo = saleRepo;
-        _ticketRepo = TicketRepo;
+        _ticketService = ticketService;
         _service = service;
         _winManager = windowsManager;
         _salesCollection = [];
@@ -158,9 +157,10 @@ public class SalesViewModel : INotifyPropertyChanged
         ExitCommand = new RelayCommand(Exit);
         GenerateReportCommand = new RelayCommand(GenerateReport);
         OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
-        ApplyFilter();
+     
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
         InitializeFilterOptions();
+        ApplyFilter();
     }
 
     //Load all options in FilterOptions
@@ -180,8 +180,8 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         try
         {
-            var sales = await _saleRepo.GetSales();
-            var tickets = await _ticketRepo.GetTicketsAsync();
+            var sales = await _service.GetSales();
+            var tickets = await _ticketService.GetTicketsAsync();
 
             _salesCollection.Clear();
             _ticketsCollection.Clear();
@@ -253,11 +253,11 @@ public class SalesViewModel : INotifyPropertyChanged
 
     public void OpenChartWindow()
     {
-        Charts chart = new Charts(_winManager,
+        ChartsWindow chartWindow = new ChartsWindow(_winManager,
             _salesCollection,
-            _ticketsCollection);
+            _ticketsCollection, _ticketService);
 
-        chart.ShowDialog();
+        chartWindow.ShowDialog();
     }
 
     public void Exit()

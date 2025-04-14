@@ -1,4 +1,5 @@
-﻿using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
+﻿using System.Collections.ObjectModel;
+using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.Core.domain.Entities;
 using ElysSalon2._0.Core.domain.Services;
 
@@ -14,4 +15,6 @@ public interface IArticleService
     Task<ServiceResult> AddType(string typeName);
     Task<ServiceResult> EditType(ArticleType type);
     Task<ServiceResult> DeleteType(int id);
+
+    Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtons();
 }

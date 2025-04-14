@@ -35,21 +35,20 @@ public partial class App : Application
         services.AddTransient<UpdateArticleViewModel>();
         services.AddTransient<ItemManagerViewModel>();
         services.AddTransient<ShoppingCartViewModel>();
-        services.AddTransient<SalesViewModel>();
+        services.AddScoped<SalesViewModel>();
+        services.AddScoped<ChartsViewModel>();
        // services.AddTransient<Charts>();
 
         //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();
         services.AddTransient<IArticleTypeRepository, ArticleTypeRepository>();
-        
         services.AddSingleton<WindowsManager>();
-        services.AddTransient<ITicketRepository, TicketRepository>();
+        services.AddScoped<ITicketRepository, TicketRepository>();
         services.AddTransient<ISalesRepository, SalesRepository>();
-
         //Services
-        services.AddTransient<IArticleService, ArticleService>();
-        services.AddTransient<ITicketService, TicketService>();
-        services.AddTransient<SalesService>();
+        services.AddScoped<IArticleService, ArticleService>();
+        services.AddScoped<ITicketService, TicketService>();
+        services.AddScoped<ISalesService, SalesService>();
 
 
         //Configuration
@@ -65,6 +64,7 @@ public partial class App : Application
         services.AddTransient<ItemManagerWindow>();
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ShoppingCartWindow>();
+        services.AddScoped<ChartsWindow>();
 
         //Mapper
         services.AddAutoMapper(typeof(App).Assembly);

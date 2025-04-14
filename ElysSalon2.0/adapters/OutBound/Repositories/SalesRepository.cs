@@ -15,19 +15,14 @@ public class SalesRepository : ISalesRepository
         _context = dbContext;
     }
 
-    public async Task SavesSale(ObservableCollection<Sales> observableCollection)
+    public async Task SavesSale(Sales sale)
     {
-        var sale = new Sales
-        {
-            SaleDate = DateTime.UtcNow,
-            Total = 25.52m
-        };
-
         _context.Add(sale);
         _context.SaveChanges();
     }
 
-    public async Task<ObservableCollection<Sales>> GetSales()
+
+    public async Task<ObservableCollection<Sales>> GetSalesAsync()
     {
         var list = await _context.Sales.ToListAsync();
         return new ObservableCollection<Sales>(list);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using AutoMapper;
 using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
@@ -103,5 +104,10 @@ public class ArticleService : IArticleService
         await _typeRepository.DeleteTypeAsync(id);
         reloadItems?.Invoke();
         return ServiceResult.SuccessResult("Tipo eliminado correctamente");
+    }
+
+    public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtons()
+    {
+        return await _articleRepository.GetArticlesToButtonAsync(); ;
     }
 }

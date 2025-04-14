@@ -13,20 +13,56 @@ using ElysSalon2._0.Core.domain.Entities;
 using Wpf.Ui.Input;
 using Window = System.Windows.Window;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
+using ElysSalon2._0.adapters.OutBound.Repositories;
+using ElysSalon2._0.Core.aplication.DTOs.DTOArticle;
 using ElysSalon2._0.Core.aplication.DTOs.DTOSales;
+using ElysSalon2._0.Core.aplication.DTOs.DTOTicketDetails;
+using ElysSalon2._0.Core.aplication.Ports.Services;
+using ElysSalon2._0.Core.domain.Services;
+using OpenTK.Graphics.ES11;
 
 namespace ElysSalon2._0.adapters.InBound.UI.ViewModels;
 
-public class ChartsViewModel
+public class ChartsViewModel : INotifyPropertyChanged
 {
     private Window _window;
     private WindowsManager _winManager;
+    private ITicketService _ticketService;
+
+
     public ICommand ExitCommand { get; }
 
     List<String> Last7daysLabels;
     private ObservableCollection<DtoSalesList> _salesCollection;
     private ObservableCollection<DtoSalesList> _ticketCollection;
+
+    private ObservableCollection<DtoBestSellerTicketDetails> _bestArticlesSeller;
+
+    public ObservableCollection<DtoBestSellerTicketDetails> BestArticlesSeller
+    {
+        get => _bestArticlesSeller;
+        set
+        {
+            SetField(ref _bestArticlesSeller, value);
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<DtoBestSellerTicketDetails> _bestServicesSeller;
+
+    public ObservableCollection<DtoBestSellerTicketDetails> BestServicesSeller
+    {
+        get => _bestServicesSeller;
+        set
+        {
+            SetField(ref _bestServicesSeller, value);
+            OnPropertyChanged();
+        }
+    }
 
 
     public ISeries[] Last7DaysSeries { get; }
@@ -41,18 +77,23 @@ public class ChartsViewModel
     public Axis[] LastYearXAxes { get; set; }
 
     public ChartsViewModel(Window window, WindowsManager winManager, ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> ticketCollection)
+        ObservableCollection<DtoSalesList> ticketCollection, ITicketService ticketService)
     {
         _winManager = winManager;
         _window = window;
+        _ticketService = ticketService;
 
         ExitCommand = new RelayCommand(Exit);
 
         _salesCollection = salesCollection;
         _ticketCollection = ticketCollection;
+        _bestArticlesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
+        _bestServicesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
+
+        _ = GenerateTopArticleServices();
+
 
         Last7DaysSeries = LoadLast7Days();
-        // LoadLast7Days(salesCollection, ticketCollection);
         LastMonthSeries = LoadLastMonth(salesCollection, ticketCollection);
 
 
@@ -109,7 +150,8 @@ public class ChartsViewModel
             new ColumnSeries<decimal>
             {
                 Name = "Tickets",
-                Values = _ticketCollection.Where(x => x.Date > DateTime.Now.AddMonths(-1)).Select(x => x.TotalAmount)
+                Values = _ticketCollection.Where(x => x.Date > DateTime.Now.AddMonths(-1)).GroupBy(x => x.Date.Date)
+                    .Select(x => x.Sum(x => x.TotalAmount)).ToList()
                     .ToList(),
             }
         ];
@@ -129,13 +171,13 @@ public class ChartsViewModel
 
     private ISeries[] LoadLast7Days()
     {
+        LoadLast7DayLabels(_ticketCollection.Where(x => x.Date >= DateTime.Now.AddDays(-7).Date).ToList());
         ISeries[] series =
         [
             new ColumnSeries<decimal>
             {
                 Name = "Ventas",
                 Values = _salesCollection.Where(x => x.Date > DateTime.Now.AddDays(-7).Date).Select(x => x.TotalAmount)
-                    .ToList()
                     .ToList()
             },
             new ColumnSeries<decimal>
@@ -148,36 +190,28 @@ public class ChartsViewModel
                     .ToList() //tickets.Where(x => x.Date >= DateTime.Now.AddDays(-7)).Select(X => X.TotalAmount).ToList()
             }
         ];
-        MessageBox.Show(DateTime.Now.AddDays(-7).Date.ToString());
-        LoadLast7DayLabels(_ticketCollection.Where(x => x.Date >= DateTime.Now.AddDays(-7)).ToList());
+
         return series;
     }
 
     public void LoadLast7DayLabels(List<DtoSalesList> list)
     {
         Last7daysLabels = new List<string>();
-        var i = 0;
-        Last7daysLabels.Add(sale.Day);
+
+
         if (list.Count >= 0)
         {
-            foreach (var sale in list)
+            for (int i = -6; i <= 0; i++)
             {
-                /*
-                 *
-                 *CHRISTIAN DEL FUTURO: TENES QUE TOMAR EL DIA DEL ULTIMO DIA DE LOS 7
-                 *DESPUES Q TENGAS EL DIA CON UN BUCLE GENERA LOS RESTANTES 6 DIAS,
-                 *
-                 *
-                 * AGREGAS UN FILTRADO DE GRAFICAS PARA VER DE UN ANIO, MES, TRIMESTRE CON UNA
-                 * GRAFICA LINEAL,
-                 *
-                 * NO OLVIDES CAMBIAR TICKET POR GASTO.
-                 *
-                 * HACER UN TOP DE PRODUCTOS Y SERVICIOS MAS SOLICITADOS
-                 *
-                 *
-                 */
+                Last7daysLabels.Add(list[0].Date.AddDays(i).Date.ToString("dddd", new CultureInfo("es-ES")));
             }
+
+            /*
+             * AGREGAS UN FILTRADO DE GRAFICAS PARA VER DE UN ANIO, MES, TRIMESTRE CON UNA
+             * GRAFICA LINEAL,
+             *
+             * NO OLVIDES CAMBIAR TICKET POR GASTO.
+             */
         }
         else
         {
@@ -185,9 +219,96 @@ public class ChartsViewModel
         }
     }
 
+    public async Task GetBestArticles()
+    {
+        var result = await _ticketService.GetTicketDetailsAsync();
+
+        var bestArticles = result
+            .GroupBy(x => x.ArticleName)
+            .Select(g => new
+            {
+                article = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice),
+            }).OrderByDescending(x => x.TotalAmount);
+
+        foreach (var article in bestArticles)
+        {
+            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
+        }
+    }
+
+
+    public async Task GetBestServices()
+    {
+        var result = await _ticketService.GetTicketDetailsAsync();
+
+        var bestServices = result
+            .GroupBy(x => x.ArticleName)
+            .Select(g => new
+            {
+                service = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice)
+            })
+            .OrderByDescending(x => x.TotalAmount);
+
+
+        foreach (var service in bestServices)
+        {
+            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
+        }
+    }
+
+    public async Task GenerateTopArticleServices()
+    {
+        var items = await _ticketService.GetTicketDetailsAsync();
+
+        var services = items.Where(x => x.Article.ArticleTypeId == 4 ).GroupBy(x => x.ArticleName)
+            .Select(g => new
+            {
+                service = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice)
+            })
+            .OrderByDescending(x => x.TotalAmount);
+
+        var articles = items.Where(x => x.Article.ArticleTypeId != 4).GroupBy(x => x.ArticleName)
+            .Select(g => new
+            {
+                article = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice)
+            })
+            .OrderByDescending(x => x.TotalAmount).ToList();
+
+
+        foreach (var article in articles)
+        {
+            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
+        }
+
+
+        foreach (var service in services)
+        {
+            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
+        }
+    }
+
 
     public void Exit()
     {
         _winManager.CloseCurrentWindowandShowWindow<SalesWindow>(_window);
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }

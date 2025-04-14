@@ -16,6 +16,7 @@ using ElysSalon2._0.adapters.InBound.UI.ViewModels;
 using ElysSalon2._0.adapters.OutBound.Repositories;
 using ElysSalon2._0.Core.aplication.Management;
 using ElysSalon2._0.Core.aplication.Ports.Repositories;
+using ElysSalon2._0.Core.aplication.Ports.Services;
 using ElysSalon2._0.Core.domain.Entities;
 using ElysSalon2._0.Core.domain.Services;
 
@@ -26,11 +27,11 @@ namespace ElysSalon2._0.adapters.InBound.UI.views.AdminViews
     /// </summary>
     public partial class SalesWindow : Window
     {
-        public SalesWindow(ISalesRepository saleRepo, WindowsManager winManager, ITicketRepository ticketRepo,SalesService service,IMapper mapper)
+        public SalesWindow(WindowsManager winManager, ITicketService ticketRepo, ISalesService service, IMapper mapper)
 
         {
             InitializeComponent();
-            DataContext = new SalesViewModel(saleRepo, this, winManager, ticketRepo, service,mapper);
+            DataContext = new SalesViewModel(this, winManager, ticketRepo, service, mapper);
         }
     }
 }
