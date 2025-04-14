@@ -1,4 +1,4 @@
-﻿using ElysSalon2._0.Core.domain.Entities;
+﻿using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElysSalon2._0.adapters.OutBound.DataBase;
@@ -19,8 +19,6 @@ public class ElyDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-
 
 
         modelBuilder.Entity<ArticleType>().HasData(

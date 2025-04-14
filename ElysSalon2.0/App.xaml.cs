@@ -1,14 +1,12 @@
 ﻿using System.Windows;
-using ElysSalon2._0.adapters.InBound.UI.ViewModels;
-using ElysSalon2._0.adapters.InBound.UI.views;
-using ElysSalon2._0.adapters.InBound.UI.views.AdminViews;
-using ElysSalon2._0.adapters.InBound.UI.views.MainViews;
+using ElysSalon2._0.adapters.InBound.ViewModels;
+using ElysSalon2._0.adapters.InBound.views;
 using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.adapters.OutBound.Repositories;
-using ElysSalon2._0.Core.aplication.Management;
-using ElysSalon2._0.Core.aplication.Ports.Repositories;
-using ElysSalon2._0.Core.aplication.Ports.Services;
-using ElysSalon2._0.Core.domain.Services;
+using ElysSalon2._0.aplication.Interfaces.Repositories;
+using ElysSalon2._0.aplication.Interfaces.Services;
+using ElysSalon2._0.aplication.Management;
+using ElysSalon2._0.domain.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,7 +35,7 @@ public partial class App : Application
         services.AddTransient<ShoppingCartViewModel>();
         services.AddScoped<SalesViewModel>();
         services.AddScoped<ChartsViewModel>();
-       // services.AddTransient<Charts>();
+        // services.AddTransient<Charts>();
 
         //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();

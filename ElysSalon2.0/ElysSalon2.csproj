@@ -11,43 +11,39 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="adapters\InBound\UI\styles\trash.png" />
-		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper.jpg" />
-		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
-		<None Remove="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
-		<None Remove="adapters\InBound\UI\views\MainViews\trashIMG.png" />
-		<None Remove="adapters\InBound\UI\views\NEGRO LOGO_Mesa de trabajo 1.png" />
-		<None Remove="adapters\InBound\UI\views\wallpaper2.png" />
-		<None Remove="images\minusSymbol.png" />
-		<None Remove="images\plusSymbol.png" />
-		<None Remove="images\row.png" />
-		<None Remove="images\trash.png" />
-		<None Remove="images\wallpaper3.jpg" />
-		<None Remove="images\wallpaper3.png" />
-		<None Remove="images\wallpaper4.jpeg" />
+		<None Remove="styles\trash.png" />
+		<None Remove="adapters\InBound\views\NEGRO LOGO_Mesa de trabajo 1.png" />
+		<None Remove="adapters\InBound\views\wallpaper2.png" />
+		<None Remove="Images\minusSymbol.png" />
+		<None Remove="Images\plusSymbol.png" />
+		<None Remove="Images\row.png" />
+		<None Remove="Images\trash.png" />
+		<None Remove="Images\wallpaper3.jpg" />
+		<None Remove="Images\wallpaper3.png" />
+		<None Remove="Images\wallpaper4.jpeg" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="adapters\InBound\UI\styles\trash.png" />
-		<Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper3.jpg" />
-		<Resource Include="adapters\InBound\UI\views\AdminViews\wallpaper4.jpeg" />
-		<Resource Include="adapters\InBound\UI\views\MainViews\trashIMG.png" />
-		<Resource Include="images\minusSymbol.png" />
-		<Resource Include="images\plusSymbol.png" />
-		<Resource Include="images\row.png" />
-		<Resource Include="images\trash.png" />
-		<Resource Include="images\wallpaper.jpg" />
-		<Resource Include="images\NEGRO LOGO_Mesa de trabajo 1.png" />
-		<Resource Include="images\products.jpg">
+		<Resource Include="styles\trash.png" />
+		<Resource Include="adapters\InBound\views\wallpaper3.jpg" />
+		<Resource Include="adapters\InBound\views\wallpaper4.jpeg" />
+		<Resource Include="adapters\InBound\views\trashIMG.png" />
+		<Resource Include="Images\minusSymbol.png" />
+		<Resource Include="Images\plusSymbol.png" />
+		<Resource Include="Images\row.png" />
+		<Resource Include="Images\trash.png" />
+		<Resource Include="Images\wallpaper.jpg" />
+		<Resource Include="Images\NEGRO LOGO_Mesa de trabajo 1.png" />
+		<Resource Include="Images\products.jpg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
-		<Resource Include="images\Services.jpg">
+		<Resource Include="Images\Services.jpg">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Resource>
-		<Resource Include="images\wallpaper2.png" />
-		<Resource Include="images\wallpaper3.jpg" />
-		<Resource Include="images\wallpaper3.png" />
-		<Resource Include="images\wallpaper4.jpeg" />
+		<Resource Include="Images\wallpaper2.png" />
+		<Resource Include="Images\wallpaper3.jpg" />
+		<Resource Include="Images\wallpaper3.png" />
+		<Resource Include="Images\wallpaper4.jpeg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -83,7 +79,6 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
-		<PackageReference Include="SharpYaml" Version="2.1.1" />
 		<PackageReference Include="WPF-UI" Version="4.0.2" />
 	</ItemGroup>
 
