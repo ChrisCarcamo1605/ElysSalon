@@ -19,4 +19,9 @@ public partial class ChartsWindow : Window
 
         DataContext = new ChartsViewModel(this, windowsManager, salesCollection, ticketCollection, ticketService);
     }
+
+    private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

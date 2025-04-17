@@ -25,8 +25,6 @@ public class SalesViewModel : INotifyPropertyChanged
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
-
-
     private ObservableCollection<DtoSalesList> _ticketsCollection;
     private IMapper _mapper;
 
@@ -168,7 +166,7 @@ public class SalesViewModel : INotifyPropertyChanged
         _filterOptions = new ObservableCollection<KeyValuePair<FilterSales, string>>
         {
             new(FilterSales.Ticket, "Ticket"),
-            new(FilterSales.Ventas, "Ventas")
+            new(FilterSales.Sales, "Ventas")
         };
 
         _selectedFilter = _filterOptions[0];
@@ -215,7 +213,7 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         switch (_selectedFilter.Key)
         {
-            case FilterSales.Ventas:
+            case FilterSales.Sales:
                 _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
 
                 _collectionView.Filter = items =>

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        xmlns:skiaSharpView="clr-namespace:LiveChartsCore.SkiaSharpView;assembly=LiveChartsCore.SkiaSharpView"
         mc:Ignorable="d"
         Title="Charts" Height="620" Width="1180"
         WindowStyle="None"
@@ -49,8 +50,8 @@
                             <RowDefinition Height="201*" />
                         </Grid.RowDefinitions>
                         <lvc:CartesianChart
-                            Series="{Binding Last7DaysSeries}"
-                            XAxes="{Binding Last7DaysXAxes}"
+                            Series="{Binding Series}"
+                            XAxes="{Binding XLabels}"
                             LegendPosition="Right" Grid.RowSpan="2" />
                     </Grid>
                 </Grid>
@@ -181,16 +182,14 @@
 
                     <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Grid.Row="0" Margin="20 0">
                         <Grid>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontSize="24" Text="Ordenar por : " Margin="0 0 0 0"
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock FontSize="24" Text="Ordenar por : " Margin="0 6 0 0"
                                            Style="{DynamicResource TitleText}" />
-
-                                <ComboBox Width="180" ItemsSource="{Binding FilterOptions}"
-
-                                          SelectedValuePath="Value"
+                                <ComboBox Width="180" ItemsSource="{Binding RangeOptions}"
+                                          DisplayMemberPath="Value"
                                           FontSize="9"
                                           SelectedItem="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}"
-                                          Height="29" />
+                                          Height="40" />
                             </StackPanel>
 
 
@@ -215,9 +214,22 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
-                    <lvc:CartesianChart Grid.Column="0"
-                                        Series="{Binding LastMonthSeries}"
-                                        ZoomMode="X" />
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <TextBlock FontSize="30" Style="{DynamicResource TitleText}" Text="Grafica General"
+                                       Padding="0 5  0 0" />
+                        </Grid>
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Series="{Binding GeneralSeries}"
+                                            XAxes="{Binding GeneralXAxis}"
+                                            YAxes="{Binding GeneralYAxis}"
+                                            LegendPosition="Right"
+                                            ZoomMode="X" />
+                    </Grid>
 
                     <Grid Grid.Column="1">
                         <lvc:PieChart
