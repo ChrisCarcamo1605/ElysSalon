@@ -11,8 +11,12 @@ public class DtoSalesList
     public decimal TotalAmount { get; set; }
 
 
-    public DtoSalesList()
+    public DtoSalesList(string day, DateTime date, decimal totalAmount)
     {
+        Id = string.Empty;
+        Day = day;
+        Date = date;
+        TotalAmount = totalAmount;
     }
 
     public DtoSalesList(Sales sales)
