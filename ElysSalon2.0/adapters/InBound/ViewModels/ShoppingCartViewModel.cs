@@ -141,7 +141,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
             existingItem = new TicketDetails
             {
                 TicketId = _ticket.TicketId, Quantity = 1, Price = article.Price, ArticleName = article.Name,
-                ArticleId = article.ArticleId
+                ArticleId = article.ArticleId, Date = DateTime.Now
             };
 
             cartItems.Add(existingItem);

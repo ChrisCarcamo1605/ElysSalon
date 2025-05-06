@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506210346_dataSeed_to_ticketdetails4")]
+    partial class dataSeed_to_ticketdetails4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -381,48 +384,6 @@ namespace ElysSalon2._0.Migrations
                             SaleId = 126,
                             SaleDate = new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 57.42m
-                        },
-                        new
-                        {
-                            SaleId = 127,
-                            SaleDate = new DateTime(2025, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 50.40m
-                        },
-                        new
-                        {
-                            SaleId = 128,
-                            SaleDate = new DateTime(2025, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 49.40m
-                        },
-                        new
-                        {
-                            SaleId = 129,
-                            SaleDate = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 38.50m
-                        },
-                        new
-                        {
-                            SaleId = 130,
-                            SaleDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 80.10m
-                        },
-                        new
-                        {
-                            SaleId = 131,
-                            SaleDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 110.40m
-                        },
-                        new
-                        {
-                            SaleId = 132,
-                            SaleDate = new DateTime(2025, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 119.40m
-                        },
-                        new
-                        {
-                            SaleId = 133,
-                            SaleDate = new DateTime(2025, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Total = 63.50m
                         });
                 });
 
@@ -681,41 +642,6 @@ namespace ElysSalon2._0.Migrations
                         {
                             TicketId = "001132",
                             EmissionDateTime = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 34.50m
-                        },
-                        new
-                        {
-                            TicketId = "001133",
-                            EmissionDateTime = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 24.80m
-                        },
-                        new
-                        {
-                            TicketId = "001134",
-                            EmissionDateTime = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 12.60m
-                        },
-                        new
-                        {
-                            TicketId = "001135",
-                            EmissionDateTime = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 22.40m
-                        },
-                        new
-                        {
-                            TicketId = "001136",
-                            EmissionDateTime = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 34.50m
-                        },
-                        new
-                        {
-                            TicketId = "001137",
-                            EmissionDateTime = new DateTime(2025, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
                             TotalAmount = 34.50m
                         });

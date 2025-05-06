@@ -141,9 +141,7 @@
                                                         Padding="4"
                                                         Margin="12,3"
                                                         CornerRadius="4">
-
                                                     <Grid>
-
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="2*" />
                                                             <ColumnDefinition Width="1.5*" />
