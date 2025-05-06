@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419230644_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -683,41 +686,6 @@ namespace ElysSalon2._0.Migrations
                             EmissionDateTime = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
                             TotalAmount = 34.50m
-                        },
-                        new
-                        {
-                            TicketId = "001133",
-                            EmissionDateTime = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 24.80m
-                        },
-                        new
-                        {
-                            TicketId = "001134",
-                            EmissionDateTime = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 12.60m
-                        },
-                        new
-                        {
-                            TicketId = "001135",
-                            EmissionDateTime = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 22.40m
-                        },
-                        new
-                        {
-                            TicketId = "001136",
-                            EmissionDateTime = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 34.50m
-                        },
-                        new
-                        {
-                            TicketId = "001137",
-                            EmissionDateTime = new DateTime(2025, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Issuer = "",
-                            TotalAmount = 34.50m
                         });
                 });
 
@@ -736,9 +704,6 @@ namespace ElysSalon2._0.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -756,118 +721,6 @@ namespace ElysSalon2._0.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketDetails");
-
-                    b.HasData(
-                        new
-                        {
-                            TicketDetailsId = 422,
-                            ArticleId = 5,
-                            ArticleName = "Tinte Rojo",
-                            Date = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 423,
-                            ArticleId = 5,
-                            ArticleName = "Tinte Rojo",
-                            Date = new DateTime(2025, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 424,
-                            ArticleId = 5,
-                            ArticleName = "Desde un Mes",
-                            Date = new DateTime(2025, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 425,
-                            ArticleId = 5,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 426,
-                            ArticleId = 6,
-                            ArticleName = "Desde un Mes",
-                            Date = new DateTime(2025, 4, 21, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 427,
-                            ArticleId = 9,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 428,
-                            ArticleId = 4,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 429,
-                            ArticleId = 9,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 4, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 430,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 431,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 1 mes",
-                            Date = new DateTime(2025, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 432,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        });
                 });
 
             modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>

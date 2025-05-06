@@ -181,7 +181,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     {
         var confirmWindow = new ConfirmWindow(this);
         _confirmWindow = confirmWindow;
-        confirmWindow.Show();
+        confirmWindow.ShowDialog();
     }
 
     private void CloseConfirmWindow()

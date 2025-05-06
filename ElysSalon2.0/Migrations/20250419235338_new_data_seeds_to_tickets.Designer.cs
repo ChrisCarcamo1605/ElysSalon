@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    [Migration("20250413175658_dataseeds_created")]
-    partial class dataseeds_created
+    [Migration("20250419235338_new_data_seeds_to_tickets")]
+    partial class new_data_seeds_to_tickets
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ElysSalon2._0.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Article", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
                 {
                     b.Property<int>("ArticleId")
                         .ValueGeneratedOnAdd()
@@ -161,7 +161,7 @@ namespace ElysSalon2._0.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.ArticleType", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.ArticleType", b =>
                 {
                     b.Property<int>("ArticleTypeId")
                         .ValueGeneratedOnAdd()
@@ -210,7 +210,7 @@ namespace ElysSalon2._0.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Sales", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Sales", b =>
                 {
                     b.Property<int>("SaleId")
                         .ValueGeneratedOnAdd()
@@ -384,10 +384,52 @@ namespace ElysSalon2._0.Migrations
                             SaleId = 126,
                             SaleDate = new DateTime(2025, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Total = 57.42m
+                        },
+                        new
+                        {
+                            SaleId = 127,
+                            SaleDate = new DateTime(2025, 4, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 50.40m
+                        },
+                        new
+                        {
+                            SaleId = 128,
+                            SaleDate = new DateTime(2025, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 49.40m
+                        },
+                        new
+                        {
+                            SaleId = 129,
+                            SaleDate = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 38.50m
+                        },
+                        new
+                        {
+                            SaleId = 130,
+                            SaleDate = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 80.10m
+                        },
+                        new
+                        {
+                            SaleId = 131,
+                            SaleDate = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 110.40m
+                        },
+                        new
+                        {
+                            SaleId = 132,
+                            SaleDate = new DateTime(2025, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 119.40m
+                        },
+                        new
+                        {
+                            SaleId = 133,
+                            SaleDate = new DateTime(2025, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Total = 63.50m
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Ticket", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
                 {
                     b.Property<string>("TicketId")
                         .ValueGeneratedOnAdd()
@@ -644,10 +686,45 @@ namespace ElysSalon2._0.Migrations
                             EmissionDateTime = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Issuer = "",
                             TotalAmount = 34.50m
+                        },
+                        new
+                        {
+                            TicketId = "001133",
+                            EmissionDateTime = new DateTime(2025, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 24.80m
+                        },
+                        new
+                        {
+                            TicketId = "001134",
+                            EmissionDateTime = new DateTime(2025, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 12.60m
+                        },
+                        new
+                        {
+                            TicketId = "001135",
+                            EmissionDateTime = new DateTime(2025, 4, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 22.40m
+                        },
+                        new
+                        {
+                            TicketId = "001136",
+                            EmissionDateTime = new DateTime(2025, 4, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 34.50m
+                        },
+                        new
+                        {
+                            TicketId = "001137",
+                            EmissionDateTime = new DateTime(2025, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Issuer = "",
+                            TotalAmount = 34.50m
                         });
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.TicketDetails", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
                 {
                     b.Property<int>("TicketDetailsId")
                         .ValueGeneratedOnAdd()
@@ -681,9 +758,9 @@ namespace ElysSalon2._0.Migrations
                     b.ToTable("TicketDetails");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Article", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Article", b =>
                 {
-                    b.HasOne("ElysSalon2._0.Core.domain.Entities.ArticleType", "ArticleType")
+                    b.HasOne("ElysSalon2._0.domain.Entities.ArticleType", "ArticleType")
                         .WithMany()
                         .HasForeignKey("ArticleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -692,15 +769,15 @@ namespace ElysSalon2._0.Migrations
                     b.Navigation("ArticleType");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.TicketDetails", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.TicketDetails", b =>
                 {
-                    b.HasOne("ElysSalon2._0.Core.domain.Entities.Article", "Article")
+                    b.HasOne("ElysSalon2._0.domain.Entities.Article", "Article")
                         .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ElysSalon2._0.Core.domain.Entities.Ticket", "Ticket")
+                    b.HasOne("ElysSalon2._0.domain.Entities.Ticket", "Ticket")
                         .WithMany("TicketDetails")
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -711,7 +788,7 @@ namespace ElysSalon2._0.Migrations
                     b.Navigation("Ticket");
                 });
 
-            modelBuilder.Entity("ElysSalon2._0.Core.domain.Entities.Ticket", b =>
+            modelBuilder.Entity("ElysSalon2._0.domain.Entities.Ticket", b =>
                 {
                     b.Navigation("TicketDetails");
                 });

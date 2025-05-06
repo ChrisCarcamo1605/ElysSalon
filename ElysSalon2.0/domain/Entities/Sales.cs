@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ElysSalon2._0.domain.Entities;
 
@@ -9,6 +10,6 @@ public class Sales
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int SaleId { get; set; }
 
-    public DateTime SaleDate { get; set; }
-    public decimal Total { get; set; }
+    [NotNull] public DateTime SaleDate { get; set; }
+    [NotNull] public decimal Total { get; set; }
 }
