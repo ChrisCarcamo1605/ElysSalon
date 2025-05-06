@@ -369,7 +369,7 @@ public class ChartsViewModel : INotifyPropertyChanged
         var Xlabels = new List<String>();
 
         if (list.Count > 0)
-            for (var i = 0; i <= 6; i++)
+            for (var i = 0; i < list.Count; i++)
                 Xlabels.Add(list[i].Date.Date.ToString("dddd", new CultureInfo("es-ES")));
         else
             MessageBox.Show("No hay ventas en los ultimos 7 dias");
@@ -539,7 +539,7 @@ public class ChartsViewModel : INotifyPropertyChanged
     {
         var minDate = list.Min(x => x.Date);
         var maxDate = list.Max(x => x.Date);
-        var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date).ToList());
+        var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date).OrderBy(x=>x.Date.Date).ToList());
         var allDates = new List<DateTime>();
 
         for (var i = minDate; i <= maxDate; i = i.AddDays(1))
