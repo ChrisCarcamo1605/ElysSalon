@@ -31,6 +31,8 @@ public class TicketDetails : INotifyPropertyChanged
 
     public decimal Price { get; set; }
 
+    public DateTime Date { get; set;}
+
 
     public decimal TotalPrice => Quantity * Price;
 

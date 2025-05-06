@@ -11,6 +11,7 @@ using Window = System.Windows.Window;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using ElysSalon2._0.adapters.InBound.views;
@@ -24,6 +25,7 @@ using LiveChartsCore.Kernel;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.Kernel.Sketches;
+using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
 
@@ -305,7 +307,8 @@ public class ChartsViewModel : INotifyPropertyChanged
                     .Select(x => x.Sum(ticket => ticket.TotalAmount)
                     )
                     .ToList(),
-                Fill = new SolidColorPaint(new SKColor(0, 0, 0), 1)//tickets.Where(x => x.Date >= DateTime.Now.AddDays(-7)).Select(X => X.TotalAmount).ToList()
+                Fill = new SolidColorPaint(new SKColor(0, 0, 0),
+                    1) //tickets.Where(x => x.Date >= DateTime.Now.AddDays(-7)).Select(X => X.TotalAmount).ToList()
             }
         ];
 
@@ -317,9 +320,12 @@ public class ChartsViewModel : INotifyPropertyChanged
         Last7daysLabels = new List<string>();
         var Xlabels = new List<String>();
 
-        if (list.Count >= 0)
+        if (list.Count > 0)
+        {
+            Xlabels.Add(list[0].Date.ToString("dddd", new CultureInfo("es-ES")));
             for (var i = -6; i <= 0; i++)
                 Xlabels.Add(list[0].Date.AddDays(i).Date.ToString("dddd", new CultureInfo("es-ES")));
+        }
         else
             MessageBox.Show("No hay ventas en los ultimos 7 dias");
 
@@ -376,74 +382,71 @@ public class ChartsViewModel : INotifyPropertyChanged
         return null;
     }
 
-
-    public async Task GetBestArticles()
-    {
-        var result = await _ticketService.GetTicketDetailsAsync();
-
-        var bestArticles = result
-            .GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                article = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            }).OrderByDescending(x => x.TotalAmount);
-
-        foreach (var article in bestArticles)
-            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
-    }
-
-
-    public async Task GetBestServices()
-    {
-        var result = await _ticketService.GetTicketDetailsAsync();
-
-        var bestServices = result
-            .GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                service = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount);
-
-
-        foreach (var service in bestServices)
-            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
-    }
-
     public async Task GenerateTopArticleServices()
     {
+
+        _bestArticlesSeller.Clear();
+        _bestServicesSeller.Clear();
         var items = await _ticketService.GetTicketDetailsAsync();
 
-        var services = items.Where(x => x.Article.ArticleTypeId == 4).GroupBy(x => x.ArticleName)
+        var groupedResult = items
+            .GroupBy(x => x.ArticleName)
             .Select(g => new
             {
-                service = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount);
+                Name = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice),
+                ArticleTypeId = g.First().Article.ArticleTypeId, 
+                Date = g.First().Date 
+            });
 
-        var articles = items.Where(x => x.Article.ArticleTypeId != 4).GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                article = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount).ToList();
+        List<DtoBestSellerTicketDetails> services = new List<DtoBestSellerTicketDetails>();
+        List<DtoBestSellerTicketDetails> articles = new List<DtoBestSellerTicketDetails>();
 
+        DateTime startDate;
 
-        foreach (var article in articles)
-            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
+        switch (_selectedFilter.Value.Key)
+        {
+            case RangeFilter.LastSevenDays:
+                startDate = DateTime.Now.AddDays(-7);
+                break;
+            case RangeFilter.LastMonth:
+                startDate = DateTime.Now.AddMonths(-1).Date;
+                break;
+            case RangeFilter.LastThreeMonths:
+                startDate = DateTime.Now.AddMonths(-3).Date;
+                break;
+            default:
+                startDate = DateTime.MinValue; // O define un comportamiento por defecto
+                break;
+        }
 
+        var filteredItems = groupedResult.Where(x => x.Date >= startDate).OrderByDescending(x => x.TotalAmount).ToList();
+
+        services = filteredItems
+            .Where(x => x.ArticleTypeId == 4)
+            .Select(x => new DtoBestSellerTicketDetails(x.Name, x.TotalAmount))
+            .ToList();
+
+        articles = filteredItems
+            .Where(x => x.ArticleTypeId != 4)
+            .Select(x => new DtoBestSellerTicketDetails(x.Name, x.TotalAmount))
+            .ToList();
 
         foreach (var service in services)
-            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
+        {
+            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.Name, service.TotalAmount));
+        }
+        foreach (var article in articles)
+        {
+            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.Name, article.TotalAmount));
+        }
     }
-
     private void ApplyFilter()
     {
         LoadAllSales();
+        GenerateTopArticleServices();
+
+
         switch (_selectedFilter.Value.Key)
         {
             case RangeFilter.LastSevenDays:

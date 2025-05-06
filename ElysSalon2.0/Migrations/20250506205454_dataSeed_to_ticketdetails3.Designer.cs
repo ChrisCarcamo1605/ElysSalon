@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506205454_dataSeed_to_ticketdetails3")]
+    partial class dataSeed_to_ticketdetails3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -757,36 +760,6 @@ namespace ElysSalon2._0.Migrations
                             ArticleId = 9,
                             ArticleName = "Desde hace 3 meses",
                             Date = new DateTime(2025, 5, 4, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 430,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 431,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 1 mes",
-                            Date = new DateTime(2025, 4, 24, 0, 0, 0, 0, DateTimeKind.Local),
-                            Price = 12.59m,
-                            Quantity = 1,
-                            TicketId = "001100"
-                        },
-                        new
-                        {
-                            TicketDetailsId = 432,
-                            ArticleId = 7,
-                            ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 3, 6, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "001100"

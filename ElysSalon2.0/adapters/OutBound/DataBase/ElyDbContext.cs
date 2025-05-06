@@ -257,5 +257,117 @@ public class ElyDbContext : DbContext
                 TicketId = "001132", Issuer = "", EmissionDateTime = new DateTime(2025, 4, 7), TotalAmount = 34.50m
             }
         );
+
+        modelBuilder.Entity<TicketDetails>().HasData(
+            
+            new TicketDetails{
+                TicketDetailsId = 422,
+                TicketId = "001100",
+                ArticleId = 5,
+                ArticleName = "Tinte Rojo",
+                Quantity = 1,
+                Price = 12.59M, 
+                Date = DateTime.Now.Date
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 423,
+                TicketId = "001100",
+                ArticleId = 5,
+                ArticleName = "Tinte Rojo",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-15)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 424,
+                TicketId = "001100",
+                ArticleId = 5,
+                ArticleName = "Desde un Mes",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-15)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 425,
+                TicketId = "001100",
+                ArticleId = 5,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddMonths(-2)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 426,
+                TicketId = "001100",
+                ArticleId = 6,
+                ArticleName = "Desde un Mes",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-15)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 427,
+                TicketId = "001100",
+                ArticleId = 9,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddMonths(-2)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 428,
+                TicketId = "001100",
+                ArticleId = 4,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddMonths(-2)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 429,
+                TicketId = "001100",
+                ArticleId = 9,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-2)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 430,
+                TicketId = "001100",
+                ArticleId = 7,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-7)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 431,
+                TicketId = "001100",
+                ArticleId = 7,
+                ArticleName = "Desde hace 1 mes",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddDays(-12)
+            },
+            new TicketDetails
+            {
+                TicketDetailsId = 432,
+                TicketId = "001100",
+                ArticleId = 7,
+                ArticleName = "Desde hace 3 meses",
+                Quantity = 1,
+                Price = 12.59M,
+                Date = DateTime.Now.Date.AddMonths(-2)
+            });
     }
 }
