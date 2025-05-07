@@ -26,6 +26,21 @@ public class SalesViewModel : INotifyPropertyChanged
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
     private ObservableCollection<DtoSalesList> _ticketsCollection;
+    private ObservableCollection<DtoSalesList> _expensesCollection;
+
+    public ObservableCollection<DtoSalesList> ExpensesCollection
+    {
+        get => _expensesCollection;
+        set
+        {
+            SetField(ref _expensesCollection, value);
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<TicketDetails> _ticketDetailsCollection;
+
+
     private IMapper _mapper;
 
 
@@ -146,9 +161,9 @@ public class SalesViewModel : INotifyPropertyChanged
         _winManager = windowsManager;
         _salesCollection = [];
         _ticketsCollection = [];
+        _expensesCollection = [];
         _mapper = mapper;
         _window = window;
-
 
         ExitCommand = new RelayCommand(Exit);
         GenerateReportCommand = new RelayCommand(GenerateReport);
@@ -178,16 +193,31 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             var sales = await _service.GetSales();
             var tickets = await _ticketService.GetTicketsAsync();
+            var expenses = await _service.GetExpenses();
+            MessageBox.Show("Cargando GASTOS: " + expenses.Count);
+            _ticketDetailsCollection = await _ticketService.GetTicketDetailsAsync();
 
             _salesCollection.Clear();
             _ticketsCollection.Clear();
+            _expensesCollection.Clear();
 
             foreach (var ticket in tickets) _ticketsCollection.Add(new DtoSalesList(ticket));
 
             foreach (var sale in sales) _salesCollection.Add(new DtoSalesList(sale));
 
+            foreach (var expense in expenses) _expensesCollection.Add(new DtoSalesList(expense));
+
+
             //  ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
+
+            _salesCollection =
+                new ObservableCollection<DtoSalesList>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
+            _ticketsCollection =
+                new ObservableCollection<DtoSalesList>(_ticketsCollection.OrderByDescending(x => x.Date.Date).ToList());
+            _expensesCollection =
+                new ObservableCollection<DtoSalesList>(_expensesCollection.OrderByDescending(x => x.Date.Date)
+                    .ToList());
         }
         catch (Exception ex)
         {
@@ -237,7 +267,7 @@ public class SalesViewModel : INotifyPropertyChanged
                 break;
         }
 
-        GetSales();
+        _ = GetSales();
         _collectionView.Refresh();
     }
 
@@ -245,7 +275,7 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         var chartWindow = new ChartsWindow(_winManager,
             _salesCollection,
-            _ticketsCollection, _ticketService);
+            _ticketsCollection, _expensesCollection, _ticketDetailsCollection);
 
         chartWindow.ShowDialog();
     }

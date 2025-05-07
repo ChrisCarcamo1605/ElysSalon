@@ -43,6 +43,8 @@ public partial class App : Application
         services.AddSingleton<WindowsManager>();
         services.AddScoped<ITicketRepository, TicketRepository>();
         services.AddTransient<ISalesRepository, SalesRepository>();
+        services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
         //Services
         services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<ITicketService, TicketService>();

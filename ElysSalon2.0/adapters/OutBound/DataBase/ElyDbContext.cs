@@ -14,12 +14,12 @@ public class ElyDbContext : DbContext
     public DbSet<TicketDetails> TicketDetails { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     public DbSet<Sales> Sales { get; set; }
+    public DbSet<Expense> Expense { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
 
         modelBuilder.Entity<ArticleType>().HasData(
             new ArticleType { ArticleTypeId = 1, Name = "Todo" },
@@ -440,14 +440,14 @@ public class ElyDbContext : DbContext
         );
 
         modelBuilder.Entity<TicketDetails>().HasData(
-            
-            new TicketDetails{
+            new TicketDetails
+            {
                 TicketDetailsId = 422,
                 TicketId = "001100",
                 ArticleId = 5,
                 ArticleName = "Tinte Rojo",
                 Quantity = 1,
-                Price = 12.59M, 
+                Price = 12.59M,
                 Date = DateTime.Now.Date
             },
             new TicketDetails
@@ -550,5 +550,51 @@ public class ElyDbContext : DbContext
                 Price = 12.59M,
                 Date = DateTime.Now.Date.AddMonths(-2)
             });
+        modelBuilder.Entity<Expense>().HasData(
+            new Expense { Id = 1, Amount = 25.50m, Reason = "Compra de suministros", Date = new DateTime(2025, 4, 30) },
+            new Expense { Id = 2, Amount = 15.75m, Reason = "Almuerzo", Date = new DateTime(2025, 5, 1) },
+            new Expense { Id = 3, Amount = 80.00m, Reason = "Combustible", Date = new DateTime(2025, 5, 2) },
+            new Expense { Id = 4, Amount = 35.20m, Reason = "Reparación menor", Date = new DateTime(2025, 5, 3) },
+            new Expense { Id = 5, Amount = 12.99m, Reason = "Suscripción online", Date = new DateTime(2025, 5, 4) },
+            new Expense { Id = 6, Amount = 210.50m, Reason = "Viaje de negocios", Date = new DateTime(2025, 5, 5) },
+            new Expense { Id = 7, Amount = 45.00m, Reason = "Material de oficina", Date = new DateTime(2025, 4, 25) },
+            new Expense { Id = 8, Amount = 65.80m, Reason = "Pago de internet", Date = new DateTime(2025, 4, 20) },
+            new Expense { Id = 9, Amount = 1200.00m, Reason = "Alquiler de local", Date = new DateTime(2025, 3, 10) },
+            new Expense { Id = 10, Amount = 90.30m, Reason = "Curso online", Date = new DateTime(2025, 3, 25) },
+            new Expense { Id = 11, Amount = 18.75m, Reason = "Mantenimiento web", Date = new DateTime(2025, 4, 15) },
+            new Expense { Id = 12, Amount = 75.00m, Reason = "Publicidad Facebook", Date = new DateTime(2025, 3, 5) },
+            new Expense { Id = 13, Amount = 5.50m, Reason = "Impresiones", Date = new DateTime(2025, 4, 1) },
+            new Expense
+            {
+                Id = 14, Amount = 30.25m, Reason = "Productos de limpieza", Date = new DateTime(2025, 3, 18)
+            },
+            new Expense { Id = 15, Amount = 40.00m, Reason = "Soporte técnico", Date = new DateTime(2025, 4, 8) },
+            new Expense
+            {
+                Id = 16, Amount = 150.00m, Reason = "Licencia de software", Date = new DateTime(2025, 3, 22)
+            },
+            new Expense { Id = 17, Amount = 55.60m, Reason = "Seguro", Date = new DateTime(2025, 4, 12) },
+            new Expense { Id = 18, Amount = 12.30m, Reason = "Envío de documentos", Date = new DateTime(2025, 3, 28) },
+            new Expense { Id = 19, Amount = 300.00m, Reason = "Consultoría", Date = new DateTime(2025, 4, 5) },
+            new Expense { Id = 20, Amount = 85.40m, Reason = "Entrada a evento", Date = new DateTime(2025, 3, 15) },
+            new Expense { Id = 21, Amount = 28.90m, Reason = "Suministros varios", Date = new DateTime(2025, 4, 28) },
+            new Expense { Id = 22, Amount = 18.50m, Reason = "Cafetería", Date = new DateTime(2025, 5, 2) },
+            new Expense
+            {
+                Id = 23, Amount = 95.00m, Reason = "Mantenimiento vehículo", Date = new DateTime(2025, 4, 22)
+            },
+            new Expense { Id = 24, Amount = 42.15m, Reason = "Arreglo de oficina", Date = new DateTime(2025, 3, 30) },
+            new Expense { Id = 25, Amount = 7.99m, Reason = "App de productividad", Date = new DateTime(2025, 5, 1) },
+            new Expense { Id = 26, Amount = 180.75m, Reason = "Alojamiento", Date = new DateTime(2025, 4, 18) },
+            new Expense { Id = 27, Amount = 38.20m, Reason = "Papelería", Date = new DateTime(2025, 3, 8) },
+            new Expense { Id = 28, Amount = 70.50m, Reason = "Pago de agua", Date = new DateTime(2025, 4, 26) },
+            new Expense { Id = 29, Amount = 1100.00m, Reason = "Publicidad impresa", Date = new DateTime(2025, 3, 12) },
+            new Expense { Id = 30, Amount = 105.60m, Reason = "Seminario", Date = new DateTime(2025, 4, 3) },
+            new Expense { Id = 31, Amount = 22.40m, Reason = "Actualización web", Date = new DateTime(2025, 3, 20) },
+            new Expense { Id = 32, Amount = 88.00m, Reason = "Google Ads", Date = new DateTime(2025, 4, 10) },
+            new Expense { Id = 33, Amount = 9.20m, Reason = "Fotocopias", Date = new DateTime(2025, 3, 27) },
+            new Expense { Id = 34, Amount = 33.90m, Reason = "Material de aseo", Date = new DateTime(2025, 4, 16) },
+            new Expense { Id = 35, Amount = 58.15m, Reason = "Repuestos", Date = new DateTime(2025, 3, 5) },
+            new Expense { Id = 36, Amount = 165.00m, Reason = "Software contable", Date = new DateTime(2025, 4, 2) });
     }
 }

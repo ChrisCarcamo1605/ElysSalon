@@ -17,12 +17,15 @@ public class SalesService : ISalesService
 {
     private ISalesRepository _salesRepo;
     private ITicketRepository _ticketRepo;
+    private IRepository<Expense> _expenseRepo;
     private ReportsConfiguration _reportConfig;
 
-    public SalesService(ISalesRepository salesRepo, ITicketRepository ticketRepo, ReportsConfiguration reportsConfig)
+    public SalesService(ISalesRepository salesRepo, ITicketRepository ticketRepo, ReportsConfiguration reportsConfig
+        , IRepository<Expense> expenseRepo)
     {
         _reportConfig = reportsConfig;
         _salesRepo = salesRepo;
+        _expenseRepo = expenseRepo;
         _ticketRepo = ticketRepo;
     }
 
@@ -174,6 +177,16 @@ public class SalesService : ISalesService
     public async Task SaveSale(Sales sale)
     {
         _salesRepo.SavesSale(sale);
+    }
+
+    public async Task AddExpense(Expense expense)
+    {
+        await _expenseRepo.SaveAsync(expense);
+    }
+
+    public async Task<ObservableCollection<Expense>> GetExpenses()
+    {
+        return await _expenseRepo.GetAllAsync();
     }
 
     public async Task<ObservableCollection<Sales>> GetSales()

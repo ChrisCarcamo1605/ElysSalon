@@ -41,6 +41,8 @@ public class ChartsViewModel : INotifyPropertyChanged
     private ObservableCollection<DtoSalesList> _salesCollection;
     private ObservableCollection<DtoSalesList> _ticketCollection;
     private ObservableCollection<KeyValuePair<RangeFilter, int>> OrderBy;
+    private ObservableCollection<DtoSalesList> _expensesCollection;
+    private ObservableCollection<TicketDetails> _ticketDetailsCollection;
 
     private ObservableCollection<KeyValuePair<RangeFilter, string>>? _rangeOptions;
 
@@ -175,29 +177,34 @@ public class ChartsViewModel : INotifyPropertyChanged
 
 
     public ChartsViewModel(Window window, WindowsManager winManager, ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> ticketCollection, ITicketService ticketService)
+        ObservableCollection<DtoSalesList> ticketCollection, ObservableCollection<DtoSalesList> expensesCollection
+        , ObservableCollection<TicketDetails> ticketDetailsCollection)
     {
         InitializeRangeOptions();
         _winManager = winManager;
         _window = window;
-        _ticketService = ticketService;
 
-        _salesCollection = new ObservableCollection<DtoSalesList>(LoadEmptyDates(salesCollection));
-        _ticketCollection = new ObservableCollection<DtoSalesList>(LoadEmptyDates(ticketCollection));
+        _salesCollection = salesCollection;
+        _ticketCollection = ticketCollection;
+        _expensesCollection = expensesCollection;
+        _ticketDetailsCollection = ticketDetailsCollection;
 
         _bestArticlesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
         _bestServicesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
         _ = GenerateTopArticleServices();
 
         LoadAllSales();
+        _expensesCollection = LoadEmptyDates(_expensesCollection);
+        _salesCollection = LoadEmptyDates(_salesCollection);
         ApplyFilter();
+
         ExitCommand = new RelayCommand(Exit);
     }
 
 
     private ISeries[] LoadLastMonth()
     {
-        var tickets = new ObservableCollectionListSource<ObservablePoint>();
+        var expenses = new ObservableCollectionListSource<ObservablePoint>();
         var sales = new ObservableCollectionListSource<ObservablePoint>();
 
 
@@ -212,7 +219,7 @@ public class ChartsViewModel : INotifyPropertyChanged
             .OrderBy(x => x.Date)
             .ToList();
 
-        var lastMonthTickets = _ticketCollection
+        var lastMonthExpenses = _expensesCollection
             .Where(x => x.Date.Date >= DateTime.Now.AddDays(-30).Date)
             .GroupBy(x => x.Date.Date)
             .Select(x => new
@@ -229,9 +236,9 @@ public class ChartsViewModel : INotifyPropertyChanged
             sales.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
         }
 
-        foreach (var ticket in lastMonthTickets)
+        foreach (var ticket in lastMonthExpenses)
         {
-            tickets.Add(new ObservablePoint(ticket.Date.ToOADate(), (double)ticket.TotalAmount));
+            expenses.Add(new ObservablePoint(ticket.Date.ToOADate(), (double)ticket.TotalAmount));
         }
 
         ISeries[] series =
@@ -249,9 +256,9 @@ public class ChartsViewModel : INotifyPropertyChanged
             },
             new LineSeries<ObservablePoint>()
             {
-                Values = tickets,
+                Values = expenses,
                 GeometrySize = 10,
-                Name = "Tickets",
+                Name = "Gastos",
                 Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0)),
                 GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
@@ -350,14 +357,14 @@ public class ChartsViewModel : INotifyPropertyChanged
             },
             new ColumnSeries<decimal>
             {
-                Name = "Tickets",
-                Values = _ticketCollection.Where(x => x.Date.Date > DateTime.Now.AddDays(-7).Date)
+                Name = "Gastos",
+                Values = _expensesCollection.Where(x => x.Date.Date > DateTime.Now.AddDays(-7).Date)
                     .GroupBy(x => x.Date.Date).OrderBy(x => x.Key)
                     .Select(x => x.Sum(ticket => ticket.TotalAmount)
                     )
                     .ToList(),
                 Fill = new SolidColorPaint(new SKColor(0, 0, 0),
-                    1) //tickets.Where(x => x.Date >= DateTime.Now.AddDays(-7)).Select(X => X.TotalAmount).ToList()
+                    1)
             }
         ];
         return series;
@@ -365,14 +372,14 @@ public class ChartsViewModel : INotifyPropertyChanged
 
     public Axis[] LoadLast7DayXAxis(List<DtoSalesList> list)
     {
-        Last7daysLabels = new List<string>();
+        Last7daysLabels = new List<String>();
         var Xlabels = new List<String>();
 
-        if (list.Count > 0)
-            for (var i = 0; i < list.Count; i++)
-                Xlabels.Add(list[i].Date.Date.ToString("dddd", new CultureInfo("es-ES")));
-        else
-            MessageBox.Show("No hay ventas en los ultimos 7 dias");
+        for (var i = 0; i < 7; i++)
+        {
+            Xlabels.Add(list[i].Date.ToString("dddd", new CultureInfo("es-ES")));
+        }
+
         return
             new Axis[]
             {
@@ -401,7 +408,7 @@ public class ChartsViewModel : INotifyPropertyChanged
             {
                 Labeler = value => DateTime.FromOADate(value).ToString("dd-MM"),
                 UnitWidth = TimeSpan.FromDays(1).TotalDays,
-                MinStep = TimeSpan.FromDays(7).TotalDays, 
+                MinStep = TimeSpan.FromDays(7).TotalDays,
                 TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
                 LabelsRotation = 90,
                 TextSize = 12, ShowSeparatorLines = true,
@@ -435,83 +442,82 @@ public class ChartsViewModel : INotifyPropertyChanged
     }
 
 
-    public async Task GetBestArticles()
-    {
-        var result = await _ticketService.GetTicketDetailsAsync();
-
-        var bestArticles = result
-            .GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                article = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            }).OrderByDescending(x => x.TotalAmount);
-
-        foreach (var article in bestArticles)
-            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
-    }
-
-
-    public async Task GetBestServices()
-    {
-        var result = await _ticketService.GetTicketDetailsAsync();
-
-        var bestServices = result
-            .GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                service = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount);
-
-
-        foreach (var service in bestServices)
-            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
-    }
-
     public async Task GenerateTopArticleServices()
     {
-        var items = await _ticketService.GetTicketDetailsAsync();
+        _bestArticlesSeller.Clear();
+        _bestServicesSeller.Clear();
+        var items = _ticketDetailsCollection;
 
-        var services = items.Where(x => x.Article.ArticleTypeId == 4).GroupBy(x => x.ArticleName)
+        var groupedResult = items
+            .GroupBy(x => x.ArticleName)
             .Select(g => new
             {
-                service = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount);
+                Name = g.Key,
+                TotalAmount = g.Sum(x => x.TotalPrice),
+                ArticleTypeId = g.First().Article.ArticleTypeId,
+                Date = g.First().Date
+            });
 
-        var articles = items.Where(x => x.Article.ArticleTypeId != 4).GroupBy(x => x.ArticleName)
-            .Select(g => new
-            {
-                article = g.Key,
-                TotalAmount = g.Sum(x => x.TotalPrice)
-            })
-            .OrderByDescending(x => x.TotalAmount).ToList();
+        List<DtoBestSellerTicketDetails> services = new List<DtoBestSellerTicketDetails>();
+        List<DtoBestSellerTicketDetails> articles = new List<DtoBestSellerTicketDetails>();
 
+        DateTime startDate;
 
-        foreach (var article in articles)
-            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.article, article.TotalAmount));
+        switch (_selectedFilter.Value.Key)
+        {
+            case RangeFilter.LastSevenDays:
+                startDate = DateTime.Now.AddDays(-7);
+                break;
+            case RangeFilter.LastMonth:
+                startDate = DateTime.Now.AddMonths(-1).Date;
+                break;
+            case RangeFilter.LastThreeMonths:
+                startDate = DateTime.Now.AddMonths(-3).Date;
+                break;
+            default:
+                startDate = DateTime.MinValue; // O define un comportamiento por defecto
+                break;
+        }
 
+        var filteredItems = groupedResult.Where(x => x.Date >= startDate).OrderByDescending(x => x.TotalAmount)
+            .ToList();
+
+        services = filteredItems
+            .Where(x => x.ArticleTypeId == 4)
+            .Select(x => new DtoBestSellerTicketDetails(x.Name, x.TotalAmount))
+            .ToList();
+
+        articles = filteredItems
+            .Where(x => x.ArticleTypeId != 4)
+            .Select(x => new DtoBestSellerTicketDetails(x.Name, x.TotalAmount))
+            .ToList();
 
         foreach (var service in services)
-            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.service, service.TotalAmount));
+        {
+            _bestServicesSeller.Add(new DtoBestSellerTicketDetails(service.Name, service.TotalAmount));
+        }
+
+        foreach (var article in articles)
+        {
+            _bestArticlesSeller.Add(new DtoBestSellerTicketDetails(article.Name, article.TotalAmount));
+        }
     }
 
     private void ApplyFilter()
     {
+        _ = GenerateTopArticleServices();
         LoadAllSales();
+
         switch (_selectedFilter.Value.Key)
         {
             case RangeFilter.LastSevenDays:
-                XLabels = LoadLast7DayXAxis(_salesCollection.Where(x => x.Date.Date > DateTime.Now.AddDays(-7).Date)
+                XLabels = LoadLast7DayXAxis(_salesCollection.OrderBy(x => x.Date)
+                    .Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7))
                     .ToList());
                 Series = LoadLast7Days();
                 break;
 
             case RangeFilter.LastMonth:
-
                 XLabels = LoadLastMontHXAxis();
                 YLabels = LoadLastMontHYAxis();
 
@@ -532,14 +538,19 @@ public class ChartsViewModel : INotifyPropertyChanged
             new KeyValuePair<RangeFilter, string>(RangeFilter.LastMonth, "Ultimo mes"),
             new KeyValuePair<RangeFilter, string>(RangeFilter.LastThreeMonths, "Ultimos 3 meses")
         };
+
         _selectedFilter = _rangeOptions[0];
     }
 
-    public List<DtoSalesList> LoadEmptyDates(ObservableCollection<DtoSalesList> list)
+    public ObservableCollection<DtoSalesList> LoadEmptyDates(ObservableCollection<DtoSalesList> collection)
     {
+        var list = collection;
         var minDate = list.Min(x => x.Date);
-        var maxDate = list.Max(x => x.Date);
-        var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date).OrderBy(x=>x.Date.Date).ToList());
+        var maxDate = DateTime.Now.Date;
+
+        var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date)
+            .OrderBy(x => x.Date.Date)
+            .ToList());
         var allDates = new List<DateTime>();
 
         for (var i = minDate; i <= maxDate; i = i.AddDays(1))
@@ -557,7 +568,7 @@ public class ChartsViewModel : INotifyPropertyChanged
             }
         }
 
-        return list.ToList();
+        return list;
     }
 
 

@@ -8,6 +8,7 @@ public class DtoSalesList
     public string Id { get; set; }
     public string Day { get; set; }
     public DateTime Date { get; set; }
+    public String Reason { get; set; }
     public decimal TotalAmount { get; set; }
 
 
@@ -33,5 +34,14 @@ public class DtoSalesList
         Day = ticket.EmissionDateTime.ToString("dddd", new CultureInfo("es-SV"));
         Date = ticket.EmissionDateTime;
         TotalAmount = ticket.TotalAmount;
+    }
+
+    public DtoSalesList(Expense expense)
+    {
+        Id = expense.Id.ToString();
+        Day = expense.Date.ToString("dddd", new CultureInfo("es-SV"));
+        Reason = expense.Reason;
+        Date = expense.Date;
+        TotalAmount = expense.Amount;
     }
 }

@@ -13,7 +13,8 @@ public interface ISalesService
     Task GenerateAnualReport(ObservableCollection<Sales> collection);
     Task GenerateAnualReport(ObservableCollection<Ticket> collection);
     Task GenerateMonthReport(ObservableCollection<Sales> collection);
-
     Task SaveSale(Sales sale);
+    Task AddExpense(Expense expense);
+    Task<ObservableCollection<Expense>> GetExpenses();
     Task<ObservableCollection<Sales>> GetSales();
 }

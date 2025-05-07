@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.InBound.ViewModels;
 using ElysSalon2._0.aplication.DTOs.DTOSales;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
+using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.adapters.InBound.views;
 
@@ -13,11 +14,11 @@ namespace ElysSalon2._0.adapters.InBound.views;
 public partial class ChartsWindow : Window
 {
     public ChartsWindow(WindowsManager windowsManager, ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> ticketCollection, ITicketService ticketService)
+        ObservableCollection<DtoSalesList> ticketCollection, ObservableCollection<DtoSalesList> expensesCollection,ObservableCollection<TicketDetails> tdetailsCollection)
     {
         InitializeComponent();
 
-        DataContext = new ChartsViewModel(this, windowsManager, salesCollection, ticketCollection, ticketService);
+        DataContext = new ChartsViewModel(this, windowsManager, salesCollection, ticketCollection,expensesCollection, tdetailsCollection);
     }
 
     private void CartesianChart_Loaded(object sender, RoutedEventArgs e)
