@@ -13,8 +13,10 @@ public class ArticleMappingProfile : Profile
         CreateMap<DTOGetArticlesButton, Article>();
         CreateMap<Article, DTOGetArticlesButton>();
         CreateMap<Article, DTOUpdateArticle>();
+        
 
         //DTO to Article
         CreateMap<DTOAddArticle, Article>();
+        CreateMap<DTOUpdateArticle, Article >();
     }
 }

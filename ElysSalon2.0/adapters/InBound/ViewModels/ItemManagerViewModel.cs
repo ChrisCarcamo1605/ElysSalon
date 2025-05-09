@@ -276,7 +276,14 @@ public class ItemManagerViewModel : INotifyPropertyChanged
             Stock ?? "0", Description);
 
         var result = await _service.AddArticle(dto);
-        MessageBox.Show(result.Message, "Error de formulario", MessageBoxButton.OK, MessageBoxImage.Warning);
+        if (result.Success)
+        {
+            MessageBox.Show(result.Message, "Articulo agregado", MessageBoxButton.OK, MessageBoxImage.Information);
+            CleanForm();
+            return;
+        }
+        else
+            MessageBox.Show(result.Message, "Error de formulario", MessageBoxButton.OK, MessageBoxImage.Warning);
     }
 
     private Task EditArticle(Article article)

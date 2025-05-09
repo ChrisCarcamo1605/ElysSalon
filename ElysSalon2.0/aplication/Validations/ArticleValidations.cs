@@ -48,7 +48,10 @@ public class ArticleValidations
         var existing = articles.FirstOrDefault(x => x.Name == dto.Name);
 
 
-        if (string.IsNullOrWhiteSpace(dto.Name)) return ServiceResult.Failed("Ingrese un nombre válido");
+        if (string.IsNullOrWhiteSpace(dto.Name))
+        {
+            return ServiceResult.Failed("Ingrese un nombre válido");
+        }
 
         if (dto.ArticleTypeId == 2) return ServiceResult.Failed("Seleccione un tipo de artículo");
 
@@ -65,7 +68,13 @@ public class ArticleValidations
             if (existing.Name != art.Name)
                 return ServiceResult.Failed("Articulo ya existente");
 
-        return ServiceResult.SuccessResult("Articulo actualizado correctamente!");
+        art.Name = dto.Name;
+        art.PriceBuy = dto.PriceBuy;
+        art.PriceCost = dto.PriceCost;
+        art.Stock = dto.Stock;
+        art.ArticleTypeId = dto.ArticleTypeId;
+        art.Description = dto.Description;
+        return ServiceResult.SuccessResult(art, "Articulo actualizado correctamente!");
     }
 
 
@@ -78,18 +87,25 @@ public class ArticleValidations
 
         if (existing != null) return ServiceResult.Failed("Tipo ya existente");
 
+        if (name.Any(char.IsDigit))
+        {
+            return ServiceResult.Failed("El nombre no debe contener números.");
+        }
+
         return ServiceResult.SuccessResult("Tipo creado correctamente");
     }
 
-    public static ServiceResult ValidateUpdateType(ArticleType type, ObservableCollection<ArticleType> articleTypes)
+    public static ServiceResult ValidateUpdateType(string name, ArticleType type)
     {
-        var existing = articleTypes.FirstOrDefault(x => x.Name == type.Name);
-
-
         if (string.IsNullOrWhiteSpace(type.Name)) return ServiceResult.Failed("Ingrese un nombre");
 
-        if (existing != null) return ServiceResult.Failed("Tipo ya existente");
+        if (name.Any(char.IsDigit))
+        {
+            return ServiceResult.Failed("El nombre no debe contener números.");
+        }
 
-        return ServiceResult.SuccessResult("Tipo actualizado correctamente");
+        type.Name = name;
+
+        return ServiceResult.SuccessResult(type, "Tipo actualizado correctamente");
     }
 }
