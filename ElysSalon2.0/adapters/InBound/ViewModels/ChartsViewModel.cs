@@ -27,6 +27,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.Kernel.Sketches;
 using System.Linq;
+using ElysSalon2._0.domain.Services;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
@@ -202,101 +203,20 @@ public class ChartsViewModel : INotifyPropertyChanged
     }
 
 
-    private ISeries[] LoadLastMonth()
-    {
-        var expenses = new ObservableCollectionListSource<ObservablePoint>();
-        var sales = new ObservableCollectionListSource<ObservablePoint>();
-
-
-        var lastMonthSales = _salesCollection
-            .Where(x => x.Date.Date >= DateTime.Now.AddDays(-30).Date)
-            .GroupBy(x => x.Date.Date)
-            .Select(x => new
-            {
-                Date = x.Key,
-                TotalAmount = x.Sum(x => x.TotalAmount)
-            })
-            .OrderBy(x => x.Date)
-            .ToList();
-
-        var lastMonthExpenses = _expensesCollection
-            .Where(x => x.Date.Date >= DateTime.Now.AddDays(-30).Date)
-            .GroupBy(x => x.Date.Date)
-            .Select(x => new
-            {
-                Date = x.Key,
-                TotalAmount = x.Sum(x => x.TotalAmount)
-            })
-            .OrderBy(x => x.Date)
-            .ToList();
-
-
-        foreach (var venta in lastMonthSales)
-        {
-            sales.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
-        }
-
-        foreach (var ticket in lastMonthExpenses)
-        {
-            expenses.Add(new ObservablePoint(ticket.Date.ToOADate(), (double)ticket.TotalAmount));
-        }
-
-        ISeries[] series =
-        [
-            new LineSeries<ObservablePoint>()
-            {
-                Values = sales,
-                GeometrySize = 10,
-                Name = "Ventas",
-                Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
-                GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190)),
-                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
-                Fill = null,
-                LineSmoothness = 0
-            },
-            new LineSeries<ObservablePoint>()
-            {
-                Values = expenses,
-                GeometrySize = 10,
-                Name = "Gastos",
-                Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
-                GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0)),
-                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
-                Fill = null,
-                LineSmoothness = 0
-            }
-        ];
-        return series;
-    }
-
-
     public void LoadAllSales()
     {
-        var lastYearSales = _salesCollection
-            .Where(x => x.Date > DateTime.Now.AddYears(-1))
+        var allSales = _salesCollection
             .OrderBy(x => x.Date)
             .ToList();
 
         var puntos = new ObservableCollection<ObservablePoint>();
 
-        foreach (var venta in lastYearSales)
+        foreach (var venta in allSales)
         {
             puntos.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
         }
 
-
-        _generalYAxis = new Axis[]
-        {
-            new Axis
-            {
-                Name = "Total",
-                Position = AxisPosition.Start,
-                ShowSeparatorLines = true,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
-                SeparatorsAtCenter = true,
-                SubseparatorsCount = 2
-            }
-        };
+        _generalYAxis = LoadChartBarYAxis();
 
         _generalXAxis = new Axis[]
         {
@@ -332,60 +252,47 @@ public class ChartsViewModel : INotifyPropertyChanged
     }
 
 
-    private void LoadLastYear(ObservableCollection<DtoSalesList> sales,
-        ObservableCollection<DtoSalesList> tickets)
+    private ISeries[] LoadChartBarValues()
     {
-        var lastYearSales = new ObservableCollection<DtoSalesList>(
-            sales.Where(x => x.Date > DateTime.Now.AddYears(-1)));
-        var lastYearTickets = new ObservableCollection<DtoSalesList>(
-            new ObservableCollection<DtoSalesList>(
-                tickets.Where(x => x.Date > DateTime.Now.AddYears(-1))));
-    }
+        var salesFiltered = FilterByRangeService.FilterByDateRange(_salesCollection, _selectedFilter.Value.Value);
+        var expensesFiltered = FilterByRangeService.FilterByDateRange(_expensesCollection, _selectedFilter.Value.Value);
 
-
-    private ISeries[] LoadLast7Days()
-    {
         ISeries[] series =
         [
             new ColumnSeries<decimal>
             {
                 Name = "Ventas",
-                Values = _salesCollection.Where(x => x.Date.Date > DateTime.Now.AddDays(-7).Date)
-                    .GroupBy(x => x.Date).OrderBy(x => x.Key)
-                    .Select(x => x.Sum(x => x.TotalAmount)).ToList(),
+                Values = salesFiltered,
+
                 Fill = new SolidColorPaint(new SKColor(255, 0, 190), 1)
             },
             new ColumnSeries<decimal>
             {
                 Name = "Gastos",
-                Values = _expensesCollection.Where(x => x.Date.Date > DateTime.Now.AddDays(-7).Date)
-                    .GroupBy(x => x.Date.Date).OrderBy(x => x.Key)
-                    .Select(x => x.Sum(ticket => ticket.TotalAmount)
-                    )
-                    .ToList(),
+                Values = expensesFiltered,
                 Fill = new SolidColorPaint(new SKColor(0, 0, 0),
                     1)
             }
         ];
+
+        LoadChartBarXAxis();
         return series;
     }
 
-    public Axis[] LoadLast7DayXAxis(List<DtoSalesList> list)
+    public Axis[] LoadChartBarXAxis()
     {
-        Last7daysLabels = new List<String>();
-        var Xlabels = new List<String>();
+        var list = _salesCollection.ToList();
+        var dates = new List<DtoSalesList>();
+        Axis XAxis = new Axis();
+        Axis[] AxisArray = new[] { XAxis };
 
-        for (var i = 0; i < 7; i++)
+        switch (_selectedFilter.Value.Key)
         {
-            Xlabels.Add(list[i].Date.ToString("dddd", new CultureInfo("es-ES")));
-        }
+            case RangeFilter.LastSevenDays:
 
-        return
-            new Axis[]
-            {
-                new Axis
+                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7)).ToList();
+                XAxis = new Axis
                 {
-                    Labels = Xlabels,
                     UnitWidth = 1,
                     TextSize = 12,
                     LabelsRotation = 0,
@@ -395,32 +302,43 @@ public class ChartsViewModel : INotifyPropertyChanged
                     TicksAtCenter = true,
                     ForceStepToMin = true,
                     Position = AxisPosition.Start,
-                }
-            };
+                };
+                var Xlabels = new List<String>();
+                for (var i = 0; i < 7; i++) Xlabels.Add(dates[i].Date.ToString("dddd", new CultureInfo("es-ES")));
+                XAxis.Labels = Xlabels;
+                AxisArray[0] = XAxis;
+                break;
+
+            case RangeFilter.LastMonth:
+
+                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-30)).ToList();
+                XAxis = new Axis
+                {
+                    Labeler = value => DateTime.FromOADate(value).ToString("dd-MM"),
+                    UnitWidth = TimeSpan.FromDays(1).TotalDays,
+                    MinStep = TimeSpan.FromDays(7).TotalDays,
+                    TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
+                    LabelsRotation = 90,
+                    TextSize = 12,
+                    ShowSeparatorLines = true,
+                    SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
+                    SeparatorsAtCenter = true,
+                    SubseparatorsCount = 2
+                };
+                AxisArray[0] = XAxis;
+
+                break;
+            case RangeFilter.LastThreeMonths:
+                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-90)).ToList();
+                AxisArray[0] = XAxis;
+
+                break;
+        }
+
+        return AxisArray;
     }
 
-
-    public Axis[] LoadLastMontHXAxis()
-    {
-        return new Axis[]
-        {
-            new Axis
-            {
-                Labeler = value => DateTime.FromOADate(value).ToString("dd-MM"),
-                UnitWidth = TimeSpan.FromDays(1).TotalDays,
-                MinStep = TimeSpan.FromDays(7).TotalDays,
-                TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
-                LabelsRotation = 90,
-                TextSize = 12, ShowSeparatorLines = true,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
-                // Opcional: Controla el estilo de las líneas de cuadrícula
-                SeparatorsAtCenter = true,
-                SubseparatorsCount = 2
-            }
-        };
-    }
-
-    public Axis[] LoadLastMontHYAxis()
+    public Axis[] LoadChartBarYAxis()
     {
         return new Axis[]
         {
@@ -435,12 +353,6 @@ public class ChartsViewModel : INotifyPropertyChanged
             }
         };
     }
-
-    public Axis[] LoadLastThreeMonth()
-    {
-        return null;
-    }
-
 
     public async Task GenerateTopArticleServices()
     {
@@ -511,21 +423,19 @@ public class ChartsViewModel : INotifyPropertyChanged
         switch (_selectedFilter.Value.Key)
         {
             case RangeFilter.LastSevenDays:
-                XLabels = LoadLast7DayXAxis(_salesCollection.OrderBy(x => x.Date)
-                    .Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7))
-                    .ToList());
-                Series = LoadLast7Days();
+                XLabels = LoadChartBarXAxis();
+                Series = LoadChartBarValues();
                 break;
 
             case RangeFilter.LastMonth:
-                XLabels = LoadLastMontHXAxis();
-                YLabels = LoadLastMontHYAxis();
+                XLabels = LoadChartBarXAxis();
+                YLabels = LoadChartBarYAxis();
 
-                Series = LoadLastMonth();
+                Series = LoadChartBarValues();
                 break;
             case RangeFilter.LastThreeMonths:
-                Series = LoadLastMonth();
-                XLabels = LoadLastThreeMonth();
+                Series = LoadChartBarValues();
+                XLabels = LoadChartBarXAxis();
                 break;
         }
     }

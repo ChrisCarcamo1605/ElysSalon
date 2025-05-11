@@ -194,7 +194,7 @@ public class SalesViewModel : INotifyPropertyChanged
             var sales = await _service.GetSales();
             var tickets = await _ticketService.GetTicketsAsync();
             var expenses = await _service.GetExpenses();
-            MessageBox.Show("Cargando GASTOS: " + expenses.Count);
+           
             _ticketDetailsCollection = await _ticketService.GetTicketDetailsAsync();
 
             _salesCollection.Clear();
