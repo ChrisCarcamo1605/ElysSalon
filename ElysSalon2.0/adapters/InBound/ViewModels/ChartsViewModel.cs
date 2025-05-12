@@ -209,11 +209,11 @@ public class ChartsViewModel : INotifyPropertyChanged
             .OrderBy(x => x.Date)
             .ToList();
 
-        var puntos = new ObservableCollection<ObservablePoint>();
+        var points = new ObservableCollection<ObservablePoint>();
 
         foreach (var venta in allSales)
         {
-            puntos.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
+            points.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
         }
 
         _generalYAxis = LoadChartBarYAxis();
@@ -229,7 +229,6 @@ public class ChartsViewModel : INotifyPropertyChanged
                 LabelsRotation = 90,
                 TextSize = 12, ShowSeparatorLines = true,
                 SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
-                // Opcional: Controla el estilo de las líneas de cuadrícula
                 SeparatorsAtCenter = true,
                 SubseparatorsCount = 2
             }
@@ -240,7 +239,7 @@ public class ChartsViewModel : INotifyPropertyChanged
             new LineSeries<ObservablePoint>
             {
                 Name = "Ventas",
-                Values = puntos,
+                Values = points,
                 GeometrySize = 10,
                 Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
@@ -256,6 +255,7 @@ public class ChartsViewModel : INotifyPropertyChanged
     {
         var salesFiltered = FilterByRangeService.FilterByDateRange(_salesCollection, _selectedFilter.Value.Value);
         var expensesFiltered = FilterByRangeService.FilterByDateRange(_expensesCollection, _selectedFilter.Value.Value);
+
 
         ISeries[] series =
         [
@@ -274,6 +274,31 @@ public class ChartsViewModel : INotifyPropertyChanged
                     1)
             }
         ];
+        if (_selectedFilter.Value.Key == RangeFilter.LastThreeMonths)
+        {
+            series[0] = new LineSeries<decimal>
+            {
+                Name = "Ventas",
+                Values = salesFiltered,
+                GeometrySize = 10,
+                Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
+                GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
+                Fill = null,
+
+                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
+            };
+            series[1] = new LineSeries<decimal>
+            {
+                Name = "Gastos",
+                Values = expensesFiltered,
+                GeometrySize = 10,
+                Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
+                GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0), 0),
+                Fill = null,
+
+                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
+            };
+        }
 
         LoadChartBarXAxis();
         return series;
@@ -281,8 +306,8 @@ public class ChartsViewModel : INotifyPropertyChanged
 
     public Axis[] LoadChartBarXAxis()
     {
-        var list = _salesCollection.ToList();
-        var dates = new List<DtoSalesList>();
+        var list = _salesCollection.OrderBy(x => x.Date);
+        var dates = new List<DateTime>();
         Axis XAxis = new Axis();
         Axis[] AxisArray = new[] { XAxis };
 
@@ -290,7 +315,7 @@ public class ChartsViewModel : INotifyPropertyChanged
         {
             case RangeFilter.LastSevenDays:
 
-                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7)).ToList();
+                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7)).Select(x => x.Date).ToList();
                 XAxis = new Axis
                 {
                     UnitWidth = 1,
@@ -310,11 +335,16 @@ public class ChartsViewModel : INotifyPropertyChanged
                 break;
 
             case RangeFilter.LastMonth:
+                dates.Clear();
+                DateTime start = DateTime.Now.AddDays(-30);
 
-                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-30)).ToList();
                 XAxis = new Axis
                 {
-                    Labeler = value => DateTime.FromOADate(value).ToString("dd-MM"),
+                    Labeler = value =>
+                    {
+                        DateTime date = start.AddDays(value);
+                        return date.ToString("dd-MM");
+                    },
                     UnitWidth = TimeSpan.FromDays(1).TotalDays,
                     MinStep = TimeSpan.FromDays(7).TotalDays,
                     TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
@@ -325,13 +355,33 @@ public class ChartsViewModel : INotifyPropertyChanged
                     SeparatorsAtCenter = true,
                     SubseparatorsCount = 2
                 };
-                AxisArray[0] = XAxis;
 
+                AxisArray[0] = XAxis;
                 break;
-            case RangeFilter.LastThreeMonths:
-                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-90)).ToList();
-                AxisArray[0] = XAxis;
 
+            case RangeFilter.LastThreeMonths:
+                dates.Clear();
+                 start = DateTime.Now.AddDays(-90);
+                MessageBox.Show(list.Count().ToString());
+                XAxis = new Axis
+                {
+                    Labeler = value =>
+                    {
+                        DateTime date = start.AddDays(value);
+                        return date.ToString("dd-MM");
+                    },
+                    UnitWidth = TimeSpan.FromDays(1).TotalDays,
+                    MinStep = TimeSpan.FromDays(7).TotalDays,
+                    TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
+                    LabelsRotation = 90,
+                    TextSize = 12,
+                    ShowSeparatorLines = true,
+                    SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
+                    SeparatorsAtCenter = true,
+                    SubseparatorsCount = 2
+                };
+
+                AxisArray[0] = XAxis;
                 break;
         }
 

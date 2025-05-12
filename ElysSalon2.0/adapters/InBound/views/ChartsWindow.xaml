@@ -53,7 +53,8 @@
                             Series="{Binding Series}"
                             XAxes="{Binding XLabels}"
                             YAxes="{Binding YLabels}"
-                            LegendPosition="Right" Grid.RowSpan="2" />
+                            LegendPosition="Right" Grid.RowSpan="2"
+                            ZoomMode="X" />
                     </Grid>
                 </Grid>
             </Border>

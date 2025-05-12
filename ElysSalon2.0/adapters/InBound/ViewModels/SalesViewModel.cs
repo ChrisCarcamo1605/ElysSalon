@@ -8,6 +8,7 @@ using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.views;
 using ElysSalon2._0.aplication.DTOs.DTOSales;
+using ElysSalon2._0.aplication.DTOs.Enums;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Entities;
@@ -20,11 +21,11 @@ public class SalesViewModel : INotifyPropertyChanged
     private readonly ITicketService _ticketService;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
-
     private readonly ISalesService _service;
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
+    private ObservableCollection<KeyValuePair<SortOptionsBy, string>>? _sortOptions;
     private ObservableCollection<DtoSalesList> _ticketsCollection;
     private ObservableCollection<DtoSalesList> _expensesCollection;
 
@@ -111,6 +112,16 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
+    public ObservableCollection<KeyValuePair<SortOptionsBy, string>>? SortOptions
+    {
+        get => _sortOptions;
+        set
+        {
+            SetField(ref _sortOptions, value);
+            OnPropertyChanged();
+        }
+    }
+
     private ObservableCollection<DtoSalesList> _salesCollection;
 
     public ObservableCollection<DtoSalesList> SalesCollection
@@ -151,6 +162,20 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
+    public KeyValuePair<SortOptionsBy, string> _selectedSort;
+
+    public KeyValuePair<SortOptionsBy, string> SelectedSort
+    {
+        get => _selectedSort;
+
+        set
+        {
+            SetField(ref _selectedSort, value);
+            OnPropertyChanged();
+            ApplyFilter();
+        }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public SalesViewModel(Window window, WindowsManager windowsManager,
@@ -170,12 +195,12 @@ public class SalesViewModel : INotifyPropertyChanged
         OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
 
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
-        InitializeFilterOptions();
+        InitializeFilterSortOptions();
         ApplyFilter();
     }
 
     //Load all options in FilterOptions
-    private void InitializeFilterOptions()
+    private void InitializeFilterSortOptions()
     {
         //It saves in ObservableCollection<KeyValuePair<...> to have a key to use and a value to show on front end
         _filterOptions = new ObservableCollection<KeyValuePair<FilterSales, string>>
@@ -184,7 +209,16 @@ public class SalesViewModel : INotifyPropertyChanged
             new(FilterSales.Sales, "Ventas")
         };
 
+        _sortOptions = new ObservableCollection<KeyValuePair<SortOptionsBy, string>>
+        {
+            new(SortOptionsBy.DateAscending, "Fecha Ascendente"),
+            new(SortOptionsBy.DateDesending, "Fecha Desendente"),
+            new(SortOptionsBy.AmountAscending, "Monto Ascendente"),
+            new(SortOptionsBy.AmountDesending, "Monto Desendente"),
+        };
+
         _selectedFilter = _filterOptions[0];
+        _selectedSort = _sortOptions[1];
     }
 
     public async Task GetSales()
@@ -194,7 +228,7 @@ public class SalesViewModel : INotifyPropertyChanged
             var sales = await _service.GetSales();
             var tickets = await _ticketService.GetTicketsAsync();
             var expenses = await _service.GetExpenses();
-           
+
             _ticketDetailsCollection = await _ticketService.GetTicketDetailsAsync();
 
             _salesCollection.Clear();
@@ -268,7 +302,31 @@ public class SalesViewModel : INotifyPropertyChanged
         }
 
         _ = GetSales();
+        ApplySort();
         _collectionView.Refresh();
+    }
+
+    public void ApplySort()
+    {
+        switch (_selectedSort.Key)
+        {
+            case SortOptionsBy.DateAscending:
+                _collectionView.SortDescriptions.Clear();
+                _collectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Ascending));
+                break;
+            case SortOptionsBy.DateDesending:
+                _collectionView.SortDescriptions.Clear();
+                _collectionView.SortDescriptions.Add(new SortDescription("Date", ListSortDirection.Descending));
+                break;
+            case SortOptionsBy.AmountAscending:
+                _collectionView.SortDescriptions.Clear();
+                _collectionView.SortDescriptions.Add(new SortDescription("TotalAmount", ListSortDirection.Ascending));
+                break;
+            case SortOptionsBy.AmountDesending:
+                _collectionView.SortDescriptions.Clear();
+                _collectionView.SortDescriptions.Add(new SortDescription("TotalAmount", ListSortDirection.Descending));
+                break;
+        }
     }
 
     public void OpenChartWindow()

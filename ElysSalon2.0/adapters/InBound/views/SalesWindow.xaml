@@ -129,6 +129,12 @@
                               DisplayMemberPath="Value"
                               SelectedItem="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}" />
 
+                    <ComboBox ItemsSource="{Binding SortOptions}" Height="40"
+                              Width="260"
+
+                              DisplayMemberPath="Value"
+                              SelectedItem="{Binding SelectedSort, UpdateSourceTrigger=PropertyChanged}" />
+
                     <ui:Button Height="40" Width="260" Margin="0 20 0 0" Icon="CharMultiple20"
                                Command="{Binding OpenChartWindowCommand}">
                         <Grid>
