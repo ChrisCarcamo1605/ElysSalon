@@ -194,6 +194,11 @@ public class SalesService : ISalesService
         return await _salesRepo.GetSalesAsync();
     }
 
+    public async Task DeleteSale(int id)
+    {
+
+    }
+
     public async Task GenerateMonthReport(ObservableCollection<Ticket> collection)
     {
         var dto = _reportConfig.GetWeeksRanges(collection);

@@ -232,15 +232,26 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" FontSize="30" Style="{DynamicResource TitleText}" Text="Rentabilidad"
+                                   Padding="0 5  0 0" />
                         <lvc:PieChart
-                            Grid.Row="1"
-                            Series="{Binding Series}"
-                            VisualElements="{Binding VisualElements}"
-                            InitialRotation="-225"
-                            MaxAngle="270"
-                            MinValue="0"
-                            MaxValue="100">
+                                Grid.Row="1"
+                                Series="{Binding PieSeries}"
+                                VisualElements="{Binding VisualElements}"
+                                InitialRotation="-225"
+                                MaxAngle="270"
+                                MinValue="0"
+                                Padding="0 5  0 0"
+                                MaxValue="100">
                         </lvc:PieChart>
+                        <TextBlock FontSize="25" Style="{DynamicResource TitleText}" Text="{Binding  EarnText}"
+                                   Padding="0 5  0 0" Width="76" Margin="157,156,0,0" Grid.Row="1" HorizontalAlignment="Left" />
+
                     </Grid>
 
                 </Grid>

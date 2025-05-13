@@ -208,11 +208,11 @@ namespace ElysSalon2._0.Migrations
                 values: new object[,]
                 {
                     { 1, 5, "MEESI", "Tinte Rojo", 12.59m, 2.5m, 10 },
-                    { 2, 3, "MEESI", "Uñas Acrilicas", 22.59m, 2.5m, 1 },
-                    { 3, 3, "MEESI", "Pedicure", 32.59m, 2.5m, 1 },
-                    { 4, 3, "MEESI", "Manicure", 52.59m, 1.5m, 1 },
-                    { 5, 3, "MEESI", "Corte Hombre", 5.5m, 2.5m, 1 },
-                    { 6, 3, "MEESI", "Corte Mujer", 7.59m, 3.5m, 1 },
+                    { 2, 4, "MEESI", "Uñas Acrilicas", 22.59m, 2.5m, 1 },
+                    { 3, 4, "MEESI", "Pedicure", 32.59m, 2.5m, 1 },
+                    { 4, 4, "MEESI", "Manicure", 52.59m, 1.5m, 1 },
+                    { 5, 4, "MEESI", "Corte Hombre", 5.5m, 2.5m, 1 },
+                    { 6, 4, "MEESI", "Corte Mujer", 7.59m, 3.5m, 1 },
                     { 7, 5, "MEESI", "Aritos", 32.59m, 2.5m, 15 },
                     { 8, 5, "MEESI", "Pestañas", 52.59m, 1.5m, 10 },
                     { 9, 3, "MEESI", "Depilado Cejas", 42.59m, 1.6m, 1 },

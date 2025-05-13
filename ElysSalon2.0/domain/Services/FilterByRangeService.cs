@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -54,6 +55,24 @@ namespace ElysSalon2._0.domain.Services
             }
 
             return null;
+        }
+
+        public static decimal GetTotalFrom(ObservableCollection<DtoSalesList> items, RangeFilter filter)
+        {
+
+            return filter switch
+            {
+                RangeFilter.LastSevenDays => items.Where(x => x.Date.Date.AddHours(23).AddMinutes(59).AddSeconds(59) >=
+                                                              DateTime.Now.Date.AddDays(-6).Date.AddHours(0))
+                    .Sum(x => x.TotalAmount),
+                RangeFilter.LastMonth => items.Where(x => x.Date.Date >= DateTime.Now.Date.AddDays(-30).Date)
+                    .Sum(x => x.TotalAmount),
+                RangeFilter.LastThreeMonths => items.Where(x => x.Date.Date >= DateTime.Now.Date.AddDays(-90).Date)
+                    .Sum(x => x.TotalAmount),
+                _ => items.Sum(x => x.TotalAmount)
+            };
+
+
         }
     }
 }

@@ -4,6 +4,7 @@ using ElysSalon2._0.adapters.OutBound.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElysSalon2._0.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250513174410_newMigration")]
+    partial class newMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasIndex("ArticleTypeId");
 
-                    b.ToTable("Article", (string)null);
+                    b.ToTable("Article");
 
                     b.HasData(
                         new
@@ -172,7 +175,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasKey("ArticleTypeId");
 
-                    b.ToTable("ArticleType", (string)null);
+                    b.ToTable("ArticleType");
 
                     b.HasData(
                         new
@@ -227,7 +230,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Expense", (string)null);
+                    b.ToTable("Expense");
 
                     b.HasData(
                         new
@@ -289,7 +292,7 @@ namespace ElysSalon2._0.Migrations
                         new
                         {
                             Id = 9,
-                            Amount = 200.00m,
+                            Amount = 1200.00m,
                             Date = new DateTime(2025, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Reason = "Alquiler de local"
                         },
@@ -429,7 +432,7 @@ namespace ElysSalon2._0.Migrations
                         new
                         {
                             Id = 29,
-                            Amount = 100.00m,
+                            Amount = 1100.00m,
                             Date = new DateTime(2025, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Reason = "Publicidad impresa"
                         },
@@ -500,7 +503,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasKey("SaleId");
 
-                    b.ToTable("Sales", (string)null);
+                    b.ToTable("Sales");
 
                     b.HasData(
                         new
@@ -727,7 +730,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasKey("TicketId");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
 
                     b.HasData(
                         new
@@ -1032,7 +1035,7 @@ namespace ElysSalon2._0.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TicketDetails", (string)null);
+                    b.ToTable("TicketDetails");
 
                     b.HasData(
                         new
