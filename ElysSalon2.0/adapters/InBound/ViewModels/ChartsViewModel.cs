@@ -29,6 +29,7 @@ using LiveChartsCore.Kernel.Sketches;
 using System.Linq;
 using ElysSalon2._0.domain.Services;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using LiveChartsCore.Drawing;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
 
@@ -208,13 +209,17 @@ public class ChartsViewModel : INotifyPropertyChanged
         var allSales = _salesCollection
             .OrderBy(x => x.Date)
             .ToList();
+        var allExpenses = _expensesCollection.OrderBy(x => x.Date)
+            .ToList();
 
-        var points = new ObservableCollection<ObservablePoint>();
+        var salePoints = new ObservableCollection<ObservablePoint>();
+        var expensePoints = new ObservableCollection<ObservablePoint>();
 
         foreach (var venta in allSales)
-        {
-            points.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
-        }
+            salePoints.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
+        foreach (var expense in allExpenses)
+            expensePoints.Add(new ObservablePoint(expense.Date.ToOADate(), (double)expense.TotalAmount));
+
 
         _generalYAxis = LoadChartBarYAxis();
 
@@ -227,7 +232,8 @@ public class ChartsViewModel : INotifyPropertyChanged
                 MinStep = TimeSpan.FromDays(7).TotalDays,
                 TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
                 LabelsRotation = 90,
-                TextSize = 12, ShowSeparatorLines = true,
+                TextSize = 12,
+                ShowSeparatorLines = true,
                 SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
                 SeparatorsAtCenter = true,
                 SubseparatorsCount = 2
@@ -239,13 +245,25 @@ public class ChartsViewModel : INotifyPropertyChanged
             new LineSeries<ObservablePoint>
             {
                 Name = "Ventas",
-                Values = points,
-                GeometrySize = 10,
+                Values = salePoints,
+                GeometrySize = 3,
                 Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
-                Fill = null,
+                Fill = null, LineSmoothness = 0,
 
                 GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
+            },
+            new LineSeries<ObservablePoint>
+            {
+                Name = "Gastos",
+                Values = expensePoints,
+                GeometrySize = 3,
+                Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
+                GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0), 0),
+                Fill = null,
+                LineSmoothness = 0,
+
+                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
             }
         };
     }
@@ -253,45 +271,74 @@ public class ChartsViewModel : INotifyPropertyChanged
 
     private ISeries[] LoadChartBarValues()
     {
-        var salesFiltered = FilterByRangeService.FilterByDateRange(_salesCollection, _selectedFilter.Value.Value);
-        var expensesFiltered = FilterByRangeService.FilterByDateRange(_expensesCollection, _selectedFilter.Value.Value);
+        var salesFiltered = FilterByRangeService.FilterByDateRange(_salesCollection, _selectedFilter.Value.Key);
+        var expensesFiltered = FilterByRangeService.FilterByDateRange(_expensesCollection, _selectedFilter.Value.Key);
+
+        var salePoints = new ObservableCollection<ObservablePoint>();
+        var expensePoints = new ObservableCollection<ObservablePoint>();
+
+        foreach (var venta in salesFiltered)
+            salePoints.Add(new ObservablePoint(venta.Date.ToOADate(), (double)venta.TotalAmount));
+        foreach (var expense in expensesFiltered)
+            expensePoints.Add(new ObservablePoint(expense.Date.ToOADate(), (double)expense.TotalAmount));
 
 
         ISeries[] series =
         [
-            new ColumnSeries<decimal>
+            new ColumnSeries<ObservablePoint>
             {
                 Name = "Ventas",
-                Values = salesFiltered,
-
+                Values = salePoints,
+                Padding = 4,
                 Fill = new SolidColorPaint(new SKColor(255, 0, 190), 1)
             },
-            new ColumnSeries<decimal>
+            new ColumnSeries<ObservablePoint>
             {
                 Name = "Gastos",
-                Values = expensesFiltered,
-                Fill = new SolidColorPaint(new SKColor(0, 0, 0),
-                    1)
+                Values = expensePoints,
+                Padding = 4,
+                Fill = new SolidColorPaint(new SKColor(0, 0, 0), 1)
             }
         ];
+        if (_selectedFilter.Value.Key == RangeFilter.LastMonth)
+        {
+            series =
+            [
+                new ColumnSeries<ObservablePoint>
+                {
+                    Name = "Ventas",
+                    Values = salePoints,
+                    Padding = 01,
+                    Fill = new SolidColorPaint(new SKColor(255, 0, 190), 1)
+                },
+                new ColumnSeries<ObservablePoint>
+                {
+                    Name = "Gastos",
+                    Values = expensePoints,
+                    Padding = 01,
+                    Fill = new SolidColorPaint(new SKColor(0, 0, 0), 1)
+                }
+            ];
+        }
+
         if (_selectedFilter.Value.Key == RangeFilter.LastThreeMonths)
         {
-            series[0] = new LineSeries<decimal>
+            series[0] = new LineSeries<ObservablePoint>
             {
                 Name = "Ventas",
-                Values = salesFiltered,
-                GeometrySize = 10,
+                Values = salePoints,
+                GeometrySize = 5,
                 Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
                 Fill = null,
 
                 GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
             };
-            series[1] = new LineSeries<decimal>
+            series[1] = new LineSeries<ObservablePoint>
             {
                 Name = "Gastos",
-                Values = expensesFiltered,
-                GeometrySize = 10,
+                Values = expensePoints,
+                GeometrySize = 5,
                 Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0), 0),
                 Fill = null,
@@ -306,53 +353,64 @@ public class ChartsViewModel : INotifyPropertyChanged
 
     public Axis[] LoadChartBarXAxis()
     {
-        var list = _salesCollection.OrderBy(x => x.Date);
-        var dates = new List<DateTime>();
         Axis XAxis = new Axis();
         Axis[] AxisArray = new[] { XAxis };
 
         switch (_selectedFilter.Value.Key)
         {
             case RangeFilter.LastSevenDays:
+                // Crear una lista de los últimos 7 días
+                var today = DateTime.Now.Date;
+                var last7Days = new List<DateTime>();
+                for (int i = 6; i >= 0; i--)
+                {
+                    last7Days.Add(today.AddDays(-i));
+                }
 
-                dates = list.Where(x => x.Date.Date > DateTime.Now.Date.AddDays(-7)).Select(x => x.Date).ToList();
                 XAxis = new Axis
                 {
-                    UnitWidth = 1,
-                    TextSize = 12,
+                    // Usar un Labeler personalizado para convertir valores OADate a nombres de día
+                    Labeler = value =>
+                    {
+                        try
+                        {
+                            DateTime date = DateTime.FromOADate(value);
+                            return date.ToString("dddd", new CultureInfo("es-ES"));
+                        }
+                        catch
+                        {
+                            return "";
+                        }
+                    },
+                    UnitWidth = TimeSpan.FromDays(1).TotalDays, // Ancho de una unidad = 1 día
+                    MinStep = TimeSpan.FromDays(1).TotalDays, // Paso mínimo = 1 día
+                    TextSize = 14,
                     LabelsRotation = 0,
                     SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200)),
                     SeparatorsAtCenter = false,
                     TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
-                    TicksAtCenter = true,
                     ForceStepToMin = true,
-                    Position = AxisPosition.Start,
+                    TicksAtCenter = true,
+                    Position = AxisPosition.Start
                 };
-                var Xlabels = new List<String>();
-                for (var i = 0; i < 7; i++) Xlabels.Add(dates[i].Date.ToString("dddd", new CultureInfo("es-ES")));
-                XAxis.Labels = Xlabels;
+
+
                 AxisArray[0] = XAxis;
                 break;
-
             case RangeFilter.LastMonth:
-                dates.Clear();
-                DateTime start = DateTime.Now.AddDays(-30);
-
                 XAxis = new Axis
                 {
-                    Labeler = value =>
-                    {
-                        DateTime date = start.AddDays(value);
-                        return date.ToString("dd-MM");
-                    },
+                    Labeler = value => DateTime.FromOADate(value).ToString("dd-ddd-MMM"),
                     UnitWidth = TimeSpan.FromDays(1).TotalDays,
                     MinStep = TimeSpan.FromDays(7).TotalDays,
-                    TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
+                    TicksPaint = new SolidColorPaint(new SKColor(115, 115, 115)),
                     LabelsRotation = 90,
                     TextSize = 12,
                     ShowSeparatorLines = true,
-                    SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
-                    SeparatorsAtCenter = true,
+                    SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.9f),
+                    SeparatorsAtCenter = false,
+                    TicksAtCenter = true,
+
                     SubseparatorsCount = 2
                 };
 
@@ -360,16 +418,9 @@ public class ChartsViewModel : INotifyPropertyChanged
                 break;
 
             case RangeFilter.LastThreeMonths:
-                dates.Clear();
-                 start = DateTime.Now.AddDays(-90);
-                MessageBox.Show(list.Count().ToString());
                 XAxis = new Axis
                 {
-                    Labeler = value =>
-                    {
-                        DateTime date = start.AddDays(value);
-                        return date.ToString("dd-MM");
-                    },
+                    Labeler = value => DateTime.FromOADate(value).ToString("dd-ddd-MMM"),
                     UnitWidth = TimeSpan.FromDays(1).TotalDays,
                     MinStep = TimeSpan.FromDays(7).TotalDays,
                     TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
@@ -495,8 +546,8 @@ public class ChartsViewModel : INotifyPropertyChanged
         _rangeOptions = new ObservableCollection<KeyValuePair<RangeFilter, string>>
         {
             new KeyValuePair<RangeFilter, string>(RangeFilter.LastSevenDays, "Ultimos 7 dias"),
-            new KeyValuePair<RangeFilter, string>(RangeFilter.LastMonth, "Ultimo mes"),
-            new KeyValuePair<RangeFilter, string>(RangeFilter.LastThreeMonths, "Ultimos 3 meses")
+            new KeyValuePair<RangeFilter, string>(RangeFilter.LastMonth, "Ultimos 30 días"),
+            new KeyValuePair<RangeFilter, string>(RangeFilter.LastThreeMonths, "Ultimos 90 días")
         };
 
         _selectedFilter = _rangeOptions[0];
@@ -507,6 +558,7 @@ public class ChartsViewModel : INotifyPropertyChanged
         var list = collection;
         var minDate = list.Min(x => x.Date);
         var maxDate = DateTime.Now.Date;
+
 
         var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date)
             .OrderBy(x => x.Date.Date)

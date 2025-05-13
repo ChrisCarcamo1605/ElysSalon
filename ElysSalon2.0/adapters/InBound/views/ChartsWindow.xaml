@@ -196,7 +196,7 @@
                         </Grid>
 
                         <TextBlock Margin="0 05" Style="{DynamicResource TitleText}" FontSize="24"
-                                   Text="Top Productos y Servicios" />
+                                   Text="Top Servicios y Productos" />
 
                     </StackPanel>
                 </Grid>
@@ -233,9 +233,14 @@
 
                     <Grid Grid.Column="1">
                         <lvc:PieChart
+                            Grid.Row="1"
                             Series="{Binding Series}"
-                            IsClockwise="False"
-                            InitialRotation="-90" />
+                            VisualElements="{Binding VisualElements}"
+                            InitialRotation="-225"
+                            MaxAngle="270"
+                            MinValue="0"
+                            MaxValue="100">
+                        </lvc:PieChart>
                     </Grid>
 
                 </Grid>
