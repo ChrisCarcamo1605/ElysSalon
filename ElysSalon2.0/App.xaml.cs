@@ -35,20 +35,18 @@ public partial class App : Application
         services.AddTransient<ShoppingCartViewModel>();
         services.AddScoped<SalesViewModel>();
         services.AddScoped<ChartsViewModel>();
-        // services.AddTransient<Charts>();
+     
 
         //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();
         services.AddTransient<IArticleTypeRepository, ArticleTypeRepository>();
         services.AddSingleton<WindowsManager>();
-        services.AddScoped<ITicketRepository, TicketRepository>();
-        services.AddTransient<ISalesRepository, SalesRepository>();
         services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
         //Services
         services.AddScoped<IArticleService, ArticleService>();
-        services.AddScoped<ITicketService, TicketService>();
-        services.AddScoped<ISalesService, SalesService>();
+        services.AddScoped<ISalesReportsService, SaleReportsService>();
+        services.AddScoped<ISalesDataService, SalesDatasDataService>();
 
 
         //Configuration
