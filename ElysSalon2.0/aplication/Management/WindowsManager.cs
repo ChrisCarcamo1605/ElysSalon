@@ -28,6 +28,7 @@ public class WindowsManager
                 newWindow = _serviceProvider.GetRequiredService<TWindow>();
 
             _windows[typeof(TWindow)] = newWindow;
+
             newWindow.Closed += (s, e) => _windows.Remove(typeof(TWindow));
 
             if (newWindow is IChildWindow childWindow)

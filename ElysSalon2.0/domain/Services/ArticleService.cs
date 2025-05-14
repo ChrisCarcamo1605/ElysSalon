@@ -30,7 +30,7 @@ public class ArticleService : IArticleService
     public event Action clearForms;
 
 
-    public async Task<ServiceResult> AddArticle(DTOAddArticle dto)
+    public async Task<ResultFromService> AddArticle(DTOAddArticle dto)
     {
         _articlesCollection = await _articleRepository.GetAllAsync();
         var validate = ArticleValidations.ValidateAddArticle(dto, _articlesCollection);
@@ -43,7 +43,7 @@ public class ArticleService : IArticleService
     }
 
 
-    public async Task<ServiceResult> UpdateArticle(DTOUpdateArticle dto)
+    public async Task<ResultFromService> UpdateArticle(DTOUpdateArticle dto)
     {
         _articlesCollection = await _articleRepository.GetAllAsync();
 
@@ -59,16 +59,16 @@ public class ArticleService : IArticleService
         return isValidted;
     }
 
-    public async Task<ServiceResult> DeleteArticle(int id)
+    public async Task<ResultFromService> DeleteArticle(int id)
     {
-        if (id == 0) return ServiceResult.Failed("Seleccione un artículo para eliminar");
+        if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");
 
         await _articleRepository.DeleteAsync(await _articleRepository.FindAsync(x => x.ArticleId == id));
         reloadItems?.Invoke();
-        return ServiceResult.SuccessResult("Artículo eliminado correctamente");
+        return ResultFromService.SuccessResult("Artículo eliminado correctamente");
     }
 
-    public async Task<ServiceResult> AddType(string name)
+    public async Task<ResultFromService> AddType(string name)
     {
         _typesCollection = await _typeRepository.GetAllAsync();
         var validate = ArticleValidations.ValidateAddType(name, _typesCollection);
@@ -77,29 +77,29 @@ public class ArticleService : IArticleService
 
         await _typeRepository.SaveAsync(new ArticleType { Name = name });
         reloadItems?.Invoke();
-        return ServiceResult.SuccessResult("Tipo creado correctamente");
+        return ResultFromService.SuccessResult("Tipo creado correctamente");
     }
 
-    public async Task<ServiceResult> EditType(ArticleType type)
+    public async Task<ResultFromService> EditType(ArticleType type)
     {
         var articleType =
             await _typeRepository.FindAsync(x => x.Name != type.Name && x.ArticleTypeId == type.ArticleTypeId);
 
-        if (articleType == null) return ServiceResult.Failed("Tipo ya existente");
+        if (articleType == null) return ResultFromService.Failed("Tipo ya existente");
 
         var validated = ArticleValidations.ValidateUpdateType(type.Name, articleType);
         await _typeRepository.UpdateAsync((ArticleType)validated.Data);
 
-        return ServiceResult.SuccessResult(validated.Data, "Tipo actualizado correctamente");
+        return ResultFromService.SuccessResult(validated.Data, "Tipo actualizado correctamente");
     }
 
-    public async Task<ServiceResult> DeleteType(int id)
+    public async Task<ResultFromService> DeleteType(int id)
     {
-        if (id == 0) return ServiceResult.Failed("Seleccione un artículo para eliminar");
+        if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");
 
         await _typeRepository.DeleteAsync(await _typeRepository.FindAsync(x => x.ArticleTypeId == id));
         reloadItems?.Invoke();
-        return ServiceResult.SuccessResult("Tipo eliminado correctamente");
+        return ResultFromService.SuccessResult("Tipo eliminado correctamente");
     }
 
     public async Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtons()

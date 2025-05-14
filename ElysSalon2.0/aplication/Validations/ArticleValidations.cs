@@ -19,30 +19,30 @@ public class ArticleValidations
         _typeRepo = typeRepo;
     }
 
-    public static ServiceResult ValidateAddArticle(DTOAddArticle dto, ObservableCollection<Article> articles)
+    public static ResultFromService ValidateAddArticle(DTOAddArticle dto, ObservableCollection<Article> articles)
     {
         var existing = articles.FirstOrDefault(x => x.Name == dto.Name);
 
 
-        if (string.IsNullOrWhiteSpace(dto.Name)) return ServiceResult.Failed("Ingrese un nombre válido");
+        if (string.IsNullOrWhiteSpace(dto.Name)) return ResultFromService.Failed("Ingrese un nombre válido");
 
-        if (dto.ArticleTypeId == 2) return ServiceResult.Failed("Seleccione un tipo de artículo");
+        if (dto.ArticleTypeId == 2) return ResultFromService.Failed("Seleccione un tipo de artículo");
 
         if (!decimal.TryParse(dto.PriceBuy, out _) || Convert.ToDecimal(dto.PriceBuy) == 0)
-            return ServiceResult.Failed("El precio de Venta debe ser un número válido.");
+            return ResultFromService.Failed("El precio de Venta debe ser un número válido.");
 
         if (!decimal.TryParse(dto.PriceCost, out _) || Convert.ToDecimal(dto.PriceCost) == 0)
-            return ServiceResult.Failed("El precio de Costo debe ser un número válido.");
+            return ResultFromService.Failed("El precio de Costo debe ser un número válido.");
 
         if (!int.TryParse(dto.Stock, out _) || Convert.ToDecimal(dto.PriceCost) == 0)
-            return ServiceResult.Failed("El stock debe ser un número entero válido.");
+            return ResultFromService.Failed("El stock debe ser un número entero válido.");
 
-        if (existing != null) return ServiceResult.Failed("Articulo ya existente");
+        if (existing != null) return ResultFromService.Failed("Articulo ya existente");
 
-        return ServiceResult.SuccessResult("Articulo guardado exitosamente!");
+        return ResultFromService.SuccessResult("Articulo guardado exitosamente!");
     }
 
-    public static ServiceResult ValidateUpdateArticle(Article art, DTOUpdateArticle dto,
+    public static ResultFromService ValidateUpdateArticle(Article art, DTOUpdateArticle dto,
         ObservableCollection<Article> articles)
     {
         var existing = articles.FirstOrDefault(x => x.Name == dto.Name);
@@ -50,23 +50,23 @@ public class ArticleValidations
 
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
-            return ServiceResult.Failed("Ingrese un nombre válido");
+            return ResultFromService.Failed("Ingrese un nombre válido");
         }
 
-        if (dto.ArticleTypeId == 2) return ServiceResult.Failed("Seleccione un tipo de artículo");
+        if (dto.ArticleTypeId == 2) return ResultFromService.Failed("Seleccione un tipo de artículo");
 
         if (dto.PriceBuy == 0 || !decimal.TryParse(dto.PriceBuy.ToString(), out _))
-            return ServiceResult.Failed("El precio de Venta debe ser un número válido.");
+            return ResultFromService.Failed("El precio de Venta debe ser un número válido.");
 
         if (dto.PriceCost == 0 || !decimal.TryParse(dto.PriceCost.ToString(), out _))
-            return ServiceResult.Failed("El precio de Costo debe ser un número válido.");
+            return ResultFromService.Failed("El precio de Costo debe ser un número válido.");
 
         if (dto.Stock == 0 || !int.TryParse(dto.Stock.ToString(), out _))
-            return ServiceResult.Failed("El stock debe ser un número entero válido.");
+            return ResultFromService.Failed("El stock debe ser un número entero válido.");
 
         if (existing != null)
             if (existing.Name != art.Name)
-                return ServiceResult.Failed("Articulo ya existente");
+                return ResultFromService.Failed("Articulo ya existente");
 
         art.Name = dto.Name;
         art.PriceBuy = dto.PriceBuy;
@@ -74,38 +74,38 @@ public class ArticleValidations
         art.Stock = dto.Stock;
         art.ArticleTypeId = dto.ArticleTypeId;
         art.Description = dto.Description;
-        return ServiceResult.SuccessResult(art, "Articulo actualizado correctamente!");
+        return ResultFromService.SuccessResult(art, "Articulo actualizado correctamente!");
     }
 
 
-    public static ServiceResult ValidateAddType(string name, ObservableCollection<ArticleType> articleTypes)
+    public static ResultFromService ValidateAddType(string name, ObservableCollection<ArticleType> articleTypes)
     {
         var existing = articleTypes.FirstOrDefault(x => x.Name == name);
 
 
-        if (string.IsNullOrWhiteSpace(name)) return ServiceResult.Failed("Ingrese un nombre");
+        if (string.IsNullOrWhiteSpace(name)) return ResultFromService.Failed("Ingrese un nombre");
 
-        if (existing != null) return ServiceResult.Failed("Tipo ya existente");
+        if (existing != null) return ResultFromService.Failed("Tipo ya existente");
 
         if (name.Any(char.IsDigit))
         {
-            return ServiceResult.Failed("El nombre no debe contener números.");
+            return ResultFromService.Failed("El nombre no debe contener números.");
         }
 
-        return ServiceResult.SuccessResult("Tipo creado correctamente");
+        return ResultFromService.SuccessResult("Tipo creado correctamente");
     }
 
-    public static ServiceResult ValidateUpdateType(string name, ArticleType type)
+    public static ResultFromService ValidateUpdateType(string name, ArticleType type)
     {
-        if (string.IsNullOrWhiteSpace(type.Name)) return ServiceResult.Failed("Ingrese un nombre");
+        if (string.IsNullOrWhiteSpace(type.Name)) return ResultFromService.Failed("Ingrese un nombre");
 
         if (name.Any(char.IsDigit))
         {
-            return ServiceResult.Failed("El nombre no debe contener números.");
+            return ResultFromService.Failed("El nombre no debe contener números.");
         }
 
         type.Name = name;
 
-        return ServiceResult.SuccessResult(type, "Tipo actualizado correctamente");
+        return ResultFromService.SuccessResult(type, "Tipo actualizado correctamente");
     }
 }

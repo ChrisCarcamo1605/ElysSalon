@@ -13,23 +13,16 @@ using OfficeOpenXml.Drawing.Chart;
 
 namespace ElysSalon2._0.domain.Services;
 
-public class SalesService : ISalesService
+public class SaleReportsService : ISalesReportsService
 {
-    private ISalesRepository _salesRepo;
-    private ITicketRepository _ticketRepo;
-    private IRepository<Expense> _expenseRepo;
     private ReportsConfiguration _reportConfig;
 
-    public SalesService(ISalesRepository salesRepo, ITicketRepository ticketRepo, ReportsConfiguration reportsConfig
-        , IRepository<Expense> expenseRepo)
+    public SaleReportsService(ReportsConfiguration reportsConfig)
     {
         _reportConfig = reportsConfig;
-        _salesRepo = salesRepo;
-        _expenseRepo = expenseRepo;
-        _ticketRepo = ticketRepo;
     }
 
-    public async Task<ServiceResult> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
+    public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
         ObservableCollection<T> collection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class
     {
@@ -174,30 +167,6 @@ public class SalesService : ISalesService
         //    $" week4= {daysPerWeek * 4}  TOTAL DE DIAS DEL MES= {totalsDaysInMonth} MES={firstDayMonth.Month}");
     }
 
-    public async Task SaveSale(Sales sale)
-    {
-        _salesRepo.SavesSale(sale);
-    }
-
-    public async Task AddExpense(Expense expense)
-    {
-        await _expenseRepo.SaveAsync(expense);
-    }
-
-    public async Task<ObservableCollection<Expense>> GetExpenses()
-    {
-        return await _expenseRepo.GetAllAsync();
-    }
-
-    public async Task<ObservableCollection<Sales>> GetSales()
-    {
-        return await _salesRepo.GetSalesAsync();
-    }
-
-    public async Task DeleteSale(int id)
-    {
-
-    }
 
     public async Task GenerateMonthReport(ObservableCollection<Ticket> collection)
     {

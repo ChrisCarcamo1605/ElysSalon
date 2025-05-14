@@ -6,7 +6,7 @@ namespace ElysSalon2._0.aplication.Interfaces.Repositories;
 public interface ITicketRepository
 {
     Task SaveTicketAsync(Ticket dto);
-    Task DeleteTicketAsync(int id);
+    Task DeleteTicketAsync(string id);
     Task<ObservableCollection<Ticket>> GetTicketsAsync();
     Task<ObservableCollection<TicketDetails>> GetTicketDetailsAsync();
 

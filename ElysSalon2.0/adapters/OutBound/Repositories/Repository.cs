@@ -24,6 +24,11 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         await _context.AddAsync((TEntity)entity);
         await _context.SaveChangesAsync();
     }
+    public async Task SaveRangeAsync(List<TEntity> entities)
+    {
+        await _context.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+    }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)
     {
@@ -43,6 +48,11 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         return await _context.FindAsync<TEntity>(id) ?? throw new NullReferenceException();
     }
+    public async Task<TEntity> GetByIdAsync(string id)
+    {
+        return await _context.FindAsync<TEntity>(id) ?? throw new NullReferenceException();
+    }
+
 
     public virtual async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
@@ -58,6 +68,19 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     public async Task<ObservableCollection<TEntity>> GetAllAsync()
     {
         var entities = await _dbSet.ToListAsync();
+        return new ObservableCollection<TEntity>(entities);
+    }
+
+    public async Task<ObservableCollection<TEntity>> GetAllWithIncludesAsync(params Expression<Func<TEntity, object>>[] includeProperties)
+    {
+        IQueryable<TEntity> query = _dbSet;
+
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+
+        var entities = await query.ToListAsync();
         return new ObservableCollection<TEntity>(entities);
     }
 }

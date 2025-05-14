@@ -165,7 +165,7 @@ public class ReportsGeneratorUtil
         }
     }
 
-    public static ServiceResult GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> collection,
+    public static ResultFromService GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> collection,
         Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector) where T : class
     {
         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -275,10 +275,10 @@ public class ReportsGeneratorUtil
                 package.SaveAs(new FileInfo(finalPath));
                 saveFileDialog.FileName = "";
 
-                return ServiceResult.SuccessResult("Archivo guardado correctamente");
+                return ResultFromService.SuccessResult("Archivo guardado correctamente");
             }
 
-            return ServiceResult.Failed("Guardado cancelado");
+            return ResultFromService.Failed("Guardado cancelado");
         }
     }
 

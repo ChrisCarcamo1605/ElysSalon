@@ -2,6 +2,7 @@
 
 public enum FilterSales
 {
-    Ticket = 0,
-    Sales = 1
+    Tickets = 0,
+    Sales = 1,
+    Expenses = 2,
 }

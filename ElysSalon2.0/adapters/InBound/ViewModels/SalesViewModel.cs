@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Windows.UI.Popups;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.views;
@@ -12,6 +13,7 @@ using ElysSalon2._0.aplication.DTOs.Enums;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Entities;
+using ElysSalon2._0.domain.Services;
 using LiveChartsCore;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
@@ -21,7 +23,8 @@ public class SalesViewModel : INotifyPropertyChanged
     private readonly ITicketService _ticketService;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
-    private readonly ISalesService _service;
+    private readonly ISalesReportsService _reportsService;
+    private readonly ISalesDataService _salesDataService;
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
@@ -147,6 +150,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
     public ICommand SaveCommand { get; }
     public ICommand ExitCommand { get; }
+    public ICommand DeleteCommand { get; }
     public ICommand GenerateReportCommand { get; }
 
     public ICommand OpenChartWindowCommand { get; }
@@ -179,10 +183,10 @@ public class SalesViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public SalesViewModel(Window window, WindowsManager windowsManager,
-        ITicketService ticketService, ISalesService service, IMapper mapper)
+        ISalesDataService salesDataService, ISalesReportsService reportsService, IMapper mapper)
     {
-        _ticketService = ticketService;
-        _service = service;
+        _reportsService = reportsService;
+        _salesDataService = salesDataService;
         _winManager = windowsManager;
         _salesCollection = [];
         _ticketsCollection = [];
@@ -193,20 +197,21 @@ public class SalesViewModel : INotifyPropertyChanged
         ExitCommand = new RelayCommand(Exit);
         GenerateReportCommand = new RelayCommand(GenerateReport);
         OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
+        DeleteCommand = new AsyncRelayCommand<DtoSalesList>(Delete);
+
 
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
         InitializeFilterSortOptions();
         ApplyFilter();
     }
 
-    //Load all options in FilterOptions
     private void InitializeFilterSortOptions()
     {
-        //It saves in ObservableCollection<KeyValuePair<...> to have a key to use and a value to show on front end
         _filterOptions = new ObservableCollection<KeyValuePair<FilterSales, string>>
         {
-            new(FilterSales.Ticket, "Ticket"),
-            new(FilterSales.Sales, "Ventas")
+            new(FilterSales.Tickets, "Ticket"),
+            new(FilterSales.Sales, "Ventas"),
+            new(FilterSales.Expenses, "Gastos"),
         };
 
         _sortOptions = new ObservableCollection<KeyValuePair<SortOptionsBy, string>>
@@ -221,15 +226,14 @@ public class SalesViewModel : INotifyPropertyChanged
         _selectedSort = _sortOptions[1];
     }
 
-    public async Task GetSales()
+    public async Task LoadData()
     {
         try
         {
-            var sales = await _service.GetSales();
-            var tickets = await _ticketService.GetTicketsAsync();
-            var expenses = await _service.GetExpenses();
-
-            _ticketDetailsCollection = await _ticketService.GetTicketDetailsAsync();
+            var sales = await _salesDataService.GetAllOf<Sales>();
+            var tickets = await _salesDataService.GetAllOf<Ticket>();
+            var expenses = await _salesDataService.GetAllOf<Expense>();
+            _ticketDetailsCollection = await _salesDataService.GetAllOf<TicketDetails>();
 
             _salesCollection.Clear();
             _ticketsCollection.Clear();
@@ -247,6 +251,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
             _salesCollection =
                 new ObservableCollection<DtoSalesList>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
+
             _ticketsCollection =
                 new ObservableCollection<DtoSalesList>(_ticketsCollection.OrderByDescending(x => x.Date.Date).ToList());
             _expensesCollection =
@@ -262,13 +267,13 @@ public class SalesViewModel : INotifyPropertyChanged
     private async void GenerateMonthReport()
     {
         var prueba = _mapper.Map<ObservableCollection<Sales>>(_salesCollection);
-        _service.GenerateMonthReport(prueba);
+        _reportsService.GenerateMonthReport(prueba);
         MessageBox.Show("Reporte Generado");
     }
 
     private async void GenerateReport()
     {
-        var result = await _service.GenerateReport(FromDate, UntilDate, _ticketsCollection, x => x.Date,
+        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _ticketsCollection, x => x.Date,
             x => x.TotalAmount);
         if (result.Success) MessageBox.Show(result.Message);
     }
@@ -288,7 +293,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
                 break;
 
-            case FilterSales.Ticket:
+            case FilterSales.Tickets:
                 _collectionView = CollectionViewSource.GetDefaultView(TicketsCollection);
 
                 _collectionView.Filter = items =>
@@ -299,9 +304,21 @@ public class SalesViewModel : INotifyPropertyChanged
                 };
 
                 break;
+            case FilterSales.Expenses:
+                _collectionView = CollectionViewSource.GetDefaultView(ExpensesCollection);
+
+                _collectionView.Filter = items =>
+                {
+                    var expense = items as DtoSalesList;
+
+                    return expense != null && expense.Date >= FromDate &&
+                           expense.Date <= UntilDate;
+                };
+
+                break;
         }
 
-        _ = GetSales();
+        _ = LoadData();
         ApplySort();
         _collectionView.Refresh();
     }
@@ -337,6 +354,42 @@ public class SalesViewModel : INotifyPropertyChanged
 
         chartWindow.ShowDialog();
     }
+
+    private async Task Delete(DtoSalesList sale)
+    {
+        var option = MessageBox.Show("¿Seguro que quiere eliminar este registro?", "Confirmar eliminación",
+            MessageBoxButton.YesNo);
+        ResultFromService resultFromService = ResultFromService.Failed("Hubo un error");
+
+        if (option == MessageBoxResult.Yes)
+        {
+            switch (_selectedFilter.Key)
+            {
+                case FilterSales.Sales:
+
+                    resultFromService = await _salesDataService.Delete<Sales>(sale.Id);
+                    break;
+                case FilterSales.Tickets:
+                    resultFromService = await _salesDataService.Delete<Ticket>(sale.Id);
+                    break;
+                case FilterSales.Expenses:
+                    resultFromService = await _salesDataService.Delete<Expense>(sale.Id);
+                    break;
+            }
+
+            if (resultFromService.Success)
+            {
+                MessageBox.Show(resultFromService.Message);
+            }
+            else
+            {
+                MessageBox.Show(resultFromService.Message);
+            }
+
+            ApplyFilter();
+        }
+    }
+
 
     public void Exit()
     {

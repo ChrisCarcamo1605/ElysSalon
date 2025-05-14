@@ -9,12 +9,12 @@ public interface IArticleService
 {
     public event Action clearForms;
     public event Action reloadItems;
-    Task<ServiceResult> AddArticle(DTOAddArticle dto);
-    Task<ServiceResult> UpdateArticle(DTOUpdateArticle dto);
-    Task<ServiceResult> DeleteArticle(int id);
-    Task<ServiceResult> AddType(string typeName);
-    Task<ServiceResult> EditType(ArticleType type);
-    Task<ServiceResult> DeleteType(int id);
+    Task<ResultFromService> AddArticle(DTOAddArticle dto);
+    Task<ResultFromService> UpdateArticle(DTOUpdateArticle dto);
+    Task<ResultFromService> DeleteArticle(int id);
+    Task<ResultFromService> AddType(string typeName);
+    Task<ResultFromService> EditType(ArticleType type);
+    Task<ResultFromService> DeleteType(int id);
 
     Task<ObservableCollection<DTOGetArticlesButton>> GetArticlesToButtons();
 }
