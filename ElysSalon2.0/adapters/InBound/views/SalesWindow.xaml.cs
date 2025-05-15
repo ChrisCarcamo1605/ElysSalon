@@ -12,7 +12,8 @@ namespace ElysSalon2._0.adapters.InBound.views;
 /// </summary>
 public partial class SalesWindow : Window
 {
-    public SalesWindow(WindowsManager winManager, ISalesDataService salesDataService, ISalesReportsService reportsService, IMapper mapper)
+    public SalesWindow(WindowsManager winManager, ISalesDataService salesDataService,
+        ISalesReportsService reportsService, IMapper mapper)
 
     {
         InitializeComponent();

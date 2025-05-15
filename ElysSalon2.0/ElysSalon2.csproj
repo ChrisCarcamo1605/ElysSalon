@@ -82,4 +82,8 @@
 		<PackageReference Include="WPF-UI" Version="4.0.2" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="aplication\DTOs\Response\SalesData\" />
+	</ItemGroup>
+
 </Project>

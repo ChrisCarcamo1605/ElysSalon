@@ -6,7 +6,7 @@ namespace ElysSalon2._0.aplication.Interfaces.Repositories;
 
 public interface IRepository<TEntity> where TEntity : class
 {
-    Task SaveAsync(TEntity entity);
+    Task<TEntity> SaveAsync(TEntity entity);
     Task SaveRangeAsync(List<TEntity> entities);
     Task<TEntity> UpdateAsync(TEntity entity);
     Task DeleteAsync(TEntity entity);

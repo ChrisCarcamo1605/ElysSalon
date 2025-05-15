@@ -1,4 +1,4 @@
-﻿namespace ElysSalon2._0.aplication.DTOs;
+﻿namespace ElysSalon2._0.aplication.DTOs.Request.Reports;
 
 public record DtoWeeksRanges(
     DateTime week1Start,

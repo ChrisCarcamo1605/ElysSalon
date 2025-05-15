@@ -3,6 +3,6 @@
 public enum RangeFilter
 {
     LastSevenDays = 0,
-    LastMonth =1,
+    LastMonth = 1,
     LastThreeMonths = 2
 }

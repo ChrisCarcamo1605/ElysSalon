@@ -2,10 +2,11 @@
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.domain.Entities;
 using System.Collections.ObjectModel;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.domain.Services;
 
-public class SalesDatasDataService : ISalesDataService
+public class SalesDataService : ISalesDataService
 {
     private readonly IRepository<Expense> _expenseRepo;
     private readonly IRepository<Ticket> _ticketRepo;
@@ -14,7 +15,7 @@ public class SalesDatasDataService : ISalesDataService
 
     private ReportsConfiguration _reportConfig;
 
-    public SalesDatasDataService(IRepository<Sales> salesRepo, IRepository<Ticket> ticketRepo
+    public SalesDataService(IRepository<Sales> salesRepo, IRepository<Ticket> ticketRepo
         , IRepository<Expense> expenseRepo, IRepository<TicketDetails> ticketDetailsRepoRepo)
     {
         _salesRepo = salesRepo;
@@ -24,24 +25,54 @@ public class SalesDatasDataService : ISalesDataService
     }
 
 
-    public async Task Add<T>(T obj)
+    public async Task<ResultFromService> Add<T>(T obj)
     {
         switch (obj)
         {
             case Sales sales:
-                await _salesRepo.SaveAsync(sales);
+                return ResultFromService.SuccessResult(await _salesRepo.SaveAsync(sales),
+                    "Venta agregada exitosammente");
                 break;
             case Ticket ticket:
-                await _ticketRepo.SaveAsync(ticket);
+                return ResultFromService.SuccessResult(await _ticketRepo.SaveAsync(ticket),
+                    "Ticket agregado exitosamente");
                 break;
             case Expense expense:
-                await _expenseRepo.SaveAsync(expense);
+                return ResultFromService.SuccessResult(await _expenseRepo.SaveAsync(expense),
+                    "Gasto agregado exitosamente");
                 break;
             case TicketDetails ticketDetails:
-                await _tickDetailsRepo.SaveAsync(ticketDetails);
+                return ResultFromService.SuccessResult(await _tickDetailsRepo.SaveAsync(ticketDetails),
+                    "Detalle de ticket agregado exitosamente");
                 break;
             default:
-                throw new InvalidOperationException($"Tipo no soportado: {typeof(T).Name}");
+                return ResultFromService.Failed($"Tipo no soportado: {typeof(T).Name}");
+        }
+    }
+
+    public async Task<ResultFromService> AddRange<T>(List<T> objects)
+    {
+        if (objects == null || !objects.Any())
+        {
+            return ResultFromService.Failed("La lista de objetos no puede ser nula o vacía.");
+        }
+
+        switch (objects)
+        {
+            case List<Sales> salesList:
+                await _salesRepo.SaveRangeAsync(salesList);
+                return ResultFromService.SuccessResult("Ventas agregadas exitosamente");
+            case List<Ticket> ticketList:
+                await _ticketRepo.SaveRangeAsync(ticketList);
+                return ResultFromService.SuccessResult("Tickets agregados exitosamente");
+            case List<Expense> expenseList:
+                await _expenseRepo.SaveRangeAsync(expenseList);
+                return ResultFromService.SuccessResult("Gastos agregados exitosamente");
+            case List<TicketDetails> ticketDetailsList:
+                await _tickDetailsRepo.SaveRangeAsync(ticketDetailsList);
+                return ResultFromService.SuccessResult("Detalles de ticket agregados exitosamente");
+            default:
+                return ResultFromService.Failed($"Tipo no soportado: {typeof(T).Name}");
         }
     }
 
@@ -77,7 +108,7 @@ public class SalesDatasDataService : ISalesDataService
 
     public async Task<ObservableCollection<T>> GetAllOf<T>() where T : class
     {
-        Type type = typeof(T);
+        var type = typeof(T);
 
         if (type == typeof(Sales))
         {
@@ -96,7 +127,7 @@ public class SalesDatasDataService : ISalesDataService
         }
         else if (type == typeof(TicketDetails))
         {
-            var tickDetails = await _tickDetailsRepo.GetAllWithIncludesAsync(x=>x.Article);
+            var tickDetails = await _tickDetailsRepo.GetAllWithIncludesAsync(x => x.Article);
             return new ObservableCollection<T>(tickDetails.Cast<T>());
         }
 

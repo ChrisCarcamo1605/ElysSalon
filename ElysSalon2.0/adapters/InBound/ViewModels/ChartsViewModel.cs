@@ -16,7 +16,6 @@ using System.Runtime.CompilerServices;
 using Windows.System.Update;
 using ElysSalon2._0.adapters.InBound.views;
 using ElysSalon2._0.adapters.OutBound.Repositories;
-using ElysSalon2._0.aplication.DTOs.DTOSales;
 using ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
@@ -34,6 +33,7 @@ using LiveChartsCore.Drawing;
 using ElysSalon2._0.adapters.InBound.Factories;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using LiveChartsCore.VisualElements;
+using ElysSalon2._0.aplication.DTOs.Request.SalesData;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
 
@@ -41,13 +41,12 @@ public class ChartsViewModel : INotifyPropertyChanged
 {
     private Window _window;
     private WindowsManager _winManager;
-    private ITicketService _ticketService;
     public ICommand ExitCommand { get; }
     private List<string> Last7daysLabels;
-    private ObservableCollection<DtoSalesList> _salesCollection;
-    private ObservableCollection<DtoSalesList> _ticketCollection;
+    private ObservableCollection<DTOSalesData> _salesCollection;
+    private ObservableCollection<DTOSalesData> _ticketCollection;
     private ObservableCollection<KeyValuePair<RangeFilter, int>> OrderBy;
-    private ObservableCollection<DtoSalesList> _expensesCollection;
+    private ObservableCollection<DTOSalesData> _expensesCollection;
     private ObservableCollection<TicketDetails> _ticketDetailsCollection;
 
     private ObservableCollection<KeyValuePair<RangeFilter, string>>? _rangeOptions;
@@ -62,9 +61,9 @@ public class ChartsViewModel : INotifyPropertyChanged
         }
     }
 
-    private KeyValuePair<RangeFilter, String>? _selectedFilter;
+    private KeyValuePair<RangeFilter, string>? _selectedFilter;
 
-    public KeyValuePair<RangeFilter, String>? SelectedFilter
+    public KeyValuePair<RangeFilter, string>? SelectedFilter
     {
         get => _selectedFilter;
         set
@@ -75,9 +74,9 @@ public class ChartsViewModel : INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<DtoBestSellerTicketDetails> _bestArticlesSeller;
+    private ObservableCollection<DTOGetBestSellersTickDet> _bestArticlesSeller;
 
-    public ObservableCollection<DtoBestSellerTicketDetails> BestArticlesSeller
+    public ObservableCollection<DTOGetBestSellersTickDet> BestArticlesSeller
     {
         get => _bestArticlesSeller;
         set
@@ -87,9 +86,9 @@ public class ChartsViewModel : INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<DtoBestSellerTicketDetails> _bestServicesSeller;
+    private ObservableCollection<DTOGetBestSellersTickDet> _bestServicesSeller;
 
-    public ObservableCollection<DtoBestSellerTicketDetails> BestServicesSeller
+    public ObservableCollection<DTOGetBestSellersTickDet> BestServicesSeller
     {
         get => _bestServicesSeller;
         set
@@ -177,9 +176,9 @@ public class ChartsViewModel : INotifyPropertyChanged
         }
     }
 
-    private String _earnText;
+    private string _earnText;
 
-    public String EarnText
+    public string EarnText
     {
         get => _earnText;
         set
@@ -196,8 +195,8 @@ public class ChartsViewModel : INotifyPropertyChanged
     public NeedleVisual Needle { get; set; }
 
 
-    public ChartsViewModel(Window window, WindowsManager winManager, ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> ticketCollection, ObservableCollection<DtoSalesList> expensesCollection
+    public ChartsViewModel(Window window, WindowsManager winManager, ObservableCollection<DTOSalesData> salesCollection,
+        ObservableCollection<DTOSalesData> ticketCollection, ObservableCollection<DTOSalesData> expensesCollection
         , ObservableCollection<TicketDetails> ticketDetailsCollection)
     {
         InitializeRangeOptions();
@@ -209,8 +208,8 @@ public class ChartsViewModel : INotifyPropertyChanged
         _expensesCollection = expensesCollection;
         _ticketDetailsCollection = ticketDetailsCollection;
 
-        _bestArticlesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
-        _bestServicesSeller = new ObservableCollection<DtoBestSellerTicketDetails>();
+        _bestArticlesSeller = new ObservableCollection<DTOGetBestSellersTickDet>();
+        _bestServicesSeller = new ObservableCollection<DTOGetBestSellersTickDet>();
         _ = GenerateTopArticleServices();
 
         _expensesCollection = LoadEmptyDates(_expensesCollection);
@@ -247,14 +246,14 @@ public class ChartsViewModel : INotifyPropertyChanged
     {
         var sectionsOuter = 130;
         var sectionsWidth = 20;
-        var ExpenseSaleDiference = (totalVentas - totalGastos);
+        var ExpenseSaleDiference = totalVentas - totalGastos;
 
         // Calcular la rentabilidad real (porcentaje)
         double rentabilidad = 0;
         if (totalVentas > 0)
         {
             // Calculamos la rentabilidad como porcentaje
-            decimal rawRentabilidad = (ExpenseSaleDiference) / totalVentas * 100;
+            var rawRentabilidad = ExpenseSaleDiference / totalVentas * 100;
             // Usamos el valor real directamente, limitado al rango [0-100]
             rentabilidad = (double)Math.Clamp(rawRentabilidad, 0, 100);
         }
@@ -313,7 +312,7 @@ public class ChartsViewModel : INotifyPropertyChanged
         _bestArticlesSeller.Clear();
         _bestServicesSeller.Clear();
 
-        DateTime startDate = _selectedFilter.Value.Key switch
+        var startDate = _selectedFilter.Value.Key switch
         {
             RangeFilter.LastSevenDays => DateTime.Now.AddDays(-7),
             RangeFilter.LastMonth => DateTime.Now.AddMonths(-1).Date,
@@ -332,13 +331,13 @@ public class ChartsViewModel : INotifyPropertyChanged
         {
             Name = x.Key.ArticleName,
             TypeId = x.Key.TypeId,
-            TotalAmount = x.Sum(y => y.TotalPrice),
+            TotalAmount = x.Sum(y => y.TotalPrice)
         }).OrderByDescending(x => x.TotalAmount);
 
 
         foreach (var item in groupedResults)
         {
-            var dto = new DtoBestSellerTicketDetails(item.Name, item.TotalAmount);
+            var dto = new DTOGetBestSellersTickDet(item.Name, item.TotalAmount);
 
             if (item.TypeId == 4)
                 _bestServicesSeller.Add(dto);
@@ -352,15 +351,15 @@ public class ChartsViewModel : INotifyPropertyChanged
     {
         _rangeOptions = new ObservableCollection<KeyValuePair<RangeFilter, string>>
         {
-            new KeyValuePair<RangeFilter, string>(RangeFilter.LastSevenDays, "Ultimos 7 dias"),
-            new KeyValuePair<RangeFilter, string>(RangeFilter.LastMonth, "Ultimos 30 días"),
-            new KeyValuePair<RangeFilter, string>(RangeFilter.LastThreeMonths, "Ultimos 90 días")
+            new(RangeFilter.LastSevenDays, "Ultimos 7 dias"),
+            new(RangeFilter.LastMonth, "Ultimos 30 días"),
+            new(RangeFilter.LastThreeMonths, "Ultimos 90 días")
         };
 
         _selectedFilter = _rangeOptions[0];
     }
 
-    public ObservableCollection<DtoSalesList> LoadEmptyDates(ObservableCollection<DtoSalesList> collection)
+    public ObservableCollection<DTOSalesData> LoadEmptyDates(ObservableCollection<DTOSalesData> collection)
     {
         var list = collection;
         var minDate = list.Min(x => x.Date);
@@ -372,20 +371,13 @@ public class ChartsViewModel : INotifyPropertyChanged
             .ToList());
         var allDates = new List<DateTime>();
 
-        for (var i = minDate; i <= maxDate; i = i.AddDays(1))
-        {
-            allDates.Add(i.Date);
-        }
+        for (var i = minDate; i <= maxDate; i = i.AddDays(1)) allDates.Add(i.Date);
 
         foreach (var i in allDates)
-        {
             if (!dates.Contains(i.Date))
-            {
                 list.Add(
-                    new DtoSalesList(i.ToString("dddd", new CultureInfo("es-ES")),
+                    new DTOSalesData(i.ToString("dddd", new CultureInfo("es-ES")),
                         i.Date, 0));
-            }
-        }
 
         return list;
     }

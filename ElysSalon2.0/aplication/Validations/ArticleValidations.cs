@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.Request.Articles;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.domain.Entities;
 using ElysSalon2._0.domain.Services;
@@ -48,10 +48,7 @@ public class ArticleValidations
         var existing = articles.FirstOrDefault(x => x.Name == dto.Name);
 
 
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            return ResultFromService.Failed("Ingrese un nombre válido");
-        }
+        if (string.IsNullOrWhiteSpace(dto.Name)) return ResultFromService.Failed("Ingrese un nombre válido");
 
         if (dto.ArticleTypeId == 2) return ResultFromService.Failed("Seleccione un tipo de artículo");
 
@@ -87,10 +84,7 @@ public class ArticleValidations
 
         if (existing != null) return ResultFromService.Failed("Tipo ya existente");
 
-        if (name.Any(char.IsDigit))
-        {
-            return ResultFromService.Failed("El nombre no debe contener números.");
-        }
+        if (name.Any(char.IsDigit)) return ResultFromService.Failed("El nombre no debe contener números.");
 
         return ResultFromService.SuccessResult("Tipo creado correctamente");
     }
@@ -99,10 +93,7 @@ public class ArticleValidations
     {
         if (string.IsNullOrWhiteSpace(type.Name)) return ResultFromService.Failed("Ingrese un nombre");
 
-        if (name.Any(char.IsDigit))
-        {
-            return ResultFromService.Failed("El nombre no debe contener números.");
-        }
+        if (name.Any(char.IsDigit)) return ResultFromService.Failed("El nombre no debe contener números.");
 
         type.Name = name;
 

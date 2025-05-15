@@ -2,7 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using AutoMapper;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.Request.Articles;
+using ElysSalon2._0.aplication.DTOs.Response.Article;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Validations;

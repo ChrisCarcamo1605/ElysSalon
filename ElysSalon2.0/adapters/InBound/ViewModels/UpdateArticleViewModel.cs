@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.views;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.Request.Articles;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Utils;

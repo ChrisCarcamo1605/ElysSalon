@@ -1,4 +1,4 @@
-﻿namespace ElysSalon2._0.aplication.DTOs.DTOArticle;
+﻿namespace ElysSalon2._0.aplication.DTOs.Response.Article;
 
 public record DTOGetArticlesButton(
     int ArticleId,

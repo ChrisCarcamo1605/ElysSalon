@@ -8,8 +8,8 @@ using System.Windows.Input;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.views;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
-using ElysSalon2._0.aplication.DTOs.DTOTicket;
+using ElysSalon2._0.aplication.DTOs.Request.Tickets;
+using ElysSalon2._0.aplication.DTOs.Response.Article;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Entities;
@@ -20,10 +20,10 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 {
     private readonly IArticleService _articleService;
     private readonly IMapper _mapper;
-    private readonly ITicketService _service;
     private readonly Window _window;
     private readonly WindowsManager _windowsManager;
     private ObservableCollection<TicketDetails> _cartItems;
+    private readonly ISalesDataService _service;
     private Window _confirmWindow;
     private string _issuer = "messi";
     private Ticket _ticket;
@@ -31,7 +31,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     public ICollectionView cartItemsView;
 
 
-    public ShoppingCartViewModel(IArticleService articleService, IMapper mapper, ITicketService service,
+    public ShoppingCartViewModel(IArticleService articleService, IMapper mapper, ISalesDataService service,
         WindowsManager windowsManager, Window window)
     {
         _service = service;
@@ -128,10 +128,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     private async Task AddToCart(DTOGetArticlesButton article)
     {
-        if (_ticket == null) await GenerateTicket();
-
         var existingItem = cartItems.FirstOrDefault(x => x.ArticleId == article.ArticleId);
-
         if (existingItem != null)
         {
             existingItem.Quantity++;
@@ -140,34 +137,45 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         {
             existingItem = new TicketDetails
             {
-                TicketId = _ticket.TicketId, Quantity = 1, Price = article.Price, ArticleName = article.Name,
-                ArticleId = article.ArticleId, Date = DateTime.Now
+                // No TicketId assignment here - will be set when finalizing
+                Quantity = 1,
+                Price = article.Price,
+                ArticleName = article.Name,
+                ArticleId = article.ArticleId,
+                Date = DateTime.Now
             };
-
             cartItems.Add(existingItem);
         }
 
-        TotalAmount += existingItem.Price;
+        TotalAmount += article.Price;
         cartItemsView?.Refresh();
-    }
-
-    public async Task GenerateTicket()
-    {
-        var dto = new DtoCreateTicket(DateTime.Now, Issuer, TotalAmount);
-        var result = await _service.SaveTicketAsync(dto);
-        if (result != null) _ticket = (Ticket)result.Data;
     }
 
     public async Task SaveTicketDetails()
     {
-        var result = await _service.SaveTicketsDetailsAsync(cartItems);
-        _ticket.TotalAmount = TotalAmount;
-        _service.UpdateTicket(_ticket);
-        if (result.Success is true)
+        // Create the ticket first with final amount
+        var dto = new DtoCreateTicket(DateTime.Now, Issuer, TotalAmount);
+        var result = await _service.Add<Ticket>(_mapper.Map<Ticket>(dto));
+
+        if (result?.Data is Ticket ticket)
         {
-            ClearCart();
-            _window.Close();
-            _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
+            _ticket = ticket;
+
+            // Assign the ticket ID to all cart items
+            foreach (var item in cartItems)
+            {
+                item.TicketId = _ticket.TicketId;
+            }
+
+            // Save all ticket details at once
+            var detailsResult = await _service.AddRange(cartItems.ToList());
+
+            if (detailsResult.Success)
+            {
+                ClearCart();
+                _window.Close();
+                _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
+            }
         }
     }
 

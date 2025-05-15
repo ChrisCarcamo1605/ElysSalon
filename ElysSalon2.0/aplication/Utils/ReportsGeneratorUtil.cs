@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using ElysSalon2._0.aplication.DTOs.DTOSales;
+using ElysSalon2._0.aplication.DTOs.Request.Report;
 using ElysSalon2._0.domain.Services;
 using Microsoft.Win32;
 using OfficeOpenXml;
@@ -12,7 +12,7 @@ namespace ElysSalon2._0.aplication.Utils;
 
 public class ReportsGeneratorUtil
 {
-    public static void GenerateAnualReport(DtoAnualData dto)
+    public static void GenerateAnualReport(DTOAddAnualData dto)
     {
         ExcelPackage.LicenseContext = LicenseContext.Commercial;
 

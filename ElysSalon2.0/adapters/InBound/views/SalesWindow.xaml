@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
                 <Button Style="{StaticResource ExitBtn}" Content="Button"
                         Command="{Binding ExitCommand}"
-                        Height="66" Width="122" HorizontalAlignment="Center" Margin=" 0 0 90 0" />
+                        Height="66" Width="122" Margin=" 0 0 90 0" />
 
                 <TextBlock Grid.Column="1" FontSize="92" Style="{StaticResource TitleText}"
                            Text="REPORTE VENTAS" Width="532" Height="92" Margin="0,42,0,0" />

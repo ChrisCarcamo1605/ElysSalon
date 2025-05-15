@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ElysSalon2._0.domain.Entities;
-
-namespace ElysSalon2._0.aplication.DTOs.DTOTicketDetails;
+namespace ElysSalon2._0.aplication.DTOs.Request.TicketDetails;
 
 public class DtoCreateTicketDetails : INotifyPropertyChanged
 {

@@ -1,4 +1,4 @@
-﻿namespace ElysSalon2._0.aplication.DTOs.DTOSales;
+﻿namespace ElysSalon2._0.aplication.DTOs.Request.Report;
 
 public record DtoMonthFinancialData(
     string month,

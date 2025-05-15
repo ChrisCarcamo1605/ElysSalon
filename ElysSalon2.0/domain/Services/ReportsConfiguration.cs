@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
-using ElysSalon2._0.aplication.DTOs;
+using ElysSalon2._0.aplication.DTOs.Request.Reports;
 using ElysSalon2._0.domain.Entities;
 
 namespace ElysSalon2._0.domain.Services;

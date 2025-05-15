@@ -1,4 +1,4 @@
-﻿namespace ElysSalon2._0.aplication.DTOs.Enums;
+﻿namespace ElysSalon2._0.aplication.Enums;
 
 public enum SortOptionsBy
 {

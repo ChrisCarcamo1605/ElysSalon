@@ -5,10 +5,10 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Globalization;
-using ElysSalon2._0.aplication.DTOs.DTOSales;
 using ElysSalon2._0.domain.Services;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
+using ElysSalon2._0.aplication.DTOs.Request.SalesData;
 
 namespace ElysSalon2._0.adapters.InBound.Factories;
 
@@ -21,7 +21,7 @@ public class ChartAxisFactory
             RangeFilter.LastSevenDays => CreateLastSevenDaysXAxis(),
             RangeFilter.LastMonth => CreateLastMonthXAxis(),
             RangeFilter.LastThreeMonths => CreateLastThreeMonthsXAxis(),
-            _ => CreateDefaultXAxis(),
+            _ => CreateDefaultXAxis()
         };
     }
 
@@ -29,12 +29,12 @@ public class ChartAxisFactory
     {
         return new Axis[]
         {
-            new Axis
+            new()
             {
                 Name = "Total",
                 Position = AxisPosition.Start,
                 ShowSeparatorLines = true,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
+                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), 0.5f),
                 SeparatorsAtCenter = true,
                 SubseparatorsCount = 2
             }
@@ -48,8 +48,8 @@ public class ChartAxisFactory
     }
 
     public static ISeries[] CreateChartSeries(
-        ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> expensesCollection,
+        ObservableCollection<DTOSalesData> salesCollection,
+        ObservableCollection<DTOSalesData> expensesCollection,
         RangeFilter filter)
     {
         var salesFiltered = FilterByRangeService.FilterByDateRange(salesCollection, filter);
@@ -73,8 +73,8 @@ public class ChartAxisFactory
     }
 
     public static ISeries[] CreateGeneralLineSeries(
-        ObservableCollection<DtoSalesList> salesCollection,
-        ObservableCollection<DtoSalesList> expensesCollection)
+        ObservableCollection<DTOSalesData> salesCollection,
+        ObservableCollection<DTOSalesData> expensesCollection)
     {
         var allSales = salesCollection.OrderBy(x => x.Date).ToList();
         var allExpenses = expensesCollection.OrderBy(x => x.Date).ToList();
@@ -98,7 +98,7 @@ public class ChartAxisFactory
                 GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
                 Fill = null,
                 LineSmoothness = 0,
-                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
+                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0)
             },
             new LineSeries<ObservablePoint>
             {
@@ -109,7 +109,7 @@ public class ChartAxisFactory
                 GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0), 0),
                 Fill = null,
                 LineSmoothness = 0,
-                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
+                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0)
             }
         };
     }
@@ -152,7 +152,7 @@ public class ChartAxisFactory
                 Stroke = new SolidColorPaint(new SKColor(255, 0, 190), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(255, 0, 190), 0),
                 Fill = null,
-                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0),
+                GeometryStroke = new SolidColorPaint(new SKColor(255, 0, 190), 0)
             },
             new LineSeries<ObservablePoint>
             {
@@ -162,7 +162,7 @@ public class ChartAxisFactory
                 Stroke = new SolidColorPaint(new SKColor(0, 0, 0), 1),
                 GeometryFill = new SolidColorPaint(new SKColor(0, 0, 0), 0),
                 Fill = null,
-                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0),
+                GeometryStroke = new SolidColorPaint(new SKColor(0, 0, 0), 0)
             }
         };
     }
@@ -178,13 +178,13 @@ public class ChartAxisFactory
     {
         return new Axis[]
         {
-            new Axis
+            new()
             {
                 Labeler = value =>
                 {
                     try
                     {
-                        DateTime date = DateTime.FromOADate(value);
+                        var date = DateTime.FromOADate(value);
                         return date.ToString("dddd", new CultureInfo("es-ES"));
                     }
                     catch
@@ -210,7 +210,7 @@ public class ChartAxisFactory
     {
         return new Axis[]
         {
-            new Axis
+            new()
             {
                 Labeler = value => DateTime.FromOADate(value).ToString("dd-ddd-MMM"),
                 UnitWidth = TimeSpan.FromDays(1).TotalDays,
@@ -219,7 +219,7 @@ public class ChartAxisFactory
                 LabelsRotation = 90,
                 TextSize = 12,
                 ShowSeparatorLines = true,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.9f),
+                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), 0.9f),
                 SeparatorsAtCenter = false,
                 TicksAtCenter = true,
                 SubseparatorsCount = 2
@@ -231,7 +231,7 @@ public class ChartAxisFactory
     {
         return new Axis[]
         {
-            new Axis
+            new()
             {
                 Labeler = value => DateTime.FromOADate(value).ToString("dd-ddd-MMM"),
                 UnitWidth = TimeSpan.FromDays(1).TotalDays,
@@ -240,7 +240,7 @@ public class ChartAxisFactory
                 LabelsRotation = 90,
                 TextSize = 12,
                 ShowSeparatorLines = true,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), strokeWidth: 0.5f),
+                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200), 0.5f),
                 SeparatorsAtCenter = true,
                 SubseparatorsCount = 2
             }

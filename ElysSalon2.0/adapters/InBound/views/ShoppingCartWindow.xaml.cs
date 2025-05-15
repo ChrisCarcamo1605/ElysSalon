@@ -17,7 +17,7 @@ public partial class ShoppingCartWindow : Window
     private readonly WindowsManager _windowsManager;
 
     public ShoppingCartWindow(IArticleService articleRepository, IMapper mapper, WindowsManager windowsManager,
-        ITicketService service)
+        ISalesDataService service)
     {
         InitializeComponent();
         DataContext = new ShoppingCartViewModel(articleRepository, mapper, service, windowsManager, this);

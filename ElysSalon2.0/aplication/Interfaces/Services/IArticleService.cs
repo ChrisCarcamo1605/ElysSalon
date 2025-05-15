@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.Request.Articles;
+using ElysSalon2._0.aplication.DTOs.Response.Article;
 using ElysSalon2._0.domain.Entities;
 using ElysSalon2._0.domain.Services;
 

@@ -8,13 +8,13 @@ using Windows.UI.Popups;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.adapters.InBound.views;
-using ElysSalon2._0.aplication.DTOs.DTOSales;
-using ElysSalon2._0.aplication.DTOs.Enums;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Entities;
 using ElysSalon2._0.domain.Services;
 using LiveChartsCore;
+using ElysSalon2._0.aplication.Enums;
+using ElysSalon2._0.aplication.DTOs.Request.SalesData;
 
 namespace ElysSalon2._0.adapters.InBound.ViewModels;
 
@@ -28,10 +28,10 @@ public class SalesViewModel : INotifyPropertyChanged
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
     private ObservableCollection<KeyValuePair<SortOptionsBy, string>>? _sortOptions;
-    private ObservableCollection<DtoSalesList> _ticketsCollection;
-    private ObservableCollection<DtoSalesList> _expensesCollection;
+    private ObservableCollection<DTOSalesData> _ticketsCollection;
+    private ObservableCollection<DTOSalesData> _expensesCollection;
 
-    public ObservableCollection<DtoSalesList> ExpensesCollection
+    public ObservableCollection<DTOSalesData> ExpensesCollection
     {
         get => _expensesCollection;
         set
@@ -47,9 +47,9 @@ public class SalesViewModel : INotifyPropertyChanged
     private IMapper _mapper;
 
 
-    private ObservableCollection<DtoSalesList> _dtoInfoList;
+    private ObservableCollection<DTOSalesData> _dtoInfoList;
 
-    public ObservableCollection<DtoSalesList> dtoInfoList
+    public ObservableCollection<DTOSalesData> dtoInfoList
     {
         get => _dtoInfoList;
         set
@@ -60,7 +60,7 @@ public class SalesViewModel : INotifyPropertyChanged
     }
 
 
-    public ObservableCollection<DtoSalesList> TicketsCollection
+    public ObservableCollection<DTOSalesData> TicketsCollection
     {
         get => _ticketsCollection;
         set
@@ -124,9 +124,9 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    private ObservableCollection<DtoSalesList> _salesCollection;
+    private ObservableCollection<DTOSalesData> _salesCollection;
 
-    public ObservableCollection<DtoSalesList> SalesCollection
+    public ObservableCollection<DTOSalesData> SalesCollection
     {
         get => _salesCollection;
 
@@ -196,7 +196,7 @@ public class SalesViewModel : INotifyPropertyChanged
         ExitCommand = new RelayCommand(Exit);
         GenerateReportCommand = new RelayCommand(GenerateReport);
         OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
-        DeleteCommand = new AsyncRelayCommand<DtoSalesList>(Delete);
+        DeleteCommand = new AsyncRelayCommand<DTOSalesData>(Delete);
 
 
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
@@ -210,7 +210,7 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             new(FilterSales.Tickets, "Ticket"),
             new(FilterSales.Sales, "Ventas"),
-            new(FilterSales.Expenses, "Gastos"),
+            new(FilterSales.Expenses, "Gastos")
         };
 
         _sortOptions = new ObservableCollection<KeyValuePair<SortOptionsBy, string>>
@@ -218,7 +218,7 @@ public class SalesViewModel : INotifyPropertyChanged
             new(SortOptionsBy.DateAscending, "Fecha Ascendente"),
             new(SortOptionsBy.DateDesending, "Fecha Desendente"),
             new(SortOptionsBy.AmountAscending, "Monto Ascendente"),
-            new(SortOptionsBy.AmountDesending, "Monto Desendente"),
+            new(SortOptionsBy.AmountDesending, "Monto Desendente")
         };
 
         _selectedFilter = _filterOptions[0];
@@ -238,23 +238,23 @@ public class SalesViewModel : INotifyPropertyChanged
             _ticketsCollection.Clear();
             _expensesCollection.Clear();
 
-            foreach (var ticket in tickets) _ticketsCollection.Add(new DtoSalesList(ticket));
+            foreach (var ticket in tickets) _ticketsCollection.Add(new DTOSalesData(ticket));
 
-            foreach (var sale in sales) _salesCollection.Add(new DtoSalesList(sale));
+            foreach (var sale in sales) _salesCollection.Add(new DTOSalesData(sale));
 
-            foreach (var expense in expenses) _expensesCollection.Add(new DtoSalesList(expense));
+            foreach (var expense in expenses) _expensesCollection.Add(new DTOSalesData(expense));
 
 
             //  ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
 
             _salesCollection =
-                new ObservableCollection<DtoSalesList>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
+                new ObservableCollection<DTOSalesData>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
 
             _ticketsCollection =
-                new ObservableCollection<DtoSalesList>(_ticketsCollection.OrderByDescending(x => x.Date.Date).ToList());
+                new ObservableCollection<DTOSalesData>(_ticketsCollection.OrderByDescending(x => x.Date.Date).ToList());
             _expensesCollection =
-                new ObservableCollection<DtoSalesList>(_expensesCollection.OrderByDescending(x => x.Date.Date)
+                new ObservableCollection<DTOSalesData>(_expensesCollection.OrderByDescending(x => x.Date.Date)
                     .ToList());
         }
         catch (Exception ex)
@@ -286,7 +286,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
                 _collectionView.Filter = items =>
                 {
-                    var SaleList = items as DtoSalesList;
+                    var SaleList = items as DTOSalesData;
                     return SaleList != null && SaleList.Date >= FromDate && SaleList.Date <= UntilDate;
                 };
 
@@ -297,7 +297,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
                 _collectionView.Filter = items =>
                 {
-                    var ticket = items as DtoSalesList;
+                    var ticket = items as DTOSalesData;
                     return ticket != null && ticket.Date >= FromDate &&
                            ticket.Date <= UntilDate;
                 };
@@ -308,7 +308,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
                 _collectionView.Filter = items =>
                 {
-                    var expense = items as DtoSalesList;
+                    var expense = items as DTOSalesData;
 
                     return expense != null && expense.Date >= FromDate &&
                            expense.Date <= UntilDate;
@@ -354,11 +354,11 @@ public class SalesViewModel : INotifyPropertyChanged
         chartWindow.ShowDialog();
     }
 
-    private async Task Delete(DtoSalesList sale)
+    private async Task Delete(DTOSalesData sale)
     {
         var option = MessageBox.Show("¿Seguro que quiere eliminar este registro?", "Confirmar eliminación",
             MessageBoxButton.YesNo);
-        ResultFromService resultFromService = ResultFromService.Failed("Hubo un error");
+        var resultFromService = ResultFromService.Failed("Hubo un error");
 
         if (option == MessageBoxResult.Yes)
         {
@@ -377,13 +377,9 @@ public class SalesViewModel : INotifyPropertyChanged
             }
 
             if (resultFromService.Success)
-            {
                 MessageBox.Show(resultFromService.Message);
-            }
             else
-            {
                 MessageBox.Show(resultFromService.Message);
-            }
 
             ApplyFilter();
         }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using ElysSalon2._0.adapters.OutBound.DataBase;
-using ElysSalon2._0.aplication.DTOs.DTOArticle;
+using ElysSalon2._0.aplication.DTOs.Response.Article;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.domain.Entities;
 using Microsoft.EntityFrameworkCore;

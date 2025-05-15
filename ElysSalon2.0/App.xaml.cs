@@ -35,7 +35,7 @@ public partial class App : Application
         services.AddTransient<ShoppingCartViewModel>();
         services.AddScoped<SalesViewModel>();
         services.AddScoped<ChartsViewModel>();
-     
+
 
         //Interfaces and Repositories
         services.AddTransient<IArticleRepository, ArticleRepository>();
@@ -46,7 +46,7 @@ public partial class App : Application
         //Services
         services.AddScoped<IArticleService, ArticleService>();
         services.AddScoped<ISalesReportsService, SaleReportsService>();
-        services.AddScoped<ISalesDataService, SalesDatasDataService>();
+        services.AddScoped<ISalesDataService, SalesDataService>();
 
 
         //Configuration

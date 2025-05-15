@@ -6,8 +6,8 @@ namespace ElysSalon2._0.aplication.Interfaces.Services;
 
 public interface ISalesDataService
 {
-    Task Add<T>(T obj);
+    Task<ResultFromService> Add<T>(T obj);
+    Task<ResultFromService> AddRange<T>(List<T> obj);
     Task<ResultFromService> Delete<T>(string id);
     Task<ObservableCollection<T>> GetAllOf<T>() where T : class;
-
 }

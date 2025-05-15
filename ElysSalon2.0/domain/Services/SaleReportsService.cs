@@ -3,7 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using ElysSalon2._0.aplication.DTOs.DTOSales;
+using ElysSalon2._0.aplication.DTOs.Request.Report;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.aplication.Utils;
@@ -83,7 +83,7 @@ public class SaleReportsService : ISalesReportsService
             .Where(x => x.SaleDate.Month == 12)
             .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
 
-        ReportsGeneratorUtil.GenerateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
+        ReportsGeneratorUtil.GenerateAnualReport(new DTOAddAnualData(year, jenuary, february, march, april, may, june,
             july,
             august, september, october, november, december
         ));
@@ -136,7 +136,7 @@ public class SaleReportsService : ISalesReportsService
             .Where(x => x.EmissionDateTime.Month == 12)
             .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
 
-        ReportsGeneratorUtil.GenerateAnualReport(new DtoAnualData(year, jenuary, february, march, april, may, june,
+        ReportsGeneratorUtil.GenerateAnualReport(new DTOAddAnualData(year, jenuary, february, march, april, may, june,
             july,
             august, september, october, november, december
         ));
@@ -161,10 +161,6 @@ public class SaleReportsService : ISalesReportsService
         var now = DateTime.Now;
         var month = now.ToString("MMMM", new CultureInfo("es-ES")).ToUpper();
         ReportsGeneratorUtil.GenerateMonthReport(new DtoMonthFinancialData(month, week1, week2, week3, week4));
-
-        //MessageBox.Show(
-        //    $"DiasPorSemana{daysPerWeek} week2= {daysPerWeek * 2} week4= {daysPerWeek * 3}" +
-        //    $" week4= {daysPerWeek * 4}  TOTAL DE DIAS DEL MES= {totalsDaysInMonth} MES={firstDayMonth.Month}");
     }
 
 
