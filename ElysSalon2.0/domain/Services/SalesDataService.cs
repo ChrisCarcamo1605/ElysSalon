@@ -2,6 +2,7 @@
 using ElysSalon2._0.aplication.Interfaces.Services;
 using ElysSalon2._0.domain.Entities;
 using System.Collections.ObjectModel;
+using ElysSalon2._0.aplication.Utils;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ElysSalon2._0.domain.Services;
@@ -9,13 +10,13 @@ namespace ElysSalon2._0.domain.Services;
 public class SalesDataService : ISalesDataService
 {
     private readonly IRepository<Expense> _expenseRepo;
-    private readonly IRepository<Ticket> _ticketRepo;
+    private readonly ITicketRepository _ticketRepo;
     private readonly IRepository<Sales> _salesRepo;
     private readonly IRepository<TicketDetails> _tickDetailsRepo;
 
     private ReportsConfiguration _reportConfig;
 
-    public SalesDataService(IRepository<Sales> salesRepo, IRepository<Ticket> ticketRepo
+    public SalesDataService(IRepository<Sales> salesRepo, ITicketRepository ticketRepo
         , IRepository<Expense> expenseRepo, IRepository<TicketDetails> ticketDetailsRepoRepo)
     {
         _salesRepo = salesRepo;
@@ -132,5 +133,26 @@ public class SalesDataService : ISalesDataService
         }
 
         return new ObservableCollection<T>();
+    }
+
+    public async Task<ResultFromService> GetLastId<T>()
+    {
+        try
+        {
+            var lastTicket = await _ticketRepo.GetLastId();
+
+            var newId = lastTicket != null
+                ? IdGeneratorUtil.GenerateNewId(lastTicket)
+                : IdGeneratorUtil.GenerateNewId(null);
+
+            return ResultFromService.SuccessResult(newId, "ID generado exitosamente");
+        }
+        catch (System.Exception ex)
+        {
+            // Log del error (implementar según tu sistema de logging)
+            // Logger.Error("Error generando nuevo ID", ex);
+
+            return ResultFromService.Failed("Error al generar el nuevo ID");
+        }
     }
 }

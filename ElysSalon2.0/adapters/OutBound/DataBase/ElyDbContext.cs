@@ -171,279 +171,279 @@ public class ElyDbContext : DbContext
 
 
         modelBuilder.Entity<Ticket>().HasData(
-            new Ticket
-            {
-                TicketId = "001100",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 15),
-                TotalAmount = 18.50m
-            },
-            new Ticket
-            {
-                TicketId = "001101",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 15),
-                TotalAmount = 22.30m
-            },
-            new Ticket
-            {
-                TicketId = "001102",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 15),
-                TotalAmount = 19.70m
-            },
-            new Ticket
-            {
-                TicketId = "001103",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 16),
-                TotalAmount = 24.10m
-            },
-            new Ticket
-            {
-                TicketId = "001104",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 16),
-                TotalAmount = 25.20m
-            },
-            new Ticket
-            {
-                TicketId = "001105",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 17),
-                TotalAmount = 30.50m
-            },
-            new Ticket
-            {
-                TicketId = "001106",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 18),
-                TotalAmount = 27.80m
-            },
-            new Ticket
-            {
-                TicketId = "001107",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 18),
-                TotalAmount = 15.90m
-            },
-            new Ticket
-            {
-                TicketId = "001108",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 20),
-                TotalAmount = 36.40m
-            },
-            new Ticket
-            {
-                TicketId = "001109",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 21),
-                TotalAmount = 22.10m
-            },
-            new Ticket
-            {
-                TicketId = "001110",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 21),
-                TotalAmount = 17.90m
-            },
-            new Ticket
-            {
-                TicketId = "001111",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 22),
-                TotalAmount = 35.10m
-            },
-            new Ticket
-            {
-                TicketId = "001112",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 23),
-                TotalAmount = 23.30m
-            },
-            new Ticket
-            {
-                TicketId = "001113",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 24),
-                TotalAmount = 31.25m
-            },
-            new Ticket
-            {
-                TicketId = "001114",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 24),
-                TotalAmount = 25.75m
-            },
-            new Ticket
-            {
-                TicketId = "001115",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 25),
-                TotalAmount = 38.90m
-            },
-            new Ticket
-            {
-                TicketId = "001116",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 25),
-                TotalAmount = 18.60m
-            },
-            new Ticket
-            {
-                TicketId = "001117",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 25),
-                TotalAmount = 17.40m
-            },
-            new Ticket
-            {
-                TicketId = "001118",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 26),
-                TotalAmount = 16.10m
-            },
-            new Ticket
-            {
-                TicketId = "001119",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 27),
-                TotalAmount = 12.30m
-            },
-            new Ticket
-            {
-                TicketId = "001120",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 27),
-                TotalAmount = 31.90m
-            },
-            new Ticket
-            {
-                TicketId = "001121",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 28),
-                TotalAmount = 11.60m
-            },
-            new Ticket
-            {
-                TicketId = "001122",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 28),
-                TotalAmount = 21.80m
-            },
-            new Ticket
-            {
-                TicketId = "001123",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 29),
-                TotalAmount = 11.90m
-            },
-            new Ticket
-            {
-                TicketId = "001124",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 3, 30),
-                TotalAmount = 21.50m
-            },
-            new Ticket
-            {
-                TicketId = "001125",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 1),
-                TotalAmount = 21.80m
-            },
-            new Ticket
-            {
-                TicketId = "001126",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 1),
-                TotalAmount = 42.10m
-            },
-            new Ticket
-            {
-                TicketId = "001127",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 2),
-                TotalAmount = 36.45m
-            },
-            new Ticket
-            {
-                TicketId = "001128",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 3),
-                TotalAmount = 15.10m
-            },
-            new Ticket
-            {
-                TicketId = "001129",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 5),
-                TotalAmount = 24.80m
-            },
-            new Ticket
-            {
-                TicketId = "001130",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 5),
-                TotalAmount = 12.60m
-            },
-            new Ticket
-            {
-                TicketId = "001131",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 6),
-                TotalAmount = 22.40m
-            },
-            new Ticket
-            {
-                TicketId = "001132",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 7),
-                TotalAmount = 34.50m
-            },
-            new Ticket
-            {
-                TicketId = "001133",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 5),
-                TotalAmount = 24.80m
-            },
-            new Ticket
-            {
-                TicketId = "001134",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 15),
-                TotalAmount = 12.60m
-            },
-            new Ticket
-            {
-                TicketId = "001135",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 16),
-                TotalAmount = 22.40m
-            },
-            new Ticket
-            {
-                TicketId = "001136",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 17),
-                TotalAmount = 34.50m
-            },
-            new Ticket
-            {
-                TicketId = "001137",
-                Issuer = "",
-                EmissionDateTime = new DateTime(2025, 4, 18),
-                TotalAmount = 34.50m
-            }
-        );
+      new Ticket
+      {
+          TicketId = "T-000100",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 15),
+          TotalAmount = 18.50m
+      },
+      new Ticket
+      {
+          TicketId = "T-000101",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 15),
+          TotalAmount = 22.30m
+      },
+      new Ticket
+      {
+          TicketId = "T-000102",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 15),
+          TotalAmount = 19.70m
+      },
+      new Ticket
+      {
+          TicketId = "T-000103",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 16),
+          TotalAmount = 24.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000104",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 16),
+          TotalAmount = 25.20m
+      },
+      new Ticket
+      {
+          TicketId = "T-000105",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 17),
+          TotalAmount = 30.50m
+      },
+      new Ticket
+      {
+          TicketId = "T-000106",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 18),
+          TotalAmount = 27.80m
+      },
+      new Ticket
+      {
+          TicketId = "T-000107",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 18),
+          TotalAmount = 15.90m
+      },
+      new Ticket
+      {
+          TicketId = "T-000108",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 20),
+          TotalAmount = 36.40m
+      },
+      new Ticket
+      {
+          TicketId = "T-000109",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 21),
+          TotalAmount = 22.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000110",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 21),
+          TotalAmount = 17.90m
+      },
+      new Ticket
+      {
+          TicketId = "T-000111",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 22),
+          TotalAmount = 35.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000112",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 23),
+          TotalAmount = 23.30m
+      },
+      new Ticket
+      {
+          TicketId = "T-000113",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 24),
+          TotalAmount = 31.25m
+      },
+      new Ticket
+      {
+          TicketId = "T-000114",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 24),
+          TotalAmount = 25.75m
+      },
+      new Ticket
+      {
+          TicketId = "T-000115",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 25),
+          TotalAmount = 38.90m
+      },
+      new Ticket
+      {
+          TicketId = "T-000116",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 25),
+          TotalAmount = 18.60m
+      },
+      new Ticket
+      {
+          TicketId = "T-000117",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 25),
+          TotalAmount = 17.40m
+      },
+      new Ticket
+      {
+          TicketId = "T-000118",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 26),
+          TotalAmount = 16.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000119",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 27),
+          TotalAmount = 12.30m
+      },
+      new Ticket
+      {
+          TicketId = "T-000120",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 27),
+          TotalAmount = 31.90m
+      },
+      new Ticket
+      {
+          TicketId = "T-000121",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 28),
+          TotalAmount = 11.60m
+      },
+      new Ticket
+      {
+          TicketId = "T-000122",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 28),
+          TotalAmount = 21.80m
+      },
+      new Ticket
+      {
+          TicketId = "T-000123",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 29),
+          TotalAmount = 11.90m
+      },
+      new Ticket
+      {
+          TicketId = "T-000124",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 3, 30),
+          TotalAmount = 21.50m
+      },
+      new Ticket
+      {
+          TicketId = "T-000125",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 1),
+          TotalAmount = 21.80m
+      },
+      new Ticket
+      {
+          TicketId = "T-000126",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 1),
+          TotalAmount = 42.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000127",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 2),
+          TotalAmount = 36.45m
+      },
+      new Ticket
+      {
+          TicketId = "T-000128",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 3),
+          TotalAmount = 15.10m
+      },
+      new Ticket
+      {
+          TicketId = "T-000129",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 5),
+          TotalAmount = 24.80m
+      },
+      new Ticket
+      {
+          TicketId = "T-000130",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 5),
+          TotalAmount = 12.60m
+      },
+      new Ticket
+      {
+          TicketId = "T-000131",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 6),
+          TotalAmount = 22.40m
+      },
+      new Ticket
+      {
+          TicketId = "T-000132",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 7),
+          TotalAmount = 34.50m
+      },
+      new Ticket
+      {
+          TicketId = "T-000133",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 5),
+          TotalAmount = 24.80m
+      },
+      new Ticket
+      {
+          TicketId = "T-000134",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 15),
+          TotalAmount = 12.60m
+      },
+      new Ticket
+      {
+          TicketId = "T-000135",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 16),
+          TotalAmount = 22.40m
+      },
+      new Ticket
+      {
+          TicketId = "T-000136",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 17),
+          TotalAmount = 34.50m
+      },
+      new Ticket
+      {
+          TicketId = "T-000137",
+          Issuer = "",
+          EmissionDateTime = new DateTime(2025, 4, 18),
+          TotalAmount = 34.50m
+      }
+  );
 
         modelBuilder.Entity<TicketDetails>().HasData(
             new TicketDetails
             {
                 TicketDetailsId = 422,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 5,
                 ArticleName = "Tinte Rojo",
                 Quantity = 1,
@@ -453,7 +453,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 423,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 5,
                 ArticleName = "Tinte Rojo",
                 Quantity = 1,
@@ -463,7 +463,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 424,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 5,
                 ArticleName = "Desde un Mes",
                 Quantity = 1,
@@ -473,7 +473,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 425,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 5,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,
@@ -483,7 +483,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 426,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 6,
                 ArticleName = "Desde un Mes",
                 Quantity = 1,
@@ -493,7 +493,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 427,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 9,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,
@@ -503,7 +503,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 428,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 4,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,
@@ -513,7 +513,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 429,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 9,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,
@@ -523,7 +523,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 430,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 7,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,
@@ -533,7 +533,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 431,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 7,
                 ArticleName = "Desde hace 1 mes",
                 Quantity = 1,
@@ -543,7 +543,7 @@ public class ElyDbContext : DbContext
             new TicketDetails
             {
                 TicketDetailsId = 432,
-                TicketId = "001100",
+                TicketId = "T-000100",
                 ArticleId = 7,
                 ArticleName = "Desde hace 3 meses",
                 Quantity = 1,

@@ -10,8 +10,7 @@ public interface IRepository<TEntity> where TEntity : class
     Task SaveRangeAsync(List<TEntity> entities);
     Task<TEntity> UpdateAsync(TEntity entity);
     Task DeleteAsync(TEntity entity);
-    Task<TEntity> GetByIdAsync(int id);
-    Task<TEntity> GetByIdAsync(string id);
+    Task<TEntity> GetByIdAsync<T>(T id);
     Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate);
     Task<ObservableCollection<TEntity>> GetAllAsync();
 

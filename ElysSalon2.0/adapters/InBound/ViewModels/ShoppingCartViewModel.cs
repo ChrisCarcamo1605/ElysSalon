@@ -137,7 +137,6 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         {
             existingItem = new TicketDetails
             {
-                // No TicketId assignment here - will be set when finalizing
                 Quantity = 1,
                 Price = article.Price,
                 ArticleName = article.Name,
@@ -153,8 +152,8 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     public async Task SaveTicketDetails()
     {
-        // Create the ticket first with final amount
-        var dto = new DtoCreateTicket(DateTime.Now, Issuer, TotalAmount);
+        var ticketId = await _service.GetLastId<Ticket>();
+        var dto = new DtoCreateTicket((string)ticketId.Data, DateTime.Now, Issuer, TotalAmount);
         var result = await _service.Add<Ticket>(_mapper.Map<Ticket>(dto));
 
         if (result?.Data is Ticket ticket)

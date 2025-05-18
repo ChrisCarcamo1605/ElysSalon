@@ -46,22 +46,17 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task<TEntity> GetByIdAsync(int id)
+    public async Task<TEntity> GetByIdAsync<T>(T id)
     {
         return await _context.FindAsync<TEntity>(id) ?? throw new NullReferenceException();
     }
-
-    public async Task<TEntity> GetByIdAsync(string id)
-    {
-        return await _context.FindAsync<TEntity>(id) ?? throw new NullReferenceException();
-    }
-
 
     public virtual async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        return await _dbSet.FirstOrDefaultAsync(predicate);
-    }
+        var entity = await _dbSet.FirstOrDefaultAsync(predicate);
 
+        return entity == null ? null : entity ;
+    }
     public async Task<ObservableCollection<T>> FindAsync<T>(Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, T>> selector)
     {
