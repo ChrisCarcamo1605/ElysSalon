@@ -1,12 +1,12 @@
 ﻿using System.Windows;
-using ElysSalon2._0.adapters.InBound.ViewModels;
-using ElysSalon2._0.adapters.InBound.views;
 using ElysSalon2._0.adapters.OutBound.DataBase;
 using ElysSalon2._0.adapters.OutBound.Repositories;
 using ElysSalon2._0.aplication.Interfaces.Repositories;
 using ElysSalon2._0.aplication.Interfaces.Services;
-using ElysSalon2._0.aplication.Management;
 using ElysSalon2._0.domain.Services;
+using ElysSalon2._0.ViewModels;
+using ElysSalon2._0.views;
+using ElysSalon2._0.WinManagement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,6 +67,7 @@ public partial class App : Application
 
         //Mapper
         services.AddAutoMapper(typeof(App).Assembly);
+
 
         //DbContext
         services.AddDbContextFactory<ElyDbContext>(options => options.UseSqlServer(
