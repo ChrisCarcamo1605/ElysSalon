@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Application.Services;
+using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.WinManagement;
 
 namespace ElysSalon2._0.views;
@@ -8,10 +10,9 @@ namespace ElysSalon2._0.views;
 /// </summary>
 public partial class ItemManagerWindow : Window
 {
-    public ItemManagerWindow(IArticleRepository articleRepository, IArticleTypeRepository TypeRepository,
-        IArticleService service, WindowsManager windowsManager)
+    public ItemManagerWindow(ArticleAppService service, WindowsManager windowsManager)
     {
         InitializeComponent();
-        DataContext = new ItemManagerViewModel(articleRepository, TypeRepository, this, service, windowsManager);
+        DataContext = new ItemManagerViewModel(this, service, windowsManager);
     }
 }

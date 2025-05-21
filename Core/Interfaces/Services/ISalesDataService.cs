@@ -1,4 +1,5 @@
 ﻿using Core.Common;
+
 namespace Core.Interfaces.Services;
 
 public interface ISalesDataService

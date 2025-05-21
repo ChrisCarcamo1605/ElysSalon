@@ -19,35 +19,35 @@ public class DtoCreateTicketDetails : INotifyPropertyChanged
         TicketDetailsId = TicketDetailsId;
         this.Ticket = Ticket;
         this.Article = Article;
-        this.quantity = quantity;
-        this.price = price;
-        totalPrice = price * quantity;
+        Quantity = quantity;
+        Price = price;
+        TotalPrice = price * quantity;
     }
 
     public int TicketDetailsId { get; set; }
     public Ticket Ticket { get; set; }
     public Article Article { get; set; }
 
-    public int quantity
+    public int Quantity
     {
         get => _quantity;
         set
         {
             if (SetField(ref _quantity, value)) // Llama a SetField y verifica si cambió
-                totalPrice = price * quantity; // Recalcula TotalPrice
+                TotalPrice = Price * Quantity; // Recalcula TotalPrice
         }
     }
 
-    public decimal price
+    public decimal Price
     {
         get => _price;
         set
         {
-            if (SetField(ref _price, value)) totalPrice = price * quantity;
+            if (SetField(ref _price, value)) TotalPrice = Price * Quantity;
         }
     }
 
-    public decimal totalPrice
+    public decimal TotalPrice
     {
         get => _totalPrice;
         set => SetField(ref _totalPrice, value);

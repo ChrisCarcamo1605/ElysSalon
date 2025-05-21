@@ -1,6 +1,8 @@
-﻿namespace Application.DTOs.Response.Articles;
+﻿using Core.Domain.Entities;
+
+namespace Application.DTOs.Response.Articles;
 
 public record DTOGetArticlesButton(
-    int ArticleId,
+    Article Article,
     string Name,
     decimal Price);

@@ -5,12 +5,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Application.DTOs.Request.SalesData;
+using Application.DTOs.Request.Tickets;
+using Application.DTOs.Request.TicketsDetails;
+using Application.DTOs.Response.Articles;
+using Application.DTOs.Response.TicketDetails;
+using Application.Services;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
-using ElysSalon2._0.aplication.DTOs.Request.Tickets;
-using ElysSalon2._0.aplication.DTOs.Response.Article;
-using ElysSalon2._0.aplication.Interfaces.Services;
-using ElysSalon2._0.domain.Entities;
+using Core.Domain.Entities;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
 
@@ -18,73 +21,79 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
-    private readonly IArticleService _articleService;
+    #region Fields
+
+    private readonly ArticleAppService _articleService;
     private readonly IMapper _mapper;
     private readonly Window _window;
     private readonly WindowsManager _windowsManager;
-    private ObservableCollection<TicketDetails> _cartItems;
-    private readonly ISalesDataService _service;
+    private readonly SaleDataAppService _saleDataService;
+
+    private ObservableCollection<DtoCreateTicketDetails> _cartItems;
     private Window _confirmWindow;
     private string _issuer = "messi";
-    private Ticket _ticket;
+    private DTOSalesData _ticket;
     private decimal _totalAmount;
-    public ICollectionView cartItemsView;
 
+    public ICollectionView CartItemsView { get; private set; }
 
-    public ShoppingCartViewModel(IArticleService articleService, IMapper mapper, ISalesDataService service,
-        WindowsManager windowsManager, Window window)
+    #endregion
+
+    #region Constructor
+
+    public ShoppingCartViewModel(
+        ArticleAppService articleService,
+        IMapper mapper,
+        SaleDataAppService saleDataService,
+        WindowsManager windowsManager,
+        Window window)
     {
-        _service = service;
+        _articleService = articleService;
         _mapper = mapper;
+        _saleDataService = saleDataService;
         _window = window;
         _windowsManager = windowsManager;
-        _cartItems = new ObservableCollection<TicketDetails>();
-        cartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
+
+        InitializeCollections();
+        InitializeCommands();
+        LoadArticlesButtons();
+    }
+
+    private void InitializeCollections()
+    {
+        _cartItems = new ObservableCollection<DtoCreateTicketDetails>();
+        CartItemsView = CollectionViewSource.GetDefaultView(_cartItems);
         ArticlesButtons = new ObservableCollection<Button>();
-        _articleService = articleService;
-        _ = LoadButtons();
+    }
 
+    private void InitializeCommands()
+    {
+        RemoveFromCartCommand = new RelayCommand<DtoCreateTicketDetails>(RemoveFromCart);
+        DecreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(DecreaseQuantity);
+        IncreaseQuantityCommand = new RelayCommand<DtoCreateTicketDetails>(IncreaseQuantity);
 
-        RemoveFromCartCommand = new RelayCommand<TicketDetails>(RemoveFromCart);
-        DecreaseQuantityCommand = new RelayCommand<TicketDetails>(DecreaseFromCart);
-        IncreaseQuantityCommand = new RelayCommand<TicketDetails>(IncreaseQuantity);
-
-        CloseShopingCartCommand = new RelayCommand(CloseShopingCart);
-        OpenConfirmsWindowCommand = new RelayCommand(OpenConfirmWindow);
+        CloseShoppingCartCommand = new RelayCommand(CloseShoppingCart);
+        OpenConfirmWindowCommand = new RelayCommand(OpenConfirmWindow);
         CloseConfirmWindowCommand = new RelayCommand(CloseConfirmWindow);
         SaveTicketsDetailsCommand = new AsyncRelayCommand(SaveTicketDetails);
     }
 
+    #endregion
 
-    public ObservableCollection<Button> ArticlesButtons { get; set; }
+    #region Properties
 
-    //COMMANDS 
-    public ICommand OpenConfirmsWindowCommand { get; }
-    public ICommand SaveTicketsDetailsCommand { get; }
-    public ICommand CloseConfirmWindowCommand { get; }
-    public ICommand CloseShopingCartCommand { get; }
-    public ICommand RemoveFromCartCommand { get; }
-    public ICommand IncreaseQuantityCommand { get; }
-    public ICommand DecreaseQuantityCommand { get; }
+    public ObservableCollection<Button> ArticlesButtons { get; private set; }
 
     public decimal TotalAmount
     {
         get => _totalAmount;
-        set
-        {
-            _totalAmount = value;
-            OnPropertyChanged();
-        }
+        set => SetField(ref _totalAmount, value);
     }
 
-    public ObservableCollection<TicketDetails> cartItems
+    public ObservableCollection<DtoCreateTicketDetails> CartItems
     {
         get => _cartItems;
-        set
-        {
-            _cartItems = value;
-            OnPropertyChanged();
-        }
+        set => SetField(ref _cartItems, value);
     }
 
     public string Issuer
@@ -93,92 +102,114 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         set => SetField(ref _issuer, value);
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+    #endregion
 
-    private async Task LoadButtons()
+    #region Commands
+
+    public ICommand OpenConfirmWindowCommand { get; private set; }
+    public ICommand SaveTicketsDetailsCommand { get; private set; }
+    public ICommand CloseConfirmWindowCommand { get; private set; }
+    public ICommand CloseShoppingCartCommand { get; private set; }
+    public ICommand RemoveFromCartCommand { get; private set; }
+    public ICommand IncreaseQuantityCommand { get; private set; }
+    public ICommand DecreaseQuantityCommand { get; private set; }
+
+    #endregion
+
+    #region Public Methods
+
+    public void ClearCart()
     {
-        var articles = await _articleService.GetArticlesToButtons();
-
-
-        if (articles != null)
-            foreach (var article in articles)
-            {
-                var btn = new Button
-                {
-                    Tag = article.ArticleId,
-                    Style = (Style)Application.Current.FindResource("articlesBtn"),
-                    Padding = new Thickness(10)
-                };
-                btn.Click += async (e, s) => { AddToCart(article); };
-                var textBlock = new TextBlock
-                {
-                    Text = article.Name,
-                    TextWrapping = TextWrapping.Wrap,
-                    TextAlignment = TextAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    FontSize = 27
-                };
-
-                btn.Content = textBlock;
-                ArticlesButtons.Add(btn);
-            }
+        CartItems.Clear();
+        TotalAmount = 0;
     }
 
+    #endregion
 
-    private async Task AddToCart(DTOGetArticlesButton article)
+    #region Private Methods
+
+    private async Task LoadArticlesButtons()
     {
-        var existingItem = cartItems.FirstOrDefault(x => x.ArticleId == article.ArticleId);
+        var articles = (ObservableCollection<DTOGetArticlesButton>)(await _articleService.GetArticlesToButtons()).Data;
+
+        if (articles == null) return;
+
+        foreach (var article in articles)
+        {
+            var button = CreateArticleButton(article);
+            ArticlesButtons.Add(button);
+        }
+    }
+
+    private Button CreateArticleButton(DTOGetArticlesButton article)
+    {
+        var button = new Button
+        {
+            Tag = article.Article.ArticleId,
+            Style = (Style)App.Current.FindResource("articleBtn"), // Corregido aquí
+            Padding = new Thickness(10),
+            Content = new TextBlock
+            {
+                Text = article.Article.Name,
+                TextWrapping = TextWrapping.Wrap,
+                TextAlignment = TextAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                FontSize = 27
+            }
+        };
+
+        button.Click += async (sender, e) => await AddToCart(_mapper.Map<DtoCreateTicketDetails>(article));
+        return button;
+    }
+
+    private async Task AddToCart(DtoCreateTicketDetails article)
+    {
+        var existingItem = CartItems.FirstOrDefault(x => x.Article.ArticleId == article.Article.ArticleId);
+
         if (existingItem != null)
         {
             existingItem.Quantity++;
         }
         else
         {
-            existingItem = new TicketDetails
-            {
-                Quantity = 1,
-                Price = article.Price,
-                ArticleName = article.Name,
-                ArticleId = article.ArticleId,
-                Date = DateTime.Now
-            };
-            cartItems.Add(existingItem);
+            existingItem = new DtoCreateTicketDetails(null, article.Article, 1, article.TotalPrice);
+            _cartItems.Add(existingItem);
         }
 
-        TotalAmount += article.Price;
-        cartItemsView?.Refresh();
+        TotalAmount += article.TotalPrice;
+        CartItemsView?.Refresh();
     }
 
-    public async Task SaveTicketDetails()
+    private async Task SaveTicketDetails()
     {
-        var ticketId = await _service.GetLastId<Ticket>();
-        var dto = new DtoCreateTicket((string)ticketId.Data, DateTime.Now, Issuer, TotalAmount);
-        var result = await _service.Add<Ticket>(_mapper.Map<Ticket>(dto));
+        var ticketIdResult = await _saleDataService.GetLastIdTicket();
+        if (!ticketIdResult.Success || ticketIdResult.Data == null) return;
 
-        if (result?.Data is Ticket ticket)
+        var dto = new DtoCreateTicket(
+            ticketIdResult.Data.ToString(),
+            DateTime.Now,
+            Issuer,
+            TotalAmount);
+
+        var ticketResult = await _saleDataService.Add<Ticket>(_mapper.Map<Ticket>(dto));
+
+        if (ticketResult?.Data is not Ticket ticket) return;
+
+        _ticket = new DTOSalesData(ticket);
+
+        // Assign the ticket ID to all cart items
+        foreach (var item in CartItems) item.Ticket.TicketId = _ticket.Id;
+
+        // Save all ticket details at once
+        var detailsResult = await _saleDataService.AddTicketDetailsRange(CartItems.ToList());
+
+        if (detailsResult.Success)
         {
-            _ticket = ticket;
-
-            // Assign the ticket ID to all cart items
-            foreach (var item in cartItems) item.TicketId = _ticket.TicketId;
-
-            // Save all ticket details at once
-            var detailsResult = await _service.AddRange(cartItems.ToList());
-
-            if (detailsResult.Success)
-            {
-                ClearCart();
-                _window.Close();
-                _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
-            }
+            ClearCart();
+            _window.Close();
+            _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
         }
-    }
-
-    public void ClearCart()
-    {
-        cartItems.Clear();
-        TotalAmount = 0;
     }
 
     private void OpenConfirmWindow()
@@ -194,45 +225,50 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         _windowsManager.CloseCurrentWindowandShowWindow<ShoppingCartWindow>(_confirmWindow);
     }
 
-    private void CloseShopingCart()
+    private void CloseShoppingCart()
     {
         _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_window);
     }
 
-
-    public void RemoveFromCart(TicketDetails ticket)
+    public void RemoveFromCart(DtoCreateTicketDetails ticket)
     {
-        if (ticket == null) ;
-        cartItems.Remove(ticket);
+        if (ticket == null) return;
+
+        CartItems.Remove(ticket);
         UpdateTotalPrice();
     }
 
-    private void DecreaseFromCart(TicketDetails ticket)
+    private void DecreaseQuantity(DtoCreateTicketDetails ticket)
     {
+        if (ticket == null) return;
+
         if (ticket.Quantity > 1)
-            ticket.Quantity -= 1;
+            ticket.Quantity--;
         else
             RemoveFromCart(ticket);
 
         UpdateTotalPrice();
     }
 
-    private void IncreaseQuantity(TicketDetails ticket)
+    private void IncreaseQuantity(DtoCreateTicketDetails ticket)
     {
         if (ticket == null) return;
+
         ticket.Quantity++;
         UpdateTotalPrice();
     }
 
     private void UpdateTotalPrice()
     {
-        decimal total = 0;
-
-        foreach (var item in cartItems) total += item.TotalPrice;
-
-        TotalAmount = total;
-        cartItemsView.Refresh();
+        TotalAmount = CartItems.Sum(item => item.TotalPrice);
+        CartItemsView.Refresh();
     }
+
+    #endregion
+
+    #region INotifyPropertyChanged Implementation
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
@@ -246,4 +282,6 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
         return true;
     }
+
+    #endregion
 }

@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Application.DTOs.Request.Articles;
+using Application.DTOs.Response.Articles;
+using Application.Services;
+using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
-using ElysSalon2._0.aplication.Interfaces.Repositories;
-using ElysSalon2._0.aplication.Interfaces.Services;
-using ElysSalon2._0.domain.Entities;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
 
@@ -14,26 +15,26 @@ namespace ElysSalon2._0.ViewModels;
 
 public class TypesManagementViewModel : INotifyPropertyChanged
 {
-    private readonly IArticleService _service;
-    private readonly IArticleTypeRepository _typeRepository;
+    private readonly ArticleAppService _service;
     private readonly TypeArticleWindow _window;
+    private readonly IMapper _map;
     private readonly WindowsManager _windowManager;
     private string _name;
     private int _typeId;
 
-    private ObservableCollection<ArticleType> _typesCollection;
+    private ObservableCollection<DTOGetArtType> _typesCollection;
 
-    public TypesManagementViewModel(IArticleTypeRepository typeRepository, WindowsManager windowsManager,
-        IArticleService service, TypeArticleWindow window)
+    public TypesManagementViewModel(WindowsManager windowsManager,
+        ArticleAppService service, TypeArticleWindow window, IMapper map)
     {
-        TypesCollection = new ObservableCollection<ArticleType>();
+        TypesCollection = new ObservableCollection<DTOGetArtType>();
         _windowManager = windowsManager;
-        _typeRepository = typeRepository;
         _service = service;
         _window = window;
+        _map = map;
         addTypeCommand = new AsyncRelayCommand(AddType);
-        editTypeCommand = new AsyncRelayCommand<ArticleType>(EditType);
-        deleteTypeCommand = new AsyncRelayCommand<ArticleType>(DeleteType);
+        editTypeCommand = new AsyncRelayCommand<DTOGetArtType>(EditType);
+        deleteTypeCommand = new AsyncRelayCommand<DTOGetArtType>(DeleteType);
         ExitCommand = new RelayCommand(Exit);
         LoadTypes();
     }
@@ -58,7 +59,7 @@ public class TypesManagementViewModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<ArticleType> TypesCollection
+    public ObservableCollection<DTOGetArtType> TypesCollection
     {
         get => _typesCollection;
         set
@@ -78,21 +79,17 @@ public class TypesManagementViewModel : INotifyPropertyChanged
 
     public async Task LoadTypes()
     {
-        var types = await _typeRepository.GetTypesAsync();
+        var types = (ObservableCollection<DTOGetArtType>)(await _service.GetTypesAsync()).Data;
 
-        types.Remove(types.First(x => x.ArticleTypeId.Equals(1)));
-        types.Remove(types.First(x => x.ArticleTypeId.Equals(2)));
+        types.Remove(types.First(x => x.ArtTypeId.Equals(1)));
+        types.Remove(types.First(x => x.ArtTypeId.Equals(2)));
 
 
         if (TypesCollection == null)
         {
             foreach (var type in types)
             {
-                var artType = new ArticleType
-                {
-                    ArticleTypeId = type.ArticleTypeId,
-                    Name = type.Name
-                };
+                var artType = new DTOGetArtType(type.ArtTypeId, type.Name);
                 TypesCollection.Add(artType);
             }
         }
@@ -101,11 +98,7 @@ public class TypesManagementViewModel : INotifyPropertyChanged
             TypesCollection.Clear();
             foreach (var type in types)
             {
-                var artType = new ArticleType
-                {
-                    ArticleTypeId = type.ArticleTypeId,
-                    Name = type.Name
-                };
+                var artType = new DTOGetArtType(type.ArtTypeId, type.Name);
                 TypesCollection.Add(artType);
             }
         }
@@ -127,25 +120,22 @@ public class TypesManagementViewModel : INotifyPropertyChanged
         await LoadTypes();
     }
 
-    public async Task EditType(ArticleType type)
+    public async Task EditType(DTOGetArtType type)
     {
-        var result = await _service.EditType(type);
+        var result = await _service.EditTypeAsync(type.Name);
         if (result.Success is true) Name = "";
 
         MessageBox.Show(result.Message);
         await LoadTypes();
     }
 
-    public async Task DeleteType(ArticleType type)
+    public async Task DeleteType(DTOGetArtType type)
     {
-        ;
-
-
         var option = MessageBox.Show("¿Seguro que quiere eliminar este tipo de articulo?", "Confirmar eliminación",
             MessageBoxButton.YesNo);
         if (option == MessageBoxResult.Yes)
         {
-            var result = await _service.DeleteType(type.ArticleTypeId);
+            var result = await _service.DeleteTypeAsync(type.ArtTypeId);
             if (result.Success is true) _name = "";
             MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
         }

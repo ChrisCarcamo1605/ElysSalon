@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.Tickets;
-using Application.DTOs.Response.Ticket;
+using Application.DTOs.Response.Tickets;
 using AutoMapper;
 using Core.Domain.Entities;
 
@@ -13,7 +13,6 @@ public class TicketMappingProfile : Profile
         //Ticket to DTO
         CreateMap<Ticket, DTOGetTicket>();
         CreateMap<DtoCreateTicket, Ticket>();
-
         CreateMap<DTOSalesData, Ticket>();
     }
 }

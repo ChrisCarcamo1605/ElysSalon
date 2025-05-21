@@ -2,21 +2,18 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Infrastructure.Persistence.Migrations
+namespace Infrastructure.Persistence.Migrations;
+
+/// <inheritdoc />
+public partial class AutoIncrementidtoTicketdisabled : Migration
 {
     /// <inheritdoc />
-    public partial class AutoIncrementidtoTicketdisabled : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+    }
 
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
     }
 }

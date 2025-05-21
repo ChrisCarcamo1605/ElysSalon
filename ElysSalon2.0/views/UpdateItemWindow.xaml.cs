@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Application.Services;
+using ElysSalon2._0.ViewModels;
 
 namespace ElysSalon2._0.views;
 
@@ -7,10 +9,10 @@ namespace ElysSalon2._0.views;
 /// </summary>
 public partial class UpdateItemWindow : Window
 {
-    public UpdateItemWindow(IArticleTypeRepository articleTypeRepository, IArticleRepository articleRepository,
-        int article, IArticleService service)
+    public UpdateItemWindow(
+        int article, ArticleAppService service)
     {
         InitializeComponent();
-        DataContext = new UpdateArticleViewModel(articleTypeRepository, articleRepository, article, this, service);
+        DataContext = new UpdateArticleViewModel(article, this, service);
     }
 }

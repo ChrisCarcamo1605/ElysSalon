@@ -7,14 +7,19 @@ using System.Windows.Input;
 using Windows.UI.Popups;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
-using Core.Common;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
 using Application.Enums;
 using Application.DTOs.Request.SalesData;
+using Application.DTOs.Response.Expense;
+using Application.DTOs.Response.SalesData;
+using Application.DTOs.Response.TicketDetails;
+using Application.DTOs.Response.Tickets;
 using Application.Services;
-using Core.Domain.Entities;
 using Application.Interfaces;
+using static SkiaSharp.HarfBuzz.SKShaper;
+using Core.Common;
+using Core.Domain.Entities;
 
 namespace ElysSalon2._0.ViewModels;
 
@@ -229,18 +234,24 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         try
         {
+            var salesResult = await _salesDataService.GetAllOf<DTOGetSales>();
+            var ticketsResult = await _salesDataService.GetAllOf<DTOGetTicket>();
+            var expensesResult = await _salesDataService.GetAllOf<DTOGetExpense>();
+            var ticketDetailsResult = await _salesDataService.GetAllOf<DTOGetTicketDetails>();
+
             _salesCollection.Clear();
             _ticketsCollection.Clear();
             _expensesCollection.Clear();
 
-            _salesCollection = (ObservableCollection<DTOSalesData>)(await _salesDataService.GetAllOf<Sales>()).Data;
-            _ticketsCollection = (ObservableCollection<DTOSalesData>)(await _salesDataService.GetAllOf<Ticket>()).Data;
-            _expensesCollection = (ObservableCollection<DTOSalesData>)(await _salesDataService.GetAllOf<Expense>()).Data;
-            _ticketDetailsCollection = (ObservableCollection<DTOSalesData>)(await _salesDataService.GetAllOf<TicketDetails>()).Data;
 
+            _salesCollection = (ObservableCollection<DTOSalesData>)salesResult.Data;
+            _ticketsCollection =
+                (ObservableCollection<DTOSalesData>)ticketsResult.Data;
+            _expensesCollection =
+                (ObservableCollection<DTOSalesData>)expensesResult.Data;
+            _ticketDetailsCollection =
+                (ObservableCollection<DTOSalesData>)ticketDetailsResult.Data;
 
-            //  ApplyFilter();
-            OnPropertyChanged(nameof(SalesView));
 
             _salesCollection =
                 new ObservableCollection<DTOSalesData>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
@@ -250,6 +261,8 @@ public class SalesViewModel : INotifyPropertyChanged
             _expensesCollection =
                 new ObservableCollection<DTOSalesData>(_expensesCollection.OrderByDescending(x => x.Date.Date)
                     .ToList());
+
+            OnPropertyChanged(nameof(SalesView));
         }
         catch (Exception ex)
         {
@@ -257,12 +270,12 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    private async void GenerateMonthReport()
-    {
-        var prueba = _mapper.Map<ObservableCollection<Sales>>(_salesCollection);
-        _reportsService.GenerateMonthReport(prueba);
-        MessageBox.Show("Reporte Generado");
-    }
+    //private async void GenerateMonthReport()
+    //{
+    //    var prueba = _mapper.Map<ObservableCollection<Sales>>(_salesCollection);
+    //    _reportsService.GenerateMonthReport(prueba);
+    //    MessageBox.Show("Reporte Generado");
+    //}
 
     private async void GenerateReport()
     {
@@ -352,28 +365,28 @@ public class SalesViewModel : INotifyPropertyChanged
     {
         var option = MessageBox.Show("¿Seguro que quiere eliminar este registro?", "Confirmar eliminación",
             MessageBoxButton.YesNo);
-        var resultFromService = ResultFromService.Failed("Hubo un error");
+
 
         if (option == MessageBoxResult.Yes)
         {
+            ResultFromService? result = null;
             switch (_selectedFilter.Key)
             {
                 case FilterSales.Sales:
-
-                    resultFromService = await _salesDataService.Delete<Sales>(sale.Id);
+                    result = await _salesDataService.Delete<DTOGetSales>(sale);
                     break;
                 case FilterSales.Tickets:
-                    resultFromService = await _salesDataService.Delete<Ticket>(sale.Id);
+                    result = await _salesDataService.Delete<DTOGetTicket>(sale.Id);
                     break;
                 case FilterSales.Expenses:
-                    resultFromService = await _salesDataService.Delete<Expense>(sale.Id);
+                    result = await _salesDataService.Delete<DTOGetExpense>(sale.Id);
                     break;
             }
 
-            if (resultFromService.Success)
-                MessageBox.Show(resultFromService.Message);
+            if (result.Success)
+                MessageBox.Show(result.Message);
             else
-                MessageBox.Show(resultFromService.Message);
+                MessageBox.Show(result.Message);
 
             ApplyFilter();
         }

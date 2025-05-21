@@ -3,10 +3,10 @@
 namespace Application.DTOs.Response.Articles;
 
 public record DTOGetArticle(
-    int articleId,
-    string articleName,
-    ArticleType articleType,
-    decimal priceCost,
-    decimal priceBuy,
-    int stock,
-    string description);
+    int ArticleId,
+    string Name,
+    ArticleType Type,
+    decimal PriceCost,
+    decimal PriceBuy,
+    int Stock,
+    string Description);

@@ -12,7 +12,7 @@ public record DTOSalesData(
     Article article
 )
 {
-    public DTOSalesData() : this(string.Empty, string.Empty, DateTime.MinValue, string.Empty, 0,null)
+    public DTOSalesData() : this(string.Empty, string.Empty, DateTime.MinValue, string.Empty, 0, null)
     {
     }
 

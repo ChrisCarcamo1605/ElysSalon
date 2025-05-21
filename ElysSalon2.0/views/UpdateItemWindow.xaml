@@ -51,7 +51,7 @@
                     <Label Style="{StaticResource h2}" Content="ArticleID" HorizontalAlignment="Left" Height="24"
                            Width="52" />
 
-                    <TextBox IsReadOnly="True" Foreground="LightSlateGray" Text="{Binding articleId}"
+                    <TextBox IsReadOnly="True" Foreground="LightSlateGray" Text="{Binding ArticleId}"
                              x:Name="ArticleIdTextBox"
                              Height="42" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" />
                 </StackPanel>

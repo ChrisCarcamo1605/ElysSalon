@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using AutoMapper;
 using Core.Common;
 using Core.Domain.Entities;
 using Core.Interfaces.Repositories;
@@ -12,36 +11,32 @@ public class ArticleService : IArticleService
 {
     private readonly IRepository<Article> _articleRepository;
     private readonly IRepository<ArticleType> _typeRepository;
-    private readonly IMapper _mapper;
     private ObservableCollection<Article> _articlesCollection;
     private ObservableCollection<ArticleType> _typesCollection;
 
-    public ArticleService(IRepository<Article> articleRepository, IRepository<ArticleType> typeRepository,
-        IMapper mapper)
+    public ArticleService(IRepository<Article> articleRepository)
     {
         _articleRepository = articleRepository;
-        _typeRepository = typeRepository;
-        _mapper = mapper;
     }
 
     public event Action reloadItems;
     public event Action clearForms;
 
 
-    public async Task<ResultFromService> AddArticle(Article article)
+    public async Task<ResultFromService> AddArticleAsync(Article article)
     {
         _articlesCollection = await _articleRepository.GetAllAsync();
         var validate = ArticleValidations.ValidateAddArticle(article, _articlesCollection);
         if (validate.Success is false) return validate;
 
-        await _articleRepository.SaveAsync(_mapper.Map<Article>(article));
+        await _articleRepository.SaveAsync(article);
         reloadItems?.Invoke();
         clearForms?.Invoke();
         return validate;
     }
 
 
-    public async Task<ResultFromService> UpdateArticle(Article article)
+    public async Task<ResultFromService> UpdateArticleAsync(Article article)
     {
         _articlesCollection = await _articleRepository.GetAllAsync();
 
@@ -57,7 +52,7 @@ public class ArticleService : IArticleService
         return isValidted;
     }
 
-    public async Task<ResultFromService> DeleteArticle(int id)
+    public async Task<ResultFromService> DeleteArticleAsync(int id)
     {
         if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");
 
@@ -66,41 +61,8 @@ public class ArticleService : IArticleService
         return ResultFromService.SuccessResult("Artículo eliminado correctamente");
     }
 
-    public async Task<ResultFromService> AddType(string name)
-    {
-        _typesCollection = await _typeRepository.GetAllAsync();
-        var validate = ArticleValidations.ValidateAddType(name, _typesCollection);
 
-        if (validate.Success is false) return validate;
-
-        await _typeRepository.SaveAsync(new ArticleType { Name = name });
-        reloadItems?.Invoke();
-        return ResultFromService.SuccessResult("Tipo creado correctamente");
-    }
-
-    public async Task<ResultFromService> EditType(ArticleType type)
-    {
-        var articleType =
-            await _typeRepository.FindAsync(x => x.Name != type.Name && x.ArticleTypeId == type.ArticleTypeId);
-
-        if (articleType == null) return ResultFromService.Failed("Tipo ya existente");
-
-        var validated = ArticleValidations.ValidateUpdateType(type.Name, articleType);
-        await _typeRepository.UpdateAsync((ArticleType)validated.Data);
-
-        return ResultFromService.SuccessResult(validated.Data, "Tipo actualizado correctamente");
-    }
-
-    public async Task<ResultFromService> DeleteType(int id)
-    {
-        if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");
-
-        await _typeRepository.DeleteAsync(await _typeRepository.FindAsync(x => x.ArticleTypeId == id));
-        reloadItems?.Invoke();
-        return ResultFromService.SuccessResult("Tipo eliminado correctamente");
-    }
-
-    public async Task<ObservableCollection<Article>> GetArticlesToButtons()
+    public async Task<ObservableCollection<Article>> GetArticlesToButtonsAsync()
     {
         return await _articleRepository.FindAsync(
             x => x.Stock >= 1,
@@ -109,5 +71,32 @@ public class ArticleService : IArticleService
                 ArticleId = x.ArticleId, Name = x.Name, PriceBuy = x.PriceBuy
             }
         );
+    }
+
+    public async Task<ResultFromService> GetArticleAsync(int id)
+    {
+        if (id <= 0) return ResultFromService.Failed("Seleccione un artículo para editar");
+        try
+        {
+            var article = await _articleRepository.FindAsync(x => x.ArticleId == id);
+            return ResultFromService.SuccessResult(article);
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+        }
+    }
+
+    public async Task<ResultFromService> GetArticlesAsync()
+    {
+        try
+        {
+            var articles = await _articleRepository.GetAllAsync();
+            return ResultFromService.SuccessResult(articles);
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+        }
     }
 }

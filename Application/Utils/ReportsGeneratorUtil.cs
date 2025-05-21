@@ -180,15 +180,15 @@ public class ReportsGeneratorUtil
             Console.WriteLine($"Carpeta creada en: {folderPath}");
         }
 
-        var saveFileDialog = new SaveFileDialog
-        {
-            Filter = "Archivos Excel (*.xlsx)|*.xlsx",
-            Title = "Guardar Reporte",
-            DefaultExt = "xlsx",
-            FileName = Path.GetFileName(uniqueName),
-            InitialDirectory = folderPath,
-            AddExtension = true
-        };
+        //var saveFileDialog = new SaveFileDialog
+        //{
+        //    Filter = "Archivos Excel (*.xlsx)|*.xlsx",
+        //    Title = "Guardar Reporte",
+        //    DefaultExt = "xlsx",
+        //    FileName = Path.GetFileName(uniqueName),
+        //    InitialDirectory = folderPath,
+        //    AddExtension = true
+        //};
 
         ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
@@ -266,15 +266,15 @@ public class ReportsGeneratorUtil
             var filePath =
                 $"Reporte_{fromDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_Hasta_{untilDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}.xlsx";
 
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                var selectedPath = saveFileDialog.FileName;
-                var finalPath = GetUniqueFileName(selectedPath);
-                package.SaveAs(new FileInfo(finalPath));
-                saveFileDialog.FileName = "";
+            //if (saveFileDialog.ShowDialog() == true)
+            //{
+            //    var selectedPath = saveFileDialog.FileName;
+            //    var finalPath = GetUniqueFileName(selectedPath);
+            //    package.SaveAs(new FileInfo(finalPath));
+            //    saveFileDialog.FileName = "";
 
-                return ResultFromService.SuccessResult("Archivo guardado correctamente");
-            }
+            //    return ResultFromService.SuccessResult("Archivo guardado correctamente");
+            //}
 
             return ResultFromService.Failed("Guardado cancelado");
         }

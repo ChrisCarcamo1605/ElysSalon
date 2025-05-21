@@ -3,29 +3,26 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Application.DTOs.Request.Articles;
+using Application.DTOs.Response.Articles;
+using Application.Services;
 using CommunityToolkit.Mvvm.Input;
-using ElysSalon2._0.aplication.DTOs.Request.Articles;
-using ElysSalon2._0.aplication.Interfaces.Repositories;
-using ElysSalon2._0.aplication.Interfaces.Services;
-using ElysSalon2._0.aplication.Utils;
-using ElysSalon2._0.domain.Entities;
+using ElysSalon2._0.Utils;
 using ElysSalon2._0.views;
 
 namespace ElysSalon2._0.ViewModels;
 
 public class UpdateArticleViewModel : INotifyPropertyChanged
 {
-    private readonly IArticleRepository _articleRepository;
-    private readonly IArticleTypeRepository _articleTypeRepository;
-    private readonly IArticleService _service;
+    private readonly ArticleAppService _service;
     private readonly UpdateItemWindow _window;
-    private Article _article;
+    private DTOGetArticle _article;
     private int _articleId;
     private string _articleName;
 
     private int _articleTypeId;
 
-    private ObservableCollection<ArticleType> _articleTypes;
+    private ObservableCollection<DTOGetArtType> _articleTypes;
 
     private string _description;
 
@@ -34,13 +31,12 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private decimal _priceCost;
     private int _stock;
 
-    public UpdateArticleViewModel(IArticleTypeRepository articleTypeRepository, IArticleRepository articleRepository,
-        int article, UpdateItemWindow window, IArticleService service)
+    public UpdateArticleViewModel(
+        int article, UpdateItemWindow window, ArticleAppService service)
     {
         _window = window;
-        _articleTypes = new ObservableCollection<ArticleType>();
-        _articleRepository = articleRepository;
-        _articleTypeRepository = articleTypeRepository;
+        _articleTypes = new ObservableCollection<DTOGetArtType>();
+
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(OnlyDigits);
         ExitCommand = new RelayCommand(Exit);
         updateArticleCommand = new AsyncRelayCommand(UpdateArticle);
@@ -116,7 +112,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<ArticleType> ArticleTypes
+    public ObservableCollection<DTOGetArtType> ArticleTypes
     {
         get => _articleTypes;
         set
@@ -135,23 +131,24 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     private async Task LoadItem(int articleId)
     {
-        _article = await _articleRepository.GetArticleAsync(articleId);
+        var article = await _service.GetArticleAsync(articleId);
+        _article = (DTOGetArticle)article.Data;
 
         _articleId = articleId;
         _articleName = _article.Name;
-        _articleTypeId = _article.ArticleTypeId;
+        _articleTypeId = _article.Type.ArticleTypeId;
         _priceBuy = _article.PriceBuy;
         _stock = _article.Stock;
         _priceCost = _article.PriceCost;
         _description = _article.Description;
 
-        var articleTypes = await _articleTypeRepository.GetTypesAsync();
-        articleTypes.Remove(articleTypes.First(x => x.ArticleTypeId == 2));
-        articleTypes.Remove(articleTypes.First(x => x.ArticleTypeId == 1));
+        var articleTypes = (ObservableCollection<DTOGetArtType>)(await _service.GetTypesAsync()).Data;
+        articleTypes.Remove(articleTypes.First(x => x.ArtTypeId == 2));
+        articleTypes.Remove(articleTypes.First(x => x.ArtTypeId == 1));
 
         if (_articleTypes == null)
         {
-            _articleTypes = new ObservableCollection<ArticleType>(articleTypes);
+            _articleTypes = new ObservableCollection<DTOGetArtType>(articleTypes);
         }
         else
         {
@@ -163,7 +160,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private async Task UpdateArticle()
     {
         var dto = new DTOUpdateArticle(articleId, Name, articleTypeId, PriceCost, PriceBuy, Stock, Description);
-        var result = await _service.UpdateArticle(dto);
+        var result = await _service.UpdateArticleAsync(dto);
 
         if (result.Success)
         {
