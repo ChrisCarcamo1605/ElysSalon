@@ -6,13 +6,12 @@ using Application.Interfaces;
 using Application.Utils;
 using Core.Common;
 using Core.Domain.Entities;
-using Core.Interfaces.Services;
 
 namespace Application.Services;
 
 public class SaleReportsService : ISalesReportsService
 {
-    private ReportsConfiguration _reportConfig;
+    private readonly ReportsConfiguration _reportConfig;
 
     public SaleReportsService(ReportsConfiguration reportsConfig)
     {

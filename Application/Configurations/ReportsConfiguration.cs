@@ -7,17 +7,17 @@ namespace Application.Configurations;
 
 public class ReportsConfiguration
 {
-    private DateTime Week1Start = DateTime.Now;
     private DateTime Week1End = DateTime.Now;
-
-    private DateTime Week2Start = DateTime.Now;
+    private DateTime Week1Start = DateTime.Now;
     private DateTime Week2End = DateTime.Now;
 
-    private DateTime Week3Start = DateTime.Now;
+    private DateTime Week2Start = DateTime.Now;
     private DateTime Week3End = DateTime.Now;
 
-    private DateTime Week4Start = DateTime.Now;
+    private DateTime Week3Start = DateTime.Now;
     private DateTime Week4End = DateTime.Now;
+
+    private DateTime Week4Start = DateTime.Now;
 
 
     public DtoWeeksRanges GetWeeksRanges(ObservableCollection<Sales> collection)

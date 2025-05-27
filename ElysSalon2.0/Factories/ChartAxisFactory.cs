@@ -1,15 +1,14 @@
 ﻿using System.Collections.ObjectModel;
-using LiveChartsCore.Measure;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using SkiaSharp;
 using System.Globalization;
 using Application.DTOs.Request.SalesData;
 using Application.Enums;
 using Application.Services;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
-
+using LiveChartsCore.Measure;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 
 namespace ElysSalon2._0.Factories;
 

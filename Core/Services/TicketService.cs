@@ -2,7 +2,6 @@
 using Core.Domain.Entities;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using System.Net.Sockets;
 
 namespace Core.Services;
 

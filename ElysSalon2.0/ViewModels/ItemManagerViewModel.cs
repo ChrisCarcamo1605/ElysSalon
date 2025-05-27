@@ -17,8 +17,8 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ItemManagerViewModel : INotifyPropertyChanged
 {
-    private readonly WindowsManager _windowsManager;
     private readonly ArticleAppService _service;
+    private readonly WindowsManager _windowsManager;
     private int _articleId;
 
     private string _articleName;
@@ -38,6 +38,32 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     private string _priceCost;
     private string? _searchText;
     private string _stock;
+
+    public ItemManagerViewModel(
+        Window windows, ArticleAppService articleService, WindowsManager windowsManager)
+    {
+        _windowsManager = windowsManager;
+        _service = articleService;
+        window = windows;
+        _articlesCollection = new ObservableCollection<DTOGetArticle>();
+        _articleTypesCollection = new ObservableCollection<DTOGetArtType>();
+        _articleSortCollection = new ObservableCollection<DTOGetArtType>();
+
+        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
+        _articlesView.Filter = FilterArticles;
+
+        addArticleCommand = new AsyncRelayCommand(AddArticle);
+        deleteArticleCommand = new AsyncRelayCommand<DTOGetArticle>(DeleteArticle);
+        updateArticleCommand = new RelayCommand<DTOGetArticle>(EditArticle);
+        OpenTypesManagementCommand = new RelayCommand(openTypesManagement);
+
+        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
+        ExitCommand = new RelayCommand(Exit);
+        LoadArticles();
+
+        _service.reloadItems += async () => await SortArticles(ArticleTypeSort);
+        _service.clearForms += CleanForm;
+    }
 
 
     private Window window { get; }
@@ -189,32 +215,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public ItemManagerViewModel(
-        Window windows, ArticleAppService articleService, WindowsManager windowsManager)
-    {
-        _windowsManager = windowsManager;
-        _service = articleService;
-        window = windows;
-        _articlesCollection = new ObservableCollection<DTOGetArticle>();
-        _articleTypesCollection = new ObservableCollection<DTOGetArtType>();
-        _articleSortCollection = new ObservableCollection<DTOGetArtType>();
-
-        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
-        _articlesView.Filter = FilterArticles;
-
-        addArticleCommand = new AsyncRelayCommand(AddArticle);
-        deleteArticleCommand = new AsyncRelayCommand<DTOGetArticle>(DeleteArticle);
-        updateArticleCommand = new RelayCommand<DTOGetArticle>(EditArticle);
-        OpenTypesManagementCommand = new RelayCommand(openTypesManagement);
-
-        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
-        ExitCommand = new RelayCommand(Exit);
-        LoadArticles();
-
-        _service.reloadItems += async () => await SortArticles(ArticleTypeSort);
-        _service.clearForms += CleanForm;
-    }
-
     private void onlyDigits(TextCompositionEventArgs e)
     {
         UIElementsUtil.NumericOnly_PreviewTextInput(e.OriginalSource as UIElement, e);
@@ -275,7 +275,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         {
             MessageBox.Show(result.Message, "Articulo agregado", MessageBoxButton.OK, MessageBoxImage.Information);
             CleanForm();
-            return;
         }
         else
         {

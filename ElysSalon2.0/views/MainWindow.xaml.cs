@@ -10,9 +10,6 @@ public partial class MainWindow : Window
     private readonly IServiceProvider _serviceProvider;
     private readonly WindowsManager _windowsManager;
 
-    public ICommand ServiceClickCommand { get; }
-    public ICommand AdminClickCommand { get; }
-
     public MainWindow(IServiceProvider serviceProvider, WindowsManager windows)
     {
         _windowsManager = windows;
@@ -22,6 +19,9 @@ public partial class MainWindow : Window
         AdminClickCommand = new RelayCommand(adminBtnClick);
         ServiceClickCommand = new RelayCommand(ProductsClick);
     }
+
+    public ICommand ServiceClickCommand { get; }
+    public ICommand AdminClickCommand { get; }
 
     private void Button_Click(object sender, RoutedEventArgs e)
     {

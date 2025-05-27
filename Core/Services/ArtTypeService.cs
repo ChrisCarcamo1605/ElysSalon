@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Xml.Linq;
-using Core.Common;
+﻿using Core.Common;
 using Core.Domain.Entities;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
@@ -11,8 +9,6 @@ namespace Core.Services;
 public class ArtTypeService : IArtTypeService
 {
     private readonly IRepository<ArticleType> _typeRepository;
-    public event Action reloadItems;
-    public event Action clearForms;
 
     public ArtTypeService(IRepository<ArticleType> repository)
     {
@@ -78,4 +74,7 @@ public class ArtTypeService : IArtTypeService
             return ResultFromService.SuccessResult("hubo un error: " + e.Message);
         }
     }
+
+    public event Action reloadItems;
+    public event Action clearForms;
 }

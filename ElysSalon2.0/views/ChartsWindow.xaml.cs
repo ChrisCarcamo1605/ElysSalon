@@ -1,14 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using Application.DTOs.Request.SalesData;
-using Core.Domain.Entities;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.WinManagement;
 
 namespace ElysSalon2._0.views;
 
 /// <summary>
-/// Lógica de interacción para Charts.xaml
+///     Lógica de interacción para Charts.xaml
 /// </summary>
 public partial class ChartsWindow : Window
 {

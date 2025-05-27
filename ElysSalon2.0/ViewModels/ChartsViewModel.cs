@@ -1,196 +1,61 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
-using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using SkiaSharp;
-using System.Windows;
-using Wpf.Ui.Input;
-using Window = System.Windows.Window;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using Windows.System.Update;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel;
-using LiveChartsCore.Measure;
-using LiveChartsCore.SkiaSharpView.Extensions;
-using LiveChartsCore.Kernel.Sketches;
-using System.Linq;
-using System.Windows.Media;
+using System.Windows.Input;
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.Enums;
-using Core.Domain.Entities;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using LiveChartsCore.Drawing;
-using LiveChartsCore.SkiaSharpView.VisualElements;
-using LiveChartsCore.VisualElements;
+using Application.Services;
+using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.Factories;
 using ElysSalon2._0.WinManagement;
-using Application.Services;
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Extensions;
+using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.VisualElements;
+using LiveChartsCore.VisualElements;
+using SkiaSharp;
+using Window = System.Windows.Window;
 
 namespace ElysSalon2._0.ViewModels;
 
 public class ChartsViewModel : INotifyPropertyChanged
 {
-    private Window _window;
-    private WindowsManager _winManager;
-    public ICommand ExitCommand { get; }
-    private List<string> Last7daysLabels;
-    private ObservableCollection<DTOSalesData> _salesCollection;
-    private ObservableCollection<DTOSalesData> _ticketCollection;
-    private ObservableCollection<KeyValuePair<RangeFilter, int>> OrderBy;
-    private ObservableCollection<DTOSalesData> _expensesCollection;
-    private ObservableCollection<DTOSalesData> _ticketDetailsCollection;
+    private readonly ObservableCollection<DTOSalesData> _expensesCollection;
 
-    private ObservableCollection<KeyValuePair<RangeFilter, string>>? _rangeOptions;
-
-    public ObservableCollection<KeyValuePair<RangeFilter, string>>? RangeOptions
-    {
-        get => _rangeOptions;
-        set
-        {
-            SetField(ref _rangeOptions, value);
-            OnPropertyChanged();
-        }
-    }
-
-    private KeyValuePair<RangeFilter, string>? _selectedFilter;
-
-    public KeyValuePair<RangeFilter, string>? SelectedFilter
-    {
-        get => _selectedFilter;
-        set
-        {
-            SetField(ref _selectedFilter, value);
-            OnPropertyChanged();
-            ApplyFilter();
-        }
-    }
+    private readonly Random _random = new();
+    private readonly ObservableCollection<DTOSalesData> _salesCollection;
+    private readonly ObservableCollection<DTOSalesData> _ticketDetailsCollection;
+    private readonly Window _window;
 
     private ObservableCollection<DTOGetBestSellersTickDet> _bestArticlesSeller;
 
-    public ObservableCollection<DTOGetBestSellersTickDet> BestArticlesSeller
-    {
-        get => _bestArticlesSeller;
-        set
-        {
-            SetField(ref _bestArticlesSeller, value);
-            OnPropertyChanged();
-        }
-    }
-
     private ObservableCollection<DTOGetBestSellersTickDet> _bestServicesSeller;
-
-    public ObservableCollection<DTOGetBestSellersTickDet> BestServicesSeller
-    {
-        get => _bestServicesSeller;
-        set
-        {
-            SetField(ref _bestServicesSeller, value);
-            OnPropertyChanged();
-        }
-    }
-
-    public ISeries[] _series;
-
-    public ISeries[] Series
-    {
-        get => _series;
-        set
-        {
-            SetField(ref _series, value);
-            OnPropertyChanged();
-        }
-    }
-
-    private Axis[] _generalYAxis;
-
-    public Axis[] GeneralYAxis
-    {
-        get => _generalYAxis;
-        set
-        {
-            SetField(ref _generalYAxis, value);
-            OnPropertyChanged();
-        }
-    }
-
-    private Axis[] _generalXAxis;
-
-    public Axis[] GeneralXAxis
-    {
-        get => _generalXAxis;
-        set
-        {
-            SetField(ref _generalXAxis, value);
-            OnPropertyChanged();
-        }
-    }
-
-    private ISeries[] _generalSeries;
-
-    public ISeries[] GeneralSeries
-    {
-        get => _generalSeries;
-        set
-        {
-            SetField(ref _generalSeries, value);
-            OnPropertyChanged();
-        }
-    }
-
-    private Axis[] _xLabels;
-
-    public Axis[] XLabels
-    {
-        get => _xLabels;
-        set
-        {
-            if (_xLabels != value)
-            {
-                _xLabels = value;
-                OnPropertyChanged();
-            }
-        }
-    }
-
-    private Axis[] _yLabels;
-
-    public Axis[] YLabels
-    {
-        get => _yLabels;
-        set
-        {
-            if (_yLabels != value)
-            {
-                _yLabels = value;
-                OnPropertyChanged();
-            }
-        }
-    }
 
     private string _earnText;
 
-    public string EarnText
-    {
-        get => _earnText;
-        set
-        {
-            SetField(ref _earnText, value);
-            OnPropertyChanged();
-        }
-    }
+    private ISeries[] _generalSeries;
 
-    private readonly Random _random = new();
+    private Axis[] _generalXAxis;
 
-    public IEnumerable<ISeries> PieSeries { get; set; }
-    public IEnumerable<VisualElement> VisualElements { get; set; }
-    public NeedleVisual Needle { get; set; }
+    private Axis[] _generalYAxis;
+
+    private ObservableCollection<KeyValuePair<RangeFilter, string>>? _rangeOptions;
+
+    private KeyValuePair<RangeFilter, string>? _selectedFilter;
+
+    public ISeries[] _series;
+    private ObservableCollection<DTOSalesData> _ticketCollection;
+    private WindowsManager _winManager;
+
+    private Axis[] _xLabels;
+
+    private Axis[] _yLabels;
+    private List<string> Last7daysLabels;
+    private ObservableCollection<KeyValuePair<RangeFilter, int>> OrderBy;
 
 
     public ChartsViewModel(Window window, WindowsManager winManager, ObservableCollection<DTOSalesData> salesCollection,
@@ -217,6 +82,131 @@ public class ChartsViewModel : INotifyPropertyChanged
         ApplyFilter();
         ExitCommand = new RelayCommand(Exit);
     }
+
+    public ICommand ExitCommand { get; }
+
+    public ObservableCollection<KeyValuePair<RangeFilter, string>>? RangeOptions
+    {
+        get => _rangeOptions;
+        set
+        {
+            SetField(ref _rangeOptions, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public KeyValuePair<RangeFilter, string>? SelectedFilter
+    {
+        get => _selectedFilter;
+        set
+        {
+            SetField(ref _selectedFilter, value);
+            OnPropertyChanged();
+            ApplyFilter();
+        }
+    }
+
+    public ObservableCollection<DTOGetBestSellersTickDet> BestArticlesSeller
+    {
+        get => _bestArticlesSeller;
+        set
+        {
+            SetField(ref _bestArticlesSeller, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<DTOGetBestSellersTickDet> BestServicesSeller
+    {
+        get => _bestServicesSeller;
+        set
+        {
+            SetField(ref _bestServicesSeller, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public ISeries[] Series
+    {
+        get => _series;
+        set
+        {
+            SetField(ref _series, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public Axis[] GeneralYAxis
+    {
+        get => _generalYAxis;
+        set
+        {
+            SetField(ref _generalYAxis, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public Axis[] GeneralXAxis
+    {
+        get => _generalXAxis;
+        set
+        {
+            SetField(ref _generalXAxis, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public ISeries[] GeneralSeries
+    {
+        get => _generalSeries;
+        set
+        {
+            SetField(ref _generalSeries, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public Axis[] XLabels
+    {
+        get => _xLabels;
+        set
+        {
+            if (_xLabels != value)
+            {
+                _xLabels = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public Axis[] YLabels
+    {
+        get => _yLabels;
+        set
+        {
+            if (_yLabels != value)
+            {
+                _yLabels = value;
+                OnPropertyChanged();
+            }
+        }
+    }
+
+    public string EarnText
+    {
+        get => _earnText;
+        set
+        {
+            SetField(ref _earnText, value);
+            OnPropertyChanged();
+        }
+    }
+
+    public IEnumerable<ISeries> PieSeries { get; set; }
+    public IEnumerable<VisualElement> VisualElements { get; set; }
+    public NeedleVisual Needle { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public void LoadAllSales()
     {
@@ -285,7 +275,7 @@ public class ChartsViewModel : INotifyPropertyChanged
 
         _earnText = ExpenseSaleDiference <= 0
             ? ExpenseSaleDiference.ToString()
-            : "+" + ExpenseSaleDiference.ToString();
+            : "+" + ExpenseSaleDiference;
 
         // Notificar cambios para actualización de UI
         OnPropertyChanged(nameof(Needle));
@@ -327,7 +317,7 @@ public class ChartsViewModel : INotifyPropertyChanged
             TypeId = x.article.ArticleTypeId
         }).Select(x => new
         {
-            Name = x.Key.article.Name,
+            x.Key.article.Name,
             x.Key.TypeId,
             TotalAmount = x.Sum(y => y.TotalAmount)
         }).OrderByDescending(x => x.TotalAmount);
@@ -391,8 +381,6 @@ public class ChartsViewModel : INotifyPropertyChanged
     {
         _window.Close();
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

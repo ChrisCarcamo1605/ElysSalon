@@ -2,11 +2,6 @@
 
 public class ResultFromService
 {
-    public bool Success { get; protected set; }
-    public string Message { get; protected set; }
-    public object Data { get; protected set; }
-
-
     private ResultFromService(bool success, string message, object data)
     {
         Success = success;
@@ -19,6 +14,10 @@ public class ResultFromService
         Success = success;
         Message = message;
     }
+
+    public bool Success { get; protected set; }
+    public string Message { get; protected set; }
+    public object Data { get; protected set; }
 
 
     public static ResultFromService SuccessResult(string message = "operacion exitosa")

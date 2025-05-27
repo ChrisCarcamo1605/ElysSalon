@@ -9,7 +9,6 @@ using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.Tickets;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Articles;
-using Application.DTOs.Response.TicketDetails;
 using Application.Services;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +20,16 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
+    #region Public Methods
+
+    public void ClearCart()
+    {
+        CartItems.Clear();
+        TotalAmount = 0;
+    }
+
+    #endregion
+
     #region Fields
 
     private readonly ArticleAppService _articleService;
@@ -113,16 +122,6 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     public ICommand RemoveFromCartCommand { get; private set; }
     public ICommand IncreaseQuantityCommand { get; private set; }
     public ICommand DecreaseQuantityCommand { get; private set; }
-
-    #endregion
-
-    #region Public Methods
-
-    public void ClearCart()
-    {
-        CartItems.Clear();
-        TotalAmount = 0;
-    }
 
     #endregion
 

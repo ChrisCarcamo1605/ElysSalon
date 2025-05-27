@@ -1,22 +1,22 @@
-﻿using Core.Common;
-using Core.Domain.Entities;
-using Core.Interfaces.Services;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Expense;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
+using Core.Common;
+using Core.Domain.Entities;
+using Core.Interfaces.Services;
 
 namespace Application.Services;
 
 public class SaleDataAppService
 {
-    private readonly ISalesService _salesService;
     private readonly IExpensesService _expService;
-    private readonly ITicketService _ticketService;
+    private readonly ISalesService _salesService;
     private readonly ITicketDetailsService _tDetailsService;
+    private readonly ITicketService _ticketService;
 
 
     public SaleDataAppService(ISalesService salesService, IExpensesService expService,
@@ -47,7 +47,7 @@ public class SaleDataAppService
 
     public async Task<ResultFromService> AddTicketDetailsRange(List<DtoCreateTicketDetails> ticketDetails)
     {
-        return await _tDetailsService.AddRange(ticketDetails.Select(x => new TicketDetails()
+        return await _tDetailsService.AddRange(ticketDetails.Select(x => new TicketDetails
         {
             Article = x.Article,
             ArticleId = x.Article.ArticleId,
@@ -87,7 +87,8 @@ public class SaleDataAppService
                     new ObservableCollection<DTOSalesData>(sales.Select(x => new DTOSalesData(x))))
                 : result;
         }
-        else if (objType == typeof(DTOGetTicket))
+
+        if (objType == typeof(DTOGetTicket))
         {
             var result = await _ticketService.GetAllOfAsync();
             var tickets = (ObservableCollection<Ticket>)result.Data;
@@ -96,7 +97,8 @@ public class SaleDataAppService
                     new ObservableCollection<DTOSalesData>(tickets.Select(x => new DTOSalesData(x))))
                 : result;
         }
-        else if (objType == typeof(DTOGetExpense))
+
+        if (objType == typeof(DTOGetExpense))
         {
             var result = await _expService.GetAllOfAsync();
             var expenses = (ObservableCollection<Expense>)result.Data;
@@ -105,7 +107,8 @@ public class SaleDataAppService
                     new ObservableCollection<DTOSalesData>(expenses.Select(x => new DTOSalesData(x))))
                 : result;
         }
-        else if (objType == typeof(DTOGetTicketDetails))
+
+        if (objType == typeof(DTOGetTicketDetails))
         {
             var result = await _tDetailsService.GetAllOfAsync();
             var tDetails = (ObservableCollection<TicketDetails>)result.Data;
@@ -114,10 +117,8 @@ public class SaleDataAppService
                     new ObservableCollection<DTOSalesData>(tDetails.Select(x => new DTOSalesData(x))))
                 : result;
         }
-        else
-        {
-            return ResultFromService.Failed($"Tipo no soportado: {objType}");
-        }
+
+        return ResultFromService.Failed($"Tipo no soportado: {objType}");
     }
 
     public async Task<ResultFromService> GetLastIdTicket()

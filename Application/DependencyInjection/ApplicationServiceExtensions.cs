@@ -1,13 +1,8 @@
-﻿using Core.Interfaces.Services;
+﻿using Application.Configurations;
+using Application.Services;
+using Core.Interfaces.Services;
 using Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Configurations;
-using Application.Services;
 
 namespace Application.DependencyInjection;
 

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Drawing;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Application.DTOs.Request.Reports;
 using Core.Common;
@@ -46,7 +47,7 @@ public class ReportsGeneratorUtil
             {
                 range.Style.Font.Bold = true;
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
             }
 
             worksheet.Cells[2, 2, months.Count + 1, 3].Style.Numberformat.Format = "#,##0.00";
@@ -125,7 +126,7 @@ public class ReportsGeneratorUtil
             {
                 range.Style.Font.Bold = true;
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
             }
 
             worksheet.Cells[2, 2, weeks.Count + 1, 3].Style.Numberformat.Format = "#,##0.00";
@@ -224,7 +225,7 @@ public class ReportsGeneratorUtil
             {
                 range.Style.Font.Bold = true;
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
             }
 
             worksheet.Columns[1].AutoFit();

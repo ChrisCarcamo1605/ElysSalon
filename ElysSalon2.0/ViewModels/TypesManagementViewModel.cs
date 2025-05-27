@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Application.DTOs.Request.Articles;
 using Application.DTOs.Response.Articles;
 using Application.Services;
 using AutoMapper;
@@ -15,9 +14,9 @@ namespace ElysSalon2._0.ViewModels;
 
 public class TypesManagementViewModel : INotifyPropertyChanged
 {
+    private readonly IMapper _map;
     private readonly ArticleAppService _service;
     private readonly TypeArticleWindow _window;
-    private readonly IMapper _map;
     private readonly WindowsManager _windowManager;
     private string _name;
     private int _typeId;

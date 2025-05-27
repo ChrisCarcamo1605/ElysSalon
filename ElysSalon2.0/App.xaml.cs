@@ -8,7 +8,6 @@ using Infrastructure.Persistence.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace ElysSalon2._0;
 
 /// <summary>

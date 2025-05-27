@@ -440,116 +440,117 @@ public class ElyDbContext : DbContext
         );
 
         modelBuilder.Entity<TicketDetails>().HasData(
-            new TicketDetails
-            {
-                TicketDetailsId = 422,
-                TicketId = "T-000100",
-                ArticleId = 5,
-                ArticleName = "Tinte Rojo",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 423,
-                TicketId = "T-000100",
-                ArticleId = 5,
-                ArticleName = "Tinte Rojo",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-15)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 424,
-                TicketId = "T-000100",
-                ArticleId = 5,
-                ArticleName = "Desde un Mes",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-15)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 425,
-                TicketId = "T-000100",
-                ArticleId = 5,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddMonths(-2)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 426,
-                TicketId = "T-000100",
-                ArticleId = 6,
-                ArticleName = "Desde un Mes",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-15)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 427,
-                TicketId = "T-000100",
-                ArticleId = 9,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddMonths(-2)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 428,
-                TicketId = "T-000100",
-                ArticleId = 4,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddMonths(-2)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 429,
-                TicketId = "T-000100",
-                ArticleId = 9,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-2)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 430,
-                TicketId = "T-000100",
-                ArticleId = 7,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-7)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 431,
-                TicketId = "T-000100",
-                ArticleId = 7,
-                ArticleName = "Desde hace 1 mes",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddDays(-12)
-            },
-            new TicketDetails
-            {
-                TicketDetailsId = 432,
-                TicketId = "T-000100",
-                ArticleId = 7,
-                ArticleName = "Desde hace 3 meses",
-                Quantity = 1,
-                Price = 12.59M,
-                Date = DateTime.Now.Date.AddMonths(-2)
-            });
+     new TicketDetails
+     {
+         TicketDetailsId = 422,
+         TicketId = "T-000100",
+         ArticleId = 5,
+         ArticleName = "Tinte Rojo",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 15) // Fecha específica, no se cambia
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 423,
+         TicketId = "T-000100",
+         ArticleId = 5,
+         ArticleName = "Tinte Rojo",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 4, 27) // 1 mes antes
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 424,
+         TicketId = "T-000100",
+         ArticleId = 5,
+         ArticleName = "Desde un Mes",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 3) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 425,
+         TicketId = "T-000100",
+         ArticleId = 5,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 10) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 426,
+         TicketId = "T-000100",
+         ArticleId = 6,
+         ArticleName = "Desde un Mes",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 4, 29) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 427,
+         TicketId = "T-000100",
+         ArticleId = 9,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 1) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 428,
+         TicketId = "T-000100",
+         ArticleId = 4,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 18) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 429,
+         TicketId = "T-000100",
+         ArticleId = 9,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 25) // Cerca de la fecha actual
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 430,
+         TicketId = "T-000100",
+         ArticleId = 7,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 20) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 431,
+         TicketId = "T-000100",
+         ArticleId = 7,
+         ArticleName = "Desde hace 1 mes",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 12) // Dentro del rango
+     },
+     new TicketDetails
+     {
+         TicketDetailsId = 432,
+         TicketId = "T-000100",
+         ArticleId = 7,
+         ArticleName = "Desde hace 3 meses",
+         Quantity = 1,
+         Price = 12.59M,
+         Date = new DateTime(2025, 5, 6) // Dentro del rango
+     }
+ );
         modelBuilder.Entity<Expense>().HasData(
             new Expense { Id = 1, Amount = 25.50m, Reason = "Compra de suministros", Date = new DateTime(2025, 4, 30) },
             new Expense { Id = 2, Amount = 15.75m, Reason = "Almuerzo", Date = new DateTime(2025, 5, 1) },

@@ -4,16 +4,19 @@ using Infrastructure.Persistence.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ElysSalon2._0.Migrations
+namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ElyDbContext))]
-    partial class ElyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250527165110_newDataSeeds2705")]
+    partial class newDataSeeds2705
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1039,7 +1042,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 422,
                             ArticleId = 5,
                             ArticleName = "Tinte Rojo",
-                            Date = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1049,7 +1052,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 423,
                             ArticleId = 5,
                             ArticleName = "Tinte Rojo",
-                            Date = new DateTime(2025, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1059,7 +1062,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 424,
                             ArticleId = 5,
                             ArticleName = "Desde un Mes",
-                            Date = new DateTime(2025, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1069,7 +1072,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 425,
                             ArticleId = 5,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1079,7 +1082,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 426,
                             ArticleId = 6,
                             ArticleName = "Desde un Mes",
-                            Date = new DateTime(2025, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1089,7 +1092,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 427,
                             ArticleId = 9,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1099,7 +1102,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 428,
                             ArticleId = 4,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1109,7 +1112,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 429,
                             ArticleId = 9,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 25, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1119,7 +1122,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 430,
                             ArticleId = 7,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 20, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1129,7 +1132,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 431,
                             ArticleId = 7,
                             ArticleName = "Desde hace 1 mes",
-                            Date = new DateTime(2025, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 5, 15, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"
@@ -1139,7 +1142,7 @@ namespace ElysSalon2._0.Migrations
                             TicketDetailsId = 432,
                             ArticleId = 7,
                             ArticleName = "Desde hace 3 meses",
-                            Date = new DateTime(2025, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Date = new DateTime(2025, 3, 27, 0, 0, 0, 0, DateTimeKind.Local),
                             Price = 12.59m,
                             Quantity = 1,
                             TicketId = "T-000100"

@@ -4,37 +4,78 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Windows.UI.Popups;
-using AutoMapper;
-using CommunityToolkit.Mvvm.Input;
-using ElysSalon2._0.views;
-using ElysSalon2._0.WinManagement;
-using Application.Enums;
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Response.Expense;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
-using Application.Services;
+using Application.Enums;
 using Application.Interfaces;
-using static SkiaSharp.HarfBuzz.SKShaper;
+using Application.Services;
+using AutoMapper;
+using CommunityToolkit.Mvvm.Input;
 using Core.Common;
-using Core.Domain.Entities;
+using ElysSalon2._0.views;
+using ElysSalon2._0.WinManagement;
 
 namespace ElysSalon2._0.ViewModels;
 
 public class SalesViewModel : INotifyPropertyChanged
 {
-    private readonly Window _window;
-    private readonly WindowsManager _winManager;
     private readonly ISalesReportsService _reportsService;
     private readonly SaleDataAppService _salesDataService;
+    private readonly Window _window;
+    private readonly WindowsManager _winManager;
+
+    private ICollectionView _collectionView;
+
+
+    private ObservableCollection<DTOSalesData> _dtoInfoList;
+    private ObservableCollection<DTOSalesData> _expensesCollection;
 
     //Where saves our filters options
     private ObservableCollection<KeyValuePair<FilterSales, string>>? _filterOptions;
+
+    private DateTime _fromDate = DateTime.Now.AddMonths(-1);
+
+
+    private IMapper _mapper;
+
+    private ObservableCollection<DTOSalesData> _salesCollection;
+
+    //Binding to ComboBox
+    private KeyValuePair<FilterSales, string> _selectedFilter;
+
+    public KeyValuePair<SortOptionsBy, string> _selectedSort;
     private ObservableCollection<KeyValuePair<SortOptionsBy, string>>? _sortOptions;
+
+    private ObservableCollection<DTOSalesData> _ticketDetailsCollection;
     private ObservableCollection<DTOSalesData> _ticketsCollection;
-    private ObservableCollection<DTOSalesData> _expensesCollection;
+
+    private DateTime _untilDate = DateTime.Now;
+
+    public SalesViewModel(Window window, WindowsManager windowsManager,
+        SaleDataAppService salesDataService, ISalesReportsService reportsService, IMapper mapper)
+    {
+        _reportsService = reportsService;
+        _salesDataService = salesDataService;
+        _winManager = windowsManager;
+        _salesCollection = [];
+        _ticketsCollection = [];
+        _expensesCollection = [];
+        _mapper = mapper;
+        _window = window;
+
+        ExitCommand = new RelayCommand(Exit);
+        GenerateReportCommand = new RelayCommand(GenerateReport);
+        OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
+        DeleteCommand = new AsyncRelayCommand<DTOSalesData>(Delete);
+
+
+        _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
+        InitializeFilterSortOptions();
+        ApplyFilter();
+    }
 
     public ObservableCollection<DTOSalesData> ExpensesCollection
     {
@@ -45,14 +86,6 @@ public class SalesViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    private ObservableCollection<DTOSalesData> _ticketDetailsCollection;
-
-
-    private IMapper _mapper;
-
-
-    private ObservableCollection<DTOSalesData> _dtoInfoList;
 
     public ObservableCollection<DTOSalesData> dtoInfoList
     {
@@ -75,10 +108,6 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    private ICollectionView _collectionView;
-
-    private DateTime _fromDate = DateTime.Now.AddMonths(-1);
-
     public DateTime FromDate
     {
         get => _fromDate;
@@ -86,12 +115,10 @@ public class SalesViewModel : INotifyPropertyChanged
         set
         {
             SetField(ref _fromDate, value);
-            OnPropertyChanged(nameof(FromDate));
+            OnPropertyChanged();
             ApplyFilter();
         }
     }
-
-    private DateTime _untilDate = DateTime.Now;
 
     public DateTime UntilDate
     {
@@ -104,9 +131,6 @@ public class SalesViewModel : INotifyPropertyChanged
             ApplyFilter();
         }
     }
-
-    //Binding to ComboBox
-    private KeyValuePair<FilterSales, string> _selectedFilter;
 
 
     public ObservableCollection<KeyValuePair<FilterSales, string>>? FilterOptions
@@ -128,8 +152,6 @@ public class SalesViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    private ObservableCollection<DTOSalesData> _salesCollection;
 
     public ObservableCollection<DTOSalesData> SalesCollection
     {
@@ -170,8 +192,6 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    public KeyValuePair<SortOptionsBy, string> _selectedSort;
-
     public KeyValuePair<SortOptionsBy, string> SelectedSort
     {
         get => _selectedSort;
@@ -185,29 +205,6 @@ public class SalesViewModel : INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
-
-    public SalesViewModel(Window window, WindowsManager windowsManager,
-        SaleDataAppService salesDataService, ISalesReportsService reportsService, IMapper mapper)
-    {
-        _reportsService = reportsService;
-        _salesDataService = salesDataService;
-        _winManager = windowsManager;
-        _salesCollection = [];
-        _ticketsCollection = [];
-        _expensesCollection = [];
-        _mapper = mapper;
-        _window = window;
-
-        ExitCommand = new RelayCommand(Exit);
-        GenerateReportCommand = new RelayCommand(GenerateReport);
-        OpenChartWindowCommand = new RelayCommand(OpenChartWindow);
-        DeleteCommand = new AsyncRelayCommand<DTOSalesData>(Delete);
-
-
-        _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
-        InitializeFilterSortOptions();
-        ApplyFilter();
-    }
 
     private void InitializeFilterSortOptions()
     {

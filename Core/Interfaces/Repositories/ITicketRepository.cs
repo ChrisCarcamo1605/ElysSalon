@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Core.Domain.Entities;
+﻿using Core.Domain.Entities;
 
 namespace Core.Interfaces.Repositories;
 

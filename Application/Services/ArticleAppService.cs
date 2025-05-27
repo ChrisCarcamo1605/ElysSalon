@@ -10,11 +10,9 @@ namespace Application.Services;
 
 public class ArticleAppService
 {
-    public event Action? clearForms;
-    public event Action? reloadItems;
     private readonly IArticleService _articleService;
-    private readonly IArtTypeService _typeService;
     private readonly IMapper _map;
+    private readonly IArtTypeService _typeService;
 
     public ArticleAppService(IArticleService articleService, IArtTypeService typeService, IMapper map)
     {
@@ -22,6 +20,9 @@ public class ArticleAppService
         _typeService = typeService;
         _map = map;
     }
+
+    public event Action? clearForms;
+    public event Action? reloadItems;
 
     public async Task<ResultFromService> GetArticlesAsync()
     {

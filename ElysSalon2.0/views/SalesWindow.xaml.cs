@@ -7,7 +7,7 @@ using ElysSalon2._0.WinManagement;
 namespace ElysSalon2._0.views;
 
 /// <summary>
-/// Interaction logic for SalesWindow.xaml
+///     Interaction logic for SalesWindow.xaml
 /// </summary>
 public partial class SalesWindow : Window
 {
