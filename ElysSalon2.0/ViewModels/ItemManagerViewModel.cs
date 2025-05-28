@@ -8,7 +8,6 @@ using Application.DTOs.Request.Articles;
 using Application.DTOs.Response.Articles;
 using Application.Services;
 using CommunityToolkit.Mvvm.Input;
-using Core.Domain.Entities;
 using ElysSalon2._0.Utils;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
@@ -288,7 +287,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         if (string.IsNullOrEmpty(SearchText))
             return true;
 
-        var article = item as Article;
+        var article = item as DTOGetArticle;
         return article.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
     }
 
