@@ -9,4 +9,11 @@ public record DTOGetArticle(
     decimal PriceCost,
     decimal PriceBuy,
     int Stock,
-    string Description);
+    string Description)
+{
+    public DTOGetArticle(Article article) : this(article.ArticleId, 
+        article.Name, article.ArticleType, article.PriceCost, article.PriceBuy,
+        article.Stock, article.Description)
+    {
+    }
+};

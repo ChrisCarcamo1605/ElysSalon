@@ -24,6 +24,8 @@ public class SalesViewModel : INotifyPropertyChanged
 {
     private readonly ISalesReportsService _reportsService;
     private readonly SaleDataAppService _salesDataService;
+
+    private readonly ObservableCollection<DTOSalesData> _ticketDetailsCollection;
     private readonly Window _window;
     private readonly WindowsManager _winManager;
 
@@ -48,8 +50,6 @@ public class SalesViewModel : INotifyPropertyChanged
 
     public KeyValuePair<SortOptionsBy, string> _selectedSort;
     private ObservableCollection<KeyValuePair<SortOptionsBy, string>>? _sortOptions;
-
-    private ObservableCollection<DTOSalesData> _ticketDetailsCollection;
     private ObservableCollection<DTOSalesData> _ticketsCollection;
 
     private DateTime _untilDate = DateTime.Now;
@@ -63,6 +63,7 @@ public class SalesViewModel : INotifyPropertyChanged
         _salesCollection = [];
         _ticketsCollection = [];
         _expensesCollection = [];
+        _ticketDetailsCollection = [];
         _mapper = mapper;
         _window = window;
 
@@ -74,7 +75,7 @@ public class SalesViewModel : INotifyPropertyChanged
 
         _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
         InitializeFilterSortOptions();
-        ApplyFilter();
+        _ = LoadData();
     }
 
     public ObservableCollection<DTOSalesData> ExpensesCollection
@@ -116,7 +117,7 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             SetField(ref _fromDate, value);
             OnPropertyChanged();
-            ApplyFilter();
+            LoadData();
         }
     }
 
@@ -128,7 +129,7 @@ public class SalesViewModel : INotifyPropertyChanged
             SetField(ref _untilDate, value);
             OnPropertyChanged(nameof(FromDate));
 
-            ApplyFilter();
+            LoadData();
         }
     }
 
@@ -187,8 +188,8 @@ public class SalesViewModel : INotifyPropertyChanged
         set
         {
             SetField(ref _selectedFilter, value);
-            OnPropertyChanged();
             ApplyFilter();
+            OnPropertyChanged();
         }
     }
 
@@ -200,7 +201,7 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             SetField(ref _selectedSort, value);
             OnPropertyChanged();
-            ApplyFilter();
+            LoadData();
         }
     }
 
@@ -236,29 +237,12 @@ public class SalesViewModel : INotifyPropertyChanged
             var expensesResult = await _salesDataService.GetAllOf<DTOGetExpense>();
             var ticketDetailsResult = await _salesDataService.GetAllOf<DTOGetTicketDetails>();
 
-            _salesCollection.Clear();
-            _ticketsCollection.Clear();
-            _expensesCollection.Clear();
+            LoadAndSortCollection(_salesCollection, salesResult);
+            LoadAndSortCollection(_ticketsCollection, ticketsResult);
+            LoadAndSortCollection(_expensesCollection, expensesResult);
+            LoadAndSortCollection(_ticketDetailsCollection, ticketDetailsResult);
 
-
-            _salesCollection = (ObservableCollection<DTOSalesData>)salesResult.Data;
-            _ticketsCollection =
-                (ObservableCollection<DTOSalesData>)ticketsResult.Data;
-            _expensesCollection =
-                (ObservableCollection<DTOSalesData>)expensesResult.Data;
-            _ticketDetailsCollection =
-                (ObservableCollection<DTOSalesData>)ticketDetailsResult.Data;
-
-
-            _salesCollection =
-                new ObservableCollection<DTOSalesData>(_salesCollection.OrderByDescending(x => x.Date.Date).ToList());
-
-            _ticketsCollection =
-                new ObservableCollection<DTOSalesData>(_ticketsCollection.OrderByDescending(x => x.Date.Date).ToList());
-            _expensesCollection =
-                new ObservableCollection<DTOSalesData>(_expensesCollection.OrderByDescending(x => x.Date.Date)
-                    .ToList());
-
+            ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
         }
         catch (Exception ex)
@@ -287,44 +271,31 @@ public class SalesViewModel : INotifyPropertyChanged
         {
             case FilterSales.Sales:
                 _collectionView = CollectionViewSource.GetDefaultView(SalesCollection);
-
-                _collectionView.Filter = items =>
-                {
-                    var SaleList = items as DTOSalesData;
-                    return SaleList != null && SaleList.Date >= FromDate && SaleList.Date <= UntilDate;
-                };
-
                 break;
 
             case FilterSales.Tickets:
                 _collectionView = CollectionViewSource.GetDefaultView(TicketsCollection);
-
-                _collectionView.Filter = items =>
-                {
-                    var ticket = items as DTOSalesData;
-                    return ticket != null && ticket.Date >= FromDate &&
-                           ticket.Date <= UntilDate;
-                };
-
                 break;
+
             case FilterSales.Expenses:
                 _collectionView = CollectionViewSource.GetDefaultView(ExpensesCollection);
-
-                _collectionView.Filter = items =>
-                {
-                    var expense = items as DTOSalesData;
-
-                    return expense != null && expense.Date >= FromDate &&
-                           expense.Date <= UntilDate;
-                };
-
                 break;
         }
 
-        _ = LoadData();
+        _collectionView.Filter = items =>
+        {
+            var salesData = items as DTOSalesData;
+            return salesData != null &&
+                   salesData.Date >= FromDate &&
+                   salesData.Date <= UntilDate;
+        };
+
         ApplySort();
         _collectionView.Refresh();
+
+        OnPropertyChanged(nameof(SalesView));
     }
+
 
     public void ApplySort()
     {
@@ -352,8 +323,10 @@ public class SalesViewModel : INotifyPropertyChanged
     public void OpenChartWindow()
     {
         var chartWindow = new ChartsWindow(_winManager,
-            _salesCollection,
-            _ticketsCollection, _expensesCollection, _ticketDetailsCollection);
+            new ObservableCollection<DTOSalesData>(_salesCollection),
+            new ObservableCollection<DTOSalesData>(_ticketsCollection),
+            new ObservableCollection<DTOSalesData>(_expensesCollection),
+            new ObservableCollection<DTOSalesData>(_ticketDetailsCollection));
 
         chartWindow.ShowDialog();
     }
@@ -389,6 +362,16 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
+    public void LoadAndSortCollection(ObservableCollection<DTOSalesData> collection,
+        ResultFromService serviceResult)
+    {
+        if (serviceResult.Data is ObservableCollection<DTOSalesData> newCollection)
+        {
+            collection.Clear();
+            var sortedItems = newCollection.OrderByDescending(x => x.Date.Date).ToList();
+            foreach (var item in sortedItems) collection.Add(item);
+        }
+    }
 
     public void Exit()
     {

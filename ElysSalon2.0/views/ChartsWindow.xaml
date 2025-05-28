@@ -100,7 +100,6 @@
                                                         <Grid Grid.Column="0" HorizontalAlignment="Center">
                                                             <TextBlock FontSize="16" Text="{Binding Name}"
                                                                        Grid.Column="1"
-
                                                                        FontFamily="Bahnschrift Condensed"
                                                                        TextAlignment="Center"
                                                                        VerticalAlignment="Center"

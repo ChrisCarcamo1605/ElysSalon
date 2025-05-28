@@ -27,9 +27,9 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private ICollectionView _articlesView;
 
-    private int _articleTypeId = 2;
+    private int _articleTypeId;
 
-    private int _articleTypeSort = 1;
+    private int _articleTypeSort =1;
 
     private string _description;
 
@@ -59,7 +59,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
         onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
         ExitCommand = new RelayCommand(Exit);
-        LoadArticles();
+        _ = LoadArticles();
 
         _service.reloadItems += async () => await SortArticles(ArticleTypeSort);
         _service.clearForms += CleanForm;
@@ -68,7 +68,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private Window window { get; }
 
-    public string searchText
+    public string SearchText
     {
         get => _searchText;
         set
@@ -118,8 +118,8 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         get => _articleTypeId;
         set
         {
-            SetField(ref _articleTypeId, value);
-            OnPropertyChanged();
+            _articleTypeId = value;
+            OnPropertyChanged(nameof(ArticleTypeId));
         }
     }
 
@@ -129,8 +129,8 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         set
         {
             _articleTypeSort = value;
-            OnPropertyChanged();
-            SortArticles(_articleTypeSort);
+            _ = SortArticles(ArticleTypeSort);
+            OnPropertyChanged(nameof(ArticleTypeSort));
         }
     }
 
@@ -221,65 +221,52 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     }
 
 
-    public async Task LoadArticles() //Load the articles and article's types to the view
+    private async Task LoadArticles()
     {
-        _articleSortCollection = (ObservableCollection<DTOGetArtType>)(await _service.GetTypesAsync()).Data;
-        OnPropertyChanged(nameof(ArticleSortCollection));
+        var artsResult = await _service.GetArticlesAsync();
+        var artTypesResult = await _service.GetTypesAsync();
+        _articleTypesCollection.Clear();
+        _articleSortCollection.Clear();
 
-        var articleTypes = (ObservableCollection<DTOGetArtType>)(await _service.GetTypesAsync()).Data;
-        var articles = (ObservableCollection<DTOGetArticle>)(await _service.GetArticlesAsync()).Data;
-
-
-        _articleSortCollection.Remove(articleTypes.First(x => x.ArtTypeId == 2));
-        articleTypes.Remove(articleTypes.First(x => x.ArtTypeId == 1));
-
-
-        if (_articleTypesCollection == null)
-        {
-            _articleTypesCollection = articleTypes;
-        }
-        else
-        {
-            _articleTypesCollection.Clear();
-
-            foreach (var articleType in articleTypes) _articleTypesCollection.Add(articleType);
-        }
-
-
-        if (_articlesCollection == null)
-        {
-            _articlesCollection = articles;
-            _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
-        }
-        else
+        if (artsResult.Success && artsResult.Data is ObservableCollection<DTOGetArticle> articles)
         {
             _articlesCollection.Clear();
-            foreach (var article in articles) _articlesCollection.Add(article);
+            foreach (var a in articles)
+                _articlesCollection.Add(a);
         }
 
-        ArticleTypeId = 2;
+        if (artTypesResult.Success && artTypesResult.Data is ObservableCollection<DTOGetArtType> types)
+        {
+            foreach (var a in types)
+            {
+                _articleTypesCollection.Add(a);
+                _articleSortCollection.Add(a);
+            }
 
-        _articlesView?.Refresh();
+            _articleSortCollection.Remove(_articleSortCollection.FirstOrDefault(x => x.ArtTypeId == 2));
+            _articleTypesCollection.Remove(_articleTypesCollection.FirstOrDefault(x => x.ArtTypeId == 1));
+        }
+
+        _articleTypeId = 2;
+        OnPropertyChanged(nameof(ArticleTypeId));
+        OnPropertyChanged(nameof(ArticleTypeSort));
+
+        _articlesView.Refresh();
     }
+
 
     private async Task AddArticle()
     {
-        var dto = new DTOAddArticle(ArticleName,
-            ArticleTypeId,
-            PriceCost ?? "0",
-            PriceBuy ?? "0",
-            Stock ?? "0", Description);
-
+        var dto = new DTOAddArticle(ArticleName, _articleTypeId, PriceCost ?? "0", PriceBuy ?? "0", Stock ?? "0",
+            Description);
         var result = await _service.AddArticleAsync(dto);
+
+        MessageBox.Show(result.Message, result.Success ? "Artículo agregado" : "Error", MessageBoxButton.OK,
+            result.Success ? MessageBoxImage.Information : MessageBoxImage.Warning);
+
         if (result.Success)
-        {
-            MessageBox.Show(result.Message, "Articulo agregado", MessageBoxButton.OK, MessageBoxImage.Information);
             CleanForm();
-        }
-        else
-        {
-            MessageBox.Show(result.Message, "Error de formulario", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
+        await SortArticles(ArticleTypeSort);
     }
 
     private void EditArticle(DTOGetArticle article)
@@ -293,31 +280,37 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         var typeSort = ArticleTypeSort;
         var result = await _service.DeleteArticleAsync(article.ArticleId);
         MessageBox.Show(result.Message);
-        SortArticles(typeSort);
+        _ = SortArticles(typeSort);
     }
 
     private bool FilterArticles(object item) //Filter the articles by name on the search bar
     {
-        if (string.IsNullOrEmpty(searchText))
+        if (string.IsNullOrEmpty(SearchText))
             return true;
 
         var article = item as Article;
-        return article.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+        return article.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
     }
 
-    private async Task SortArticles(int typeId) //Sort the articles by type
+    private async Task SortArticles(int typeId)
     {
         await LoadArticles();
-
         if (typeId != 1)
         {
             var sorted = _articlesCollection.Where(item => item.Type.ArticleTypeId.Equals(typeId)).ToList();
             _articlesCollection.Clear();
-            foreach (var item in sorted) _articlesCollection.Add(item);
 
-            _articlesView.Refresh();
+            foreach (var item in sorted)
+            {
+                _articlesCollection.Add(item);
+            }
+
+            OnPropertyChanged(nameof(ArticleCollection));
         }
+
+        _articlesView.Refresh();
     }
+
 
     private void openTypesManagement()
     {

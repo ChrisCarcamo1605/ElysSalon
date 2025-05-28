@@ -46,7 +46,7 @@ public partial class App : System.Windows.Application
             dbContext.Database.Migrate();
         }
 
-        var mainWindow = _serviceProvider.GetRequiredService<SalesWindow>();
+        var mainWindow = _serviceProvider.GetRequiredService<ItemManagerWindow>();
         mainWindow.Show();
     }
 }

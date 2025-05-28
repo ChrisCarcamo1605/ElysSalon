@@ -75,9 +75,9 @@
 
                               x:Name="typeComboBox"
                               DisplayMemberPath="Name"
-                              SelectedValuePath="ArticleTypeId"
+                              SelectedValuePath="ArtTypeId"
                               SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedIndex="0" VerticalAlignment="Top" Height="37" />
+                              SelectedIndex="0" VerticalAlignment="Top" Height="37" SelectionChanged="typeComboBox_SelectionChanged" />
 
                 </StackPanel>
 
@@ -169,7 +169,7 @@
                                FontSize="24" Height="27"
                                HorizontalAlignment="Left" Width="175" />
 
-                    <ui:TextBox Text="{Binding searchText, UpdateSourceTrigger=PropertyChanged}" x:Name="searchTxtBox"
+                    <ui:TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" x:Name="searchTxtBox"
                                 PlaceholderText="Buscar..." Height="36" VerticalAlignment="Top" />
 
 
@@ -177,7 +177,7 @@
                                FontSize="24" Height="27"
                                HorizontalAlignment="Left" Width="76" />
                     <ComboBox ItemsSource="{Binding ArticleSortCollection}"
-                              DisplayMemberPath="Name" SelectedValuePath="ArticleTypeId" VerticalAlignment="Top"
+                              DisplayMemberPath="Name" SelectedValuePath="ArtTypeId" VerticalAlignment="Top"
                               SelectedValue="{Binding ArticleTypeSort, UpdateSourceTrigger=PropertyChanged}"
                               Height="37" />
 
@@ -236,7 +236,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid Grid.Column="0" Background="Gainsboro">
 
-                                        <TextBlock Text="{Binding ArticleId}" Background="Gainsboro"
+                                        <TextBlock Text="{Binding ArticleId }" Background="Gainsboro"
                                                    FontSize="20"
 
                                                    FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"
@@ -249,7 +249,7 @@
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
                                                Padding="0, 0 " />
                                     <Grid Background="Gainsboro" Grid.Column="2">
-                                        <TextBlock FontSize="18" Text="{Binding ArticleType.Name}"
+                                        <TextBlock FontSize="18" Text="{Binding Type.Name}"
                                                    Background="Gainsboro" FontFamily="Bahnschrift Condensed"
                                                    TextAlignment="Center" VerticalAlignment="Center"
                                                    TextWrapping="Wrap"

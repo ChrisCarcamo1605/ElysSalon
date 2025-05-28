@@ -15,4 +15,9 @@ public partial class ItemManagerWindow : Window
         InitializeComponent();
         DataContext = new ItemManagerViewModel(this, service, windowsManager);
     }
+
+    private void typeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+
+    }
 }

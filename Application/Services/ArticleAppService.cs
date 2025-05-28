@@ -26,15 +26,29 @@ public class ArticleAppService
 
     public async Task<ResultFromService> GetArticlesAsync()
     {
-        var articles = await _articleService.GetArticlesAsync();
-        return articles.Success
-            ? ResultFromService.SuccessResult(_map.Map<ObservableCollection<DTOGetArticle>>(articles.Data))
-            : articles;
+        var artResult = await _articleService.GetArticlesAsync();
+
+        var articles = (ObservableCollection<Article>)artResult.Data;
+        var artsGetted = new ObservableCollection<DTOGetArticle>();
+        foreach (var a in articles)
+            artsGetted.Add(new DTOGetArticle(a));
+
+        return artResult.Success
+            ? ResultFromService.SuccessResult(artsGetted)
+            : artResult;
     }
 
     public Task<ResultFromService> AddArticleAsync(DTOAddArticle article)
     {
-        return _articleService.AddArticleAsync(_map.Map<Article>(article));
+        return _articleService.AddArticleAsync(new Article()
+        {
+            ArticleTypeId = article.ArticleTypeId,
+            Name = article.Name,
+            PriceCost = decimal.Parse(article.PriceCost),
+            PriceBuy = decimal.Parse(article.PriceBuy),
+            Stock = int.Parse(article.Stock),
+            Description = article.Description
+        });
     }
 
     public Task<ResultFromService> UpdateArticleAsync(DTOUpdateArticle article)
@@ -60,7 +74,16 @@ public class ArticleAppService
 
     public async Task<ResultFromService> GetTypesAsync()
     {
-        return await _typeService.GetTypesAsync();
+        var result = await _typeService.GetTypesAsync();
+        var types = (ObservableCollection<ArticleType>)result.Data;
+        var typesGetted = new ObservableCollection<DTOGetArtType>();
+
+        foreach (var a in types)
+        {
+            typesGetted.Add(new DTOGetArtType(a.ArticleTypeId, a.Name));
+        }
+
+        return ResultFromService.SuccessResult(typesGetted);
     }
 
 

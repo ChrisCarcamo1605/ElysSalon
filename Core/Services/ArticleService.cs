@@ -91,7 +91,7 @@ public class ArticleService : IArticleService
     {
         try
         {
-            var articles = await _articleRepository.GetAllAsync();
+            var articles = await _articleRepository.GetAllWithIncludesAsync(x => x.ArticleType);
             return ResultFromService.SuccessResult(articles);
         }
         catch (Exception e)

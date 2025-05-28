@@ -25,7 +25,7 @@ public class ResultFromService
         return new ResultFromService(true, message);
     }
 
-    public static ResultFromService SuccessResult(object data, string message = "operacion exitosa")
+    public static ResultFromService SuccessResult<T>(T data, string message = "operacion exitosa") where T : class
     {
         return new ResultFromService(true, message, data);
     }

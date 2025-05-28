@@ -58,7 +58,7 @@ public class TicketDetailsService : ITicketDetailsService
     {
         try
         {
-            var ticketDetails = await _tDetailsService.GetAllAsync();
+            var ticketDetails = await _tDetailsService.GetAllWithIncludesAsync(x => x.Article);
             return ResultFromService.SuccessResult(ticketDetails);
         }
         catch (Exception e)

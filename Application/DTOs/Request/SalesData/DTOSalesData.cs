@@ -52,11 +52,11 @@ public record DTOSalesData(
     }
 
     public DTOSalesData(TicketDetails ticketDetails) : this(
-        ticketDetails.TicketId,
+        ticketDetails.TicketDetailsId.ToString(),
         ticketDetails.Date.ToString("dddd", new CultureInfo("es-SV")),
         ticketDetails.Date,
         string.Empty,
-        ticketDetails.TotalPrice, null
+        ticketDetails.TotalPrice, ticketDetails.Article
     )
     {
     }
