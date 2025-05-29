@@ -113,8 +113,8 @@
 
                     <ComboBox ItemsSource="{Binding ArticleTypes}"
                               DisplayMemberPath="Name"
-                              SelectedValuePath="ArticleTypeId"
-                              SelectedValue="{Binding articleTypeId, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValuePath="ArtTypeId"
+                              SelectedValue="{Binding ArticleTypeId, UpdateSourceTrigger=PropertyChanged}"
                               VerticalAlignment="Top" Width="185" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">

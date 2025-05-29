@@ -16,4 +16,8 @@ public record DTOGetArticle(
         article.Stock, article.Description)
     {
     }
+
+    public DTOGetArticle() : this(0, string.Empty, new ArticleType(), 0, 0, 0, string.Empty)
+    {
+    }
 };

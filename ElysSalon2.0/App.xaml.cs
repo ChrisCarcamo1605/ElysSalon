@@ -32,7 +32,6 @@ public partial class App : System.Windows.Application
             "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;");
 
         services.AddSingleton<WindowsManager>();
-        services.AddAutoMapper(typeof(App).Assembly);
     }
 
     protected override void OnStartup(StartupEventArgs e)

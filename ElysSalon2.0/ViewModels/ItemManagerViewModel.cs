@@ -14,7 +14,7 @@ using ElysSalon2._0.WinManagement;
 
 namespace ElysSalon2._0.ViewModels;
 
-public class ItemManagerViewModel : INotifyPropertyChanged
+public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
 {
     private readonly ArticleAppService _service;
     private readonly WindowsManager _windowsManager;
@@ -28,7 +28,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
 
     private int _articleTypeId;
 
-    private int _articleTypeSort =1;
+    private int _articleTypeSort = 1;
 
     private string _description;
 
@@ -60,8 +60,17 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         ExitCommand = new RelayCommand(Exit);
         _ = LoadArticles();
 
-        _service.reloadItems += async () => await SortArticles(ArticleTypeSort);
-        _service.clearForms += CleanForm;
+        _service.ReloadItems += OnReloadItems;
+        _service.ClearForms += CleanForm;
+    }
+
+    private async void OnReloadItems()
+    {
+        // Asegurar que se ejecute en el hilo UI
+        await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
+        {
+            await SortArticles(ArticleTypeSort);
+        });
     }
 
 
@@ -253,7 +262,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         _articlesView.Refresh();
     }
 
-
     private async Task AddArticle()
     {
         var dto = new DTOAddArticle(ArticleName, _articleTypeId, PriceCost ?? "0", PriceBuy ?? "0", Stock ?? "0",
@@ -272,6 +280,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged
     {
         var updateWindow = new UpdateItemWindow(article.ArticleId, _service);
         updateWindow.Show();
+
     }
 
     private async Task DeleteArticle(DTOGetArticle article)
@@ -347,5 +356,11 @@ public class ItemManagerViewModel : INotifyPropertyChanged
         field = value;
         OnPropertyChanged(propertyName);
         return true;
+    }
+
+    public void Dispose()
+    {
+        _service.ReloadItems -= OnReloadItems;
+        _service.ClearForms -= CleanForm;
     }
 }

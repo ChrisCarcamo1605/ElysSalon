@@ -25,6 +25,9 @@ public static class PresentationServiceExtensions
         services.AddTransient<TypeArticleWindow>();
         services.AddTransient<ShoppingCartWindow>();
         services.AddScoped<ChartsWindow>();
+
+        services.AddAutoMapper(typeof(PresentationServiceExtensions).Assembly);
+        
         return services;
     }
 }

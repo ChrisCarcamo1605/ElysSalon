@@ -63,7 +63,7 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Grid Grid.Column="0" Background="LightGray">
-                                        <TextBlock Text="{Binding ArticleTypeId}"
+                                        <TextBlock Text="{Binding ArtTypeId}"
                                                    Margin="2"
                                                    FontSize="20"
                                                    FontFamily="Bahnschrift Condensed" VerticalAlignment="Center"

@@ -51,9 +51,15 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public virtual async Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
-        var entity = await _dbSet.FirstOrDefaultAsync(predicate);
-
-        return entity == null ? null : entity;
+        try
+        {
+            var entity = await _dbSet.FirstOrDefaultAsync(predicate);
+            return entity == null ? null : entity;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<ObservableCollection<T>> FindAsync<T>(Expression<Func<TEntity, bool>> predicate,

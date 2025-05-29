@@ -29,17 +29,26 @@ public class ArtTypeService : IArtTypeService
 
     public async Task<ResultFromService> EditTypeAsync(ArticleType type)
     {
-        var articleType =
-            await _typeRepository.FindAsync(x => x.Name != type.Name && x.ArticleTypeId == type.ArticleTypeId);
+        var currentArticleType = await _typeRepository.FindAsync(x =>
+            x.ArticleTypeId == type.ArticleTypeId);
 
-        if (articleType == null) return ResultFromService.Failed("Tipo ya existente");
+        if (currentArticleType == null)
+            return ResultFromService.Failed("Tipo no encontrado");
 
-        var validated = ArticleValidations.ValidateUpdateType(type.Name, articleType);
+        if (currentArticleType.Name != type.Name)
+        {
+            var duplicateType = await _typeRepository.FindAsync(x =>
+                x.Name == type.Name && x.ArticleTypeId != type.ArticleTypeId);
+
+            if (duplicateType != null)
+                return ResultFromService.Failed("Ya existe un tipo con ese nombre");
+        }
+
+        var validated = ArticleValidations.ValidateUpdateType(type.Name, currentArticleType);
         await _typeRepository.UpdateAsync((ArticleType)validated.Data);
 
         return ResultFromService.SuccessResult(validated.Data, "Tipo actualizado correctamente");
     }
-
     public async Task<ResultFromService> DeleteTypeAsync(int id)
     {
         if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");
@@ -49,11 +58,11 @@ public class ArtTypeService : IArtTypeService
         return ResultFromService.SuccessResult("Tipo eliminado correctamente");
     }
 
-    public async Task<ResultFromService> getTypeAsync(string name)
+    public async Task<ResultFromService> GetTypeAsync(int id)
     {
         try
         {
-            var result = await _typeRepository.FindAsync(x => x.Name == name);
+            var result = await _typeRepository.FindAsync(x => x.ArticleTypeId == id);
             return ResultFromService.SuccessResult(result, "Tipo encontrado");
         }
         catch (Exception e)

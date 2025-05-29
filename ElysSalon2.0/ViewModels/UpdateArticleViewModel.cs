@@ -19,6 +19,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private DTOGetArticle _article;
     private int _articleId;
     private string _articleName;
+    private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
 
     private int _articleTypeId;
 
@@ -41,22 +42,22 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         ExitCommand = new RelayCommand(Exit);
         updateArticleCommand = new AsyncRelayCommand(UpdateArticle);
         _service = service;
-        LoadItem(article);
+        InitiazlizeAsync(article);
     }
 
     public ICommand onlyDigitsCommand { get; }
 
-    public int articleId
+    public int ArticleId
     {
         get => _articleId;
         set
         {
             _articleId = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(ArticleId));
         }
     }
 
-    public int articleTypeId
+    public int ArticleTypeId
     {
         get => _articleTypeId;
         set
@@ -127,20 +128,35 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public event Action? reloadItems;
+    private async void InitiazlizeAsync(int id)
+    {
+        try
+        {
+            await LoadItem(id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 
     private async Task LoadItem(int articleId)
     {
+        
         var article = await _service.GetArticleAsync(articleId);
         _article = (DTOGetArticle)article.Data;
 
         _articleId = articleId;
-        _articleName = _article.Name;
-        _articleTypeId = _article.Type.ArticleTypeId;
-        _priceBuy = _article.PriceBuy;
-        _stock = _article.Stock;
-        _priceCost = _article.PriceCost;
-        _description = _article.Description;
+
+        Name = _article.Name; 
+        ArticleTypeId = _article.Type.ArticleTypeId;
+        PriceBuy = _article.PriceBuy;
+        Stock = _article.Stock; 
+        PriceCost = _article.PriceCost; 
+        Description = _article.Description; 
+
+        OnPropertyChanged(nameof(ArticleId));
 
         var articleTypes = (ObservableCollection<DTOGetArtType>)(await _service.GetTypesAsync()).Data;
         articleTypes.Remove(articleTypes.First(x => x.ArtTypeId == 2));
@@ -159,23 +175,34 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     private async Task UpdateArticle()
     {
-        var dto = new DTOUpdateArticle(articleId, Name, articleTypeId, PriceCost, PriceBuy, Stock, Description);
-        var result = await _service.UpdateArticleAsync(dto);
+        // Si ya hay una operación en curso, salir
+        if (!_updateSemaphore.Wait(0))
+            return;
 
-        if (result.Success)
+        try
         {
-            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
-            Exit();
+            var dto = new DTOUpdateArticle(ArticleId, Name, ArticleTypeId, PriceCost, PriceBuy, Stock, Description);
+            var result = await _service.UpdateArticleAsync(dto);
+
+            if (result.Success)
+            {
+                MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK);
+                Exit();
+            }
+            else
+            {
+                MessageBox.Show(result.Message, "Error en operación", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-        else
+        finally
         {
-            MessageBox.Show(result.Message, "Operación exitosa", MessageBoxButton.OK, MessageBoxImage.Error);
+            _updateSemaphore.Release();
         }
     }
-
     private void Exit()
     {
         _window.Close();
+        
     }
 
     private void OnlyDigits(TextCompositionEventArgs e)

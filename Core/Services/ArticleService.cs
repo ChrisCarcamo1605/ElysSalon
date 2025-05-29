@@ -42,7 +42,7 @@ public class ArticleService : IArticleService
 
         var isArticle = await _articleRepository.FindAsync(x => x.ArticleId == article.ArticleId);
 
-        var isValidted = ArticleValidations.ValidateUpdateArticle(article, isArticle, _articlesCollection);
+        var isValidted = ArticleValidations.ValidateUpdateArticle(isArticle, article, _articlesCollection);
         if (isValidted.Success is false) return isValidted;
         await _articleRepository.UpdateAsync((Article)isValidted.Data);
 

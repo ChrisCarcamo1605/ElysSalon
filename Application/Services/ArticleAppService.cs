@@ -8,7 +8,7 @@ using Core.Interfaces.Services;
 
 namespace Application.Services;
 
-public class ArticleAppService
+public class ArticleAppService : IDisposable
 {
     private readonly IArticleService _articleService;
     private readonly IMapper _map;
@@ -21,17 +21,21 @@ public class ArticleAppService
         _map = map;
     }
 
-    public event Action? clearForms;
-    public event Action? reloadItems;
+    public event Action? ClearForms;
+    public event Action? ReloadItems;
 
     public async Task<ResultFromService> GetArticlesAsync()
     {
         var artResult = await _articleService.GetArticlesAsync();
+        var artsGetted = new ObservableCollection<DTOGetArticle>();
 
         var articles = (ObservableCollection<Article>)artResult.Data;
-        var artsGetted = new ObservableCollection<DTOGetArticle>();
-        foreach (var a in articles)
-            artsGetted.Add(new DTOGetArticle(a));
+        if (articles != null)
+        {
+            foreach (var a in articles)
+                artsGetted.Add(new DTOGetArticle(a));
+
+        }
 
         return artResult.Success
             ? ResultFromService.SuccessResult(artsGetted)
@@ -53,7 +57,10 @@ public class ArticleAppService
 
     public Task<ResultFromService> UpdateArticleAsync(DTOUpdateArticle article)
     {
-        return _articleService.UpdateArticleAsync(_map.Map<Article>(article));
+        var result = _articleService.UpdateArticleAsync(_map.Map<Article>(article));
+        OnReloadItems();
+        OnClearForms();
+        return result;
     }
 
     public Task<ResultFromService> DeleteArticleAsync(int id)
@@ -66,10 +73,12 @@ public class ArticleAppService
         return _typeService.AddTypeAsync(typeName);
     }
 
-    public async Task<ResultFromService> EditTypeAsync(string type)
+    public async Task<ResultFromService> EditTypeAsync(int id, string typeName)
     {
-        var isExist = await _typeService.getTypeAsync(type);
-        return await _typeService.EditTypeAsync((ArticleType)isExist.Data);
+        var findResult = await _typeService.GetTypeAsync(id);
+        var type = (ArticleType)findResult.Data;
+        type.Name = typeName;
+        return await _typeService.EditTypeAsync(type);
     }
 
     public async Task<ResultFromService> GetTypesAsync()
@@ -78,10 +87,14 @@ public class ArticleAppService
         var types = (ObservableCollection<ArticleType>)result.Data;
         var typesGetted = new ObservableCollection<DTOGetArtType>();
 
-        foreach (var a in types)
+        if(types != null)
         {
-            typesGetted.Add(new DTOGetArtType(a.ArticleTypeId, a.Name));
+            foreach (var a in types)
+            {
+                typesGetted.Add(new DTOGetArtType(a.ArticleTypeId, a.Name));
+            }
         }
+       
 
         return ResultFromService.SuccessResult(typesGetted);
     }
@@ -102,7 +115,26 @@ public class ArticleAppService
 
     public async Task<ResultFromService> GetArticleAsync(int id)
     {
-        var article = await _articleService.GetArticleAsync(id);
-        return article.Success ? ResultFromService.SuccessResult(_map.Map<DTOGetArticle>(article.Data)) : article;
+        var getResult = await _articleService.GetArticleAsync(id);
+        var article = (Article)getResult.Data;
+        return getResult.Success
+            ? ResultFromService.SuccessResult(new DTOGetArticle(article))
+            : getResult;
+    }
+    // Método para invocar ClearForms de forma segura
+    protected virtual void OnClearForms()
+    {
+        ClearForms?.Invoke();
+    }
+
+    // Método para invocar ReloadItems de forma segura
+    protected virtual void OnReloadItems()
+    {
+        ReloadItems?.Invoke();
+    }
+    public void Dispose()
+    {
+        ClearForms = null;
+        ReloadItems = null;
     }
 }
