@@ -75,18 +75,26 @@ public class SaleDataAppService
         }).ToList());
     }
 
-    public async Task<ResultFromService> Delete<T>(object objType) where T : class
+    public async Task<ResultFromService> Delete<T>(Object entityDto) where T : class
     {
-        switch (objType)
+        switch (typeof(T))
         {
-            case DTOGetSales sales:
-                return await _salesService.DeleteAsync(sales.SaleId.ToString());
-            case DTOGetTicket ticket:
-                return await _ticketService.DeleteAsync(ticket.TicketId);
-            case DTOGetExpense expense:
-                return await _expService.DeleteAsync(expense.ExpenseId);
-            case DTOGetTicketDetails ticketDetails:
-                return await _tDetailsService.DeleteAsync(ticketDetails.TicketDetailsId);
+            case Type t when t == typeof(DTOGetSales):
+                var sales = entityDto as DTOGetSales;
+                return await _salesService.DeleteAsync(sales?.SaleId.ToString() ?? "");
+
+            case Type t when t == typeof(DTOGetTicket):
+                var ticket = entityDto as DTOGetTicket;
+                return await _ticketService.DeleteAsync(ticket?.TicketId ?? "");
+
+            case Type t when t == typeof(DTOGetExpense):
+                var expense = entityDto as DTOGetExpense;
+                return await _expService.DeleteAsync(expense?.ExpenseId ?? 0);
+
+            case Type t when t == typeof(DTOGetTicketDetails):
+                var details = entityDto as DTOGetTicketDetails;
+                return await _tDetailsService.DeleteAsync(details?.TicketDetailsId ?? 0);
+
             default:
                 return ResultFromService.Failed($"Tipo no soportado: {typeof(T)}");
         }

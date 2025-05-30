@@ -337,6 +337,7 @@ public class SalesViewModel : INotifyPropertyChanged
             MessageBoxButton.YesNo);
 
 
+        MessageBox.Show(sale.Id);
         if (option == MessageBoxResult.Yes)
         {
             ResultFromService? result = null;
@@ -346,10 +347,10 @@ public class SalesViewModel : INotifyPropertyChanged
                     result = await _salesDataService.Delete<DTOGetSales>(sale);
                     break;
                 case FilterSales.Tickets:
-                    result = await _salesDataService.Delete<DTOGetTicket>(sale.Id);
+                    result = await _salesDataService.Delete<DTOGetTicket>(sale);
                     break;
                 case FilterSales.Expenses:
-                    result = await _salesDataService.Delete<DTOGetExpense>(sale.Id);
+                    result = await _salesDataService.Delete<DTOGetExpense>(sale);
                     break;
             }
 
