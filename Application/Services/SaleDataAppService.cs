@@ -75,28 +75,33 @@ public class SaleDataAppService
         }).ToList());
     }
 
-    public async Task<ResultFromService> Delete<T>(Object entityDto) where T : class
+    public async Task<ResultFromService> Delete<T>(string id)
     {
-        switch (typeof(T))
+        try
         {
-            case Type t when t == typeof(DTOGetSales):
-                var sales = entityDto as DTOGetSales;
-                return await _salesService.DeleteAsync(sales?.SaleId.ToString() ?? "");
+            switch (typeof(T).Name)
+            {
+                case nameof(DTOGetSales):
+                    await _salesService.DeleteAsync(id);
+                    break;
+                case nameof(DTOGetTicket):
+                    await _ticketService.DeleteAsync(id);
+                    break;
+                case nameof(DTOGetExpense):
+                    await _expService.DeleteAsync(int.Parse(id));
+                    break;
+                case nameof(TicketDetails):
+                    await _tDetailsService.DeleteAsync(int.Parse(id));
+                    break;
+                default:
+                    return ResultFromService.Failed($"Tipo no soportado: {typeof(T).Name}");
+            }
 
-            case Type t when t == typeof(DTOGetTicket):
-                var ticket = entityDto as DTOGetTicket;
-                return await _ticketService.DeleteAsync(ticket?.TicketId ?? "");
-
-            case Type t when t == typeof(DTOGetExpense):
-                var expense = entityDto as DTOGetExpense;
-                return await _expService.DeleteAsync(expense?.ExpenseId ?? 0);
-
-            case Type t when t == typeof(DTOGetTicketDetails):
-                var details = entityDto as DTOGetTicketDetails;
-                return await _tDetailsService.DeleteAsync(details?.TicketDetailsId ?? 0);
-
-            default:
-                return ResultFromService.Failed($"Tipo no soportado: {typeof(T)}");
+            return ResultFromService.SuccessResult("Eliminado correctamente");
+        }
+        catch (System.Exception ex)
+        {
+            return ResultFromService.Failed($"Error al eliminar: {ex.Message}");
         }
     }
 

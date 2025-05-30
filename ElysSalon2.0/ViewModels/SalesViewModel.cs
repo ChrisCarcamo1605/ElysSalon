@@ -336,21 +336,19 @@ public class SalesViewModel : INotifyPropertyChanged
         var option = MessageBox.Show("¿Seguro que quiere eliminar este registro?", "Confirmar eliminación",
             MessageBoxButton.YesNo);
 
-
-        MessageBox.Show(sale.Id);
         if (option == MessageBoxResult.Yes)
         {
             ResultFromService? result = null;
             switch (_selectedFilter.Key)
             {
                 case FilterSales.Sales:
-                    result = await _salesDataService.Delete<DTOGetSales>(sale);
+                    result = await _salesDataService.Delete<DTOGetSales>(sale.Id);
                     break;
                 case FilterSales.Tickets:
-                    result = await _salesDataService.Delete<DTOGetTicket>(sale);
+                    result = await _salesDataService.Delete<DTOGetTicket>(sale.Id);
                     break;
                 case FilterSales.Expenses:
-                    result = await _salesDataService.Delete<DTOGetExpense>(sale);
+                    result = await _salesDataService.Delete<DTOGetExpense>(sale.Id);
                     break;
             }
 
@@ -359,7 +357,8 @@ public class SalesViewModel : INotifyPropertyChanged
             else
                 MessageBox.Show(result.Message);
 
-            ApplyFilter();
+            _ = LoadData();
+            ApplySort();
         }
     }
 
