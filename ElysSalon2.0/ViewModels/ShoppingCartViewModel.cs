@@ -10,9 +10,9 @@ using Application.DTOs.Request.Tickets;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Articles;
 using Application.Services;
+using Application.Utils;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
-using Core.Domain.Entities;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
 
@@ -20,15 +20,6 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
-    #region Public Methods
-
-    public void ClearCart()
-    {
-        CartItems.Clear();
-        TotalAmount = 0;
-    }
-
-    #endregion
 
     #region Fields
 
@@ -41,7 +32,6 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     private ObservableCollection<DtoCreateTicketDetails> _cartItems;
     private Window _confirmWindow;
     private string _issuer = "messi";
-    private DTOSalesData _ticket;
     private decimal _totalAmount;
 
     public ICollectionView CartItemsView { get; private set; }
@@ -65,7 +55,7 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
         InitializeCollections();
         InitializeCommands();
-        LoadArticlesButtons();
+        InitializeArticleButtons();
     }
 
     private void InitializeCollections()
@@ -85,6 +75,18 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
         OpenConfirmWindowCommand = new RelayCommand(OpenConfirmWindow);
         CloseConfirmWindowCommand = new RelayCommand(CloseConfirmWindow);
         SaveTicketsDetailsCommand = new AsyncRelayCommand(SaveTicketDetails);
+    }
+
+    private async void InitializeArticleButtons()
+    {
+        try
+        {
+            await LoadArticlesButtons();
+        }
+        catch (Exception e)
+        {
+            MessageBox.Show(e.Message);
+        }
     }
 
     #endregion
@@ -142,10 +144,11 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     private Button CreateArticleButton(DTOGetArticlesButton article)
     {
+        //    MessageBox.Show($"Creating button for article: {article.Article.Name}");
         var button = new Button
         {
             Tag = article.Article.ArticleId,
-            Style = (Style)App.Current.FindResource("articleBtn"), // Corregido aquí
+            Style = (Style)App.Current.FindResource("articlesBtn"),
             Padding = new Thickness(10),
             Content = new TextBlock
             {
@@ -182,34 +185,28 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
 
     private async Task SaveTicketDetails()
     {
-        var ticketIdResult = await _saleDataService.GetLastIdTicket();
-        if (!ticketIdResult.Success || ticketIdResult.Data == null) return;
-
-        var dto = new DtoCreateTicket(
-            ticketIdResult.Data.ToString(),
-            DateTime.Now,
-            Issuer,
+        var ticketResult = await _saleDataService.GetLastIdTicket();
+        var ticket = (DTOSalesData)ticketResult.Data;
+        var dto = new DtoCreateTicket(IdGeneratorUtil.GenerateNewId(ticket.Id), DateTime.Now, Issuer,
             TotalAmount);
 
-        var ticketResult = await _saleDataService.Add<Ticket>(_mapper.Map<Ticket>(dto));
+        var saveTicketOperation = await _saleDataService.Add<DtoCreateTicket>(dto);
 
-        if (ticketResult?.Data is not Ticket ticket) return;
-
-        _ticket = new DTOSalesData(ticket);
-
-        // Assign the ticket ID to all cart items
-        foreach (var item in CartItems) item.Ticket.TicketId = _ticket.Id;
-
-        // Save all ticket details at once
-        var detailsResult = await _saleDataService.AddTicketDetailsRange(CartItems.ToList());
-
-        if (detailsResult.Success)
+        if (saveTicketOperation.Success)
         {
-            ClearCart();
-            _window.Close();
-            _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
+            var saveRangeOperation = await _saleDataService.AddTicketDetailsRange(CartItems.ToList());
+            if (saveRangeOperation.Success)
+            {
+                ClearCart();
+                _window.Close();
+                _windowsManager.CloseCurrentWindowandShowWindow<MainWindow>(_confirmWindow);
+            }
         }
     }
+
+    #endregion
+
+    #region UIMethods
 
     private void OpenConfirmWindow()
     {
@@ -261,6 +258,12 @@ public class ShoppingCartViewModel : INotifyPropertyChanged
     {
         TotalAmount = CartItems.Sum(item => item.TotalPrice);
         CartItemsView.Refresh();
+    }
+
+    public void ClearCart()
+    {
+        CartItems.Clear();
+        TotalAmount = 0;
     }
 
     #endregion

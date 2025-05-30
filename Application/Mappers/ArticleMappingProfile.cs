@@ -1,4 +1,6 @@
 ﻿using Application.DTOs.Request.Articles;
+using Application.DTOs.Request.Tickets;
+using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Articles;
 using AutoMapper;
 using Core.Domain.Entities;
@@ -19,5 +21,6 @@ public class ArticleMappingProfile : Profile
         //DTO to Article
         CreateMap<DTOAddArticle, Article>();
         CreateMap<DTOUpdateArticle, Article>();
+        CreateMap<DTOGetArticlesButton, DtoCreateTicketDetails>();
     }
 }

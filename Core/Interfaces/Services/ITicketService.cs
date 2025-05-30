@@ -9,4 +9,5 @@ public interface ITicketService
     Task<ResultFromService> DeleteAsync(string id);
     Task<ResultFromService> GetAllOfAsync();
     Task<ResultFromService> GetLastIdAsync();
+    Task<ResultFromService> GetByIdAsync(string id);
 }

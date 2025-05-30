@@ -109,7 +109,7 @@ public class ArticleAppService : IDisposable
     {
         var articles = await _articleService.GetArticlesToButtonsAsync();
         var dtos = new ObservableCollection<DTOGetArticlesButton>();
-        foreach (var a in articles) dtos.Add(_map.Map<DTOGetArticlesButton>(a));
+        foreach (var a in articles) dtos.Add(new DTOGetArticlesButton(a));
         return ResultFromService.SuccessResult(dtos);
     }
 

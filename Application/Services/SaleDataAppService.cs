@@ -1,10 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using Application.DTOs.Request.SalesData;
+using Application.DTOs.Request.Tickets;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Expense;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
+using AutoMapper;
 using Core.Common;
 using Core.Domain.Entities;
 using Core.Interfaces.Services;
@@ -17,14 +19,15 @@ public class SaleDataAppService
     private readonly ISalesService _salesService;
     private readonly ITicketDetailsService _tDetailsService;
     private readonly ITicketService _ticketService;
-
+    private readonly IMapper _mapper;
 
     public SaleDataAppService(ISalesService salesService, IExpensesService expService,
-        ITicketService ticketService, ITicketDetailsService tDetailsService)
+        ITicketService ticketService, ITicketDetailsService tDetailsService,IMapper mapper)
     {
         _salesService = salesService;
         _expService = expService;
         _ticketService = ticketService;
+        _mapper = mapper;
         _tDetailsService = tDetailsService;
     }
 
@@ -34,8 +37,12 @@ public class SaleDataAppService
         {
             case Sales sales:
                 return await _salesService.AddAsync(sales);
-            case Ticket ticket:
-                return await _ticketService.AddAsync(ticket);
+            case DtoCreateTicket ticket:
+                var ticketSaved = await _ticketService.AddAsync(_mapper.Map<Ticket>(ticket));
+                return ticketSaved.Success
+                    ? ResultFromService.SuccessResult(new DTOSalesData((Ticket)ticketSaved.Data),
+                        "Ticket guardado correctamente")
+                    : ticketSaved;
             case Expense expense:
                 return await _expService.AddAsync(expense);
             case TicketDetails ticketDetails:
@@ -47,12 +54,23 @@ public class SaleDataAppService
 
     public async Task<ResultFromService> AddTicketDetailsRange(List<DtoCreateTicketDetails> ticketDetails)
     {
+        var tickResul = await _ticketService.GetLastIdAsync();
+        var ticket = (Ticket)tickResul.Data;
+
+
+        if (!tickResul.Success)
+        {
+            return ResultFromService.Failed("No se pudo encontrar el ticket asociado." + "ticket de lista: "+ ticketDetails[0].Ticket.TicketId);
+        }
+
         return await _tDetailsService.AddRange(ticketDetails.Select(x => new TicketDetails
         {
-            Article = x.Article,
             ArticleId = x.Article.ArticleId,
+            ArticleName = x.Article.Name,
+            Date = x.Date,
             Quantity = x.Quantity,
-            TicketId = x.Ticket.TicketId,
+            Ticket = ticket,
+            TicketId = ticket.TicketId,
             Price = x.Price
         }).ToList());
     }
@@ -123,6 +141,16 @@ public class SaleDataAppService
 
     public async Task<ResultFromService> GetLastIdTicket()
     {
-        return await _ticketService.GetLastIdAsync();
+        var ticketResult = await _ticketService.GetLastIdAsync();
+        var ticket = (Ticket)ticketResult.Data;
+
+        if (!ticketResult.Success)
+        {
+            return ticketResult;
+        }
+
+        return ticketResult.Success
+            ? ResultFromService.SuccessResult(data: new DTOSalesData(ticket))
+            : ticketResult;
     }
 }

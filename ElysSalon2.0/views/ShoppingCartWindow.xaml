@@ -28,12 +28,12 @@
                 Margin="62,41,0,0" VerticalAlignment="Top" Width="140" FontFamily="Bahnschrift Condensed" FontSize="24"
                 FontWeight="Bold"
                 Foreground="#FFEFECE7"
-                Command="{Binding CloseShopingCartCommand}" />
+                Command="{Binding CloseShoppingCartCommand}" />
         <Button Style="{StaticResource Btn}" x:Name="ListoBtn" HorizontalAlignment="Left" Height="78"
                 Margin="1031,559,0,0" VerticalAlignment="Top" Width="210"
                 FontFamily="Bahnschrift Condensed" FontSize="48"
                 RenderTransformOrigin="0.294,0.436"
-                Command="{Binding OpenConfirmsWindowCommand}">
+                Command="{Binding OpenConfirmWindowCommand}">
             <TextBlock Text="LISTO" FontSize="30" />
         </Button>
 
@@ -41,7 +41,7 @@
         <Border Margin="773,112,22,171" BorderThickness="2" BorderBrush="Black">
             <ScrollViewer VerticalScrollBarVisibility="Visible">
                 <ItemsControl Background="#d1d5d7
-                          " ItemsSource="{Binding cartItems}">
+                          " ItemsSource="{Binding CartItems}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Height="75" Background="White" BorderThickness="1" BorderBrush="Black"
@@ -56,7 +56,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <!-- Nombre del Producto -->
-                                    <TextBlock Text="{Binding ArticleName, StringFormat=C}" FontSize="21"
+                                    <TextBlock Text="{Binding Article.Name, StringFormat=C}" FontSize="21"
                                                FontFamily="Bahnschrift Condensed"
                                                Grid.Column="0"
                                                TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"

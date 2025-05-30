@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Core.Interfaces.Repositories;
 using Infrastructure.Persistence.DataBase;
+using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
@@ -26,8 +27,18 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 
     public async Task SaveRangeAsync(List<TEntity> entities)
     {
-        await _context.AddRangeAsync(entities);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new RuntimeBinderException(e.Message);
+        }
+    
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)

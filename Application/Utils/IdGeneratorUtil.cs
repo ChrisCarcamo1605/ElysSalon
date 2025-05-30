@@ -1,6 +1,6 @@
 ﻿namespace Application.Utils;
 
-public class IdGeneratorUtil
+public static class IdGeneratorUtil
 {
     private const string PREFIX = "T";
     private const string DEFAULT_ID = "T-000100";

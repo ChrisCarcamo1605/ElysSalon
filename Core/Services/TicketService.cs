@@ -18,8 +18,8 @@ public class TicketService : ITicketService
     {
         try
         {
-            await _ticketRepository.SaveAsync(ticket);
-            return ResultFromService.SuccessResult();
+            var ticketSaved = await _ticketRepository.SaveAsync(ticket);
+            return ResultFromService.SuccessResult(ticketSaved);
         }
         catch (Exception e)
         {
@@ -52,11 +52,26 @@ public class TicketService : ITicketService
         }
     }
 
+    public async Task<ResultFromService> GetByIdAsync(string id)
+    {
+        try
+        {
+            var result = await _ticketRepository.FindAsync(x => x.TicketId == id);
+
+            return result != null ? ResultFromService.SuccessResult() :
+                ResultFromService.Failed("No se encontró el ticket con el ID proporcionado.");
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+        }
+    }
+
     public async Task<ResultFromService> GetLastIdAsync()
     {
         try
         {
-            return ResultFromService.SuccessResult(await _ticketRepository.GetLastId());
+            return ResultFromService.SuccessResult(await _ticketRepository.GetLastId(), "operacion exitosa");
         }
         catch (Exception e)
         {

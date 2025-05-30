@@ -15,10 +15,16 @@ public class TicketRepository : Repository<Ticket>, ITicketRepository
     }
 
 
-    public async Task<string> GetLastId()
+    public async Task<Ticket> GetLastId()
     {
-        return await _context.Tickets.OrderByDescending(t => t.TicketId)
-            .Select(t => t.TicketId)
-            .FirstOrDefaultAsync();
+        try
+        {
+            return await _context.Tickets.OrderByDescending(t => t.TicketId)
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Error al obtener el último ID de Ticket: {e.Message}");
+        }
     }
 }
