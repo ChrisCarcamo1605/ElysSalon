@@ -7,7 +7,7 @@ namespace Application.Interfaces;
 public interface ISalesReportsService
 {
     Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
-        ObservableCollection<T> collection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
+        ObservableCollection<T> salesCollection, ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class;
 
     Task GenerateAnualReport(ObservableCollection<Sales> collection);

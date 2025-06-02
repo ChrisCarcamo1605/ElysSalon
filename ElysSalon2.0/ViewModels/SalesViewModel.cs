@@ -260,9 +260,11 @@ public class SalesViewModel : INotifyPropertyChanged
 
     private async void GenerateReport()
     {
-        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _ticketsCollection, x => x.Date,
+        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection,_expensesCollection, x => x.Date,
             x => x.TotalAmount);
+
         if (result.Success) MessageBox.Show(result.Message);
+        else MessageBox.Show(result.Message);
     }
 
     private void ApplyFilter()

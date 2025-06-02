@@ -21,7 +21,6 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ArticleAppService>();
         services.AddScoped<SaleDataAppService>();
-        services.AddScoped<SaleReportsService>();
         services.AddScoped<ReportsConfiguration>();
 
         services.AddAutoMapper(typeof(ApplicationServiceExtensions).Assembly);

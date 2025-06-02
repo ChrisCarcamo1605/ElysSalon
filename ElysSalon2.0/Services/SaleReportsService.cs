@@ -1,13 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using Application.Configurations;
 using Application.DTOs.Request.Reports;
 using Application.Interfaces;
 using Application.Utils;
 using Core.Common;
 using Core.Domain.Entities;
+using ElysSalon2._0.Utils;
 
-namespace Application.Services;
+namespace ElysSalon2._0.Services;
 
 public class SaleReportsService : ISalesReportsService
 {
@@ -19,17 +21,22 @@ public class SaleReportsService : ISalesReportsService
     }
 
     public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
-        ObservableCollection<T> collection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
+        ObservableCollection<T> salesCollection, ObservableCollection<T> expensesCollection,
+        Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class
     {
-        var collectionFilter =
-            collection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
+        var salesFiltered =
+            salesCollection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
 
-        var fromDateFormated = fromDate.ToString("ddMMMM", new CultureInfo("es-ES"));
-        var untilDateFormated = untilDate.ToString("ddMMMM", new CultureInfo("es-ES"));
+        var expensesFiltered =
+            expensesCollection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
+
+        var saveDialog = ReportFileUtil.CreateSaveFileDialog(fromDate, untilDate);
+        if (saveDialog.ShowDialog() == false) return ResultFromService.Failed("Reporte Cancelado");
 
         var result =
-            ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, collectionFilter, dateSelector, totalSelector);
+            ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, salesFiltered,
+                expensesFiltered, dateSelector, totalSelector, saveDialog.FileName);
         return result;
     }
 

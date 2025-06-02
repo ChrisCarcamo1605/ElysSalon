@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Application.Services;
 using AutoMapper;
+using ElysSalon2._0.Services;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.WinManagement;
 
