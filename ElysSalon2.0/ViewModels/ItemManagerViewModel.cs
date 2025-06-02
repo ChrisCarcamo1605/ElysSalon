@@ -280,7 +280,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
     {
         var updateWindow = new UpdateItemWindow(article.ArticleId, _service);
         updateWindow.Show();
-
     }
 
     private async Task DeleteArticle(DTOGetArticle article)
@@ -308,10 +307,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
             var sorted = _articlesCollection.Where(item => item.Type.ArticleTypeId.Equals(typeId)).ToList();
             _articlesCollection.Clear();
 
-            foreach (var item in sorted)
-            {
-                _articlesCollection.Add(item);
-            }
+            foreach (var item in sorted) _articlesCollection.Add(item);
 
             OnPropertyChanged(nameof(ArticleCollection));
         }

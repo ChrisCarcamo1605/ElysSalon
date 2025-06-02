@@ -2,12 +2,13 @@
 using Core.Common;
 using Core.Domain.Entities;
 
-namespace Application.Interfaces;
+namespace Core.Interfaces.Services;
 
-public interface ISalesReportsService
+public interface IReportsService
 {
     Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
-        ObservableCollection<T> salesCollection, ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
+        ObservableCollection<T> salesCollection, ObservableCollection<T> expensesCollection,
+        Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class;
 
     Task GenerateAnualReport(ObservableCollection<Sales> collection);

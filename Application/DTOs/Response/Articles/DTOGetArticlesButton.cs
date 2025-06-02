@@ -8,9 +8,10 @@ public record DTOGetArticlesButton(
     decimal Price)
 {
     public DTOGetArticlesButton()
-        : this(null,string.Empty,0)
+        : this(null, string.Empty, 0)
     {
     }
+
     public DTOGetArticlesButton(Article article)
         : this(article, article.Name, article.PriceBuy)
     {

@@ -1,4 +1,4 @@
-﻿using ElysSalon2._0.Services;
+﻿using Application.Services;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.views;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +15,7 @@ public static class PresentationServiceExtensions
         services.AddTransient<ItemManagerViewModel>();
         services.AddTransient<ShoppingCartViewModel>();
         services.AddScoped<SalesViewModel>();
-        services.AddScoped<SaleReportsService>();
+        services.AddScoped<ReportsAppService>();
 
         services.AddScoped<ChartsViewModel>();
         services.AddTransient<AdminWindow>();
@@ -30,7 +30,7 @@ public static class PresentationServiceExtensions
         services.AddScoped<ChartsWindow>();
 
         services.AddAutoMapper(typeof(PresentationServiceExtensions).Assembly);
-        
+
         return services;
     }
 }

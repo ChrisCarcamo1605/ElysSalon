@@ -19,7 +19,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
     private DTOGetArticle _article;
     private int _articleId;
     private string _articleName;
-    private readonly SemaphoreSlim _updateSemaphore = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
 
     private int _articleTypeId;
 
@@ -143,18 +143,17 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
 
     private async Task LoadItem(int articleId)
     {
-        
         var article = await _service.GetArticleAsync(articleId);
         _article = (DTOGetArticle)article.Data;
 
         _articleId = articleId;
 
-        Name = _article.Name; 
+        Name = _article.Name;
         ArticleTypeId = _article.Type.ArticleTypeId;
         PriceBuy = _article.PriceBuy;
-        Stock = _article.Stock; 
-        PriceCost = _article.PriceCost; 
-        Description = _article.Description; 
+        Stock = _article.Stock;
+        PriceCost = _article.PriceCost;
+        Description = _article.Description;
 
         OnPropertyChanged(nameof(ArticleId));
 
@@ -199,10 +198,10 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
             _updateSemaphore.Release();
         }
     }
+
     private void Exit()
     {
         _window.Close();
-        
     }
 
     private void OnlyDigits(TextCompositionEventArgs e)

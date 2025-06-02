@@ -31,11 +31,8 @@ public class ArticleAppService : IDisposable
 
         var articles = (ObservableCollection<Article>)artResult.Data;
         if (articles != null)
-        {
             foreach (var a in articles)
                 artsGetted.Add(new DTOGetArticle(a));
-
-        }
 
         return artResult.Success
             ? ResultFromService.SuccessResult(artsGetted)
@@ -87,14 +84,10 @@ public class ArticleAppService : IDisposable
         var types = (ObservableCollection<ArticleType>)result.Data;
         var typesGetted = new ObservableCollection<DTOGetArtType>();
 
-        if(types != null)
-        {
+        if (types != null)
             foreach (var a in types)
-            {
                 typesGetted.Add(new DTOGetArtType(a.ArticleTypeId, a.Name));
-            }
-        }
-       
+
 
         return ResultFromService.SuccessResult(typesGetted);
     }
@@ -121,6 +114,7 @@ public class ArticleAppService : IDisposable
             ? ResultFromService.SuccessResult(new DTOGetArticle(article))
             : getResult;
     }
+
     // Método para invocar ClearForms de forma segura
     protected virtual void OnClearForms()
     {
@@ -132,6 +126,7 @@ public class ArticleAppService : IDisposable
     {
         ReloadItems?.Invoke();
     }
+
     public void Dispose()
     {
         ClearForms = null;

@@ -20,7 +20,6 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ShoppingCartViewModel : INotifyPropertyChanged
 {
-
     #region Fields
 
     private readonly ArticleAppService _articleService;

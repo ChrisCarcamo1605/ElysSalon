@@ -18,6 +18,5 @@ public partial class ItemManagerWindow : Window
 
     private void typeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
-
     }
 }

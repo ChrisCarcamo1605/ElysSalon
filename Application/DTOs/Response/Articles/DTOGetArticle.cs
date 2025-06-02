@@ -11,7 +11,7 @@ public record DTOGetArticle(
     int Stock,
     string Description)
 {
-    public DTOGetArticle(Article article) : this(article.ArticleId, 
+    public DTOGetArticle(Article article) : this(article.ArticleId,
         article.Name, article.ArticleType, article.PriceCost, article.PriceBuy,
         article.Stock, article.Description)
     {

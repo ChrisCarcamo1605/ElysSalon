@@ -1,23 +1,24 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using Application.Configurations;
 using Application.DTOs.Request.Reports;
-using Application.Interfaces;
 using Application.Utils;
 using Core.Common;
 using Core.Domain.Entities;
-using ElysSalon2._0.Utils;
+using Core.Interfaces;
+using Core.Interfaces.Services;
 
-namespace ElysSalon2._0.Services;
+namespace Application.Services;
 
-public class SaleReportsService : ISalesReportsService
+public class ReportsAppService : IReportsService
 {
     private readonly ReportsConfiguration _reportConfig;
+    private readonly IFileDialogInterface _fileFileDialog;
 
-    public SaleReportsService(ReportsConfiguration reportsConfig)
+    public ReportsAppService(ReportsConfiguration reportsConfig, IFileDialogInterface fileFileDialog)
     {
         _reportConfig = reportsConfig;
+        _fileFileDialog = fileFileDialog;
     }
 
     public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
@@ -31,12 +32,12 @@ public class SaleReportsService : ISalesReportsService
         var expensesFiltered =
             expensesCollection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
 
-        var saveDialog = ReportFileUtil.CreateSaveFileDialog(fromDate, untilDate);
-        if (saveDialog.ShowDialog() == false) return ResultFromService.Failed("Reporte Cancelado");
+        var filePath = await _fileFileDialog.ShowSaveFileDialogAsync(fromDate, untilDate);
+        if (filePath == null) return ResultFromService.Failed("Reporte Cancelado");
 
         var result =
             ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, salesFiltered,
-                expensesFiltered, dateSelector, totalSelector, saveDialog.FileName);
+                expensesFiltered, dateSelector, totalSelector, filePath);
         return result;
     }
 

@@ -18,6 +18,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITicketDetailsService, TicketDetailsService>();
         services.AddScoped<ISalesService, SalesService>();
         services.AddScoped<IExpensesService, ExpenseService>();
+        services.AddScoped<IReportsService, ReportsAppService>();
 
         services.AddScoped<ArticleAppService>();
         services.AddScoped<SaleDataAppService>();

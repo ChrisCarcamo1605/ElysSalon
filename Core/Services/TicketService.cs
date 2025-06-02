@@ -58,8 +58,9 @@ public class TicketService : ITicketService
         {
             var result = await _ticketRepository.FindAsync(x => x.TicketId == id);
 
-            return result != null ? ResultFromService.SuccessResult() :
-                ResultFromService.Failed("No se encontró el ticket con el ID proporcionado.");
+            return result != null
+                ? ResultFromService.SuccessResult()
+                : ResultFromService.Failed("No se encontró el ticket con el ID proporcionado.");
         }
         catch (Exception e)
         {

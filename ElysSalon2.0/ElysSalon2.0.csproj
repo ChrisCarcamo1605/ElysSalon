@@ -68,6 +68,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
 		<PackageReference Include="WPF-UI" Version="4.0.2" />

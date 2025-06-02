@@ -10,11 +10,11 @@ using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
 using Application.Enums;
-using Application.Interfaces;
 using Application.Services;
 using AutoMapper;
 using CommunityToolkit.Mvvm.Input;
 using Core.Common;
+using Core.Interfaces.Services;
 using ElysSalon2._0.views;
 using ElysSalon2._0.WinManagement;
 
@@ -22,7 +22,7 @@ namespace ElysSalon2._0.ViewModels;
 
 public class SalesViewModel : INotifyPropertyChanged
 {
-    private readonly ISalesReportsService _reportsService;
+    private readonly IReportsService _reportsService;
     private readonly SaleDataAppService _salesDataService;
 
     private readonly ObservableCollection<DTOSalesData> _ticketDetailsCollection;
@@ -55,7 +55,7 @@ public class SalesViewModel : INotifyPropertyChanged
     private DateTime _untilDate = DateTime.Now;
 
     public SalesViewModel(Window window, WindowsManager windowsManager,
-        SaleDataAppService salesDataService, ISalesReportsService reportsService, IMapper mapper)
+        SaleDataAppService salesDataService, IReportsService reportsService, IMapper mapper)
     {
         _reportsService = reportsService;
         _salesDataService = salesDataService;
@@ -260,7 +260,8 @@ public class SalesViewModel : INotifyPropertyChanged
 
     private async void GenerateReport()
     {
-        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection,_expensesCollection, x => x.Date,
+        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection, _expensesCollection,
+            x => x.Date,
             x => x.TotalAmount);
 
         if (result.Success) MessageBox.Show(result.Message);

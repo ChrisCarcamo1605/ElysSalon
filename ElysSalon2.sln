@@ -3,15 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElysSalon2", "ElysSalon2.0\ElysSalon2.csproj", "{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsWindowService", "ReportsWindowService\ReportsWindowService.csproj", "{B4420D5D-E6EA-43FC-9031-16C1AE777B42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElysSalon2.0", "ElysSalon2.0\ElysSalon2.0.csproj", "{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{028CF3D7-EDF8-484A-B0DF-677505CBBE1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{F48C674C-0F5F-4478-B8AE-3202A57E3412}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C39F8A87-BEE3-4C9A-B7B8-FE9CCA656109}"
 EndProject
@@ -25,10 +21,6 @@ Global
 		{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B4420D5D-E6EA-43FC-9031-16C1AE777B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4420D5D-E6EA-43FC-9031-16C1AE777B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4420D5D-E6EA-43FC-9031-16C1AE777B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4420D5D-E6EA-43FC-9031-16C1AE777B42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{028CF3D7-EDF8-484A-B0DF-677505CBBE1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{028CF3D7-EDF8-484A-B0DF-677505CBBE1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{028CF3D7-EDF8-484A-B0DF-677505CBBE1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,10 +36,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{72CE185B-3BBD-4DD6-BA18-E9D9AD21F420} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{B4420D5D-E6EA-43FC-9031-16C1AE777B42} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF68A6E5-1BD1-481A-B8F6-55A5FAE94AD6}

@@ -49,6 +49,7 @@ public class ArtTypeService : IArtTypeService
 
         return ResultFromService.SuccessResult(validated.Data, "Tipo actualizado correctamente");
     }
+
     public async Task<ResultFromService> DeleteTypeAsync(int id)
     {
         if (id == 0) return ResultFromService.Failed("Seleccione un artículo para eliminar");

@@ -31,14 +31,12 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
         {
             await _context.AddRangeAsync(entities);
             await _context.SaveChangesAsync();
-
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw new RuntimeBinderException(e.Message);
         }
-    
     }
 
     public async Task<TEntity> UpdateAsync(TEntity entity)

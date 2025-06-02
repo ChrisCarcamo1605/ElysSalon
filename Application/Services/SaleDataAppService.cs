@@ -22,7 +22,7 @@ public class SaleDataAppService
     private readonly IMapper _mapper;
 
     public SaleDataAppService(ISalesService salesService, IExpensesService expService,
-        ITicketService ticketService, ITicketDetailsService tDetailsService,IMapper mapper)
+        ITicketService ticketService, ITicketDetailsService tDetailsService, IMapper mapper)
     {
         _salesService = salesService;
         _expService = expService;
@@ -59,9 +59,8 @@ public class SaleDataAppService
 
 
         if (!tickResul.Success)
-        {
-            return ResultFromService.Failed("No se pudo encontrar el ticket asociado." + "ticket de lista: "+ ticketDetails[0].Ticket.TicketId);
-        }
+            return ResultFromService.Failed("No se pudo encontrar el ticket asociado." + "ticket de lista: " +
+                                            ticketDetails[0].Ticket.TicketId);
 
         return await _tDetailsService.AddRange(ticketDetails.Select(x => new TicketDetails
         {
@@ -99,7 +98,7 @@ public class SaleDataAppService
 
             return ResultFromService.SuccessResult("Eliminado correctamente");
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             return ResultFromService.Failed($"Error al eliminar: {ex.Message}");
         }
@@ -157,13 +156,10 @@ public class SaleDataAppService
         var ticketResult = await _ticketService.GetLastIdAsync();
         var ticket = (Ticket)ticketResult.Data;
 
-        if (!ticketResult.Success)
-        {
-            return ticketResult;
-        }
+        if (!ticketResult.Success) return ticketResult;
 
         return ticketResult.Success
-            ? ResultFromService.SuccessResult(data: new DTOSalesData(ticket))
+            ? ResultFromService.SuccessResult(new DTOSalesData(ticket))
             : ticketResult;
     }
 }

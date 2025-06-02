@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using Application.Services;
 using AutoMapper;
-using ElysSalon2._0.Services;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.WinManagement;
 
@@ -13,10 +12,10 @@ namespace ElysSalon2._0.views;
 public partial class SalesWindow : Window
 {
     public SalesWindow(WindowsManager winManager, SaleDataAppService salesDataService,
-        SaleReportsService reportsService, IMapper mapper)
+        ReportsAppService reportsAppService, IMapper mapper)
 
     {
         InitializeComponent();
-        DataContext = new SalesViewModel(this, winManager, salesDataService, reportsService, mapper);
+        DataContext = new SalesViewModel(this, winManager, salesDataService, reportsAppService, mapper);
     }
 }

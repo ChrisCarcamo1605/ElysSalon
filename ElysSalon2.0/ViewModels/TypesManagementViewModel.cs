@@ -121,7 +121,7 @@ public class TypesManagementViewModel : INotifyPropertyChanged
 
     public async Task EditType(DTOGetArtType type)
     {
-        var result = await _service.EditTypeAsync(type.ArtTypeId,type.Name);
+        var result = await _service.EditTypeAsync(type.ArtTypeId, type.Name);
         if (result.Success is true) Name = "";
 
         MessageBox.Show(result.Message);

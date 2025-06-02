@@ -11,6 +11,7 @@ public class DtoCreateTicketDetails : INotifyPropertyChanged
     private decimal _totalPrice;
     private string ArticleName;
     public DateTime Date;
+
     public DtoCreateTicketDetails()
     {
     }
@@ -21,7 +22,7 @@ public class DtoCreateTicketDetails : INotifyPropertyChanged
         this.Ticket = Ticket;
         this.Article = Article;
         ArticleName = Article.Name;
-        Date= DateTime.Now;
+        Date = DateTime.Now;
         Quantity = quantity;
         Price = price;
         TotalPrice = price * quantity;
