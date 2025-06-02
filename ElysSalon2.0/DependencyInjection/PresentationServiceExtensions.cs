@@ -1,4 +1,6 @@
 ﻿using Application.Services;
+using Core.Interfaces;
+using ElysSalon2._0.Utils;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.views;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ public static class PresentationServiceExtensions
         services.AddTransient<ShoppingCartViewModel>();
         services.AddScoped<SalesViewModel>();
         services.AddScoped<ReportsAppService>();
+        services.AddSingleton<IFilePathProvider, ReportFileUtil>();
 
         services.AddScoped<ChartsViewModel>();
         services.AddTransient<AdminWindow>();

@@ -2,6 +2,9 @@
 using System.Globalization;
 using Application.Configurations;
 using Application.DTOs.Request.Reports;
+using Application.DTOs.Request.SalesData;
+using Application.DTOs.Response.Expense;
+using Application.DTOs.Response.SalesData;
 using Application.Utils;
 using Core.Common;
 using Core.Domain.Entities;
@@ -13,12 +16,15 @@ namespace Application.Services;
 public class ReportsAppService : IReportsService
 {
     private readonly ReportsConfiguration _reportConfig;
-    private readonly IFileDialogInterface _fileFileDialog;
+    private readonly IFilePathProvider _fileFileDialog;
+    private readonly SaleDataAppService _saleService;
 
-    public ReportsAppService(ReportsConfiguration reportsConfig, IFileDialogInterface fileFileDialog)
+    public ReportsAppService(ReportsConfiguration reportsConfig, IFilePathProvider fileFileDialog,
+        SaleDataAppService saleService)
     {
         _reportConfig = reportsConfig;
         _fileFileDialog = fileFileDialog;
+        _saleService = saleService;
     }
 
     public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
@@ -40,6 +46,38 @@ public class ReportsAppService : IReportsService
                 expensesFiltered, dateSelector, totalSelector, filePath);
         return result;
     }
+
+    public async Task<ResultFromService> GenerateDailyReport()
+    {
+        var salesOperation = await _saleService.GetAllOf<DTOGetSales>();
+        var expensesOperation = await _saleService.GetAllOf<DTOGetExpense>();
+
+        var sales = (ObservableCollection<DTOSalesData>)salesOperation.Data;
+        var expenses = (ObservableCollection<DTOSalesData>)expensesOperation.Data;
+
+
+        var today = DateTime.Now.Date;
+
+        var salesFiltered = sales
+            .Where(x => x.Date.Date == today)
+            .ToList();
+        var expensesFiltered = expenses
+            .Where(x => x.Date.Date == today)
+            .ToList();
+
+        var salesList = new List<DTOSalesData>();
+        var expensesList = new List<DTOSalesData>();
+
+        salesList = sales.ToList();
+        expensesList = expenses.ToList();
+        //foreach (var sale in sales) salesList.Add(new DTOSalesData(sale));
+        //foreach (var expense in expenses) expensesList.Add(new DTOSalesData(expense));
+
+        var filePath = _fileFileDialog.GetReportsDirectory();
+
+        return ReportsGeneratorUtil.GenerateDayReport(salesList, expensesList, filePath, x => x.TotalAmount);
+    }
+
 
     public async Task GenerateAnualReport(ObservableCollection<Sales> collection)
     {

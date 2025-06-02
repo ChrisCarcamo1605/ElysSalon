@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace ElysSalon2._0.Utils;
 
-public class ReportFileUtil : IFileDialogInterface
+public class ReportFileUtil : IFilePathProvider
 {
     public Task<string?> ShowSaveFileDialogAsync(DateTime fromDate, DateTime untilDate)
     {
@@ -24,7 +24,7 @@ public class ReportFileUtil : IFileDialogInterface
         return Task.FromResult(saveDialog.ShowDialog() == true ? saveDialog.FileName : null);
     }
 
-    private string GetReportsDirectory()
+    public  string GetReportsDirectory()
     {
         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var folderPath = Path.Combine(documentsDirectory, "Mis Reportes");

@@ -14,4 +14,6 @@ public interface IReportsService
     Task GenerateAnualReport(ObservableCollection<Sales> collection);
     Task GenerateAnualReport(ObservableCollection<Ticket> collection);
     Task GenerateMonthReport(ObservableCollection<Sales> collection);
+
+    Task<ResultFromService> GenerateDailyReport();
 }

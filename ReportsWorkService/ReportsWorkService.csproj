@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-ReportWorkService-2fd9c0d9-b262-43b6-9b55-77b014b56235</UserSecretsId>
+    <UserSecretsId>dotnet-ReportsWorkService-c89f3abf-7269-4a4b-b017-c7994db5a7dc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

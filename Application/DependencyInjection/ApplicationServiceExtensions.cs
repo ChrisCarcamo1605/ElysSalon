@@ -1,6 +1,7 @@
 ﻿using Application.Configurations;
 using Application.Services;
 using AutoMapper;
+using Core.Interfaces;
 using Core.Interfaces.Services;
 using Core.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ISalesService, SalesService>();
         services.AddScoped<IExpensesService, ExpenseService>();
         services.AddScoped<IReportsService, ReportsAppService>();
+        
 
         services.AddScoped<ArticleAppService>();
         services.AddScoped<SaleDataAppService>();
