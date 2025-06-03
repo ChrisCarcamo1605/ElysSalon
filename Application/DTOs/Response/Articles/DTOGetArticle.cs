@@ -20,4 +20,4 @@ public record DTOGetArticle(
     public DTOGetArticle() : this(0, string.Empty, new ArticleType(), 0, 0, 0, string.Empty)
     {
     }
-};
+}

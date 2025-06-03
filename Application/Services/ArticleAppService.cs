@@ -21,6 +21,12 @@ public class ArticleAppService : IDisposable
         _map = map;
     }
 
+    public void Dispose()
+    {
+        ClearForms = null;
+        ReloadItems = null;
+    }
+
     public event Action? ClearForms;
     public event Action? ReloadItems;
 
@@ -41,7 +47,7 @@ public class ArticleAppService : IDisposable
 
     public Task<ResultFromService> AddArticleAsync(DTOAddArticle article)
     {
-        return _articleService.AddArticleAsync(new Article()
+        return _articleService.AddArticleAsync(new Article
         {
             ArticleTypeId = article.ArticleTypeId,
             Name = article.Name,
@@ -125,11 +131,5 @@ public class ArticleAppService : IDisposable
     protected virtual void OnReloadItems()
     {
         ReloadItems?.Invoke();
-    }
-
-    public void Dispose()
-    {
-        ClearForms = null;
-        ReloadItems = null;
     }
 }

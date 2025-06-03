@@ -72,7 +72,7 @@ public class TicketService : ITicketService
     {
         try
         {
-            return ResultFromService.SuccessResult(await _ticketRepository.GetLastId(), "operacion exitosa");
+            return ResultFromService.SuccessResult(await _ticketRepository.GetLastId());
         }
         catch (Exception e)
         {

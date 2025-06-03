@@ -2,7 +2,7 @@
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.Tickets;
 using Application.DTOs.Request.TicketsDetails;
-using Application.DTOs.Response.Expense;
+using Application.DTOs.Response.Expenses;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
@@ -16,10 +16,10 @@ namespace Application.Services;
 public class SaleDataAppService
 {
     private readonly IExpensesService _expService;
+    private readonly IMapper _mapper;
     private readonly ISalesService _salesService;
     private readonly ITicketDetailsService _tDetailsService;
     private readonly ITicketService _ticketService;
-    private readonly IMapper _mapper;
 
     public SaleDataAppService(ISalesService salesService, IExpensesService expService,
         ITicketService ticketService, ITicketDetailsService tDetailsService, IMapper mapper)
@@ -134,7 +134,7 @@ public class SaleDataAppService
             var expenses = (ObservableCollection<Expense>)result.Data;
             return result.Success
                 ? ResultFromService.SuccessResult(
-                    new ObservableCollection<DTOSalesData>(expenses.Select(x => new DTOSalesData(x))))
+                    new ObservableCollection<DTOGetExpense>(expenses.Select(x => new DTOGetExpense(x))))
                 : result;
         }
 
@@ -144,7 +144,7 @@ public class SaleDataAppService
             var tDetails = (ObservableCollection<TicketDetails>)result.Data;
             return result.Success
                 ? ResultFromService.SuccessResult(
-                    new ObservableCollection<DTOSalesData>(tDetails.Select(x => new DTOSalesData(x))))
+                    new ObservableCollection<DTOGetTicketDetails>(tDetails.Select(x => new DTOGetTicketDetails(x))))
                 : result;
         }
 

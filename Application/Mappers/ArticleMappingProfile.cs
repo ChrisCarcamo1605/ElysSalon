@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Request.Articles;
-using Application.DTOs.Request.Tickets;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Articles;
 using AutoMapper;

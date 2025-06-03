@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using Application.DTOs.Response.Expenses;
+using Application.DTOs.Response.TicketDetails;
 using Core.Domain.Entities;
 
 namespace Application.DTOs.Request.SalesData;
@@ -41,8 +43,8 @@ public record DTOSalesData(
     {
     }
 
-    public DTOSalesData(Expense expense) : this(
-        expense.Id.ToString(),
+    public DTOSalesData(DTOGetExpense expense) : this(
+        expense.ExpenseId.ToString(),
         expense.Date.ToString("dddd", new CultureInfo("es-SV")),
         expense.Date,
         expense.Reason,
@@ -51,10 +53,10 @@ public record DTOSalesData(
     {
     }
 
-    public DTOSalesData(TicketDetails ticketDetails) : this(
+    public DTOSalesData(DTOGetTicketDetails ticketDetails) : this(
         ticketDetails.TicketDetailsId.ToString(),
-        ticketDetails.Date.ToString("dddd", new CultureInfo("es-SV")),
-        ticketDetails.Date,
+        ticketDetails.Ticket.EmissionDateTime.ToString("dddd", new CultureInfo("es-SV")),
+        ticketDetails.Ticket.EmissionDateTime,
         string.Empty,
         ticketDetails.TotalPrice, ticketDetails.Article
     )

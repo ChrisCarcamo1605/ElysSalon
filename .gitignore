@@ -3,6 +3,7 @@
 /obj/
 .bin/
 .obj/
+.publish/
 obj/
 bin/
 /ElysSalon2.0/bin/
@@ -41,3 +42,4 @@ wwwroot/
 /ElysSalon2.0/bin/
 /ElysSalon2.0/obj/
 /publish
+/ReportWorkerService/publish

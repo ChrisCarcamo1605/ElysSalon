@@ -64,15 +64,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         _service.ClearForms += CleanForm;
     }
 
-    private async void OnReloadItems()
-    {
-        // Asegurar que se ejecute en el hilo UI
-        await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
-        {
-            await SortArticles(ArticleTypeSort);
-        });
-    }
-
 
     private Window window { get; }
 
@@ -127,7 +118,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         set
         {
             _articleTypeId = value;
-            OnPropertyChanged(nameof(ArticleTypeId));
+            OnPropertyChanged();
         }
     }
 
@@ -138,7 +129,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         {
             _articleTypeSort = value;
             _ = SortArticles(ArticleTypeSort);
-            OnPropertyChanged(nameof(ArticleTypeSort));
+            OnPropertyChanged();
         }
     }
 
@@ -221,7 +212,22 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
     public ICommand ExitCommand { get; }
     public ICommand OpenTypesManagementCommand { get; }
 
+    public void Dispose()
+    {
+        _service.ReloadItems -= OnReloadItems;
+        _service.ClearForms -= CleanForm;
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    private async void OnReloadItems()
+    {
+        // Asegurar que se ejecute en el hilo UI
+        await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
+        {
+            await SortArticles(ArticleTypeSort);
+        });
+    }
 
     private void onlyDigits(TextCompositionEventArgs e)
     {
@@ -352,11 +358,5 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         field = value;
         OnPropertyChanged(propertyName);
         return true;
-    }
-
-    public void Dispose()
-    {
-        _service.ReloadItems -= OnReloadItems;
-        _service.ClearForms -= CleanForm;
     }
 }

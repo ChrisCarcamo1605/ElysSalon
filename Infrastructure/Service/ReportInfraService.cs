@@ -6,22 +6,31 @@ namespace Infrastructure.Service;
 public class ReportInfraService : IReportInfraService
 {
     private readonly IReportsService _reportsService;
+
     public ReportInfraService(IReportsService reportsService)
     {
         _reportsService = reportsService;
     }
 
-    public async Task<ResultFromService> GenerateDailyReportAsync()
+    public async Task<ResultFromService> GenerateDailyReportAsync(string path)
     {
-       return  await _reportsService.GenerateDailyReport();
+        try
+        {
+            return await _reportsService.GenerateDailyReport(path);
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+            throw;
+        }
     }
 
-    public Task GenerateMonthlyReportAsync()
+    public Task GenerateMonthlyReportAsync(string path)
     {
         throw new NotImplementedException();
     }
 
-    public Task GenerateAnnualReportAsync()
+    public Task GenerateAnnualReportAsync(string path)
     {
         throw new NotImplementedException();
     }

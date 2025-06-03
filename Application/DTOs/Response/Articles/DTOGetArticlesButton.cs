@@ -16,4 +16,4 @@ public record DTOGetArticlesButton(
         : this(article, article.Name, article.PriceBuy)
     {
     }
-};
+}

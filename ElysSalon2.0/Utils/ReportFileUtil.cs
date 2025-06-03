@@ -24,7 +24,7 @@ public class ReportFileUtil : IFilePathProvider
         return Task.FromResult(saveDialog.ShowDialog() == true ? saveDialog.FileName : null);
     }
 
-    public  string GetReportsDirectory()
+    public string GetReportsDirectory()
     {
         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var folderPath = Path.Combine(documentsDirectory, "Mis Reportes");
@@ -46,6 +46,7 @@ public class ReportFileUtil : IFilePathProvider
 
         return GetUniqueFileName(folderPath, baseName);
     }
+
 
     private string GetUniqueFileName(string directory, string fileName)
     {

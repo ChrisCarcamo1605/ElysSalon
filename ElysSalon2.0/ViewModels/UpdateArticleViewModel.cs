@@ -15,11 +15,11 @@ namespace ElysSalon2._0.ViewModels;
 public class UpdateArticleViewModel : INotifyPropertyChanged
 {
     private readonly ArticleAppService _service;
+    private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
     private readonly UpdateItemWindow _window;
     private DTOGetArticle _article;
     private int _articleId;
     private string _articleName;
-    private readonly SemaphoreSlim _updateSemaphore = new(1, 1);
 
     private int _articleTypeId;
 
@@ -53,7 +53,7 @@ public class UpdateArticleViewModel : INotifyPropertyChanged
         set
         {
             _articleId = value;
-            OnPropertyChanged(nameof(ArticleId));
+            OnPropertyChanged();
         }
     }
 

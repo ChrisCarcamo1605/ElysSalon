@@ -1,10 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System; // Asegúrate de que System esté importado para ArgumentNullException, DateTime, etc.
+using System.Collections.Generic; // Para List<T>
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Application.Configurations;
 using Application.DTOs.Request.Reports;
 using Application.DTOs.Request.SalesData;
-using Application.DTOs.Response.Expense;
+using Application.DTOs.Request.TicketsDetails;
+using Application.DTOs.Response.Expenses;
 using Application.DTOs.Response.SalesData;
+using Application.DTOs.Response.TicketDetails;
 using Application.Utils;
 using Core.Common;
 using Core.Domain.Entities;
@@ -15,16 +21,16 @@ namespace Application.Services;
 
 public class ReportsAppService : IReportsService
 {
-    private readonly ReportsConfiguration _reportConfig;
     private readonly IFilePathProvider _fileFileDialog;
+    private readonly ReportsConfiguration _reportConfig;
     private readonly SaleDataAppService _saleService;
 
     public ReportsAppService(ReportsConfiguration reportsConfig, IFilePathProvider fileFileDialog,
         SaleDataAppService saleService)
     {
-        _reportConfig = reportsConfig;
-        _fileFileDialog = fileFileDialog;
-        _saleService = saleService;
+        _reportConfig = reportsConfig ?? throw new ArgumentNullException(nameof(reportsConfig));
+        _fileFileDialog = fileFileDialog ?? throw new ArgumentNullException(nameof(fileFileDialog));
+        _saleService = saleService ?? throw new ArgumentNullException(nameof(saleService));
     }
 
     public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
@@ -32,200 +38,223 @@ public class ReportsAppService : IReportsService
         Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class
     {
-        var salesFiltered =
-            salesCollection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
+        try
+        {
+            if (salesCollection == null) return ResultFromService.Failed("La colección de ventas no puede ser nula.");
+            if (expensesCollection == null)
+                return ResultFromService.Failed("La colección de gastos no puede ser nula.");
+            if (dateSelector == null) return ResultFromService.Failed("El selector de fecha no puede ser nulo.");
+            if (totalSelector == null) return ResultFromService.Failed("El selector de total no puede ser nulo.");
+            if (fromDate > untilDate)
+                return ResultFromService.Failed("La fecha 'desde' no puede ser posterior a la fecha 'hasta'.");
 
-        var expensesFiltered =
-            expensesCollection.Where(x => dateSelector(x) >= fromDate && dateSelector(x) <= untilDate).ToList();
 
-        var filePath = await _fileFileDialog.ShowSaveFileDialogAsync(fromDate, untilDate);
-        if (filePath == null) return ResultFromService.Failed("Reporte Cancelado");
+            var salesFiltered = salesCollection
+                .Where(x =>
+                {
+                    var date = dateSelector(x).Date;
+                    return date >= fromDate.Date && date <= untilDate.Date;
+                })
+                .ToList();
 
-        var result =
-            ReportsGeneratorUtil.GenerateReport(fromDate, untilDate, salesFiltered,
-                expensesFiltered, dateSelector, totalSelector, filePath);
-        return result;
+            var expensesFiltered = expensesCollection
+                .Where(x =>
+                {
+                    var date = dateSelector(x).Date;
+                    return date >= fromDate.Date && date <= untilDate.Date;
+                })
+                .ToList();
+
+            var filePath = await _fileFileDialog.ShowSaveFileDialogAsync(fromDate, untilDate);
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return ResultFromService.Failed("Reporte Cancelado o ruta de archivo no válida.");
+            }
+
+            var result = await Task.Run(() => ReportsGeneratorUtil.GenerateReport(
+                fromDate, untilDate, salesFiltered, expensesFiltered,
+                dateSelector, totalSelector, filePath));
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed($"Error al generar el reporte: {e.Message}");
+        }
     }
 
-    public async Task<ResultFromService> GenerateDailyReport()
+
+    public async Task<ResultFromService> GenerateDailyReport(string path)
     {
-        var salesOperation = await _saleService.GetAllOf<DTOGetSales>();
-        var expensesOperation = await _saleService.GetAllOf<DTOGetExpense>();
+        try
+        {
+            var today = DateTime.Now.Date;
 
-        var sales = (ObservableCollection<DTOSalesData>)salesOperation.Data;
-        var expenses = (ObservableCollection<DTOSalesData>)expensesOperation.Data;
+            var ticketDetOperation = await _saleService.GetAllOf<DTOGetTicketDetails>();
+            var expensesOperation = await _saleService.GetAllOf<DTOGetExpense>();
 
+            if (!ticketDetOperation.Success || !expensesOperation.Success)
+            {
+                var errors = new List<string>();
+                if (!ticketDetOperation.Success)
+                    errors.Add($"Error obteniendo detalles de tickets: {ticketDetOperation.Message}");
+                if (!expensesOperation.Success) errors.Add($"Error obteniendo gastos: {expensesOperation.Message}");
+                return ResultFromService.Failed(string.Join("; ", errors));
+            }
 
-        var today = DateTime.Now.Date;
+            var ticketDetails = (ticketDetOperation.Data as IEnumerable<DTOGetTicketDetails>) ??
+                                Enumerable.Empty<DTOGetTicketDetails>();
+            var expenses = (expensesOperation.Data as IEnumerable<DTOGetExpense>) ?? Enumerable.Empty<DTOGetExpense>();
 
-        var salesFiltered = sales
-            .Where(x => x.Date.Date == today)
-            .ToList();
-        var expensesFiltered = expenses
-            .Where(x => x.Date.Date == today)
-            .ToList();
+            var expensesList = expenses
+                .Where(x => x.Date.Date == today)
+                .ToList();
 
-        var salesList = new List<DTOSalesData>();
-        var expensesList = new List<DTOSalesData>();
+            var ticketDetailsList = ticketDetails
+                .Where(x => x.Ticket.EmissionDateTime.Date == today)
+                .Select(x => new DTOSetTicketDetailsReport(x.TicketDetailsId, x.Article.Name, x.Quantity, x.date,
+                    x.PriceBuy, x.TotalPrice))
+                .ToList();
 
-        salesList = sales.ToList();
-        expensesList = expenses.ToList();
-        //foreach (var sale in sales) salesList.Add(new DTOSalesData(sale));
-        //foreach (var expense in expenses) expensesList.Add(new DTOSalesData(expense));
-
-        var filePath = _fileFileDialog.GetReportsDirectory();
-
-        return ReportsGeneratorUtil.GenerateDayReport(salesList, expensesList, filePath, x => x.TotalAmount);
+            return await Task.Run(() => ReportsGeneratorUtil.GenerateDayReport(ticketDetailsList, expensesList, path));
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed($"Error al generar el reporte diario: {e.Message}");
+        }
     }
 
-
-    public async Task GenerateAnualReport(ObservableCollection<Sales> collection)
+    private DTOAddAnualData GenerateAnualDataInternal<T>(
+        IEnumerable<T> collection,
+        Func<T, DateTime> dateSelector,
+        Func<T, decimal> totalSelector)
     {
-        var year = DateTime.Now.Year;
-        var jenuary = collection
-            .Where(x => x.SaleDate.Month == 1)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
+        var currentYear = DateTime.Now.Year;
 
-        var february = collection
-            .Where(x => x.SaleDate.Month == 2)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var march = collection
-            .Where(x => x.SaleDate.Month == 3)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
+        var monthlyTotals = collection
+            .Where(x => dateSelector(x).Year == currentYear)
+            .GroupBy(x => dateSelector(x).Month)
+            .ToDictionary(g => g.Key, g => g.Sum(totalSelector));
 
-        var april = collection
-            .Where(x => x.SaleDate.Month == 4)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
+        decimal[] totalsByMonth = new decimal[12];
+        for (int i = 0; i < 12; i++)
+        {
+            totalsByMonth[i] = monthlyTotals.TryGetValue(i + 1, out var total) ? total : 0m;
+        }
 
-        var may = collection
-            .Where(x => x.SaleDate.Month == 5)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var june = collection
-            .Where(x => x.SaleDate.Month == 6)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var july = collection
-            .Where(x => x.SaleDate.Month == 7)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var august = collection
-            .Where(x => x.SaleDate.Month == 8)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var september = collection
-            .Where(x => x.SaleDate.Month == 9)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var october = collection
-            .Where(x => x.SaleDate.Month == 10)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var november = collection
-            .Where(x => x.SaleDate.Month == 11)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        var december = collection
-            .Where(x => x.SaleDate.Month == 12)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-
-        ReportsGeneratorUtil.GenerateAnualReport(new DTOAddAnualData(year, jenuary, february, march, april, may, june,
-            july,
-            august, september, october, november, december
-        ));
+        return new DTOAddAnualData(currentYear,
+            totalsByMonth[0], totalsByMonth[1], totalsByMonth[2], totalsByMonth[3],
+            totalsByMonth[4], totalsByMonth[5], totalsByMonth[6], totalsByMonth[7],
+            totalsByMonth[8], totalsByMonth[9], totalsByMonth[10], totalsByMonth[11]
+        );
     }
 
-    public async Task GenerateAnualReport(ObservableCollection<Ticket> collection)
+    // Método público para generar reporte anual con Sales y Expenses
+    public async Task<ResultFromService> GenerateAnualReport<T>(ObservableCollection<T> salesCollection,
+        ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector,
+        Func<T, decimal> totalSelector) where T : class
     {
-        var year = DateTime.Now.Year;
+        try
+        {
+            if (salesCollection == null) throw new ArgumentNullException(nameof(salesCollection));
+            if (expensesCollection == null) throw new ArgumentNullException(nameof(expensesCollection));
 
-        var jenuary = collection
-            .Where(x => x.EmissionDateTime.Month == 1)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
+            await Task.Run(() =>
+            {
+                var salesData = GenerateAnualDataInternal(salesCollection, s => dateSelector(s), s => totalSelector(s));
+                var expensesData =
+                    GenerateAnualDataInternal(expensesCollection, e => dateSelector(e), e => totalSelector(e));
 
-        var february = collection
-            .Where(x => x.EmissionDateTime.Month == 2)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var march = collection
-            .Where(x => x.EmissionDateTime.Month == 3)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
+                ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
+            });
 
-        var april = collection
-            .Where(x => x.EmissionDateTime.Month == 4)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-
-        var may = collection
-            .Where(x => x.EmissionDateTime.Month == 5)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var june = collection
-            .Where(x => x.EmissionDateTime.Month == 6)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-
-        var july = collection
-            .Where(x => x.EmissionDateTime.Month == 7)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var august = collection
-            .Where(x => x.EmissionDateTime.Month == 8)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var september = collection
-            .Where(x => x.EmissionDateTime.Month == 9)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var october = collection
-            .Where(x => x.EmissionDateTime.Month == 10)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-
-        var november = collection
-            .Where(x => x.EmissionDateTime.Month == 11)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-
-        var december = collection
-            .Where(x => x.EmissionDateTime.Month == 12)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-
-        ReportsGeneratorUtil.GenerateAnualReport(new DTOAddAnualData(year, jenuary, february, march, april, may, june,
-            july,
-            august, september, october, november, december
-        ));
+            return ResultFromService.SuccessResult("Reporte anual generado exitosamente.");
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed($"Error al generar el reporte anual: {e.Message}");
+        }
     }
 
-    public async Task GenerateMonthReport(ObservableCollection<Sales> collection)
+    private DtoMonthFinancialData GenerateMonthDataInternal<T>(
+        IEnumerable<T> collection,
+        Func<T, DateTime> dateSelector,
+        Func<T, decimal> totalSelector,
+        IReadOnlyList<WeekDateRange> weekRanges)
     {
-        var dto = _reportConfig.GetWeeksRanges(collection);
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        if (weekRanges == null || !weekRanges.Any())
+            throw new ArgumentException("Se requieren rangos de semanas.", nameof(weekRanges));
 
-        var week1 = collection
-            .Where(x => x.SaleDate > dto.week1Start && x.SaleDate < dto.week1End)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var week2 = collection
-            .Where(x => x.SaleDate > dto.week2Start && x.SaleDate < dto.week3End)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var week3 = collection
-            .Where(x => x.SaleDate > dto.week3Start && x.SaleDate < dto.week3End)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
-        var week4 = collection.Where(x => x.SaleDate > dto.week4Start && x.SaleDate < dto.week4End)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.Total);
+        var weeklyTotals = new List<decimal>();
+        foreach (var range in weekRanges)
+        {
+            var weekTotal = collection
+                .Where(x =>
+                {
+                    var date = dateSelector(x);
+                    return date > range.Start && date < range.End;
+                })
+                .Sum(totalSelector);
+            weeklyTotals.Add(weekTotal);
+        }
 
         var now = DateTime.Now;
-        var month = now.ToString("MMMM", new CultureInfo("es-ES")).ToUpper();
-        ReportsGeneratorUtil.GenerateMonthReport(new DtoMonthFinancialData(month, week1, week2, week3, week4));
+        var monthName = now.ToString("MMMM", CultureInfo.GetCultureInfo("es-ES")).ToUpperInvariant();
+
+        decimal w1 = weeklyTotals.Count > 0 ? weeklyTotals[0] : 0m;
+        decimal w2 = weeklyTotals.Count > 1 ? weeklyTotals[1] : 0m;
+        decimal w3 = weeklyTotals.Count > 2 ? weeklyTotals[2] : 0m;
+        decimal w4 = weeklyTotals.Count > 3 ? weeklyTotals[3] : 0m;
+
+        return new DtoMonthFinancialData(monthName, w1, w2, w3, w4);
     }
 
-
-    public async Task GenerateMonthReport(ObservableCollection<Ticket> collection)
+    public async Task<ResultFromService> GenerateMonthRepor<T>(ObservableCollection<T> salesCollection,
+        ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector,
+        Func<T, decimal> totalSelector) where T : class
     {
-        var dto = _reportConfig.GetWeeksRanges(collection);
+        try
+        {
+            if (salesCollection == null) throw new ArgumentNullException(nameof(salesCollection));
+            if (expensesCollection == null) throw new ArgumentNullException(nameof(expensesCollection));
 
-        var week1 = collection
-            .Where(x => x.EmissionDateTime > DateTime.Now.AddDays(-28) &&
-                        x.EmissionDateTime < DateTime.Now.AddDays(-21))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var week2 = collection
-            .Where(x => x.EmissionDateTime > DateTime.Now.AddDays(-21) &&
-                        x.EmissionDateTime < DateTime.Now.AddDays(-14))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var week3 = collection
-            .Where(x => x.EmissionDateTime > DateTime.Now.AddDays(-14) && x.EmissionDateTime < DateTime.Now.AddDays(-7))
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
-        var week4 = collection
-            .Where(x => x.EmissionDateTime > DateTime.Now.AddDays(-7) && x.EmissionDateTime < DateTime.Now)
-            .Aggregate(0m, (acumulador, n) => acumulador + n.TotalAmount);
+            var now = DateTime.Now;
+            var weekRanges = new List<WeekDateRange>
+            {
+                new WeekDateRange(now.AddDays(-28), now.AddDays(-21)),
+                new WeekDateRange(now.AddDays(-21), now.AddDays(-14)),
+                new WeekDateRange(now.AddDays(-14), now.AddDays(-7)),
+                new WeekDateRange(now.AddDays(-7), now)
+            }.AsReadOnly();
 
-        var month = DateTime.Now.ToString("MMMM", new CultureInfo("es-ES")).ToUpperInvariant();
-        ReportsGeneratorUtil.GenerateMonthReport(new DtoMonthFinancialData(month, week1, week2, week3, week4));
+            await Task.Run(() =>
+            {
+                var salesData = GenerateMonthDataInternal(salesCollection, s => dateSelector(s), s => totalSelector(s),
+                    weekRanges);
+                var expensesData = GenerateMonthDataInternal(expensesCollection, e => dateSelector(e),
+                    e => totalSelector(e), weekRanges);
+
+                ReportsGeneratorUtil.GenerateMonthReport(salesData, expensesData);
+            });
+
+            return ResultFromService.SuccessResult("Reporte mensual generado exitosamente.");
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed($"Error al generar el reporte mensual: {e.Message}");
+        }
+    }
+}
+
+public class WeekDateRange
+{
+    public DateTime Start { get; }
+    public DateTime End { get; }
+
+    public WeekDateRange(DateTime start, DateTime end)
+    {
+        Start = start;
+        End = end;
     }
 }

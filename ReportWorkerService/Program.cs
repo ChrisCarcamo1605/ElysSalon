@@ -1,22 +1,25 @@
-using Application.Configurations;
+using System.Reflection;
 using Application.DependencyInjection;
-using Application.Services;
 using Core.Interfaces;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using Core.Services;
 using Infrastructure.DependencyInjection;
 using Infrastructure.Persistence.DataBase;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Service;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using ReportWorkerService;
 
-
 var builder = Host.CreateApplicationBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.json", optional: false);
-builder.Services.AddWindowsService();  
+
+
+var exePath = Assembly.GetExecutingAssembly().Location;
+var rootDirectory = Path.GetDirectoryName(exePath);
+
+
+builder.Configuration.AddJsonFile("appsettings.json", false);
+builder.Services.AddWindowsService();
 
 // Database
 builder.Services.AddDbContext<ElyDbContext>(options =>
@@ -26,12 +29,15 @@ builder.Services.AddDbContext<ElyDbContext>(options =>
 // Generic repository
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-// Core services
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // para debugging local
 builder.Services.AddAplication();
+builder.Logging.AddEventLog(eventLogSettings => { eventLogSettings.SourceName = "ReportWorkService3"; });
+
 builder.Services.AddInfrastructure(
     "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;");
 
-builder.Services.AddScoped<IFilePathProvider, FilePathDialog>();
+builder.Services.AddScoped<IFilePathProvider, FilePathDialogUtil>();
 builder.Services.AddScoped<IReportInfraService, ReportInfraService>();
 
 // AutoMapper

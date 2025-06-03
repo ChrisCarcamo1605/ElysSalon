@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Application.DTOs.Request.SalesData;
-using Application.DTOs.Response.Expense;
+using Application.DTOs.Response.Expenses;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
@@ -237,10 +237,10 @@ public class SalesViewModel : INotifyPropertyChanged
             var expensesResult = await _salesDataService.GetAllOf<DTOGetExpense>();
             var ticketDetailsResult = await _salesDataService.GetAllOf<DTOGetTicketDetails>();
 
-            LoadAndSortCollection(_salesCollection, salesResult);
-            LoadAndSortCollection(_ticketsCollection, ticketsResult);
-            LoadAndSortCollection(_expensesCollection, expensesResult);
-            LoadAndSortCollection(_ticketDetailsCollection, ticketDetailsResult);
+            LoadAndSortCollection<DTOSalesData>(_salesCollection, salesResult);
+            LoadAndSortCollection<DTOSalesData>(_ticketsCollection, ticketsResult);
+            LoadAndSortCollection<DTOGetExpense>(_expensesCollection, expensesResult);
+            LoadAndSortCollection<DTOGetTicketDetails>(_ticketDetailsCollection, ticketDetailsResult);
 
             ApplyFilter();
             OnPropertyChanged(nameof(SalesView));
@@ -250,26 +250,15 @@ public class SalesViewModel : INotifyPropertyChanged
             MessageBox.Show($"Error al cargar ventas: {ex.Message}");
         }
     }
-
-    //private async void GenerateMonthReport()
-    //{
-    //    var prueba = _mapper.Map<ObservableCollection<Sales>>(_salesCollection);
-    //    _reportsService.GenerateMonthReport(prueba);
-    //    MessageBox.Show("Reporte Generado");
-    //}
-
+    
     private async void GenerateReport()
     {
-        //var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection, _expensesCollection,
-        //    x => x.Date,
-        //    x => x.TotalAmount);
+        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection, _expensesCollection,
+            x => x.Date,
+            x => x.TotalAmount);
 
-        //if (result.Success) MessageBox.Show(result.Message);
-        //else MessageBox.Show(result.Message);
-
-       var result =  await _reportsService.GenerateDailyReport();
-       MessageBox.Show(result.Success ? result.Message : result.Message);
-        
+        if (result.Success) MessageBox.Show(result.Message);
+        else MessageBox.Show(result.Message);
     }
 
     private void ApplyFilter()
@@ -369,14 +358,37 @@ public class SalesViewModel : INotifyPropertyChanged
         }
     }
 
-    public void LoadAndSortCollection(ObservableCollection<DTOSalesData> collection,
-        ResultFromService serviceResult)
+    public void LoadAndSortCollection<T>(ObservableCollection<DTOSalesData> collection,
+        ResultFromService serviceResult) where T : class
     {
         if (serviceResult.Data is ObservableCollection<DTOSalesData> newCollection)
         {
             collection.Clear();
             var sortedItems = newCollection.OrderByDescending(x => x.Date.Date).ToList();
             foreach (var item in sortedItems) collection.Add(item);
+        }
+        else if (serviceResult.Data is ObservableCollection<DTOGetExpense> list)
+        {
+            collection.Clear();
+
+            var sortedItems = list.OrderByDescending(x => x.Date.Date).ToList();
+            foreach (var item in sortedItems) collection.Add(new DTOSalesData(item));
+        }
+        else if (serviceResult.Data is ObservableCollection<DTOGetTicketDetails> ticketList)
+        {
+            collection.Clear();
+            var sortedItems = ticketList.OrderByDescending(x => x.Ticket.EmissionDateTime.Date).ToList();
+            foreach (var item in sortedItems) collection.Add(new DTOSalesData(item));
+        }
+        else if (serviceResult.Data is ObservableCollection<DTOGetTicketDetails> ticketDetailsList)
+        {
+            collection.Clear();
+            var sortedItems = ticketDetailsList.OrderByDescending(x => x.Ticket.EmissionDateTime.Date).ToList();
+            foreach (var item in sortedItems) collection.Add(new DTOSalesData(item));
+        }
+        else
+        {
+            MessageBox.Show("No se pudo cargar la colección correctamente.");
         }
     }
 

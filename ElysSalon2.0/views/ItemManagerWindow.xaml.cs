@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using Application.Services;
 using ElysSalon2._0.ViewModels;
 using ElysSalon2._0.WinManagement;
@@ -16,7 +17,7 @@ public partial class ItemManagerWindow : Window
         DataContext = new ItemManagerViewModel(this, service, windowsManager);
     }
 
-    private void typeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    private void typeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
     }
 }

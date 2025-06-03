@@ -1,18 +1,18 @@
 ﻿using Core.Interfaces;
 
-namespace Infrastructure.Service;
+namespace Infrastructure.Utils;
 
-public class FilePathDialog : IFilePathProvider
+public class FilePathDialogUtil : IFilePathProvider
 {
     public Task<string?> ShowSaveFileDialogAsync(DateTime fromDate, DateTime untilDate)
     {
         throw new NotImplementedException();
     }
 
-    public  string GetReportsDirectory()
+    public string GetReportsDirectory()
     {
-        var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        var folderPath = Path.Combine(documentsDirectory, "Mis Reportes");
+        //var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        var folderPath = Path.Combine("C:\\Users\\Christian\\Documents", "Mis Reportes");
 
         if (!Directory.Exists(folderPath))
         {

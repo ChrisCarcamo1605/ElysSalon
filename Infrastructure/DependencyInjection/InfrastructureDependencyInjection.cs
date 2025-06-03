@@ -1,8 +1,6 @@
 ﻿using Core.Interfaces.Repositories;
-using Core.Interfaces.Services;
 using Infrastructure.Persistence.DataBase;
 using Infrastructure.Persistence.Repositories;
-using Infrastructure.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +13,7 @@ public static class InfrastructureDependencyInjection
         services.AddTransient<ITicketRepository, TicketRepository>();
         services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
         services.AddDbContextFactory<ElyDbContext>(options =>
-            options.UseSqlServer(connectionString),ServiceLifetime.Scoped);
+            options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
 
         return services;
     }
