@@ -15,7 +15,7 @@ public class ReportsGeneratorUtil
     public static void GenerateAnualReport(DTOAddAnualData salesCollection, DTOAddAnualData expensesCollection)
     {
         ExcelPackage.LicenseContext =
-            LicenseContext.NonCommercial; 
+            LicenseContext.NonCommercial;
         using (var package = new ExcelPackage())
         {
             var worksheet = package.Workbook.Worksheets.Add("Data");
@@ -40,7 +40,7 @@ public class ReportsGeneratorUtil
                 salesCollection.decemberTotal
             };
 
-            var expenses = new List<decimal> 
+            var expenses = new List<decimal>
             {
                 expensesCollection.jenuaryTotal, expensesCollection.februaryTotal, expensesCollection.marchTotal,
                 expensesCollection.aprilTotal, expensesCollection.mayTota, expensesCollection.juneTotal,
@@ -73,7 +73,7 @@ public class ReportsGeneratorUtil
 
             worksheet.Cells[2, 2, months.Count + 1, 4].Style.Numberformat.Format = "#,##0.00";
 
-         
+
             int totalRow = months.Count + 3; // Place it a couple of rows below the data
             worksheet.Cells[totalRow, 3].Value = "Total Profit:";
             worksheet.Cells[totalRow, 3].Style.Font.Bold = true;
@@ -93,7 +93,7 @@ public class ReportsGeneratorUtil
             chart.SetPosition(1, 0, 5, 0); // Row, RowOffsetPixels, Col, ColOffsetPixels
             chart.SetSize(800, 400);
 
-            
+
             var salesSeries = chart.Series.Add(worksheet.Cells[2, 2, months.Count + 1, 2],
                 worksheet.Cells[2, 1, months.Count + 1, 1]);
             salesSeries.Header = "Sales";
@@ -104,15 +104,15 @@ public class ReportsGeneratorUtil
 
             chart.Legend.Position = eLegendPosition.Bottom;
 
-           
+
             var worksheetGraph = package.Workbook.Worksheets.Add("Annual Graphs");
             var lineChart = worksheetGraph.Drawings.AddChart("AnnualSalesTrendChart", eChartType.Line);
 
 
             lineChart.Title.Text = $"Sales Trend for {salesCollection.year}";
-           
+
             lineChart.SetPosition(0, 0, 0, 0); // Top-left of the "Annual Graphs" sheet
-            
+
             lineChart.SetSize(800, 400);
 
             var lineSeriesSales =
@@ -124,7 +124,7 @@ public class ReportsGeneratorUtil
 
             // File Saving
             var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var folderName = "Mis Reportes\\Reportes Anuales"; 
+            var folderName = "Mis Reportes\\Reportes Anuales";
             var folderPath = Path.Combine(documentsDirectory, folderName);
 
             if (!Directory.Exists(folderPath))
@@ -133,7 +133,7 @@ public class ReportsGeneratorUtil
             }
 
             var date = DateTime.Today.ToString("yyyyMMdd",
-                CultureInfo.InvariantCulture); 
+                CultureInfo.InvariantCulture);
             var fileName = $"AnualSalesReport_{salesCollection.year}_{date}.xlsx";
             var fileInfo = new FileInfo(Path.Combine(folderPath, fileName));
             package.SaveAs(fileInfo);
@@ -144,11 +144,11 @@ public class ReportsGeneratorUtil
     public static void GenerateMonthReport(DtoMonthFinancialData salesCollection,
         DtoMonthFinancialData expensesCollection)
     {
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial; 
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var folderName =
-            $"Mis Reportes\\Reportes Mensuales\\"; 
+            $"Mis Reportes\\Reportes Mensuales\\";
         var folderPath = Path.Combine(documentsDirectory, folderName);
 
         var baseName = $"Reporte_Mensual_{salesCollection.month}_{DateTime.Now.Date.ToString("yyyy")}.xlsx";
@@ -167,7 +167,7 @@ public class ReportsGeneratorUtil
             worksheet.Cells[1, 3].Value = "Gastos";
             worksheet.Cells[1, 4].Value = "Ganancia";
 
-            var weeks = new List<string> { "Semana1", "Semana2", "Semana3", "Semana4" }; 
+            var weeks = new List<string> { "Semana1", "Semana2", "Semana3", "Semana4" };
 
             var sales = new List<decimal>
             {
@@ -241,7 +241,8 @@ public class ReportsGeneratorUtil
             // To add to the same sheet:
             // var lineChart = worksheet.Drawings.AddChart("MonthlySalesTrendChart", eChartType.Line);
 
-            lineChart.Title.Text = $"Tendencia de ventas de {salesCollection.month} {DateTime.Now.Date.ToString("YYYY")}";
+            lineChart.Title.Text =
+                $"Tendencia de ventas de {salesCollection.month} {DateTime.Now.Date.ToString("YYYY")}";
             // Adjust position if on the same sheet to avoid overlap
             // If on new sheet:
             lineChart.SetPosition(0, 0, 0, 0); // Top-left of the "Monthly Graphs" sheet
@@ -281,16 +282,20 @@ public class ReportsGeneratorUtil
                 var expenses = expensesCollection.Select(x => totalSelector(x)).ToList();
 
 
+                for (var i = 0; i < expenses.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 3].Value = expenses[i];
+                    worksheet.Cells[i + 2, 3].Style.Numberformat.Format = "#,##0.00";
+                }
+
                 for (var i = 0; i < sales.Count; i++)
                 {
                     var day = fromDate.AddDays(i);
                     worksheet.Cells[i + 2, 1].Value =
                         dateSelector(salesCollection[i]).ToString("ddMMMM", new CultureInfo("es-ES"));
                     worksheet.Cells[i + 2, 2].Value = sales[i];
-                    worksheet.Cells[i + 2, 3].Value = expenses[i];
 
                     worksheet.Cells[i + 2, 2].Style.Numberformat.Format = "#,##0.00";
-                    worksheet.Cells[i + 2, 3].Style.Numberformat.Format = "#,##0.00";
                 }
 
                 using (var range = worksheet.Cells[1, 1, 1, 3])
@@ -350,7 +355,7 @@ public class ReportsGeneratorUtil
         }
     }
 
-    public static ResultFromService GenerateDayReport(List<DTOSetTicketDetailsReport> ticketDetailsCollection,
+    public static ResultFromService GenerateDailyReport(List<DTOSetTicketDetailsReport> ticketDetailsCollection,
         List<DTOGetExpense> expensesCollection,
         string filePath)
     {

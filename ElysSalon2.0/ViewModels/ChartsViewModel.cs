@@ -9,6 +9,7 @@ using Application.Enums;
 using Application.Services;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.Factories;
+using ElysSalon2._0.Utils;
 using ElysSalon2._0.WinManagement;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
@@ -75,8 +76,8 @@ public class ChartsViewModel : INotifyPropertyChanged
         _bestServicesSeller = new ObservableCollection<DTOGetBestSellersTickDet>();
         _ = GenerateTopArticleServices();
 
-        _expensesCollection = LoadEmptyDates(_expensesCollection);
-        _salesCollection = LoadEmptyDates(_salesCollection);
+        _expensesCollection = CollectionUtil.LoadEmptyDates(_expensesCollection);
+        _salesCollection = CollectionUtil.LoadEmptyDates(_salesCollection);
 
         LoadAllSales();
         ApplyFilter();
@@ -236,23 +237,18 @@ public class ChartsViewModel : INotifyPropertyChanged
         var sectionsWidth = 20;
         var ExpenseSaleDiference = totalVentas - totalGastos;
 
-        // Calcular la rentabilidad real (porcentaje)
         double rentabilidad = 0;
         if (totalVentas > 0)
         {
-            // Calculamos la rentabilidad como porcentaje
             var rawRentabilidad = ExpenseSaleDiference / totalVentas * 100;
-            // Usamos el valor real directamente, limitado al rango [0-100]
             rentabilidad = (double)Math.Clamp(rawRentabilidad, 0, 100);
         }
 
-        // Actualizamos la aguja con el valor real
         Needle = new NeedleVisual
         {
             Value = rentabilidad
         };
 
-        // Mantenemos las secciones del gauge
         PieSeries = GaugeGenerator.BuildAngularGaugeSections(
             new GaugeItem(30, s => SetStyle(sectionsOuter, sectionsWidth, s, new SKColor(255, 92, 92))),
             new GaugeItem(30, s => SetStyle(sectionsOuter, sectionsWidth, s, new SKColor(92, 133, 255))),
@@ -347,28 +343,7 @@ public class ChartsViewModel : INotifyPropertyChanged
         _selectedFilter = _rangeOptions[0];
     }
 
-    public ObservableCollection<DTOSalesData> LoadEmptyDates(ObservableCollection<DTOSalesData> collection)
-    {
-        var list = collection;
-        var minDate = list.Min(x => x.Date);
-        var maxDate = DateTime.Now.Date;
-
-
-        var dates = new HashSet<DateTime>(list.Select(x => x.Date.Date)
-            .OrderBy(x => x.Date.Date)
-            .ToList());
-        var allDates = new List<DateTime>();
-
-        for (var i = minDate; i <= maxDate; i = i.AddDays(1)) allDates.Add(i.Date);
-
-        foreach (var i in allDates)
-            if (!dates.Contains(i.Date))
-                list.Add(
-                    new DTOSalesData(i.ToString("dddd", new CultureInfo("es-ES")),
-                        i.Date, 0));
-
-        return list;
-    }
+   
 
 
     public void DoRandomChange()

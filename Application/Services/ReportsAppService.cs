@@ -1,6 +1,7 @@
 ﻿using System; // Asegúrate de que System esté importado para ArgumentNullException, DateTime, etc.
 using System.Collections.Generic; // Para List<T>
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Core.Common;
 using Core.Domain.Entities;
 using Core.Interfaces;
 using Core.Interfaces.Services;
+using ElysSalon2._0.Utils;
 
 namespace Application.Services;
 
@@ -65,15 +67,18 @@ public class ReportsAppService : IReportsService
                 })
                 .ToList();
 
+
             var filePath = await _fileFileDialog.ShowSaveFileDialogAsync(fromDate, untilDate);
             if (string.IsNullOrEmpty(filePath))
             {
                 return ResultFromService.Failed("Reporte Cancelado o ruta de archivo no válida.");
             }
 
-            var result = await Task.Run(() => ReportsGeneratorUtil.GenerateReport(
+            CollectionUtil.LoadEmptyDates( salesFiltered, dateSelector, totalSelector);
+            CollectionUtil.LoadEmptyDates( expensesFiltered, dateSelector, totalSelector);
+            var result =  ReportsGeneratorUtil.GenerateReport(
                 fromDate, untilDate, salesFiltered, expensesFiltered,
-                dateSelector, totalSelector, filePath));
+                dateSelector, totalSelector, filePath);
 
             return result;
         }
@@ -116,7 +121,7 @@ public class ReportsAppService : IReportsService
                     x.PriceBuy, x.TotalPrice))
                 .ToList();
 
-            return await Task.Run(() => ReportsGeneratorUtil.GenerateDayReport(ticketDetailsList, expensesList, path));
+            return await Task.Run(() => ReportsGeneratorUtil.GenerateDailyReport(ticketDetailsList, expensesList, path));
         }
         catch (Exception e)
         {
