@@ -11,7 +11,7 @@ public record DTOGetTicketDetails(
     decimal PriceBuy,
     decimal TotalPrice)
 {
-    public DTOGetTicketDetails() : this(0, null, null, 0,DateTime.Now, 0, 0)
+    public DTOGetTicketDetails() : this(0, null, null, 0, DateTime.Now, 0, 0)
     {
     }
 

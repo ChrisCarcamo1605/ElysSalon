@@ -1,12 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.Enums;
 using Application.Services;
+using Application.Utils;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.Factories;
 using ElysSalon2._0.Utils;
@@ -342,8 +342,6 @@ public class ChartsViewModel : INotifyPropertyChanged
 
         _selectedFilter = _rangeOptions[0];
     }
-
-   
 
 
     public void DoRandomChange()

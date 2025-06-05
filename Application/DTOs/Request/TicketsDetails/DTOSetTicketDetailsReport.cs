@@ -1,6 +1,4 @@
-﻿using Core.Domain.Entities;
-
-namespace Application.DTOs.Request.TicketsDetails;
+﻿namespace Application.DTOs.Request.TicketsDetails;
 
 public record DTOSetTicketDetailsReport(
     int ticketDetId,
@@ -10,5 +8,4 @@ public record DTOSetTicketDetailsReport(
     decimal PriceBuy,
     decimal TotalPrice)
 {
-   
 }

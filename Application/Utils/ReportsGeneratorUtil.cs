@@ -57,7 +57,7 @@ public class ReportsGeneratorUtil
                 worksheet.Cells[i + 2, 1].Value = months[i];
                 worksheet.Cells[i + 2, 2].Value = sales[i];
                 worksheet.Cells[i + 2, 3].Value = expenses[i];
-                decimal monthlyProfit = sales[i] - expenses[i];
+                var monthlyProfit = sales[i] - expenses[i];
                 worksheet.Cells[i + 2, 4].Value = monthlyProfit;
                 profits.Add(monthlyProfit);
                 totalProfit += monthlyProfit;
@@ -74,7 +74,7 @@ public class ReportsGeneratorUtil
             worksheet.Cells[2, 2, months.Count + 1, 4].Style.Numberformat.Format = "#,##0.00";
 
 
-            int totalRow = months.Count + 3; // Place it a couple of rows below the data
+            var totalRow = months.Count + 3; // Place it a couple of rows below the data
             worksheet.Cells[totalRow, 3].Value = "Total Profit:";
             worksheet.Cells[totalRow, 3].Style.Font.Bold = true;
             worksheet.Cells[totalRow, 4].Value = totalProfit;
@@ -127,10 +127,7 @@ public class ReportsGeneratorUtil
             var folderName = "Mis Reportes\\Reportes Anuales";
             var folderPath = Path.Combine(documentsDirectory, folderName);
 
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
+            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
             var date = DateTime.Today.ToString("yyyyMMdd",
                 CultureInfo.InvariantCulture);
@@ -148,15 +145,12 @@ public class ReportsGeneratorUtil
 
         var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var folderName =
-            $"Mis Reportes\\Reportes Mensuales\\";
+            "Mis Reportes\\Reportes Mensuales\\";
         var folderPath = Path.Combine(documentsDirectory, folderName);
 
         var baseName = $"Reporte_Mensual_{salesCollection.month}_{DateTime.Now.Date.ToString("yyyy")}.xlsx";
 
-        if (!Directory.Exists(folderPath))
-        {
-            Directory.CreateDirectory(folderPath);
-        }
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
         using (var package = new ExcelPackage())
         {
@@ -187,7 +181,7 @@ public class ReportsGeneratorUtil
                 worksheet.Cells[i + 2, 1].Value = weeks[i];
                 worksheet.Cells[i + 2, 2].Value = sales[i];
                 worksheet.Cells[i + 2, 3].Value = expenses[i];
-                decimal weeklyProfit = sales[i] - expenses[i];
+                var weeklyProfit = sales[i] - expenses[i];
                 worksheet.Cells[i + 2, 4].Value = weeklyProfit;
                 profits.Add(weeklyProfit);
                 totalProfit += weeklyProfit;
@@ -206,7 +200,7 @@ public class ReportsGeneratorUtil
             worksheet.Cells[2, 2, weeks.Count + 1, 4].Style.Numberformat.Format = "#,##0.00";
 
             // Add Total Profit
-            int totalRow = weeks.Count + 3;
+            var totalRow = weeks.Count + 3;
             worksheet.Cells[totalRow, 3].Value = "Total Profit:";
             worksheet.Cells[totalRow, 3].Style.Font.Bold = true;
             worksheet.Cells[totalRow, 4].Value = totalProfit;
@@ -387,13 +381,13 @@ public class ReportsGeneratorUtil
                 }
 
                 // --- Llenado de Datos ---
-                int numTicketDetails = ticketDetailsCollection?.Count ?? 0;
-                int numExpenses = expensesCollection?.Count ?? 0;
-                int maxRows = Math.Max(numTicketDetails, numExpenses);
+                var numTicketDetails = ticketDetailsCollection?.Count ?? 0;
+                var numExpenses = expensesCollection?.Count ?? 0;
+                var maxRows = Math.Max(numTicketDetails, numExpenses);
 
-                for (int i = 0; i < maxRows; i++)
+                for (var i = 0; i < maxRows; i++)
                 {
-                    int currentRow = i + 2; // Los datos comienzan en la fila 2
+                    var currentRow = i + 2; // Los datos comienzan en la fila 2
 
                     // Datos de DTOSetTicketDetailsReport (Ventas)
                     if (i < numTicketDetails)
@@ -419,16 +413,12 @@ public class ReportsGeneratorUtil
                         // Si no hay un detalle de ticket en esta fila pero sí un gasto,
                         // la descripción del gasto se pone en la columna "Descripción".
                         if (i >= numTicketDetails)
-                        {
                             worksheet.Cells[currentRow, 2].Value =
                                 expensesCollection[i].Reason; // Descripción (Razón Gasto)
-                        }
                         else if
                             (worksheet.Cells[currentRow, 2].Value ==
                              null) // Si la celda de descripción está vacía (porque no hay producto)
-                        {
                             worksheet.Cells[currentRow, 2].Value = expensesCollection[i].Reason;
-                        }
 
 
                         worksheet.Cells[currentRow, 5].Value = expensesCollection[i].Amount; // Total Gasto
@@ -437,10 +427,7 @@ public class ReportsGeneratorUtil
                 }
 
                 // --- Autoajuste de Columnas ---
-                for (int col = 1; col <= 5; col++)
-                {
-                    worksheet.Column(col).AutoFit();
-                }
+                for (var col = 1; col <= 5; col++) worksheet.Column(col).AutoFit();
 
                 // --- Gráficos ---
                 // Gráfico 1: Ventas y Gastos por Descripción (Columnas Agrupadas)

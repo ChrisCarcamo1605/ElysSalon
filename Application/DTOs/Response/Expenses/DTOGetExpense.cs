@@ -12,6 +12,7 @@ public record DTOGetExpense(
     public DTOGetExpense() : this(0, 0, string.Empty, DateTime.MinValue)
     {
     }
+
     public DTOGetExpense(Expense expense) : this(
         expense.Id,
         expense.Amount,

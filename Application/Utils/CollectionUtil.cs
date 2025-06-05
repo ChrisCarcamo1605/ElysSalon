@@ -1,8 +1,8 @@
-﻿using Application.DTOs.Request.SalesData;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using Application.DTOs.Request.SalesData;
 
-namespace ElysSalon2._0.Utils;
+namespace Application.Utils;
 
 public static class CollectionUtil
 {
@@ -50,26 +50,19 @@ public static class CollectionUtil
         var culture = new CultureInfo("es-ES");
 
         for (var date = minDate; date <= maxDate; date = date.AddDays(1))
-        {
             if (dateTotalMap.TryGetValue(date, out var total))
-            {
                 result.Add(new DTOSalesData(
                     date.ToString("dddd", culture),
                     date,
                     total
                 ));
-            }
             else
-            {
                 result.Add(new DTOSalesData(
                     date.ToString("dddd", culture),
                     date,
                     0
                 ));
-            }
-        }
 
         return result;
     }
-
 }

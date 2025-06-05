@@ -68,7 +68,7 @@ public class ArtTypeService : IArtTypeService
         }
         catch (Exception e)
         {
-            return ResultFromService.SuccessResult("Tipo no encontrado, error: " + e.Message);
+            return ResultFromService.Failed("Tipo no encontrado, error: " + e.Message);
         }
     }
 
