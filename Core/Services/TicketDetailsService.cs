@@ -45,7 +45,8 @@ public class TicketDetailsService : ITicketDetailsService
     {
         try
         {
-            await _tDetailsService.DeleteAsync(await _tDetailsService.GetByIdAsync(id));
+            var tickDetails = await _tDetailsService.FindAsync(x => x.TicketDetailsId == id);
+            await _tDetailsService.DeleteAsync(tickDetails);
             return ResultFromService.SuccessResult();
         }
         catch (Exception e)

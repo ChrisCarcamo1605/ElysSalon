@@ -8,7 +8,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class ArtTypeServiceTests
+public class ArtTypeServiceTest
 {
     private Mock<IRepository<ArticleType>> _typeRepository;
     private ArtTypeService _typeService;
@@ -112,10 +112,12 @@ public class ArtTypeServiceTests
         Assert.IsTrue(result.Success);
         Assert.AreEqual("Tipo encontrado", result.Message);
         Assert.AreEqual(type, result.Data);
+
+        _typeRepository.Verify(r => r.FindAsync(It.IsAny<Expression<Func<ArticleType, bool>>>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task GetTypeAsync_ShouldReturnError_WhenExceptionThrown()
+    public async Task GetTypeByIdAsync_ShouldReturnError_WhenExceptionThrown()
     {
         _typeRepository.Setup(r => r.FindAsync(It.IsAny<Expression<Func<ArticleType, bool>>>()))
             .ThrowsAsync(new Exception("DB Error"));
@@ -124,5 +126,25 @@ public class ArtTypeServiceTests
 
         Assert.IsFalse(result.Success); 
         Assert.IsTrue(result.Message.StartsWith("Tipo no encontrado, error:"));
+    }
+
+    [TestMethod]
+    public async Task GetTypesAsync()
+    {
+        var types = new ObservableCollection<ArticleType>
+        {
+            new ArticleType { ArticleTypeId = 1, Name = "Bebida" },
+            new ArticleType { ArticleTypeId = 2, Name = "Comida" }
+        };
+
+        _typeRepository.Setup(r => r.GetAllAsync())
+            .ReturnsAsync(types);
+
+        var result = await _typeService.GetTypesAsync();
+
+        Assert.IsTrue(result.Success);
+        Assert.IsInstanceOfType(result.Data, typeof(ObservableCollection<ArticleType>));
+
+        _typeRepository.Verify(r => r.GetAllAsync(), Times.Once);
     }
 }
