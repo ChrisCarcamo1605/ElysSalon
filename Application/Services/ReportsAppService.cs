@@ -2,8 +2,10 @@
 using System.Globalization;
 using Application.Configurations;
 using Application.DTOs.Request.Reports;
+using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Expenses;
+using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.Utils;
 using Core.Common;
@@ -122,23 +124,36 @@ public class ReportsAppService : IReportsService
         }
     }
 
-    // Método público para generar reporte anual con Sales y Expenses
-    public async Task<ResultFromService> GenerateAnualReport<T>(ObservableCollection<T> salesCollection,
-        ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector,
-        Func<T, decimal> totalSelector) where T : class
+    public async Task<ResultFromService> GenerateAnualReport(string path)
     {
+        var salesOperation = await _saleService.GetAllOf<DTOGetSales>();
+        var expensesOperation = await _saleService.GetAllOf<DTOGetExpense>();
+
+        if (!salesOperation.Success || !expensesOperation.Success)
+        {
+            var errors = new List<string>();
+            if (!salesOperation.Success)
+                errors.Add($"Error obteniendo ventas: {salesOperation.Message}");
+            if (!expensesOperation.Success)
+                errors.Add($"Error obteniendo gastos: {expensesOperation.Message}");
+            return ResultFromService.Failed(string.Join("; ", errors));
+        }
+
+        var expenses = (ObservableCollection<DTOSalesData>)salesOperation.Data;
+        var sales = (ObservableCollection<DTOGetExpense>)expensesOperation.Data;
+
         try
         {
-            if (salesCollection == null) throw new ArgumentNullException(nameof(salesCollection));
-            if (expensesCollection == null) throw new ArgumentNullException(nameof(expensesCollection));
+            if (sales == null) throw new ArgumentNullException(nameof(sales));
+            if (expenses == null) throw new ArgumentNullException(nameof(expenses));
 
             await Task.Run(() =>
             {
-                var salesData = GenerateAnualDataInternal(salesCollection, s => dateSelector(s), s => totalSelector(s));
+                var salesData = GenerateAnualDataInternal(sales, s => s.Date, s => s.Amount);
                 var expensesData =
-                    GenerateAnualDataInternal(expensesCollection, e => dateSelector(e), e => totalSelector(e));
+                    GenerateAnualDataInternal(expenses, e => e.Date, e => e.TotalAmount);
 
-                ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
+                 ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
             });
 
             return ResultFromService.SuccessResult("Reporte anual generado exitosamente.");
@@ -149,12 +164,27 @@ public class ReportsAppService : IReportsService
         }
     }
 
-    public async Task<ResultFromService> GenerateMonthRepor<T>(ObservableCollection<T> salesCollection,
-        ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector,
-        Func<T, decimal> totalSelector) where T : class
+    public async Task<ResultFromService> GenerateMonthReport(string path)
     {
         try
         {
+            var salesOperation = await _saleService.GetAllOf<DTOGetSales>();
+            var expensesOperation = await _saleService.GetAllOf<DTOGetExpense>();
+
+            if (!salesOperation.Success || !expensesOperation.Success)
+            {
+                var errors = new List<string>();
+                if (!salesOperation.Success)
+                    errors.Add($"Error obteniendo ventas: {salesOperation.Message}");
+                if (!expensesOperation.Success)
+                    errors.Add($"Error obteniendo gastos: {expensesOperation.Message}");
+                return ResultFromService.Failed(string.Join("; ", errors));
+            }
+
+            var salesCollection = (ObservableCollection<DTOSalesData>) salesOperation.Data;
+            var expensesCollection =(ObservableCollection<DTOGetExpense>) expensesOperation.Data;
+
+
             if (salesCollection == null) throw new ArgumentNullException(nameof(salesCollection));
             if (expensesCollection == null) throw new ArgumentNullException(nameof(expensesCollection));
 
@@ -169,10 +199,10 @@ public class ReportsAppService : IReportsService
 
             await Task.Run(() =>
             {
-                var salesData = GenerateMonthDataInternal(salesCollection, s => dateSelector(s), s => totalSelector(s),
+                var salesData = GenerateMonthDataInternal(salesCollection, s => s.Date, s => s.TotalAmount,
                     weekRanges);
-                var expensesData = GenerateMonthDataInternal(expensesCollection, e => dateSelector(e),
-                    e => totalSelector(e), weekRanges);
+                var expensesData = GenerateMonthDataInternal(expensesCollection, e => e.Date,
+                    e => e.Amount, weekRanges);
 
                 ReportsGeneratorUtil.GenerateMonthReport(salesData, expensesData);
             });

@@ -16,56 +16,17 @@ namespace ElysSalon2._0.ViewModels;
 
 public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
 {
-    private readonly ArticleAppService _service;
-    private readonly WindowsManager _windowsManager;
-    private int _articleId;
-
-    private string _articleName;
-
-    private ObservableCollection<DTOGetArtType> _articleSortCollection;
-
-    private ICollectionView _articlesView;
+    #region Properties
 
     private int _articleTypeId;
-
     private int _articleTypeSort = 1;
-
     private string _description;
-
     private string _priceBuy;
-
     private string _priceCost;
     private string? _searchText;
     private string _stock;
-
-    public ItemManagerViewModel(
-        Window windows, ArticleAppService articleService, WindowsManager windowsManager)
-    {
-        _windowsManager = windowsManager;
-        _service = articleService;
-        window = windows;
-        _articlesCollection = new ObservableCollection<DTOGetArticle>();
-        _articleTypesCollection = new ObservableCollection<DTOGetArtType>();
-        _articleSortCollection = new ObservableCollection<DTOGetArtType>();
-
-        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
-        _articlesView.Filter = FilterArticles;
-
-        addArticleCommand = new AsyncRelayCommand(AddArticle);
-        deleteArticleCommand = new AsyncRelayCommand<DTOGetArticle>(DeleteArticle);
-        updateArticleCommand = new RelayCommand<DTOGetArticle>(EditArticle);
-        OpenTypesManagementCommand = new RelayCommand(openTypesManagement);
-
-        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
-        ExitCommand = new RelayCommand(Exit);
-        _ = LoadArticles();
-
-        _service.ReloadItems += OnReloadItems;
-        _service.ClearForms += CleanForm;
-    }
-
-
-    private Window window { get; }
+    private int _articleId;
+    private string _articleName;
 
     public string SearchText
     {
@@ -77,20 +38,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
             FilterItems();
         }
     }
-
-    private ObservableCollection<DTOGetArtType> _articleTypesCollection { get; set; }
-    private ObservableCollection<DTOGetArticle> _articlesCollection { get; set; }
-
-    public ICollectionView ArticlesView
-    {
-        get => _articlesView;
-        set
-        {
-            _articlesView = value;
-            OnPropertyChanged();
-        }
-    }
-
 
     public int articleId
     {
@@ -172,8 +119,36 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
             OnPropertyChanged();
         }
     }
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
+    #endregion
 
+    #region Collections
+
+    private ObservableCollection<DTOGetArtType> _articleSortCollection;
+    private ObservableCollection<DTOGetArtType> _articleTypesCollection { get; set; }
+    private ObservableCollection<DTOGetArticle> _articlesCollection { get; set; }
+    private ICollectionView _articlesView;
+
+    public ICollectionView ArticlesView
+    {
+        get => _articlesView;
+        set
+        {
+            _articlesView = value;
+            OnPropertyChanged();
+        }
+    }
     public ObservableCollection<DTOGetArticle> ArticleCollection
     {
         get => _articlesCollection;
@@ -205,12 +180,54 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         }
     }
 
+    #endregion
+
+    #region Constructor
+
+    private readonly ArticleAppService _service;
+    private readonly WindowsManager _windowsManager;
+    private Window window { get; }
+
+    public ItemManagerViewModel(
+        Window windows, ArticleAppService articleService, WindowsManager windowsManager)
+    {
+        _windowsManager = windowsManager;
+        _service = articleService;
+        window = windows;
+        _articlesCollection = new ObservableCollection<DTOGetArticle>();
+        _articleTypesCollection = new ObservableCollection<DTOGetArtType>();
+        _articleSortCollection = new ObservableCollection<DTOGetArtType>();
+
+        _articlesView = CollectionViewSource.GetDefaultView(_articlesCollection);
+        _articlesView.Filter = FilterArticles;
+
+        addArticleCommand = new AsyncRelayCommand(AddArticle);
+        deleteArticleCommand = new AsyncRelayCommand<DTOGetArticle>(DeleteArticle);
+        updateArticleCommand = new RelayCommand<DTOGetArticle>(EditArticle);
+        OpenTypesManagementCommand = new RelayCommand(openTypesManagement);
+
+        onlyDigitsCommand = new RelayCommand<TextCompositionEventArgs>(onlyDigits);
+        ExitCommand = new RelayCommand(Exit);
+        _ = LoadArticles();
+
+        _service.ReloadItems += OnReloadItems;
+        _service.ClearForms += CleanForm;
+    }
+
+    #endregion
+    
+    #region Commands
+
     public ICommand addArticleCommand { get; }
     public ICommand deleteArticleCommand { get; }
     public ICommand updateArticleCommand { get; }
     public ICommand onlyDigitsCommand { get; }
     public ICommand ExitCommand { get; }
     public ICommand OpenTypesManagementCommand { get; }
+
+    #endregion
+
+    #region Events
 
     public void Dispose()
     {
@@ -222,18 +239,15 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
 
     private async void OnReloadItems()
     {
-        // Asegurar que se ejecute en el hilo UI
         await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
         {
             await SortArticles(ArticleTypeSort);
         });
     }
 
-    private void onlyDigits(TextCompositionEventArgs e)
-    {
-        UIElementsUtil.NumericOnly_PreviewTextInput(e.OriginalSource as UIElement, e);
-    }
+    #endregion
 
+    #region CRUD Methods
 
     private async Task LoadArticles()
     {
@@ -296,6 +310,15 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         _ = SortArticles(typeSort);
     }
 
+    #endregion
+
+    #region UI methods
+
+    private void onlyDigits(TextCompositionEventArgs e)
+    {
+        UIElementsUtil.NumericOnly_PreviewTextInput(e.OriginalSource as UIElement, e);
+    }
+
     private bool FilterArticles(object item) //Filter the articles by name on the search bar
     {
         if (string.IsNullOrEmpty(SearchText))
@@ -321,17 +344,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         _articlesView.Refresh();
     }
 
-
-    private void openTypesManagement()
-    {
-        _windowsManager.NavigateToWindow<TypeArticleWindow>();
-    }
-
-    private void FilterItems()
-    {
-        _articlesView.Refresh();
-    }
-
     public void CleanForm()
     {
         ArticleTypeId = 2;
@@ -347,16 +359,15 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         _windowsManager.CloseCurrentWindowandShowWindow<AdminWindow>(window);
     }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void openTypesManagement()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        _windowsManager.NavigateToWindow<TypeArticleWindow>();
     }
 
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    private void FilterItems()
     {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
+        _articlesView.Refresh();
     }
+    #endregion
+
 }

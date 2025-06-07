@@ -10,13 +10,9 @@ public interface IReportsService
         Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector)
         where T : class;
 
-    Task<ResultFromService> GenerateAnualReport<T>(ObservableCollection<T> collection,
-        ObservableCollection<T> expensesCollection,
-        Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector) where T : class;
+    Task<ResultFromService> GenerateAnualReport(string path);
 
-    Task<ResultFromService> GenerateMonthRepor<T>(ObservableCollection<T> salesCollection,
-        ObservableCollection<T> expensesCollection, Func<T, DateTime> dateSelector,
-        Func<T, decimal> totalSelector) where T : class;
+    Task<ResultFromService> GenerateMonthReport(string path);
 
     Task<ResultFromService> GenerateDailyReport(string path);
 }

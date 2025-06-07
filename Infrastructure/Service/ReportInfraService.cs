@@ -25,13 +25,27 @@ public class ReportInfraService : IReportInfraService
         }
     }
 
-    public Task GenerateMonthlyReportAsync(string path)
+    public async Task<ResultFromService> GenerateMonthlyReportAsync(string path)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _reportsService.GenerateMonthReport(path);
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+        }
     }
 
-    public Task GenerateAnnualReportAsync(string path)
+    public async Task<ResultFromService> GenerateAnnualReportAsync(string path)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await _reportsService.GenerateAnualReport(path);
+        }
+        catch (Exception e)
+        {
+            return ResultFromService.Failed(e.Message);
+        }
     }
 }

@@ -123,18 +123,25 @@ public class ReportsGeneratorUtil
 
 
             // File Saving
-            var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var folderName = "Mis Reportes\\Reportes Anuales";
-            var folderPath = Path.Combine(documentsDirectory, folderName);
 
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            try
+            {
+                var documentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var folderName = "Mis Reportes\\Reportes Anuales";
+                var folderPath = Path.Combine(documentsDirectory, folderName);
 
-            var date = DateTime.Today.ToString("yyyyMMdd",
-                CultureInfo.InvariantCulture);
-            var fileName = $"AnualSalesReport_{salesCollection.year}_{date}.xlsx";
-            var fileInfo = new FileInfo(Path.Combine(folderPath, fileName));
-            package.SaveAs(fileInfo);
-            Console.WriteLine($"Annual report saved to: {fileInfo.FullName}");
+                if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+                var date = DateTime.Today.ToString("yyyyMMdd",
+                    CultureInfo.InvariantCulture);
+                var fileName = $"AnualSalesReport_{salesCollection.year}_{date}.xlsx";
+                var fileInfo = new FileInfo(Path.Combine(folderPath, fileName));
+                package.SaveAs(fileInfo);
+            }
+            catch (Exception e)
+            {
+              throw new Exception("Error al guardar el archivo: " + e.Message);
+            }
         }
     }
 

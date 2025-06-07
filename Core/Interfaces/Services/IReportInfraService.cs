@@ -5,6 +5,6 @@ namespace Core.Interfaces.Services;
 public interface IReportInfraService
 {
     Task<ResultFromService> GenerateDailyReportAsync(string path);
-    Task GenerateMonthlyReportAsync(string path);
-    Task GenerateAnnualReportAsync(string path);
+    Task<ResultFromService> GenerateMonthlyReportAsync(string path);
+    Task<ResultFromService> GenerateAnnualReportAsync(string path);
 }

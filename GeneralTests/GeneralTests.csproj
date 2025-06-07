@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="AppServices\" />
-    <Folder Include="InfraServices\" />
   </ItemGroup>
 
   <ItemGroup>

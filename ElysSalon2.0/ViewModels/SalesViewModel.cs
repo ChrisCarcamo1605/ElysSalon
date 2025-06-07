@@ -253,10 +253,11 @@ public class SalesViewModel : INotifyPropertyChanged
     
     private async void GenerateReport()
     {
-        var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection, _expensesCollection,
-            x => x.Date,
-            x => x.TotalAmount);
+        //var result = await _reportsService.GenerateReport(FromDate, UntilDate, _salesCollection, _expensesCollection,
+        //    x => x.Date,
+        //    x => x.TotalAmount);
 
+        var result = await _reportsService.GenerateMonthReport("C:\\Users\\Christian\\Documents\\Mis Reportes");
         if (result.Success) MessageBox.Show(result.Message);
         else MessageBox.Show(result.Message);
     }

@@ -73,7 +73,10 @@ public class ArticleAppService : IDisposable
 
     public Task<ResultFromService> AddType(string typeName)
     {
-        return _typeService.AddTypeAsync(typeName);
+        var operation = _typeService.AddTypeAsync(typeName);
+        OnReloadItems();
+
+        return operation;
     }
 
     public async Task<ResultFromService> EditTypeAsync(int id, string typeName)
@@ -81,7 +84,10 @@ public class ArticleAppService : IDisposable
         var findResult = await _typeService.GetTypeAsync(id);
         var type = (ArticleType)findResult.Data;
         type.Name = typeName;
-        return await _typeService.EditTypeAsync(type);
+
+        var operation = await _typeService.EditTypeAsync(type);
+        OnReloadItems();
+        return operation;
     }
 
     public async Task<ResultFromService> GetTypesAsync()
@@ -101,7 +107,10 @@ public class ArticleAppService : IDisposable
 
     public Task<ResultFromService> DeleteTypeAsync(int id)
     {
-        return _typeService.DeleteTypeAsync(id);
+        var operation = _typeService.DeleteTypeAsync(id);
+        OnReloadItems();
+
+        return operation;
     }
 
     public async Task<ResultFromService> GetArticlesToButtons()
