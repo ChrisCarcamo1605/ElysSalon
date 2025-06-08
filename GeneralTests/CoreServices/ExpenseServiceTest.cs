@@ -36,8 +36,8 @@ public class ExpenseServiceTest
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Success);
-        
-        _expenseRepo.Verify(x=> x.SaveAsync(expense));
+
+        _expenseRepo.Verify(x => x.SaveAsync(expense));
     }
 
     [TestMethod]
@@ -58,7 +58,7 @@ public class ExpenseServiceTest
     {
         var expenses = new ObservableCollection<Expense>
         {
-            new Expense { Id = 1, Amount = 12.32m, Date = new DateTime(2023, 3, 20), Reason = "test" }
+            new() { Id = 1, Amount = 12.32m, Date = new DateTime(2023, 3, 20), Reason = "test" }
         };
         _expenseRepo.Setup(x => x.GetAllAsync()).ReturnsAsync(expenses);
         var result = await _expenseService.GetAllOfAsync();

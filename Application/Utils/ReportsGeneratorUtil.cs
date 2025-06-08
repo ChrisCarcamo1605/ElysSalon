@@ -140,7 +140,7 @@ public class ReportsGeneratorUtil
             }
             catch (Exception e)
             {
-              throw new Exception("Error al guardar el archivo: " + e.Message);
+                throw new Exception("Error al guardar el archivo: " + e.Message);
             }
         }
     }
@@ -262,7 +262,7 @@ public class ReportsGeneratorUtil
         }
     }
 
-    public static ResultFromService GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> salesCollection,
+    public static void GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> salesCollection,
         List<T> expensesCollection,
         Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector, string finalPath) where T : class
     {
@@ -346,13 +346,14 @@ public class ReportsGeneratorUtil
                     $"Reporte_{fromDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}_Hasta_{untilDate.ToString("ddMMMMyyyy", new CultureInfo("es-ES"))}.xlsx";
 
                 if (finalPath == null) finalPath = filePath;
+                else if (!finalPath.EndsWith(".xlsx"))
+                    finalPath = Path.Combine(finalPath, filePath);
                 package.SaveAs(new FileInfo(finalPath));
-                return ResultFromService.SuccessResult("Reporte generado exitosamente");
             }
         }
         catch (Exception e)
         {
-            return ResultFromService.Failed("Guardado cancelado");
+            throw new Exception(e.Message);
         }
     }
 
@@ -363,7 +364,7 @@ public class ReportsGeneratorUtil
         try
         {
             var today = DateTime.Now.Date.ToString("dd-MMMM-yyyy",
-                new CultureInfo("es-ES")); // Formato de fecha corregido un poco
+                new CultureInfo("es-ES")); 
             ExcelPackage.LicenseContext =
                 LicenseContext.NonCommercial; // O LicenseContext.Commercial si tienes licencia
 

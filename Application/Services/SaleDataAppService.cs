@@ -6,6 +6,7 @@ using Application.DTOs.Response.Expenses;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
 using Application.DTOs.Response.Tickets;
+using Application.Interfaces;
 using AutoMapper;
 using Core.Common;
 using Core.Domain.Entities;
@@ -13,7 +14,7 @@ using Core.Interfaces.Services;
 
 namespace Application.Services;
 
-public class SaleDataAppService
+public class SaleDataAppService : ISaleDataAppService
 {
     private readonly IExpensesService _expService;
     private readonly IMapper _mapper;

@@ -1,34 +1,30 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using Application.Configurations;
 using Application.DTOs.Request.Reports;
 using Application.DTOs.Request.SalesData;
 using Application.DTOs.Request.TicketsDetails;
 using Application.DTOs.Response.Expenses;
 using Application.DTOs.Response.SalesData;
 using Application.DTOs.Response.TicketDetails;
+using Application.Interfaces;
 using Application.Utils;
 using Core.Common;
 using Core.Interfaces;
 using Core.Interfaces.Services;
-
-// Asegúrate de que System esté importado para ArgumentNullException, DateTime, etc.
-// Para List<T>
 
 namespace Application.Services;
 
 public class ReportsAppService : IReportsService
 {
     private readonly IFilePathProvider _fileFileDialog;
-    private readonly ReportsConfiguration _reportConfig;
-    private readonly SaleDataAppService _saleService;
 
-    public ReportsAppService(ReportsConfiguration reportsConfig, IFilePathProvider fileFileDialog,
-        SaleDataAppService saleService)
+    private readonly ISaleDataAppService _saleService;
+
+    public ReportsAppService(IFilePathProvider fileFileDialog,
+        ISaleDataAppService saleService)
     {
-        _reportConfig = reportsConfig ?? throw new ArgumentNullException(nameof(reportsConfig));
         _fileFileDialog = fileFileDialog ?? throw new ArgumentNullException(nameof(fileFileDialog));
-        _saleService = saleService ?? throw new ArgumentNullException(nameof(saleService));
+        _saleService = saleService;
     }
 
     public async Task<ResultFromService> GenerateReport<T>(DateTime fromDate, DateTime untilDate,
@@ -41,8 +37,7 @@ public class ReportsAppService : IReportsService
             if (salesCollection == null) return ResultFromService.Failed("La colección de ventas no puede ser nula.");
             if (expensesCollection == null)
                 return ResultFromService.Failed("La colección de gastos no puede ser nula.");
-            if (dateSelector == null) return ResultFromService.Failed("El selector de fecha no puede ser nulo.");
-            if (totalSelector == null) return ResultFromService.Failed("El selector de total no puede ser nulo.");
+
             if (fromDate > untilDate)
                 return ResultFromService.Failed("La fecha 'desde' no puede ser posterior a la fecha 'hasta'.");
 
@@ -70,17 +65,24 @@ public class ReportsAppService : IReportsService
 
             CollectionUtil.LoadEmptyDates(salesFiltered, dateSelector, totalSelector);
             CollectionUtil.LoadEmptyDates(expensesFiltered, dateSelector, totalSelector);
-            var result = ReportsGeneratorUtil.GenerateReport(
+
+            if (salesFiltered.Count == 0 && expensesFiltered.Count == 0)
+                return ResultFromService.Failed("No hay datos para generar el reporte en el rango de fechas seleccionado.");
+
+            ReportsGeneratorUtil.GenerateReport(
                 fromDate, untilDate, salesFiltered, expensesFiltered,
                 dateSelector, totalSelector, filePath);
 
-            return result;
+            return ResultFromService.SuccessResult("Reporte Generado Exitosamente");
         }
         catch (Exception e)
         {
             return ResultFromService.Failed($"Error al generar el reporte: {e.Message}");
         }
     }
+
+
+
 
 
     public async Task<ResultFromService> GenerateDailyReport(string path)
@@ -153,7 +155,7 @@ public class ReportsAppService : IReportsService
                 var expensesData =
                     GenerateAnualDataInternal(expenses, e => e.Date, e => e.TotalAmount);
 
-                 ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
+                ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
             });
 
             return ResultFromService.SuccessResult("Reporte anual generado exitosamente.");
@@ -181,8 +183,8 @@ public class ReportsAppService : IReportsService
                 return ResultFromService.Failed(string.Join("; ", errors));
             }
 
-            var salesCollection = (ObservableCollection<DTOSalesData>) salesOperation.Data;
-            var expensesCollection =(ObservableCollection<DTOGetExpense>) expensesOperation.Data;
+            var salesCollection = (ObservableCollection<DTOSalesData>)salesOperation.Data;
+            var expensesCollection = (ObservableCollection<DTOGetExpense>)expensesOperation.Data;
 
 
             if (salesCollection == null) throw new ArgumentNullException(nameof(salesCollection));

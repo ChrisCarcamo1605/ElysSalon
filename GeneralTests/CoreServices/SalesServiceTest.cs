@@ -38,7 +38,6 @@ public class SalesServiceTest
     [TestMethod]
     public async Task GetSalesAsync_ShouldGet()
     {
-
         var sales = new ObservableCollection<Sales>();
         _salesRepository.Setup(repo => repo.GetAllAsync())
             .ReturnsAsync(new ObservableCollection<Sales>(sales));
@@ -46,7 +45,8 @@ public class SalesServiceTest
         var result = await _salesService.GetAllOfAsync();
 
         Assert.IsTrue(result.Success, "Expected to retrieve sales successfully.");
-        Assert.IsInstanceOfType(result.Data, typeof(ObservableCollection<Sales>), "Expected data to be of type ObservableCollection<Sales>.");
+        Assert.IsInstanceOfType(result.Data, typeof(ObservableCollection<Sales>),
+            "Expected data to be of type ObservableCollection<Sales>.");
         _salesRepository.Verify(repo => repo.GetAllAsync(), Times.Once);
     }
 

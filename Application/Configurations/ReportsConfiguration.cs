@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using Application.DTOs.Request.Reports;
-using Core.Domain.Entities;
+using Application.DTOs.Request.SalesData;
+using Application.DTOs.Response.Expenses;
 
 namespace Application.Configurations;
 
@@ -20,7 +21,7 @@ public class ReportsConfiguration
     private DateTime Week4Start = DateTime.Now;
 
 
-    public DtoWeeksRanges GetWeeksRanges(ObservableCollection<Sales> collection)
+    public DtoWeeksRanges GetWeeksRanges(ObservableCollection<DTOSalesData> collection)
     {
         var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
         var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
@@ -103,7 +104,7 @@ public class ReportsConfiguration
             Week4End);
     }
 
-    public DtoWeeksRanges GetWeeksRanges(ObservableCollection<Ticket> collection)
+    public DtoWeeksRanges GetWeeksRanges(ObservableCollection<DTOGetExpense> collection)
     {
         var timeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
         var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);

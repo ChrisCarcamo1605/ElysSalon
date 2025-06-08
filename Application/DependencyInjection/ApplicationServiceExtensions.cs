@@ -1,4 +1,5 @@
 ﻿using Application.Configurations;
+using Application.Interfaces;
 using Application.Services;
 using Core.Interfaces.Services;
 using Core.Services;
@@ -18,7 +19,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ISalesService, SalesService>();
         services.AddScoped<IExpensesService, ExpenseService>();
         services.AddScoped<IReportsService, ReportsAppService>();
-
+        services.AddScoped<ISaleDataAppService, SaleDataAppService>();
 
         services.AddScoped<ArticleAppService>();
         services.AddScoped<SaleDataAppService>();

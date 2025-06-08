@@ -10,8 +10,8 @@ namespace GeneralTests.CoreServices;
 [TestClass]
 public class TicketDetailsServiceTest
 {
-    Mock<IRepository<TicketDetails>> _tickDetailsRepo;
-    TicketDetailsService _service;
+    private TicketDetailsService _service;
+    private Mock<IRepository<TicketDetails>> _tickDetailsRepo;
 
     [TestInitialize]
     public void SetUp()
@@ -23,14 +23,14 @@ public class TicketDetailsServiceTest
     [TestMethod]
     public async Task TestGetTicketDetails()
     {
-        var tickDetails = new List<TicketDetails>()
+        var tickDetails = new List<TicketDetails>
         {
-            new TicketDetails()
+            new()
             {
                 ArticleId = 1, ArticleName = "Test", Date = new DateTime(2025, 06, 25),
                 Quantity = 2, Price = 10.0m, TicketId = "123", TicketDetailsId = 1
             },
-            new TicketDetails()
+            new()
             {
                 ArticleId = 2, ArticleName = "Test2", Date = new DateTime(2025, 06, 26),
                 Quantity = 3, Price = 15.0m, TicketId = "123", TicketDetailsId = 2
@@ -40,7 +40,8 @@ public class TicketDetailsServiceTest
         var ticketId = 123;
 
         _tickDetailsRepo.Setup(x
-            => x.GetAllWithIncludesAsync(x => x.Article)).ReturnsAsync(new ObservableCollection<TicketDetails>(tickDetails));
+                => x.GetAllWithIncludesAsync(x => x.Article))
+            .ReturnsAsync(new ObservableCollection<TicketDetails>(tickDetails));
 
         var result = await _service.GetAllOfAsync();
 
@@ -74,7 +75,7 @@ public class TicketDetailsServiceTest
     [TestMethod]
     public async Task DeleteTicketDetails()
     {
-        var tickDetails = new TicketDetails()
+        var tickDetails = new TicketDetails
         {
             ArticleId = 1,
             Quantity = 2,
@@ -83,7 +84,7 @@ public class TicketDetailsServiceTest
             TicketDetailsId = 1
         };
 
-         _tickDetailsRepo.Setup(X => X.FindAsync(It.IsAny<Expression<Func<TicketDetails, bool>>>()))
+        _tickDetailsRepo.Setup(X => X.FindAsync(It.IsAny<Expression<Func<TicketDetails, bool>>>()))
             .ReturnsAsync(tickDetails);
 
         _tickDetailsRepo.Setup(x => x.DeleteAsync(It.IsAny<TicketDetails>()));
@@ -92,7 +93,7 @@ public class TicketDetailsServiceTest
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.Success);
-        
+
         _tickDetailsRepo.Verify(x => x.DeleteAsync(It.IsAny<TicketDetails>()));
     }
 }

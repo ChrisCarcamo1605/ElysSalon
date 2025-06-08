@@ -108,9 +108,9 @@ public sealed class ArticleServiceTest
     {
         var articles = new ObservableCollection<Article>
         {
-            new Article { ArticleId = 1, Name = "Article 1", PriceBuy = 10.0m, Stock = 5 },
-            new Article { ArticleId = 2, Name = "Article 2", PriceBuy = 20.0m, Stock = 0 },
-            new Article { ArticleId = 3, Name = "Article 3", PriceBuy = 30.0m, Stock = 10 }
+            new() { ArticleId = 1, Name = "Article 1", PriceBuy = 10.0m, Stock = 5 },
+            new() { ArticleId = 2, Name = "Article 2", PriceBuy = 20.0m, Stock = 0 },
+            new() { ArticleId = 3, Name = "Article 3", PriceBuy = 30.0m, Stock = 10 }
         };
         _articleRepository.Setup(repo => repo.FindAsync(
                 It.IsAny<Expression<Func<Article, bool>>>(),
@@ -132,18 +132,18 @@ public sealed class ArticleServiceTest
     [TestMethod]
     public async Task GerArticlesAsync()
     {
-        _articleRepository.Setup(repo => repo.GetAllWithIncludesAsync(X=> X.ArticleType))
+        _articleRepository.Setup(repo => repo.GetAllWithIncludesAsync(X => X.ArticleType))
             .ReturnsAsync(new ObservableCollection<Article>
             {
-                new Article
+                new()
                 {
                     ArticleId = 1, Name = "Article 1", PriceBuy = 10.0m, Stock = 5, ArticleType = new ArticleType()
                 },
-                new Article
+                new()
                 {
                     ArticleId = 2, Name = "Article 2", PriceBuy = 20.0m, Stock = 0, ArticleType = new ArticleType()
                 },
-                new Article
+                new()
                 {
                     ArticleId = 3, Name = "Article 3", PriceBuy = 30.0m, Stock = 10, ArticleType = new ArticleType()
                 }
@@ -153,20 +153,20 @@ public sealed class ArticleServiceTest
 
         Assert.IsNotNull(result, "Expected to retrieve articles.");
 
-        _articleRepository.Verify(repo => repo.GetAllWithIncludesAsync(X=> X.ArticleType), Times.Once);
+        _articleRepository.Verify(repo => repo.GetAllWithIncludesAsync(X => X.ArticleType), Times.Once);
     }
 
     [TestMethod]
     public async Task GetArticleById()
     {
-        var Article = new Article()
+        var Article = new Article
         {
             ArticleId = 1,
             Name = "Test Article",
             PriceBuy = 10.0m,
             PriceCost = 13.32m,
             ArticleTypeId = 1,
-            Description = "This is a test article.",
+            Description = "This is a test article."
         };
 
         _articleRepository.Setup(repo => repo.FindAsync(It.IsAny<Expression<Func<Article, bool>>>()))

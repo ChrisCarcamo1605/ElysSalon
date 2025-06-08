@@ -66,7 +66,7 @@ public class ArtTypeServiceTest
         var updated = new ArticleType { ArticleTypeId = 1, Name = "Comida" };
 
         _typeRepository.SetupSequence(r => r.FindAsync(It.IsAny<Expression<Func<ArticleType, bool>>>()))
-            .ReturnsAsync(current)  
+            .ReturnsAsync(current)
             .ReturnsAsync(duplicate);
 
         var result = await _typeService.EditTypeAsync(updated);
@@ -124,7 +124,7 @@ public class ArtTypeServiceTest
 
         var result = await _typeService.GetTypeAsync(1);
 
-        Assert.IsFalse(result.Success); 
+        Assert.IsFalse(result.Success);
         Assert.IsTrue(result.Message.StartsWith("Tipo no encontrado, error:"));
     }
 
@@ -133,8 +133,8 @@ public class ArtTypeServiceTest
     {
         var types = new ObservableCollection<ArticleType>
         {
-            new ArticleType { ArticleTypeId = 1, Name = "Bebida" },
-            new ArticleType { ArticleTypeId = 2, Name = "Comida" }
+            new() { ArticleTypeId = 1, Name = "Bebida" },
+            new() { ArticleTypeId = 2, Name = "Comida" }
         };
 
         _typeRepository.Setup(r => r.GetAllAsync())

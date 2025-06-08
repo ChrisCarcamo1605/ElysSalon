@@ -119,6 +119,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
             OnPropertyChanged();
         }
     }
+
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -131,6 +132,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
         OnPropertyChanged(propertyName);
         return true;
     }
+
     #endregion
 
     #region Collections
@@ -149,6 +151,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
             OnPropertyChanged();
         }
     }
+
     public ObservableCollection<DTOGetArticle> ArticleCollection
     {
         get => _articlesCollection;
@@ -215,7 +218,7 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
     }
 
     #endregion
-    
+
     #region Commands
 
     public ICommand addArticleCommand { get; }
@@ -368,6 +371,6 @@ public class ItemManagerViewModel : INotifyPropertyChanged, IDisposable
     {
         _articlesView.Refresh();
     }
-    #endregion
 
+    #endregion
 }

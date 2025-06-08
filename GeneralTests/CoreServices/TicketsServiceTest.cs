@@ -22,7 +22,7 @@ public class TicketsServiceTest
     [TestMethod]
     public async Task AddTicket()
     {
-        var ticket = new Ticket()
+        var ticket = new Ticket
         {
             EmissionDateTime = new DateTime(25, 06, 06),
             Issuer = "Messi",
@@ -58,12 +58,12 @@ public class TicketsServiceTest
     {
         var tickets = new ObservableCollection<Ticket>
         {
-            new Ticket
+            new()
             {
                 TicketId = "1", Issuer = "Messi", TotalAmount = 100.0m, TotalOutTaxes = 125.25m,
                 EmissionDateTime = new DateTime(25, 06, 06)
             },
-            new Ticket
+            new()
             {
                 TicketId = "2", Issuer = "Ronaldo", TotalAmount = 200.0m, TotalOutTaxes = 250.50m,
                 EmissionDateTime = new DateTime(26, 07, 07)
@@ -87,7 +87,7 @@ public class TicketsServiceTest
             TicketId = ticketId, Issuer = "Messi", TotalAmount = 100.0m, TotalOutTaxes = 125.25m,
             EmissionDateTime = new DateTime(25, 06, 06)
         };
-        _ticketRepo.Setup(x => x.FindAsync(x=> x.TicketId == ticketId)).ReturnsAsync(ticket);
+        _ticketRepo.Setup(x => x.FindAsync(x => x.TicketId == ticketId)).ReturnsAsync(ticket);
 
         var result = await _ticketService.GetByIdAsync(ticketId);
         Assert.IsNotNull(result);
@@ -100,7 +100,7 @@ public class TicketsServiceTest
     [TestMethod]
     public async Task GetLastIdAsync()
     {
-        var lastTicket = new Ticket()
+        var lastTicket = new Ticket
         {
             TicketId = "1",
             EmissionDateTime = new DateTime(2025, 03, 06),

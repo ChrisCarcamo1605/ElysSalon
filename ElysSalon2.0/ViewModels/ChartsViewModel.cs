@@ -9,7 +9,6 @@ using Application.Services;
 using Application.Utils;
 using CommunityToolkit.Mvvm.Input;
 using ElysSalon2._0.Factories;
-using ElysSalon2._0.Utils;
 using ElysSalon2._0.WinManagement;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;

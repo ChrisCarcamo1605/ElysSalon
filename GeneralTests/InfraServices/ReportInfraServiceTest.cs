@@ -8,8 +8,8 @@ namespace GeneralTests.InfraServices;
 [TestClass]
 public class ReportInfraServiceTest
 {
-    private Mock<IReportsService> _reportService;
     private IReportInfraService _reportInfraService;
+    private Mock<IReportsService> _reportService;
 
     [TestInitialize]
     public void SetUp()
@@ -75,6 +75,4 @@ public class ReportInfraServiceTest
         Assert.AreEqual(exceptionMessage, result.Message);
         _reportService.Verify(rs => rs.GenerateMonthReport(path), Times.Once);
     }
-
-
 }
