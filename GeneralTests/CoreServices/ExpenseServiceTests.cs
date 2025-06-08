@@ -7,7 +7,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class ExpenseServiceTest
+public class ExpenseServiceTests
 {
     private Mock<IRepository<Expense>> _expenseRepo;
     private ExpenseService _expenseService;

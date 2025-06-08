@@ -8,7 +8,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class TicketDetailsServiceTest
+public class TicketDetailsServiceTests
 {
     private TicketDetailsService _service;
     private Mock<IRepository<TicketDetails>> _tickDetailsRepo;

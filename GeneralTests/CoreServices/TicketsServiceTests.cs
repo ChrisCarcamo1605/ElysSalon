@@ -7,7 +7,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class TicketsServiceTest
+public class TicketsServiceTests
 {
     private Mock<ITicketRepository> _ticketRepo;
     private TicketService _ticketService;

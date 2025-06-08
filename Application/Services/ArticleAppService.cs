@@ -131,13 +131,13 @@ public class ArticleAppService : IDisposable
     }
 
     // Método para invocar ClearForms de forma segura
-    protected virtual void OnClearForms()
+    public virtual void OnClearForms()
     {
         ClearForms?.Invoke();
     }
 
     // Método para invocar ReloadItems de forma segura
-    protected virtual void OnReloadItems()
+    public virtual void OnReloadItems()
     {
         ReloadItems?.Invoke();
     }

@@ -13,7 +13,7 @@ using Moq;
 namespace GeneralTests.AppServices;
 
 [TestClass]
-public class ReportsAppServiceTest
+public class ReportsAppServiceTests
 {
     private Mock<IFilePathProvider> _fileFileDialog;
     private ReportsAppService _reportsAppService;
@@ -51,7 +51,7 @@ public class ReportsAppServiceTest
         };
 
         _fileFileDialog.Reset();
-        _fileFileDialog.Setup(x => x.ShowSaveFileDialogAsync(fromDate, untilDate)).ReturnsAsync("C:\\Users\\Christian\\Documents\\Mis Reportes");
+        _fileFileDialog.Setup(x => x.ShowSaveFileDialogAsync(fromDate, untilDate)).ReturnsAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
         
         var result = await _reportsAppService
             .GenerateReport<DTOSalesData>(fromDate, untilDate, sales, expenses, x => x.Date, x => x.TotalAmount);
@@ -76,7 +76,7 @@ public class ReportsAppServiceTest
         };
         _fileFileDialog.Reset();
         _fileFileDialog.Setup(x => x.ShowSaveFileDialogAsync(fromDate, untilDate))
-            .ReturnsAsync("C:\\Users\\Christian\\Documents\\Mis Reportes");
+            .ReturnsAsync(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
 
         // Act
         var result = await _reportsAppService

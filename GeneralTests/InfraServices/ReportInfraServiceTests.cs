@@ -6,7 +6,7 @@ using Moq;
 namespace GeneralTests.InfraServices;
 
 [TestClass]
-public class ReportInfraServiceTest
+public class ReportInfraServiceTests
 {
     private IReportInfraService _reportInfraService;
     private Mock<IReportsService> _reportService;

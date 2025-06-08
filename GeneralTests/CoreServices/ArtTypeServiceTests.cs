@@ -8,7 +8,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class ArtTypeServiceTest
+public class ArtTypeServiceTests
 {
     private Mock<IRepository<ArticleType>> _typeRepository;
     private ArtTypeService _typeService;

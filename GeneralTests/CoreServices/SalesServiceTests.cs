@@ -7,7 +7,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public class SalesServiceTest
+public class SalesServiceTests
 {
     private Mock<IRepository<Sales>> _salesRepository;
     private SalesService _salesService;
@@ -38,7 +38,10 @@ public class SalesServiceTest
     [TestMethod]
     public async Task GetSalesAsync_ShouldGet()
     {
-        var sales = new ObservableCollection<Sales>();
+        var sales = new ObservableCollection<Sales>()
+        {
+            new Sales() { SaleDate = new DateTime(2025, 06, 06) }
+        };
         _salesRepository.Setup(repo => repo.GetAllAsync())
             .ReturnsAsync(new ObservableCollection<Sales>(sales));
 

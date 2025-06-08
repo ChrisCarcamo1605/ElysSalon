@@ -8,7 +8,7 @@ using Moq;
 namespace GeneralTests.CoreServices;
 
 [TestClass]
-public sealed class ArticleServiceTest
+public sealed class ArticleServiceTests
 {
     private Mock<IRepository<Article>> _articleRepository;
     private ArticleService _articleService;
