@@ -7,11 +7,13 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly IServiceProvider serviceProvider;
+    private readonly IEmailService _emailService;
 
     public Worker(ILogger<Worker> logger, IServiceProvider service)
     {
         _logger = logger;
         serviceProvider = service;
+        _emailService = serviceProvider.GetRequiredService<IEmailService>();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,7 +27,7 @@ public class Worker : BackgroundService
                     var filePathProvider = scope.ServiceProvider.GetRequiredService<IFilePathProvider>();
 
                     var operation =
-                        await reportService.GenerateDailyReportAsync(filePathProvider.GetReportsDirectory());
+                        await reportService.GenerateAnnualReportAsync(filePathProvider.GetReportsDirectory());
 
                     if (operation.Success)
                         _logger.LogInformation(
@@ -33,9 +35,20 @@ public class Worker : BackgroundService
                             DateTimeOffset.Now);
                     else
                         _logger.LogError("Failed to generate report: {error}", operation.Message);
+
+
+
+                    var fileBytes = File.ReadAllBytes((string)operation.Data);
+
+                    await _emailService.SendEmailWithAttachmentAsync("mojicachris27@gmail.com", "Daily Report",
+                        "<h1>Esto es una prueba</h1><p>Funciona correctamente!</p>", fileBytes,$"Reporte Diario {DateTime.Now.ToString()}.xlsx");
+
+                    _logger.LogInformation(
+                        "CORREO ENVIADOOO");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+
+                await Task.Delay(TimeSpan.FromSeconds(500), stoppingToken);
             }
             catch (Exception e)
             {

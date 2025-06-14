@@ -8,8 +8,10 @@ using Infrastructure.Persistence.DataBase;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Service;
 using Infrastructure.Utils;
+using MailKit;
 using Microsoft.EntityFrameworkCore;
 using ReportWorkerService;
+using MailService = Infrastructure.Service.MailService;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -34,11 +36,19 @@ builder.Logging.AddConsole(); // para debugging local
 builder.Services.AddAplication();
 builder.Logging.AddEventLog(eventLogSettings => { eventLogSettings.SourceName = "ReportWorkService3"; });
 
-builder.Services.AddInfrastructure(
+
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+builder.Services.AddInfrastructure(configuration,
     "Server=localhost,1433;Database=elysalondb;User Id=sa;Password=Carcamito*-*2024$1605;TrustServerCertificate=True;");
 
 builder.Services.AddScoped<IFilePathProvider, FilePathDialogUtil>();
 builder.Services.AddScoped<IReportInfraService, ReportInfraService>();
+builder.Services.AddTransient<IEmailService, MailService>();
+// En tu método AddInfrastructure
 
 // AutoMapper
 // Hosted service

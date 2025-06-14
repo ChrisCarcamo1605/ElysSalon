@@ -67,7 +67,8 @@ public class ReportsAppService : IReportsService
             CollectionUtil.LoadEmptyDates(expensesFiltered, dateSelector, totalSelector);
 
             if (salesFiltered.Count == 0 && expensesFiltered.Count == 0)
-                return ResultFromService.Failed("No hay datos para generar el reporte en el rango de fechas seleccionado.");
+                return ResultFromService.Failed(
+                    "No hay datos para generar el reporte en el rango de fechas seleccionado.");
 
             ReportsGeneratorUtil.GenerateReport(
                 fromDate, untilDate, salesFiltered, expensesFiltered,
@@ -80,9 +81,6 @@ public class ReportsAppService : IReportsService
             return ResultFromService.Failed($"Error al generar el reporte: {e.Message}");
         }
     }
-
-
-
 
 
     public async Task<ResultFromService> GenerateDailyReport(string path)
@@ -107,12 +105,18 @@ public class ReportsAppService : IReportsService
                                 Enumerable.Empty<DTOGetTicketDetails>();
             var expenses = expensesOperation.Data as IEnumerable<DTOGetExpense> ?? Enumerable.Empty<DTOGetExpense>();
 
+
+            if (ticketDetails == null)
+                return ResultFromService.Failed($"No hay ventas este día: {DateTime.Now.ToString()}");
+            if (expenses == null)
+                return ResultFromService.Failed($"No hay gastis este día: {DateTime.Now.ToString()}");
+
             var expensesList = expenses
                 .Where(x => x.Date.Date == today)
                 .ToList();
 
             var ticketDetailsList = ticketDetails
-                .Where(x => x.Ticket.EmissionDateTime.Date == today)
+                .Where(x => x.date == today)
                 .Select(x => new DTOSetTicketDetailsReport(x.TicketDetailsId, x.Article.Name, x.Quantity, x.date,
                     x.PriceBuy, x.TotalPrice))
                 .ToList();
@@ -149,16 +153,14 @@ public class ReportsAppService : IReportsService
             if (sales == null) throw new ArgumentNullException(nameof(sales));
             if (expenses == null) throw new ArgumentNullException(nameof(expenses));
 
-            await Task.Run(() =>
+            return await Task.Run(() =>
             {
                 var salesData = GenerateAnualDataInternal(sales, s => s.Date, s => s.Amount);
                 var expensesData =
                     GenerateAnualDataInternal(expenses, e => e.Date, e => e.TotalAmount);
 
-                ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
+                return ReportsGeneratorUtil.GenerateAnualReport(salesData, expensesData);
             });
-
-            return ResultFromService.SuccessResult("Reporte anual generado exitosamente.");
         }
         catch (Exception e)
         {
@@ -199,17 +201,16 @@ public class ReportsAppService : IReportsService
                 new(now.AddDays(-7), now)
             }.AsReadOnly();
 
-            await Task.Run(() =>
+
+            return await Task.Run(() =>
             {
                 var salesData = GenerateMonthDataInternal(salesCollection, s => s.Date, s => s.TotalAmount,
                     weekRanges);
                 var expensesData = GenerateMonthDataInternal(expensesCollection, e => e.Date,
                     e => e.Amount, weekRanges);
 
-                ReportsGeneratorUtil.GenerateMonthReport(salesData, expensesData);
+                return ReportsGeneratorUtil.GenerateMonthReport(salesData, expensesData);
             });
-
-            return ResultFromService.SuccessResult("Reporte mensual generado exitosamente.");
         }
         catch (Exception e)
         {

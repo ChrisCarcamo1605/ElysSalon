@@ -12,7 +12,8 @@ namespace Application.Utils;
 
 public class ReportsGeneratorUtil
 {
-    public static void GenerateAnualReport(DTOAddAnualData salesCollection, DTOAddAnualData expensesCollection)
+    public static ResultFromService GenerateAnualReport(DTOAddAnualData salesCollection,
+        DTOAddAnualData expensesCollection)
     {
         ExcelPackage.LicenseContext =
             LicenseContext.NonCommercial;
@@ -137,15 +138,17 @@ public class ReportsGeneratorUtil
                 var fileName = $"AnualSalesReport_{salesCollection.year}_{date}.xlsx";
                 var fileInfo = new FileInfo(Path.Combine(folderPath, fileName));
                 package.SaveAs(fileInfo);
+
+                return ResultFromService.SuccessResult(fileInfo.FullName, "Reporte anual generado correctamente");
             }
             catch (Exception e)
             {
-                throw new Exception("Error al guardar el archivo: " + e.Message);
+                return ResultFromService.Failed("Hubo un error al generar el reporte: " + e.Message);
             }
         }
     }
 
-    public static void GenerateMonthReport(DtoMonthFinancialData salesCollection,
+    public static ResultFromService GenerateMonthReport(DtoMonthFinancialData salesCollection,
         DtoMonthFinancialData expensesCollection)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -256,13 +259,23 @@ public class ReportsGeneratorUtil
             lineSeriesSales.Header = "Sales";
             lineChart.Legend.Position = eLegendPosition.Bottom;
 
-            var filepath = Path.Combine(folderPath, baseName);
-            var fileInfo = new FileInfo(filepath);
-            package.SaveAs(fileInfo);
+
+            try
+            {
+                var filepath = Path.Combine(folderPath, baseName);
+                var fileInfo = new FileInfo(filepath);
+                package.SaveAs(fileInfo);
+
+                return ResultFromService.SuccessResult(filepath, "Reporte generado correctamente");
+            }
+            catch (Exception e)
+            {
+                return ResultFromService.Failed("Hubo un error al generar el reporte: " + e.Message);
+            }
         }
     }
 
-    public static void GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> salesCollection,
+    public static ResultFromService GenerateReport<T>(DateTime fromDate, DateTime untilDate, List<T> salesCollection,
         List<T> expensesCollection,
         Func<T, DateTime> dateSelector, Func<T, decimal> totalSelector, string finalPath) where T : class
     {
@@ -349,11 +362,14 @@ public class ReportsGeneratorUtil
                 else if (!finalPath.EndsWith(".xlsx"))
                     finalPath = Path.Combine(finalPath, filePath);
                 package.SaveAs(new FileInfo(finalPath));
+                return ResultFromService.SuccessResult(finalPath,
+                    "Reporte generado exitosamente en: " + finalPath);
             }
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            throw new ArgumentException(e.Message);
+            return ResultFromService.Failed("Error al generar el reporte: " + e.Message);
         }
     }
 
@@ -364,7 +380,7 @@ public class ReportsGeneratorUtil
         try
         {
             var today = DateTime.Now.Date.ToString("dd-MMMM-yyyy",
-                new CultureInfo("es-ES")); 
+                new CultureInfo("es-ES"));
             ExcelPackage.LicenseContext =
                 LicenseContext.NonCommercial; // O LicenseContext.Commercial si tienes licencia
 
@@ -501,12 +517,11 @@ public class ReportsGeneratorUtil
                     }
                 }
 
-                // --- Guardar el Archivo ---
                 var fullPath =
                     Path.Combine(filePath,
                         $"Reporte_{today.Replace("-", "_")}.xlsx"); // Reemplazar caracteres no válidos si es necesario
                 package.SaveAs(new FileInfo(fullPath));
-                return ResultFromService.SuccessResult("Reporte generado exitosamente en: " + fullPath);
+                return ResultFromService.SuccessResult(fullPath, "Reporte generado exitosamente en: " + fullPath);
             }
         }
         catch (Exception e)
